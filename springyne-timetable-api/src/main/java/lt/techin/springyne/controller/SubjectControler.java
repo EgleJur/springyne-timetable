@@ -8,14 +8,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static lt.techin.springyne.dto.mapper.SubjectMapper.toSubject;
+import static lt.techin.springyne.dto.mapper.SubjectMapper.toSubjectDto;
 import static org.springframework.http.ResponseEntity.ok;
 
 @Controller
@@ -48,6 +47,11 @@ public class SubjectControler {
         return responseEntity;
     }
 
+    @PostMapping
+     public ResponseEntity<SubjectDto> createSubject(@RequestBody SubjectDto subjectDto) {
+        var createdSubject = subjectService.create(toSubject(subjectDto));
 
+        return ok(toSubjectDto(createdSubject));
+    }
 
 }

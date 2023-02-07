@@ -26,6 +26,8 @@ public class SubjectService {
         return subjectRepository.findById(id);
     }
 
-
+    public Subject create(Subject subject) {
+        return subjectRepository.save(subject);
+    }
 
 }

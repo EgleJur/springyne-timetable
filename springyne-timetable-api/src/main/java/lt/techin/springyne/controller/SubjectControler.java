@@ -31,7 +31,7 @@ public class SubjectControler {
 
     @GetMapping
     @ResponseBody
-    public List<SubjectDto> getSubjects() {
+    public List<SubjectDto> getAllSubjects() {
         return subjectService.getAll().stream().map(SubjectMapper::toSubjectDto)
                 .collect(Collectors.toList());
 

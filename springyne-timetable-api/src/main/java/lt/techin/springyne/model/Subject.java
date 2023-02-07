@@ -1,5 +1,6 @@
 package lt.techin.springyne.model;
 
+import lombok.Data;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 import org.springframework.data.annotation.CreatedDate;
@@ -7,11 +8,15 @@ import org.springframework.data.annotation.CreatedDate;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Set;
 
 @Entity
 @Table(name = "SUBJECT_TABLE")
 //@SQLDelete(sql = "UPDATE Subject SET deleted = true WHERE id=?")
 //@Where(clause = "deleted=false")
+@Data
 public class Subject {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,57 +32,25 @@ public class Subject {
 
     private boolean deleted = Boolean.FALSE;
 
-//    active Boolean default true
-//
-//    select * from Customers where active = true;
 
-//    @ManyToOne(fetch = FetchType.EAGER)
-//    @JoinColumn(name = "room_id")
-//
-//    private Room room;
+//    @ManyToMany
+//    private Module module;
+
+    @ManyToMany//(fetch = FetchType.LAZY)
+    @JoinTable(name = "subjects_and_modules",
+            joinColumns = @JoinColumn(name = "subject_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "module_id", referencedColumnName = "id"))
+    Set<Module> modules;
+
+
+//    @ManyToMany//(fetch = FetchType.EAGER)
+//    @JoinTable(name = "subjects_in_rooms", joinColumns = @JoinColumn(name = "subject_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "room_id", referencedColumnName = "id"))
+//    private Collection<Room> rooms;
+
 
 
     public Subject() {
-    }
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public LocalDateTime getUpdatedDate() {
-        return lastUpdated;
-    }
-
-    public void setUpdatedDate(LocalDateTime updatedDate) {
-        this.lastUpdated = updatedDate;
-    }
-
-    public boolean isDeleted() {
-        return deleted;
-    }
-
-    public void setDeleted(boolean deleted) {
-        this.deleted = deleted;
     }
 
     @PrePersist
@@ -89,4 +62,6 @@ public class Subject {
     private void preUpdate() {
         lastUpdated = LocalDateTime.now();
     }
+
+
 }

@@ -10,6 +10,8 @@ public class ModuleMapper {
         Module module = new Module();
         module.setNumber(moduleDto.getNumber());
         module.setName(moduleDto.getName());
+        module.setDeleted(moduleDto.isDeleted());
+
         return module;
     }
 
@@ -18,6 +20,7 @@ public class ModuleMapper {
         ModuleDto moduleDto = new ModuleDto();
         moduleDto.setNumber(module.getNumber());
         moduleDto.setName(module.getName());
+        moduleDto.setDeleted(module.isDeleted());
 
         return moduleDto;
     }

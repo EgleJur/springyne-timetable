@@ -1,5 +1,6 @@
 package lt.techin.springyne.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lt.techin.springyne.dto.ModuleDto;
 import lt.techin.springyne.dto.mapper.ModuleMapper;
 import lt.techin.springyne.model.Module;
@@ -19,6 +20,9 @@ public class ModuleController {
     @Autowired
     ModuleService moduleService;
 
+    @Autowired
+    ObjectMapper objectMapper;
+
     public ModuleController(ModuleService moduleService) {
         this.moduleService = moduleService;
     }
@@ -30,10 +34,19 @@ public class ModuleController {
     }
 
     @PostMapping
-    public ResponseEntity<ModuleDto> addModule(@Valid @RequestBody ModuleDto moduleDto) {
-
+    public ResponseEntity<Object> addModule(@Valid @RequestBody ModuleDto moduleDto) {
+        if (moduleService.existsByNumber(moduleDto.getNumber())) {
+            return ResponseEntity.badRequest().body("Toks numeris jau egzistuoja");
+        }
         Module newModule = moduleService.addModule(ModuleMapper.toModule(moduleDto));
         return ResponseEntity.ok(ModuleMapper.toModuleDto(newModule));
+    }
+
+    @GetMapping("/search")
+    public List<ModuleDto> filterModulesByNamePaged(@RequestParam(required = false) String name,
+                                                    @RequestParam int page, @RequestParam int pageSize) {
+        return moduleService.searchByName(name,page,pageSize).stream().map(ModuleMapper::toModuleDto)
+                .collect(Collectors.toList());
     }
 
 }

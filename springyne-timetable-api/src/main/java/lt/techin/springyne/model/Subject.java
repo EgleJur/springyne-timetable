@@ -1,15 +1,11 @@
 package lt.techin.springyne.model;
 
 import lombok.Data;
-import org.hibernate.annotations.SQLDelete;
-import org.hibernate.annotations.Where;
 import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -41,7 +37,7 @@ public class Subject {
     @JoinTable(name = "subject_and_modules",
             joinColumns = @JoinColumn(name = "subject_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "module_id", referencedColumnName = "id"))
-    Set<Module> modules;
+    Set<ModuleInfo> moduleInfos;
 
 
     @ManyToMany(fetch = FetchType.EAGER)
@@ -51,7 +47,7 @@ public class Subject {
 
 
     public Subject() {
-        modules = new HashSet<>();
+        moduleInfos = new HashSet<>();
         rooms = new HashSet<>();
 
     }

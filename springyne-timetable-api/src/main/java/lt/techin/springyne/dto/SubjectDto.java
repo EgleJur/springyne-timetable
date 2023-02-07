@@ -1,5 +1,8 @@
 package lt.techin.springyne.dto;
 
+import lt.techin.springyne.model.ModuleInfo;
+import lt.techin.springyne.model.Room;
+
 public class SubjectDto {
 
     private String name;
@@ -10,7 +13,7 @@ public class SubjectDto {
     public SubjectDto() {
     }
 
-    public SubjectDto(String name, String description) {
+    public SubjectDto(String name, String description, ModuleInfo module, Room room) {
 
         this.name = name;
         this.description = description;

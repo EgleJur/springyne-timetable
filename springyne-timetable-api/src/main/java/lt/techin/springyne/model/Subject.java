@@ -37,21 +37,22 @@ public class Subject {
 //    @ManyToMany
 //    private Module module;
 
-    @ManyToMany//(fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "subject_and_modules",
             joinColumns = @JoinColumn(name = "subject_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "module_id", referencedColumnName = "id"))
     Set<Module> modules;
 
 
-//    @ManyToMany//(fetch = FetchType.EAGER)
-//    @JoinTable(name = "subjects_in_rooms", joinColumns = @JoinColumn(name = "subject_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "room_id", referencedColumnName = "id"))
-//    private Collection<Room> rooms;
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "subjects_in_rooms", joinColumns = @JoinColumn(name = "subject_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "room_id", referencedColumnName = "id"))
+    private Set<Room> rooms;
 
 
 
     public Subject() {
         modules = new HashSet<>();
+        rooms = new HashSet<>();
 
     }
 

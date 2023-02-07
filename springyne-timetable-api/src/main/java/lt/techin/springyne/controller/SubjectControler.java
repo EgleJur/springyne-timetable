@@ -5,14 +5,18 @@ import lt.techin.springyne.dto.mapper.SubjectMapper;
 import lt.techin.springyne.model.Subject;
 import lt.techin.springyne.service.SubjectService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static org.springframework.http.ResponseEntity.ok;
 
 @Controller
 @RequestMapping("/api/v1/subject")
@@ -33,33 +37,17 @@ public class SubjectControler {
                 .collect(Collectors.toList());
 
     }
+    @GetMapping("/{subjectId}")
+    public ResponseEntity<Subject> getSubject(@PathVariable Long subjectId) {
+        var subjectOptional = subjectService.getById(subjectId);
 
+        var responseEntity = subjectOptional
+                .map(subject -> ok(subject))
+                .orElseGet(() -> ResponseEntity.notFound().build());
 
-//    @RestController
-//    @RequestMapping("api/v1/modules")
-//    public class ModuleController {
-//
-//        @Autowired
-//        ModuleService moduleService;
-//
-//        public ModuleController(ModuleService moduleService) {
-//            this.moduleService = moduleService;
-//        }
-//
-//        @GetMapping
-//        public List<ModuleDto> getAllModules() {
-//            return moduleService.getAllModules().stream().map((ModuleMapper::toModuleDto))
-//                    .collect(Collectors.toList());
-//        }
-//
-//        @PostMapping
-//        public ResponseEntity<ModuleDto> addModule(@Valid @RequestBody ModuleDto moduleDto) {
-//
-//            Module newModule = moduleService.addModule(ModuleMapper.toModule(moduleDto));
-//            return ResponseEntity.ok(ModuleMapper.toModuleDto(newModule));
-//        }
-//
-//    }
+        return responseEntity;
+    }
+
 
 
 }

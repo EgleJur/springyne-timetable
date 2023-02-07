@@ -10,6 +10,7 @@ import javax.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -37,7 +38,7 @@ public class Subject {
 //    private Module module;
 
     @ManyToMany//(fetch = FetchType.LAZY)
-    @JoinTable(name = "subjects_and_modules",
+    @JoinTable(name = "subject_and_modules",
             joinColumns = @JoinColumn(name = "subject_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "module_id", referencedColumnName = "id"))
     Set<Module> modules;
@@ -50,6 +51,7 @@ public class Subject {
 
 
     public Subject() {
+        modules = new HashSet<>();
 
     }
 

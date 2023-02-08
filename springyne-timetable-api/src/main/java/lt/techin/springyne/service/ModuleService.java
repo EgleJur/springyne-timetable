@@ -25,7 +25,7 @@ public class ModuleService {
 
 
     public List<Module> getAllModules() {
-        return moduleRepository.findAll();
+        return moduleRepository.findAllByOrderByDeletedAscNameAsc();
     }
 
     public Module addModule(Module module) {
@@ -43,7 +43,7 @@ public class ModuleService {
             module.setName(name);
         }
         Example<Module> moduleExample = Example.of(module, SEARCH_CONTAINS_NAME);
-        Pageable pageable = PageRequest.of(page,pageSize, Sort.by("deleted"));
+        Pageable pageable = PageRequest.of(page,pageSize, Sort.by("deleted").and(Sort.by("name")));
         return moduleRepository.findAll(moduleExample,pageable);
     }
 }

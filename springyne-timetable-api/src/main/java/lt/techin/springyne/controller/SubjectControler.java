@@ -54,4 +54,19 @@ public class SubjectControler {
         return ok(toSubjectDto(createdSubject));
     }
 
+//    @PatchMapping("/{subjectId}")
+//    public ResponseEntity<SubjectDto> updateSubject(@PathVariable Long subjectId, @RequestBody SubjectDto subjectDto) {
+//        var updatedSubject = subjectService.update(subjectId, toSubject(subjectDto));
+//
+//        return ok(toSubjectDto(updatedSubject));
+//    }
+
+    @PatchMapping("/{subjectId}")
+    public ResponseEntity<SubjectDto> deleteSubject(@PathVariable Long subjectId) {
+
+        var updatedSubject = subjectService.delete(subjectId);
+        return ok(toSubjectDto(updatedSubject));
+
+    }
+
 }

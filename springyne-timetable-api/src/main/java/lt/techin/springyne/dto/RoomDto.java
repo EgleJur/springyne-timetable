@@ -17,8 +17,9 @@ public class RoomDto {
 
     private boolean deleted;
 
-    public RoomDto(String name, String building) {
+    public RoomDto(String name, String building, String description) {
         this.name = name;
         this.building = building;
+        this.description = description;
     }
 }

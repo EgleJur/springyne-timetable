@@ -1,6 +1,7 @@
 package lt.techin.springyne.service;
 
 import lt.techin.springyne.dto.RoomDto;
+import lt.techin.springyne.exception.RoomValidationEception;
 import lt.techin.springyne.model.Room;
 import lt.techin.springyne.repository.RoomRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -81,12 +82,14 @@ public class RoomService {
 //    }
 
     public Room editRoom(Long id, Room room) {
-        room.setId(id);
-        return roomRepository.save(room);
+        Room existingRoom = roomRepository.findById(id)
+                .orElseThrow(() -> new RoomValidationEception("Room does not exist",
+                        "id", "Room not found", id.toString()));
+
+        existingRoom.setName(room.getName());
+        existingRoom.setBuilding(room.getBuilding());
+        existingRoom.setDescription(room.getDescription());
+
+        return roomRepository.save(existingRoom);
     }
-
-//    public void editRoom(Room room){
-//        roomRepository.save(room);
-//    }
-
 }

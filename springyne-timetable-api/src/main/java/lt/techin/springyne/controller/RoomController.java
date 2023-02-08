@@ -1,5 +1,6 @@
 package lt.techin.springyne.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lt.techin.springyne.dto.RoomDto;
 import lt.techin.springyne.dto.mapper.RoomMapper;
 import lt.techin.springyne.model.Room;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.toList;
 import static lt.techin.springyne.dto.mapper.RoomMapper.toRoom;
@@ -24,21 +26,42 @@ public class RoomController {
     @Autowired
     RoomService roomService;
 
+    @Autowired
+    ObjectMapper objetMapper;
+
+
     public RoomController (RoomService roomService){
+
         this.roomService = roomService;
     }
 
     @GetMapping
-    public List<RoomDto> getAllRooms() {
-        return roomService.getAllRooms().stream()
-                .map(RoomMapper::toRoomDto)
-                .collect(toList());
+    public List<Room> getAllRooms(){
+
+        return roomService.getAllRooms();
     }
 
     @PostMapping
-    public ResponseEntity<RoomDto> addRoom(@Valid @RequestBody RoomDto roomDto) {
-        Room newRoom = roomService.addRoom(toRoom(roomDto));
-        return ResponseEntity.ok(toRoomDto(newRoom));
+    public ResponseEntity<Object> addRoom(@Valid @RequestBody RoomDto roomDto) {
+        if (roomService.existsByName(roomDto.getName())) {
+            return ResponseEntity.badRequest().body("Toks kabinetas jau egzistuoja");
+        }
+        Room newRoom = roomService.addRoom(RoomMapper.toRoom(roomDto));
+        return ResponseEntity.ok(RoomMapper.toRoomDto(newRoom));
+    }
+
+    @GetMapping("/searchByName")
+    public List<Room> filterRoomsByNamePaged(@RequestParam(required = false) String name,
+                                                 @RequestParam int page, @RequestParam int pageSize) {
+        return roomService.searchByName(name,page,pageSize).stream()
+                .collect(Collectors.toList());
+    }
+
+    @GetMapping("/searchByBuilding")
+    public List<Room> filterRoomsByBuildingPaged(@RequestParam(required = false) String building,
+                                             @RequestParam int page, @RequestParam int pageSize) {
+        return roomService.searchByBuilding(building,page,pageSize).stream()
+                .collect(Collectors.toList());
     }
 
     @GetMapping("/{id}")
@@ -64,22 +87,12 @@ public class RoomController {
         return ok(toRoomDto(editedRoom));
     }
 
+
 //    @PutMapping("/{id}")
 //    public void editRoom(@PathVariable Long id, @RequestBody Room room){
 //        roomService.editRoom(room);
-//
 //}
 
-
-//    @DeleteMapping("/{id}")
-//    public ResponseEntity<Void> deleteRoom(@PathVariable Long id) {
-//        var roomDeleted = roomService.deleteById(id);
-//
-//        if (roomDeleted) {
-//            return ResponseEntity.noContent().build();
-//        }
-//        return ResponseEntity.notFound().build();
-//    }
 
 
 }

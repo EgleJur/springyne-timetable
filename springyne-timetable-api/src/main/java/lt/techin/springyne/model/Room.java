@@ -10,8 +10,8 @@ import javax.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
 
 @Entity
-@Data
 @Table(name="ROOM")
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class Room {
@@ -28,7 +28,7 @@ public class Room {
 
     private String description;
 
-    private boolean deleted = Boolean.FALSE; //???
+    private boolean deleted = Boolean.FALSE;
 
     @LastModifiedDate
     private LocalDateTime lastModifiedDate;

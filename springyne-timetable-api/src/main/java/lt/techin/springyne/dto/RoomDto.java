@@ -11,7 +11,14 @@ public class RoomDto {
 
     private String name;
 
-    private String Building;
+    private String building;
 
     private String description;
+
+    private boolean deleted;
+
+    public RoomDto(String name, String building) {
+        this.name = name;
+        this.building = building;
+    }
 }

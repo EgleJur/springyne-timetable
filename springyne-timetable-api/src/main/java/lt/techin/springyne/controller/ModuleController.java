@@ -28,9 +28,8 @@ public class ModuleController {
     }
 
     @GetMapping
-    public List<ModuleDto> getAllModules() {
-        return moduleService.getAllModules().stream().map((ModuleMapper::toModuleDto))
-                .collect(Collectors.toList());
+    public List<Module> getAllModules() {
+        return moduleService.getAllModules();
     }
 
     @PostMapping
@@ -43,9 +42,9 @@ public class ModuleController {
     }
 
     @GetMapping("/search")
-    public List<ModuleDto> filterModulesByNamePaged(@RequestParam(required = false) String name,
+    public List<Module> filterModulesByNamePaged(@RequestParam(required = false) String name,
                                                     @RequestParam int page, @RequestParam int pageSize) {
-        return moduleService.searchByName(name,page,pageSize).stream().map(ModuleMapper::toModuleDto)
+        return moduleService.searchByName(name,page,pageSize).stream()
                 .collect(Collectors.toList());
     }
 

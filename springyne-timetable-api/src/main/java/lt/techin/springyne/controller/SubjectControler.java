@@ -1,7 +1,6 @@
 package lt.techin.springyne.controller;
 
 import lt.techin.springyne.dto.SubjectDto;
-import lt.techin.springyne.dto.mapper.SubjectMapper;
 import lt.techin.springyne.model.Subject;
 import lt.techin.springyne.service.SubjectService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,9 +30,8 @@ public class SubjectControler {
 
     @GetMapping
     @ResponseBody
-    public List<SubjectDto> getAllSubjects() {
-        return subjectService.getAll().stream().map(SubjectMapper::toSubjectDto)
-                .collect(Collectors.toList());
+    public List<Subject> getAllSubjects() {
+        return subjectService.getAll();
 
     }
     @GetMapping("/{subjectId}")
@@ -68,6 +66,13 @@ public class SubjectControler {
 
         var updatedSubject = subjectService.delete(subjectId);
         return ok(toSubjectDto(updatedSubject));
+
+    }
+    @PatchMapping("/restore/{subjectId}")
+    public ResponseEntity<SubjectDto> restoreSubject(@PathVariable Long subjectId) {
+
+        var restoredSubject = subjectService.restore(subjectId);
+        return ok(toSubjectDto(restoredSubject));
 
     }
 

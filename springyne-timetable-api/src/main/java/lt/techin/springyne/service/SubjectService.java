@@ -108,6 +108,15 @@ public class SubjectService {
         return subjectRepository.save(existingSubject);
     }
 
+    public Subject restore(Long id) {
+        var existingSubject = subjectRepository.findById(id)
+                .orElseThrow(() -> new ScheduleValidationException("Subject does not exist",
+                        "id", "Subject not found", id.toString()));
+
+        existingSubject.setDeleted(false);
+        return subjectRepository.save(existingSubject);
+    }
+
 //    @Transactional
 //    public void addTagToPost(Long postId, Long tagId) {
 //        Subject post = subjectRepository.findModuleWithSubjectById(postId).orElseThrow();

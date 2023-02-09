@@ -7,6 +7,7 @@ import RoomListPage from './pages/RoomList';
 import ShiftListPage from './pages/ShiftList';
 import SubjectListPage from './pages/SubjectList';
 import TeacherListPage from './pages/TeacherList';
+import CreateModulePage from './pages/CreateModule';
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
             <Route path="/shifts" element={<ShiftListPage />} />
             <Route path="/subjects" element={<SubjectListPage />} />
             <Route path="/teachers" element={<TeacherListPage />} />
+            <Route path="/modules/create" element={<CreateModulePage />} />
           </Routes>
         </div>
       </HashRouter>

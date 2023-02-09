@@ -1,22 +1,29 @@
 import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 
 function ModuleListPage() {
   const [modules, setModules] = useState([]);
   const [pageNumber, setPageNumber] = useState(0);
-  const [pageSize, setPageSize] = useState(50);
+  const [pageSize, setPageSize] = useState(20);
   const [searchName, setSearchName] = useState("");
 
   useEffect(() => {
-    fetch(
-      `/api/v1/modules`
-    )
+    fetch(`/api/v1/modules`)
       .then((response) => response.json())
       .then((jsonResponse) => setModules(jsonResponse));
-  },[])
+  }, []);
 
   const searchAndPage = () => {
+    let newPageNumber = pageNumber;
+    if (newPageNumber === "") {
+      newPageNumber = 0;
+      setPageNumber(0);
+    }
+    if (pageSize === "") {
+      setPageSize(20);
+    }
     fetch(
-      `/api/v1/modules/search?name=${searchName}&page=${pageNumber}&pageSize=${pageSize}`
+      `/api/v1/modules/search?name=${searchName}&page=${newPageNumber}&pageSize=${pageSize}`
     )
       .then((response) => response.json())
       .then((jsonResponse) => setModules(jsonResponse));
@@ -26,12 +33,14 @@ function ModuleListPage() {
     <div className="mx-3">
       <h2 className="my-5">Moduliai</h2>
       <div className="d-flex">
-        <button className="btn btn-outline-success mb-5">
-          Pridėti naują modulį
+        <button className="btn btn-primary mb-5">
+          <Link to="/modules/create" className="nav-link">
+            Pridėti naują modulį
+          </Link>
         </button>
       </div>
       <div className="d-flex justify-content-end">
-        <div class="mb-4">
+        <div className="mb-4">
           <form className="d-flex" role="search">
             <input
               className="form-control me-2 w-25"
@@ -56,7 +65,11 @@ function ModuleListPage() {
               value={searchName}
               onChange={(e) => setSearchName(e.target.value)}
             />
-            <button className="btn btn-outline-success" type="submit" onClick={searchAndPage}>
+            <button
+              className="btn btn-outline-primary"
+              type="submit"
+              onClick={searchAndPage}
+            >
               Ieškoti
             </button>
           </form>
@@ -79,8 +92,8 @@ function ModuleListPage() {
               <td>{module.name}</td>
               <td>{module.deleted ? "Modulis ištrintas" : ""}</td>
               <td>
-                <button className="btn btn-outline-secondary">Žiūrėti</button>
-                <button className="btn btn-outline-secondary ms-2">
+                <button className="btn btn-outline-primary">Žiūrėti</button>
+                <button className="btn btn-outline-primary ms-2">
                   Redaguoti
                 </button>
                 {module.deleted ? (

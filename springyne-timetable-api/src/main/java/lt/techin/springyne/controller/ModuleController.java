@@ -6,12 +6,12 @@ import lt.techin.springyne.dto.mapper.ModuleMapper;
 import lt.techin.springyne.model.Module;
 import lt.techin.springyne.service.ModuleService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("api/v1/modules")
@@ -42,10 +42,9 @@ public class ModuleController {
     }
 
     @GetMapping("/search")
-    public List<Module> filterModulesByNamePaged(@RequestParam(required = false) String name,
-                                                    @RequestParam int page, @RequestParam int pageSize) {
-        return moduleService.searchByName(name,page,pageSize).stream()
-                .collect(Collectors.toList());
+    public Page<Module> filterModulesByNamePaged(@RequestParam(required = false) String name,
+                                                 @RequestParam int page, @RequestParam int pageSize) {
+        return moduleService.searchByName(name,page,pageSize);
     }
 
 }

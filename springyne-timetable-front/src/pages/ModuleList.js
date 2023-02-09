@@ -1,32 +1,41 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import { TextField } from "@mui/material";
+import { Select, MenuItem, Pagination } from "@mui/material";
 
 function ModuleListPage() {
-  const [modules, setModules] = useState([]);
+  const [modules, setModules] = useState({});
   const [pageNumber, setPageNumber] = useState(0);
   const [pageSize, setPageSize] = useState(20);
   const [searchName, setSearchName] = useState("");
+  const [page, setPage] = useState(1);
 
-  useEffect(() => {
-    fetch(`/api/v1/modules`)
-      .then((response) => response.json())
-      .then((jsonResponse) => setModules(jsonResponse));
-  }, []);
+  const fetchModules = () => {fetch(
+    `/api/v1/modules/search?name=${searchName}&page=${pageNumber}&pageSize=${pageSize}`
+  )
+    .then((response) => response.json())
+    .then((jsonResponse) => setModules(jsonResponse))};
 
-  const searchAndPage = () => {
-    let newPageNumber = pageNumber;
-    if (newPageNumber === "") {
-      newPageNumber = 0;
-      setPageNumber(0);
-    }
-    if (pageSize === "") {
-      setPageSize(20);
-    }
+  useEffect(fetchModules, []);
+
+  const handlePageChange = (e, value) => {
+    setPage(value);
+    setPageNumber(value - 1);
     fetch(
-      `/api/v1/modules/search?name=${searchName}&page=${newPageNumber}&pageSize=${pageSize}`
-    )
-      .then((response) => response.json())
-      .then((jsonResponse) => setModules(jsonResponse));
+    `/api/v1/modules/search?name=${searchName}&page=${value-1}&pageSize=${pageSize}`
+  )
+    .then((response) => response.json())
+    .then((jsonResponse) => setModules(jsonResponse))};
+
+  const handlePageSizeChange = (e) => {
+    setPageSize(e.target.value);
+    setPage(1);
+    setPageNumber(0);
+    fetch(
+    `/api/v1/modules/search?name=${searchName}&page=${0}&pageSize=${e.target.value}`
+  )
+    .then((response) => response.json())
+    .then((jsonResponse) => setModules(jsonResponse))
   };
 
   return (
@@ -42,37 +51,46 @@ function ModuleListPage() {
       <div className="d-flex justify-content-end">
         <div className="mb-4">
           <form className="d-flex" role="search">
-            <input
-              className="form-control me-2 w-25"
-              id="input-pageNumber"
-              placeholder="Puslapis"
-              value={pageNumber}
-              onChange={(e) => setPageNumber(e.target.value)}
-            />
-            <input
-              className="form-control me-2 w-25"
-              id="input-pageSize"
-              placeholder="Puslapyje"
+            <label htmlFor="page-size-select" className="me-2">
+              Puslapyje:
+            </label>
+            <Select
+              id="page-size-select"
               value={pageSize}
-              onChange={(e) => setPageSize(e.target.value)}
-            />
-            <input
-              className="form-control me-2"
-              type="search"
-              placeholder="Ieškoti pavadinimo"
-              aria-label="Search"
-              id="input-searchName"
-              value={searchName}
+              size="small"
+              className="me-2"
+              onChange={handlePageSizeChange}
+            >
+              <MenuItem value={5}>5</MenuItem>
+              <MenuItem value={10}>10</MenuItem>
+              <MenuItem value={20}>20</MenuItem>
+              <MenuItem value={50}>50</MenuItem>
+            </Select>
+            <TextField
               onChange={(e) => setSearchName(e.target.value)}
+              value={searchName}
+              id="search-name-input"
+              label="Ieškoti pavadinimo"
+              className="form-control me-2"
+              size="small"
             />
             <button
               className="btn btn-outline-primary"
               type="submit"
-              onClick={searchAndPage}
+              onClick={fetchModules}
             >
               Ieškoti
             </button>
           </form>
+        </div>
+        <div>
+          <Pagination
+            count={modules.totalPages}
+            defaultPage={1}
+            siblingCount={0}
+            onChange={handlePageChange}
+            value={page}
+          />
         </div>
       </div>
 
@@ -86,22 +104,24 @@ function ModuleListPage() {
           </tr>
         </thead>
         <tbody>
-          {modules.map((module) => (
+          {modules.content?.map((module) => (
             <tr key={module.id} id={module.id}>
               <td>{module.number}</td>
               <td>{module.name}</td>
               <td>{module.deleted ? "Modulis ištrintas" : ""}</td>
               <td>
-                <button className="btn btn-outline-primary">Žiūrėti</button>
-                <button className="btn btn-outline-primary ms-2">
+                <button className="btn btn-outline-primary me-2 my-1">
+                  Žiūrėti
+                </button>
+                <button className="btn btn-outline-primary me-2 my-1">
                   Redaguoti
                 </button>
                 {module.deleted ? (
-                  <button className="btn btn-outline-danger ms-2">
+                  <button className="btn btn-outline-danger me-2 my-1">
                     Atstatyti
                   </button>
                 ) : (
-                  <button className="btn btn-outline-danger ms-2">
+                  <button className="btn btn-outline-danger me-2 my-1">
                     Ištrinti
                   </button>
                 )}

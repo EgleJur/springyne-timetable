@@ -1,19 +1,25 @@
 import { useState } from "react";
-import { useHref } from "react-router-dom";
+import { Alert,Collapse } from "@mui/material";
+import { TextField } from "@mui/material";
 
 function CreateModulePage() {
   const [number, setNumber] = useState("");
   const [name, setName] = useState("");
-  const [inputClassName1, setImputClassName1] = useState("form-control");
-  const [inputClassName2, setImputClassName2] = useState("form-control");
+  const [numberError, setNumberError] = useState("");
+  const [nameError, setNameError] = useState("");
+  const [success, setSuccess] = useState(false);
+  const [failure, setFailure] = useState(false);
 
-  const createNewModule = () => {
+  const createNewModule = (e) => {
+    e.preventDefault();
+    setNumberError(false);
+    setNameError(false);
     if (name === "" || number === "") {
       if (number === "") {
-        setImputClassName1("form-control border-danger-subtle");
+        setNumberError(true);
       }
       if (name === "") {
-        setImputClassName2("form-control border-danger-subtle");
+        setNameError(true);
       }
     } else {
       fetch("/api/v1/modules/", {
@@ -29,12 +35,12 @@ function CreateModulePage() {
         if (result.ok) {
           setNumber("");
           setName("");
-          setImputClassName1("form-control");
-          setImputClassName2("form-control");
-          window.alert("Įrašas sėkmingai sukurtas");
+          setSuccess(true);
+          setFailure(false);
         } else {
-          setImputClassName1("form-control border-danger-subtle");
-          window.alert("Įrašo nepavyko sukurti");
+          setFailure(true);
+          setSuccess(false);
+          setNumberError(true);
         }
       });
     }
@@ -43,40 +49,52 @@ function CreateModulePage() {
   return (
     <div className="mx-3">
       <h2 className="my-5">Pridėti naują modulį</h2>
+      <Collapse in={success}>
+        <Alert
+          onClose={() => {
+            setSuccess(false);
+          }}
+          severity="success"
+          className="mb-3"
+        >
+          Įrašas sėkmingai sukurtas
+        </Alert>
+      </Collapse>
 
-      <form>
-        <div className="mb-3">
-          <label htmlFor="create-module-number" className="form-label">
-            Numeris
-          </label>
-          <input
-            type="text"
-            className={inputClassName1}
-            id="create-module-number"
-            aria-describedby="module-number-help"
-            value={number}
-            onChange={(e) => setNumber(e.target.value)}
-          />
-          <div id="module-number-help" className="form-text">
-            Numeris turi būti unikalus ir negali būti tuščias
-          </div>
-        </div>
-        <div className="mb-3">
-          <label htmlFor="create-module-name" className="form-label">
-            Pavadinimas
-          </label>
-          <input
-            type="text"
-            className={inputClassName2}
-            id="create-module-name"
-            aria-describedby="module-name-help"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-          />
-          <div id="module-name-help" className="form-text">
-            Pavadinimas negali būti tuščias
-          </div>
-        </div>
+      <Collapse in={failure}>
+        <Alert
+          onClose={() => {
+            setFailure(false);
+          }}
+          severity="error"
+          className="mb-3"
+        >
+          Įrašo nepavyko sukurti
+        </Alert>
+      </Collapse>
+      <form noValidate>
+        <TextField
+          error={!!numberError}
+          onChange={(e) => setNumber(e.target.value)}
+          value={number}
+          id="create-module-number-with-error"
+          label="Numeris"
+          helperText="Numeris turi būti unikalus ir negali būti tuščias"
+          className="form-control mb-3"
+          size="small"
+          required
+        />
+        <TextField
+          error={!!nameError}
+          onChange={(e) => setName(e.target.value)}
+          value={name}
+          id="create-module-number-with-error"
+          label="Pavadinimas"
+          helperText="Pavadinimas negali būti tuščias"
+          className="form-control mb-3"
+          size="small"
+          required
+        />
         <button
           type="submit"
           className="btn btn-primary"

@@ -13,11 +13,11 @@ public class SubjectMapper {
 
         Subject subject = new Subject();
 
-        subject.setId(subjectDto.getId());
+       // subject.setId(subjectDto.getId());
         subject.setName(subjectDto.getName());
         subject.setDescription(subjectDto.getDescription());
-        subject.setModule((Set<Module>) subjectDto.getModule());
-        subject.setRooms((Set<Room>) subjectDto.getRoom());
+        //subject.setModule((Set<Module>) subjectDto.getModule());
+       // subject.setRooms((Set<Room>) subjectDto.getRoom());
 
         return subject;
     }
@@ -26,7 +26,7 @@ public class SubjectMapper {
 
         SubjectDto subjectDto = new SubjectDto();
 
-        subjectDto.setId(subject.getId());
+     //   subjectDto.setId(subject.getId());
         subjectDto.setName(subject.getName());
         subjectDto.setDescription(subject.getDescription());
         subjectDto.setModule((Set<Module>) subject.getModule());

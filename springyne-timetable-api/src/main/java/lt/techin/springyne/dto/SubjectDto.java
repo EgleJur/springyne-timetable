@@ -13,7 +13,7 @@ import java.util.Set;
 @NoArgsConstructor
 public class SubjectDto {
 
-    private Long id;
+//    private Long id;
     private String name;
     private String description;
     private Set<Module> module;

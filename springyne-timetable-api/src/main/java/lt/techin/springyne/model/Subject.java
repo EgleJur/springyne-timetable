@@ -2,7 +2,6 @@ package lt.techin.springyne.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.*;
@@ -17,34 +16,51 @@ import java.util.Set;
 //@Where(clause = "deleted=false")
 @Data
 @AllArgsConstructor
-@NoArgsConstructor
+
 public class Subject {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private Long id;
 
     @NotBlank
+    @Column(name = "name")
     private String name;
 
+    @Column(name = "description")
     private String description;
 
     @CreatedDate
+    @Column(name = "LAST_UPDATED")
     private LocalDateTime lastUpdated;
 
     private boolean deleted = Boolean.FALSE;
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "subject_and_modules",
             joinColumns = @JoinColumn(name = "subject_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "module_id", referencedColumnName = "id"))
-    private Set<Module> module;
-
+private Set<Module> module;
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "subjects_in_rooms",
             joinColumns = @JoinColumn(name = "subject_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "room_id", referencedColumnName = "id"))
     private Set<Room> rooms;
+
+    public Subject() {
+        this.module = new HashSet<>();
+        this.rooms = new HashSet<>();
+    }
+
+//    public void addModule(Module module){
+//    this.modules.add(module);
+//    module.getSubj().add(this);
+//
+//}
+//    public void addRoom(Room room){
+//        this.rooms.add(room);
+//    }
 
 
     @PrePersist

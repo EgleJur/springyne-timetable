@@ -9,5 +9,5 @@ public interface ModuleRepository extends JpaRepository<Module,Long> {
 
     boolean existsByNumberIgnoreCase(String name);
 
-    List<Module> findAllByOrderByDeletedAscNameAsc();
+    List<Module> findAllByOrderByDeletedAscNameAscNumberAsc();
 }

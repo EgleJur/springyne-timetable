@@ -1,5 +1,6 @@
 package lt.techin.springyne.controller;
 
+import org.springframework.http.HttpStatus;
 import lt.techin.springyne.dto.ErrorDto;
 import lt.techin.springyne.dto.ErrorFieldDto;
 import lt.techin.springyne.dto.mapper.ErrorFieldMapper;
@@ -29,39 +30,15 @@ import static java.util.stream.Collectors.toList;
 @ControllerAdvice
 public class ApiExceptionHandler {
 
+    @ExceptionHandler(ConstraintViolationException.class)
+    @ResponseStatus(value = HttpStatus.BAD_REQUEST, reason = "Validation error")
+    public void handleValidationExceptions(ConstraintViolationException exception) {
 
         @ExceptionHandler(ConstraintViolationException.class)
         @ResponseStatus(value = HttpStatus.BAD_REQUEST, reason = "Validation error")
         public void handleValidationExceptions(ConstraintViolationException exception) {
 
-        }
-        private static final Logger logger = LoggerFactory.getLogger(ApiExceptionHandler.class);
-
-        @ExceptionHandler(SQLException.class)
-        public String handleSQLException(HttpServletRequest request, Exception ex) {
-                logger.info("SQLException Occured:: URL=" + request.getRequestURL());
-                return "database_error";
-        }
-
-//    @ExceptionHandler(IOException.class)
-//    public void scheduleNotFoundException() {
-//        logger.error("IOException handler executed");
-//        //returning 404 error code
-//    }
-
-        @ResponseStatus(value = HttpStatus.NOT_FOUND, reason = "IOException occured")
-        @ExceptionHandler(IOException.class)
-        public void handleIOException() {
-                logger.error("IOException handler executed");
-                //returning 404 error code
-        }
-
-//@ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR, reason = "SQL query error")
-//    public void handleSQLGrammarException(SQLGrammarException exception) {
-//        logger.error("All Exceptions handler executed: {}. SQL: {}. Get SQL: {}",
-//                exception.getMessage(), exception.getSQLException(), exception.getSQL());
-//        //returning 404 error code
-//    }
+    }
 
         @ExceptionHandler(DataAccessException.class)
         public ResponseEntity<ErrorDto> handleDataAccessException(HttpServletRequest request, DataAccessException dataAccessException) {

@@ -7,6 +7,7 @@ import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ModuleService {
@@ -46,5 +47,9 @@ public class ModuleService {
         Pageable pageable = PageRequest.of(page,pageSize, Sort.by("deleted").and(Sort.by("id")));
 //                .and(Sort.by("number"))));
         return moduleRepository.findAll(moduleExample,pageable);
+    }
+
+    public Optional<Module> getModuleById(Long moduleId) {
+        return moduleRepository.findById(moduleId);
     }
 }

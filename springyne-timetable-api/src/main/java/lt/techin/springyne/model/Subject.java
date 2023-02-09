@@ -1,6 +1,7 @@
 package lt.techin.springyne.model;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import org.springframework.data.annotation.CreatedDate;
 
@@ -11,6 +12,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
+@Builder
 @Table(name = "SUBJECT_TABLE")
 //@SQLDelete(sql = "UPDATE Subject SET deleted = true WHERE id=?")
 //@Where(clause = "deleted=false")

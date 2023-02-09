@@ -6,6 +6,7 @@ import lt.techin.springyne.repository.ModuleRepository;
 import lt.techin.springyne.repository.RoomRepositoryE;
 import lt.techin.springyne.repository.SubjectRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -25,6 +26,10 @@ public class SubjectService {
         this.subjectRepository = subjectRepository;
 
     }
+
+    private static final ExampleMatcher SEARCH_CONTAINS_NAME = ExampleMatcher.matchingAny()
+            .withMatcher("name", ExampleMatcher.GenericPropertyMatchers.contains().ignoreCase())
+            .withIgnorePaths("id", "number","deleted","lastupdated");
 
     public List<Subject> getAll() {
         return subjectRepository.findAllSubjects();
@@ -50,6 +55,16 @@ public class SubjectService {
         return subjectRepository.save(existingSubject);
     }
 
+    public Page<Subject> searchByName(String name, int page, int pageSize) {
+
+        Subject subject = new Subject();
+        if(name != null) {
+            subject.setName(name);
+        }
+        Example<Subject> subjectExample = Example.of(subject, SEARCH_CONTAINS_NAME);
+        Pageable pageable = PageRequest.of(page,pageSize, Sort.by("deleted").and(Sort.by("name")));
+        return subjectRepository.findAll(subjectExample, pageable);
+    }
 
 //        if(moduleId!=null) {
 //

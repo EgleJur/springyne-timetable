@@ -71,6 +71,13 @@ public class SubjectControler {
 
     }
 
+    @GetMapping("/search")
+    public List<Subject> filterSubjectsByNamePaged(@RequestParam(required = false) String name,
+                                                 @RequestParam int page, @RequestParam int pageSize) {
+        return subjectService.searchByName(name,page,pageSize).stream()
+                .collect(Collectors.toList());
+    }
+
 
 
 }

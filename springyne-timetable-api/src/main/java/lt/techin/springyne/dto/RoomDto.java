@@ -4,13 +4,17 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.NotBlank;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class RoomDto {
 
+//    @NotBlank(message = "Butina ivesti kabineto pavadinima")
     private String name;
 
+//    @NotBlank (message = "Butina ivesti pastato adresa")
     private String building;
 
     private String description;

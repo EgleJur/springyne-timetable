@@ -3,22 +3,31 @@ package lt.techin.springyne.controller;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lt.techin.springyne.dto.RoomDto;
+import lt.techin.springyne.dto.mapper.RoomMapper;
 import lt.techin.springyne.model.Room;
+import lt.techin.springyne.repository.RoomRepository;
+import lt.techin.springyne.service.RoomService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
+import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
@@ -52,8 +61,8 @@ class RoomControllerTest {
         Assertions.assertTrue(resultList.containsAll(expectedList));
     }
 
-        @Test
-        void addRoomThrowsExceptionWithNullOrEmptyValues() throws Exception {
+    @Test
+    void addRoomThrowsExceptionWithNullOrEmptyValues() throws Exception {
         RoomDto testRoomDto4 = new RoomDto("", "Test name4", "Test");
         RoomDto testRoomDto5 = new RoomDto(null, "Test name5", "Test");
         RoomDto testRoomDto6 = new RoomDto(null, null, null);
@@ -79,4 +88,30 @@ class RoomControllerTest {
                         content(objectMapper.writeValueAsString(roomDto)))
                 .andExpect(status().isBadRequest()).andReturn();
     }
+
+    @InjectMocks
+    RoomController roomController;
+
+    @Mock
+    RoomService roomService;
+
+    @Mock
+    Room room;
+
+    private static final long Id = 1;
+
+    @Test
+    public void viewRoomByIdTest(){
+        when(roomService.viewRoom(Id)).thenReturn(Optional.of(room));
+        assertEquals(roomController.viewRoom(Id).getBody(), room);
+    }
+
+    @Test
+    public void getAllRoomsTest(){
+        List<Room> rooms = new ArrayList<>();
+        rooms.add(room);
+        when(roomService.getAllRooms()).thenReturn(rooms);
+        assertEquals(roomController.getAllRooms().size(), rooms.size());
+    }
+
 }

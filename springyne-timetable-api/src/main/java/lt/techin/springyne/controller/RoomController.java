@@ -46,6 +46,7 @@ public class RoomController {
         if (roomService.existsByName(roomDto.getName())) {
             return ResponseEntity.badRequest().body("Toks kabinetas jau egzistuoja");
         }
+
         Room newRoom = roomService.addRoom(RoomMapper.toRoom(roomDto));
         return ResponseEntity.ok(RoomMapper.toRoomDto(newRoom));
     }
@@ -86,13 +87,4 @@ public class RoomController {
 
         return ok(toRoomDto(editedRoom));
     }
-
-
-//    @PutMapping("/{id}")
-//    public void editRoom(@PathVariable Long id, @RequestBody Room room){
-//        roomService.editRoom(room);
-//}
-
-
-
 }

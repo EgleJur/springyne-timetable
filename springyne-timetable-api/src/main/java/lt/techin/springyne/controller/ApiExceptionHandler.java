@@ -1,6 +1,5 @@
 package lt.techin.springyne.controller;
 
-import org.springframework.http.HttpStatus;
 import lt.techin.springyne.dto.ErrorDto;
 import lt.techin.springyne.dto.ErrorFieldDto;
 import lt.techin.springyne.dto.mapper.ErrorFieldMapper;
@@ -19,8 +18,6 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.ConstraintViolationException;
-import java.io.IOException;
-import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -30,13 +27,11 @@ import static java.util.stream.Collectors.toList;
 @ControllerAdvice
 public class ApiExceptionHandler {
 
+    private static final Logger logger = LoggerFactory.getLogger(ApiExceptionHandler.class);
+
     @ExceptionHandler(ConstraintViolationException.class)
     @ResponseStatus(value = HttpStatus.BAD_REQUEST, reason = "Validation error")
     public void handleValidationExceptions(ConstraintViolationException exception) {
-
-        @ExceptionHandler(ConstraintViolationException.class)
-        @ResponseStatus(value = HttpStatus.BAD_REQUEST, reason = "Validation error")
-        public void handleValidationExceptions(ConstraintViolationException exception) {
 
     }
 

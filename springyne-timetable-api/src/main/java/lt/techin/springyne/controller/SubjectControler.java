@@ -32,7 +32,6 @@ public class SubjectControler {
     @ResponseBody
     public List<Subject> getAllSubjects() {
         return subjectService.getAll();
-
     }
     @GetMapping("/{subjectId}")
     public ResponseEntity<Subject> getSubject(@PathVariable Long subjectId) {

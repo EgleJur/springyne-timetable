@@ -29,10 +29,13 @@ public class SubjectService {
 
     private static final ExampleMatcher SEARCH_CONTAINS_NAME = ExampleMatcher.matchingAny()
             .withMatcher("name", ExampleMatcher.GenericPropertyMatchers.contains().ignoreCase())
-            .withIgnorePaths("id", "number","deleted","lastupdated");
+            .withIgnorePaths("id","deleted","lastupdated");
 
+    private static final ExampleMatcher SEARCH_CONTAINS_MODULE = ExampleMatcher.matchingAny()
+            .withMatcher("name", ExampleMatcher.GenericPropertyMatchers.contains().ignoreCase())
+            .withIgnorePaths("id", "deleted","lastupdated");
     public List<Subject> getAll() {
-        return subjectRepository.findAllSubjects();
+        return subjectRepository.findAllSubjectsAcsDeletedOrder();
 
     }
 

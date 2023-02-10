@@ -34,12 +34,8 @@ public class ModuleController {
     }
 
     @PostMapping
-    public ResponseEntity<Object> addModule(@Valid @RequestBody ModuleDto moduleDto) {
-        if (moduleService.existsByNumber(moduleDto.getNumber())) {
-            return ResponseEntity.badRequest().body("Toks numeris jau egzistuoja");
-        }
-        Module newModule = moduleService.addModule(ModuleMapper.toModule(moduleDto));
-        return ResponseEntity.ok(ModuleMapper.toModuleDto(newModule));
+    public ResponseEntity<Module> addModule(@Valid @RequestBody ModuleDto moduleDto) {
+        return ResponseEntity.ok(moduleService.addModule(ModuleMapper.toModule(moduleDto)));
     }
 
     @GetMapping("/search")
@@ -51,6 +47,21 @@ public class ModuleController {
     @GetMapping("/{moduleId}")
     public Optional<Module> getModuleById(@PathVariable Long moduleId) {
         return moduleService.getModuleById(moduleId);
+    }
+
+    @PatchMapping("/delete/{moduleId}")
+    public ResponseEntity<Module> deleteModule(@PathVariable Long moduleId) {
+        return ResponseEntity.ok(moduleService.deleteModule(moduleId));
+    }
+
+    @PatchMapping("/restore/{moduleId}")
+    public ResponseEntity<Module> restoreModule(@PathVariable Long moduleId) {
+        return ResponseEntity.ok(moduleService.restoreModule(moduleId));
+    }
+
+    @PatchMapping("/update/{moduleId}")
+    public ResponseEntity<Module> updateModule(@PathVariable Long moduleId, @Valid @RequestBody ModuleDto moduleDto) {
+        return ResponseEntity.ok(moduleService.updateModule(moduleId, ModuleMapper.toModule(moduleDto)));
     }
 
 }

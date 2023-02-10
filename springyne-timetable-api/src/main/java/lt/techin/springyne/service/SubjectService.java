@@ -3,7 +3,7 @@ package lt.techin.springyne.service;
 import lt.techin.springyne.exception.ScheduleValidationException;
 import lt.techin.springyne.model.Subject;
 import lt.techin.springyne.repository.ModuleRepository;
-import lt.techin.springyne.repository.RoomRepositoryE;
+import lt.techin.springyne.repository.RoomRepository;
 import lt.techin.springyne.repository.SubjectRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.*;
@@ -19,7 +19,7 @@ public class SubjectService {
     @Autowired
     SubjectRepository subjectRepository;
     ModuleRepository moduleRepository;
-    RoomRepositoryE roomRepository;
+    RoomRepository roomRepository;
 
 
     public SubjectService(SubjectRepository subjectRepository) {

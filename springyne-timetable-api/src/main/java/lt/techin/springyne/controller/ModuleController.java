@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("api/v1/modules")
@@ -45,6 +46,11 @@ public class ModuleController {
     public Page<Module> filterModulesByNamePaged(@RequestParam(required = false) String name,
                                                  @RequestParam int page, @RequestParam int pageSize) {
         return moduleService.searchByName(name,page,pageSize);
+    }
+
+    @GetMapping("/{moduleId}")
+    public Optional<Module> getModuleById(@PathVariable Long moduleId) {
+        return moduleService.getModuleById(moduleId);
     }
 
 }

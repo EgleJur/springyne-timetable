@@ -2,6 +2,7 @@ package lt.techin.springyne.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.LastModifiedDate;
 
@@ -41,5 +42,6 @@ public class Room {
     @PreUpdate
     private void preUpdate() {
         lastModifiedDate = LocalDateTime.now();
+
     }
 }

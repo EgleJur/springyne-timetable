@@ -2,7 +2,6 @@ package lt.techin.springyne.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
-
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.LastModifiedDate;
 
@@ -11,37 +10,35 @@ import javax.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name="ROOM")
+@Table(name="MODULE_TABLE")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Room {
+public class Module {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @NotBlank
-    private String name;
+    private String number;
 
     @NotBlank
-    private String building;
-
-    private String description;
+    private String name;
 
     private boolean deleted = Boolean.FALSE;
 
     @LastModifiedDate
-    private LocalDateTime lastModifiedDate;
+    private LocalDateTime modifiedDate;
 
     @PrePersist
     private void prePersist() {
-        lastModifiedDate = LocalDateTime.now();
+        modifiedDate = LocalDateTime.now();
     }
 
     @PreUpdate
     private void preUpdate() {
-        lastModifiedDate = LocalDateTime.now();
-
+        modifiedDate = LocalDateTime.now();
     }
+
 }

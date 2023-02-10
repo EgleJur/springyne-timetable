@@ -4,7 +4,6 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lt.techin.springyne.dto.SubjectDto;
 import lt.techin.springyne.model.Module;
-import lt.techin.springyne.model.Room;
 import lt.techin.springyne.model.Subject;
 import lt.techin.springyne.service.SubjectService;
 import org.junit.jupiter.api.Assertions;

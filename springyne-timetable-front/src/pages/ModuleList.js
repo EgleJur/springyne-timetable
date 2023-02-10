@@ -6,15 +6,17 @@ import { Select, MenuItem, Pagination } from "@mui/material";
 function ModuleListPage() {
   const [modules, setModules] = useState({});
   const [pageNumber, setPageNumber] = useState(0);
-  const [pageSize, setPageSize] = useState(20);
+  const [pageSize, setPageSize] = useState(25);
   const [searchName, setSearchName] = useState("");
   const [page, setPage] = useState(1);
 
-  const fetchModules = () => {fetch(
-    `/api/v1/modules/search?name=${searchName}&page=${pageNumber}&pageSize=${pageSize}`
-  )
-    .then((response) => response.json())
-    .then((jsonResponse) => setModules(jsonResponse))};
+  const fetchModules = () => {
+    fetch(
+      `/api/v1/modules/search?name=${searchName}&page=${pageNumber}&pageSize=${pageSize}`
+    )
+      .then((response) => response.json())
+      .then((jsonResponse) => setModules(jsonResponse));
+  };
 
   useEffect(fetchModules, []);
 
@@ -22,20 +24,25 @@ function ModuleListPage() {
     setPage(value);
     setPageNumber(value - 1);
     fetch(
-    `/api/v1/modules/search?name=${searchName}&page=${value-1}&pageSize=${pageSize}`
-  )
-    .then((response) => response.json())
-    .then((jsonResponse) => setModules(jsonResponse))};
+      `/api/v1/modules/search?name=${searchName}&page=${
+        value - 1
+      }&pageSize=${pageSize}`
+    )
+      .then((response) => response.json())
+      .then((jsonResponse) => setModules(jsonResponse));
+  };
 
   const handlePageSizeChange = (e) => {
     setPageSize(e.target.value);
     setPage(1);
     setPageNumber(0);
     fetch(
-    `/api/v1/modules/search?name=${searchName}&page=${0}&pageSize=${e.target.value}`
-  )
-    .then((response) => response.json())
-    .then((jsonResponse) => setModules(jsonResponse))
+      `/api/v1/modules/search?name=${searchName}&page=${0}&pageSize=${
+        e.target.value
+      }`
+    )
+      .then((response) => response.json())
+      .then((jsonResponse) => setModules(jsonResponse));
   };
 
   return (
@@ -61,10 +68,10 @@ function ModuleListPage() {
               className="me-2"
               onChange={handlePageSizeChange}
             >
-              <MenuItem value={5}>5</MenuItem>
               <MenuItem value={10}>10</MenuItem>
-              <MenuItem value={20}>20</MenuItem>
+              <MenuItem value={25}>25</MenuItem>
               <MenuItem value={50}>50</MenuItem>
+              <MenuItem value={100}>100</MenuItem>
             </Select>
             <TextField
               onChange={(e) => setSearchName(e.target.value)}

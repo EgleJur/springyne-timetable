@@ -7,7 +7,8 @@ import java.util.Set;
 
 public class RoomCreator {
     public static Set<Room> createRoom(){
-        Room room = new Room(5l);
+        Room room = new Room();
+        room.setId(5L);
         Set<Room> rooms = new HashSet<>();
 
         rooms.add(room);

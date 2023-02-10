@@ -11,10 +11,8 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
-import static java.util.stream.Collectors.toList;
 import static lt.techin.springyne.dto.mapper.RoomMapper.toRoom;
 import static lt.techin.springyne.dto.mapper.RoomMapper.toRoomDto;
 import static org.springframework.http.ResponseEntity.ok;

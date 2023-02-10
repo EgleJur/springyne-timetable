@@ -16,6 +16,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -25,9 +26,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import static lt.techin.springyne.dto.mapper.RoomMapper.toRoom;
+import static lt.techin.springyne.dto.mapper.RoomMapper.toRoomDto;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
+import static org.springframework.http.ResponseEntity.ok;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
@@ -59,6 +63,7 @@ class RoomControllerTest {
         });
 
         Assertions.assertTrue(resultList.containsAll(expectedList));
+//        assertThat(resultList).containsAll(expectedList);
     }
 
     @Test
@@ -98,12 +103,15 @@ class RoomControllerTest {
     @Mock
     Room room;
 
+    @Mock
+    RoomDto roomDto;
+
     private static final long Id = 1;
 
     @Test
     public void viewRoomByIdTest(){
         when(roomService.viewRoom(Id)).thenReturn(Optional.of(room));
-        assertEquals(roomController.viewRoom(Id).getBody(), room);
+        assertEquals(roomController.viewRoom(Id).getBody(), roomDto);
     }
 
     @Test

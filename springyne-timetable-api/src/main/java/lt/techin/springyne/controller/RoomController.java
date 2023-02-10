@@ -87,4 +87,19 @@ public class RoomController {
 
         return ok(toRoomDto(editedRoom));
     }
+
+    @PatchMapping("/delete/{id}")
+    public ResponseEntity<RoomDto> deleteRoom(@PathVariable Long id) {
+
+        var updatedRoom = roomService.delete(id);
+        return ok(toRoomDto(updatedRoom));
+
+    }
+    @PatchMapping("/restore/{id}")
+    public ResponseEntity<RoomDto> restoreRoom(@PathVariable Long id) {
+
+        var restoredRoom = roomService.restore(id);
+        return ok(toRoomDto(restoredRoom));
+
+    }
 }

@@ -92,4 +92,22 @@ public class RoomService {
 
         return roomRepository.save(existingRoom);
     }
+
+    public Room delete(Long id) {
+        var existingRoom = roomRepository.findById(id)
+                .orElseThrow(() -> new RoomValidationEception("Room does not exist",
+                        "id", "Room not found", id.toString()));
+
+        existingRoom.setDeleted(true);
+        return roomRepository.save(existingRoom);
+    }
+
+    public Room restore(Long id) {
+        var existingRoom = roomRepository.findById(id)
+                .orElseThrow(() -> new RoomValidationEception("Room does not exist",
+                        "id", "Room not found", id.toString()));
+
+        existingRoom.setDeleted(false);
+        return roomRepository.save(existingRoom);
+    }
 }

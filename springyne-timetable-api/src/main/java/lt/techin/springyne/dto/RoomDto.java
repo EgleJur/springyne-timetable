@@ -11,10 +11,8 @@ import javax.validation.constraints.NotBlank;
 @NoArgsConstructor
 public class RoomDto {
 
-//    @NotBlank(message = "Butina ivesti kabineto pavadinima")
     private String name;
 
-//    @NotBlank (message = "Butina ivesti pastato adresa")
     private String building;
 
     private String description;
@@ -26,4 +24,11 @@ public class RoomDto {
         this.building = building;
         this.description = description;
     }
+
+//    public RoomDto(String name, String building, String description, boolean deleted) {
+//        this.name = name;
+//        this.building = building;
+//        this.description = description;
+//        this.deleted = deleted;
+//    }
 }

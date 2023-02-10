@@ -1,5 +1,8 @@
 package lt.techin.springyne.controller;
 
+
+import org.springframework.http.HttpStatus;
+
 import lt.techin.springyne.dto.ErrorDto;
 import lt.techin.springyne.dto.ErrorFieldDto;
 import lt.techin.springyne.dto.mapper.ErrorFieldMapper;
@@ -11,10 +14,16 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.HttpMediaTypeException;
+
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
+
+
+import javax.validation.ConstraintViolationException;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.ConstraintViolationException;
@@ -24,8 +33,10 @@ import java.util.List;
 import static java.util.stream.Collectors.toList;
 
 
+
 @ControllerAdvice
 public class ApiExceptionHandler {
+
 
     private static final Logger logger = LoggerFactory.getLogger(ApiExceptionHandler.class);
 
@@ -117,3 +128,4 @@ public class ApiExceptionHandler {
                 logger.error("All Exceptions handler: {}", exception.getMessage());
         }
 }
+

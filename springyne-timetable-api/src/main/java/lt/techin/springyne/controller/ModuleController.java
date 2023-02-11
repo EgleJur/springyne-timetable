@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("api/v1/modules")
@@ -33,18 +34,34 @@ public class ModuleController {
     }
 
     @PostMapping
-    public ResponseEntity<Object> addModule(@Valid @RequestBody ModuleDto moduleDto) {
-        if (moduleService.existsByNumber(moduleDto.getNumber())) {
-            return ResponseEntity.badRequest().body("Toks numeris jau egzistuoja");
-        }
-        Module newModule = moduleService.addModule(ModuleMapper.toModule(moduleDto));
-        return ResponseEntity.ok(ModuleMapper.toModuleDto(newModule));
+    public ResponseEntity<Module> addModule(@Valid @RequestBody ModuleDto moduleDto) {
+        return ResponseEntity.ok(moduleService.addModule(ModuleMapper.toModule(moduleDto)));
     }
 
     @GetMapping("/search")
     public Page<Module> filterModulesByNamePaged(@RequestParam(required = false) String name,
                                                  @RequestParam int page, @RequestParam int pageSize) {
         return moduleService.searchByName(name,page,pageSize);
+    }
+
+    @GetMapping("/{moduleId}")
+    public Optional<Module> getModuleById(@PathVariable Long moduleId) {
+        return moduleService.getModuleById(moduleId);
+    }
+
+    @PatchMapping("/delete/{moduleId}")
+    public ResponseEntity<Module> deleteModule(@PathVariable Long moduleId) {
+        return ResponseEntity.ok(moduleService.deleteModule(moduleId));
+    }
+
+    @PatchMapping("/restore/{moduleId}")
+    public ResponseEntity<Module> restoreModule(@PathVariable Long moduleId) {
+        return ResponseEntity.ok(moduleService.restoreModule(moduleId));
+    }
+
+    @PatchMapping("/update/{moduleId}")
+    public ResponseEntity<Module> updateModule(@PathVariable Long moduleId, @Valid @RequestBody ModuleDto moduleDto) {
+        return ResponseEntity.ok(moduleService.updateModule(moduleId, ModuleMapper.toModule(moduleDto)));
     }
 
 }

@@ -4,21 +4,17 @@ import lt.techin.springyne.dto.SubjectDto;
 import lt.techin.springyne.model.Subject;
 import lt.techin.springyne.service.SubjectService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 import static lt.techin.springyne.dto.mapper.SubjectMapper.toSubject;
 import static lt.techin.springyne.dto.mapper.SubjectMapper.toSubjectDto;
 import static org.springframework.http.ResponseEntity.ok;
 
-@Controller
-@RequestMapping("/api/v1/subject")
-@Validated
+@RestController
+@RequestMapping("/api/v1/subjects")
+
 public class SubjectControler {
 
     @Autowired
@@ -28,12 +24,20 @@ public class SubjectControler {
         this.subjectService = subjectService;
     }
 
-    @GetMapping
-    @ResponseBody
-    public List<Subject> getAllSubjects() {
-        return subjectService.getAll();
+    @GetMapping("/search")
+    public Page<Subject> searchByNamePaged(@RequestParam(required = false) String name,
+                                           @RequestParam int page,
+                                           @RequestParam int pageSize) {
+        return subjectService.searchByNamePaged(name, page, pageSize);
     }
-    @GetMapping("/{subjectId}")
+
+    @GetMapping("/byModule/search")
+
+    public Page<Subject> getByModule(@RequestParam String name, @RequestParam int page,
+                                           @RequestParam int pageSize){
+        return subjectService.getByModule(name, page, pageSize);
+    }
+    @GetMapping("/view/{subjectId}")
     public ResponseEntity<Subject> getSubject(@PathVariable Long subjectId) {
         var subjectOptional = subjectService.getById(subjectId);
 
@@ -74,14 +78,6 @@ public class SubjectControler {
         return ok(toSubjectDto(restoredSubject));
 
     }
-
-    @GetMapping("/search")
-    public List<Subject> filterSubjectsByNamePaged(@RequestParam(required = false) String name,
-                                                 @RequestParam int page, @RequestParam int pageSize) {
-        return subjectService.searchByName(name,page,pageSize).stream()
-                .collect(Collectors.toList());
-    }
-
 
 
 }

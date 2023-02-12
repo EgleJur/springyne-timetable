@@ -28,11 +28,6 @@ class SubjectServiceTest {
         verify(subjectRepository).findById(Id);
     }
 
-    @Test
-    private void getAllSubjectsTests(){
-        subjectService.getAll();
-        verify(subjectRepository).findAll();
-    }
 
     @Test
     public void saveSubject(){
@@ -50,4 +45,5 @@ class SubjectServiceTest {
         subjectService.edit(Id, subject);
         verify(subjectRepository).save(subject);
     }
+
 }

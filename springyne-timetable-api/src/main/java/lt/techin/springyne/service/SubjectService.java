@@ -9,7 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+
 import java.util.Optional;
 
 
@@ -29,21 +29,50 @@ public class SubjectService {
 
     private static final ExampleMatcher SEARCH_CONTAINS_NAME = ExampleMatcher.matchingAny()
             .withMatcher("name", ExampleMatcher.GenericPropertyMatchers.contains().ignoreCase())
-            .withIgnorePaths("id","deleted","lastupdated");
+            .withIgnorePaths("id","deleted","last_updated");
 
-    private static final ExampleMatcher SEARCH_CONTAINS_MODULE = ExampleMatcher.matchingAny()
-            .withMatcher("name", ExampleMatcher.GenericPropertyMatchers.contains().ignoreCase())
-            .withIgnorePaths("id", "deleted","lastupdated");
-    public List<Subject> getAll() {
-        return subjectRepository.findAllSubjectsAcsDeletedOrder();
+//    private static final ExampleMatcher SEARCH_CONTAINS_MODULE = ExampleMatcher.matchingAny()
+//            .withMatcher("name", ExampleMatcher.GenericPropertyMatchers.contains().ignoreCase())
+//            .withIgnorePaths("id", "deleted","last_updated");
 
+
+    public Page<Subject> searchByNamePaged(String name, int page, int pageSize) {
+
+        Subject subject = new Subject();
+        if(name != null) {
+            subject.setName(name);
+        }
+        Example<Subject> subjectExample = Example.of(subject, SEARCH_CONTAINS_NAME);
+        Pageable pageable = PageRequest.of(page,pageSize, Sort.by("deleted").and(Sort.by("name")));
+        return subjectRepository.findAll(subjectExample, pageable);
+    }
+    public Page<Subject> searchByModulePaged(String name, int page, int pageSize) {
+
+        Subject subject = new Subject();
+        if(name != null) {
+            subject.setName(name);
+        }
+        Example<Subject> subjectExample = Example.of(subject, SEARCH_CONTAINS_NAME);
+        Pageable pageable = PageRequest.of(page,pageSize, Sort.by("deleted").and(Sort.by("name")));
+        return subjectRepository.findAll(subjectExample, pageable);
+    }
+
+    public Page<Subject> getByModule(String name, int page, int pageSize){
+        Pageable pageable = PageRequest.of(page,pageSize);
+        return subjectRepository.findByModuleName(name, pageable);
     }
 
     public Optional<Subject> getById(Long id) {
         return subjectRepository.findById(id);
     }
+    public boolean existsByName(String name) {
+        return subjectRepository.existsByNameIgnoreCase(name);
+    }
 
     public Subject create(Subject subject) {
+        if (existsByName(subject.getName())) {
+            throw new ScheduleValidationException("Subject name must be unique", "name", "Name already exists", subject.getName());
+        }
         return subjectRepository.save(subject);
     }
 
@@ -58,16 +87,25 @@ public class SubjectService {
         return subjectRepository.save(existingSubject);
     }
 
-    public Page<Subject> searchByName(String name, int page, int pageSize) {
+    public Subject delete(Long id) {
+        var existingSubject = subjectRepository.findById(id)
+                .orElseThrow(() -> new ScheduleValidationException("Subject does not exist",
+                        "id", "Subject not found", id.toString()));
 
-        Subject subject = new Subject();
-        if(name != null) {
-            subject.setName(name);
-        }
-        Example<Subject> subjectExample = Example.of(subject, SEARCH_CONTAINS_NAME);
-        Pageable pageable = PageRequest.of(page,pageSize, Sort.by("deleted").and(Sort.by("name")));
-        return subjectRepository.findAll(subjectExample, pageable);
+        existingSubject.setDeleted(true);
+        return subjectRepository.save(existingSubject);
     }
+
+
+    public Subject restore(Long id) {
+        var existingSubject = subjectRepository.findById(id)
+                .orElseThrow(() -> new ScheduleValidationException("Subject does not exist",
+                        "id", "Subject not found", id.toString()));
+
+        existingSubject.setDeleted(false);
+        return subjectRepository.save(existingSubject);
+    }
+
 
 //        if(moduleId!=null) {
 //
@@ -102,23 +140,9 @@ public class SubjectService {
 
 
 
-    public Subject delete(Long id) {
-        var existingSubject = subjectRepository.findById(id)
-                .orElseThrow(() -> new ScheduleValidationException("Subject does not exist",
-                        "id", "Subject not found", id.toString()));
 
-        existingSubject.setDeleted(true);
-        return subjectRepository.save(existingSubject);
-    }
 
-    public Subject restore(Long id) {
-        var existingSubject = subjectRepository.findById(id)
-                .orElseThrow(() -> new ScheduleValidationException("Subject does not exist",
-                        "id", "Subject not found", id.toString()));
 
-        existingSubject.setDeleted(false);
-        return subjectRepository.save(existingSubject);
-    }
 
 //    @Transactional
 //    public void addTagToPost(Long postId, Long tagId) {

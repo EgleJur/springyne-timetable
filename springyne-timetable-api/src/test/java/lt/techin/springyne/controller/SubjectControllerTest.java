@@ -40,6 +40,17 @@ class SubjectControllerTest {
     Room room;
     Set<Module> modules = new HashSet<>();
     Set<Room> rooms = new HashSet<>();
+
+    @InjectMocks
+    SubjectControler subjectControler;
+
+    @Mock
+    SubjectService subjectService;
+
+    @Mock
+    Subject subject;
+
+    private static final long Id = 1;
     @Test
     void getAllSubjectsContainsCorrectDtos() throws Exception {
 
@@ -53,7 +64,7 @@ class SubjectControllerTest {
         expectedList.add(testSubjectDto2);
         expectedList.add(testSubjectDto3);
 
-        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/subject")
+        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/subjects")
         ).andExpect(status().isOk()).andReturn();
 
         List<SubjectDto> resultList = objectMapper.readValue(mvcResult.getResponse().getContentAsString(), new TypeReference<List<SubjectDto>>() {
@@ -77,30 +88,52 @@ class SubjectControllerTest {
     }
 
     @Test
-    void addModuleThrowsExceptionWithNonUniqueNumberValue() throws Exception {
-        SubjectDto testSubjectDto1 = new SubjectDto("R1", "Test name1", modules, rooms);
+    void addSubjectThrowsExceptionWithNonUniqueNumberValue() throws Exception {
+        SubjectDto testSubjectDto1 = new SubjectDto("S1", "Test name1", modules, rooms);
         assertEquals(400, performSubjectPostBadRequest(testSubjectDto1).getResponse().getStatus(),
-                "Non unique Subject number should return bad request status");
+                "Non unique Subject name should return bad request status");
     }
 
 
     public MvcResult performSubjectPostBadRequest(SubjectDto subjectDto) throws Exception {
 
-        return mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/subject").contentType(MediaType.APPLICATION_JSON).
+        return mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/subjects").contentType(MediaType.APPLICATION_JSON).
                         content(objectMapper.writeValueAsString(subjectDto)))
                 .andExpect(status().isBadRequest()).andReturn();
     }
+    @Test
+    void deleteSubjectSetsDeletedPropertyToTrue() throws Exception {
+        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.patch("/api/v1/subjects/delete/4").contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk()).andReturn();
+        Subject resultSubject = objectMapper.readValue(mvcResult.getResponse().getContentAsString(), new TypeReference<Subject>() {});
+        Assertions.assertTrue(resultSubject.isDeleted());
+    }
 
-    @InjectMocks
-    SubjectControler subjectControler;
+    @Test
+    void restoreSubjectSetsDeletedPropertyToFalse() throws Exception {
+        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.patch("/api/v1/subjects/restore/4").contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk()).andReturn();
+        Subject resultSubject = objectMapper.readValue(mvcResult.getResponse().getContentAsString(), new TypeReference<Subject>() {});
+        Assertions.assertFalse(resultSubject.isDeleted());
+    }
 
-    @Mock
-    SubjectService subjectService;
+    @Test
+    void editSubjectThrowsExceptionWithNonUniqueNumberValue() throws Exception {
+        SubjectDto testSubjectDto5 = new SubjectDto("S1", "Test", modules, rooms);
+        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.patch("/api/v1/subjects/edit/1").contentType(MediaType.APPLICATION_JSON).
+                content(objectMapper.writeValueAsString(testSubjectDto5))).andReturn();
 
-    @Mock
-    Subject subject;
+        assertEquals(400, mvcResult.getResponse().getStatus(),"Non unique Subject name should return bad request status");
+    }
+    @Test
+    void editSubjectThrowsExceptionWithEmptyValues() throws Exception {
+        SubjectDto testSubjectDto5 = new SubjectDto("", "test", modules, rooms);
+        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.patch("/api/v1/subjects/edit/4").contentType(MediaType.APPLICATION_JSON).
+                content(objectMapper.writeValueAsString(testSubjectDto5))).andReturn();
 
-    private static final long Id = 1;
+        assertEquals(400, mvcResult.getResponse().getStatus(),"Empty value name should return bad request status");
+    }
+
 
     @Test
     public void viewSubjectByIdTest() {
@@ -109,12 +142,14 @@ class SubjectControllerTest {
     }
 
     @Test
-    public void getAllSubjectsTest() {
-        List<Subject> subjects = new ArrayList<>();
-        subjects.add(subject);
-        when(subjectService.getAll()).thenReturn(subjects);
-        assertEquals(subjectControler.getAllSubjects().size(), subjects.size());
+    void editSubjectAllowsSavingWithUniqueName() throws Exception {
+        SubjectDto testSubjectDto4 = new SubjectDto("test","test", modules, rooms);
+        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.patch("/api/v1/subjects/edit/4").contentType(MediaType.APPLICATION_JSON).
+                content(objectMapper.writeValueAsString(testSubjectDto4))).andReturn();
+
+        assertEquals(200, mvcResult.getResponse().getStatus(),"Unique value number and non empty name should return ok status");
     }
+
 }
 
 

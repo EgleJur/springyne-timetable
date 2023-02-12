@@ -3,6 +3,7 @@ package lt.techin.springyne.controller;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lt.techin.springyne.dto.RoomDto;
+import lt.techin.springyne.model.Room;
 import lt.techin.springyne.service.RoomService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -72,7 +73,7 @@ class RoomControllerTest {
         assertEquals(400,performRoomPostBadRequest(testRoomDto6).getResponse().getStatus(), message);
     }
     @Test
-    void addModuleThrowsExceptionWithNonUniqueNumberValue() throws Exception {
+    void addRoomThrowsExceptionWithNonUniqueNumberValue() throws Exception {
         RoomDto testRoomDto1 = new RoomDto("R1", "Test name1", "Test");
         assertEquals(400,performRoomPostBadRequest(testRoomDto1).getResponse().getStatus(),
                 "Non unique Room number should return bad request status");

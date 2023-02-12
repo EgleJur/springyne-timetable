@@ -42,7 +42,7 @@ class SubjectControllerTest {
     Set<Room> rooms = new HashSet<>();
 
     @InjectMocks
-    SubjectControler subjectControler;
+    SubjectController subjectController;
 
     @Mock
     SubjectService subjectService;
@@ -138,7 +138,7 @@ class SubjectControllerTest {
     @Test
     public void viewSubjectByIdTest() {
         when(subjectService.getById(Id)).thenReturn(Optional.of(subject));
-        assertEquals(subjectControler.getSubject(Id).getBody(), subject);
+        assertEquals(subjectController.getSubject(Id).getBody(), subject);
     }
 
     @Test

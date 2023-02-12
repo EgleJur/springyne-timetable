@@ -31,22 +31,8 @@ public class SubjectService {
             .withMatcher("name", ExampleMatcher.GenericPropertyMatchers.contains().ignoreCase())
             .withIgnorePaths("id","deleted","last_updated");
 
-//    private static final ExampleMatcher SEARCH_CONTAINS_MODULE = ExampleMatcher.matchingAny()
-//            .withMatcher("name", ExampleMatcher.GenericPropertyMatchers.contains().ignoreCase())
-//            .withIgnorePaths("id", "deleted","last_updated");
-
 
     public Page<Subject> searchByNamePaged(String name, int page, int pageSize) {
-
-        Subject subject = new Subject();
-        if(name != null) {
-            subject.setName(name);
-        }
-        Example<Subject> subjectExample = Example.of(subject, SEARCH_CONTAINS_NAME);
-        Pageable pageable = PageRequest.of(page,pageSize, Sort.by("deleted").and(Sort.by("name")));
-        return subjectRepository.findAll(subjectExample, pageable);
-    }
-    public Page<Subject> searchByModulePaged(String name, int page, int pageSize) {
 
         Subject subject = new Subject();
         if(name != null) {

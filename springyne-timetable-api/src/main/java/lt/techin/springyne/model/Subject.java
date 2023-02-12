@@ -1,9 +1,10 @@
 package lt.techin.springyne.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -32,8 +33,9 @@ public class Subject {
     @Column(name = "description")
     private String description;
 
-    @CreatedDate
+    @LastModifiedDate
     @Column(name = "LAST_UPDATED")
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
     private LocalDateTime lastUpdated;
 
     private boolean deleted = Boolean.FALSE;

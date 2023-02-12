@@ -15,12 +15,12 @@ import static org.springframework.http.ResponseEntity.ok;
 @RestController
 @RequestMapping("/api/v1/subjects")
 
-public class SubjectControler {
+public class SubjectController {
 
     @Autowired
     SubjectService subjectService;
 
-    public SubjectControler(SubjectService subjectService) {
+    public SubjectController(SubjectService subjectService) {
         this.subjectService = subjectService;
     }
 

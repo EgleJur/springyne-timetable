@@ -8,6 +8,8 @@ import ShiftListPage from './pages/ShiftList';
 import SubjectListPage from './pages/SubjectList';
 import TeacherListPage from './pages/TeacherList';
 import CreateModulePage from './pages/CreateModule';
+import ViewModulePage from './pages/ViewModule';
+import EditModulePage from './pages/EditModule';
 
 function App() {
   return (
@@ -23,6 +25,8 @@ function App() {
             <Route path="/subjects" element={<SubjectListPage />} />
             <Route path="/teachers" element={<TeacherListPage />} />
             <Route path="/modules/create" element={<CreateModulePage />} />
+            <Route path="/modules/view/:id" element={<ViewModulePage />} />
+            <Route path="/modules/edit/:id" element={<EditModulePage />} />
           </Routes>
         </div>
       </HashRouter>

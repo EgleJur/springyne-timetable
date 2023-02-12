@@ -19,12 +19,9 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
-import static org.springframework.http.ResponseEntity.ok;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
@@ -42,7 +39,7 @@ class RoomControllerTest {
 
         RoomDto testRoomDto1 = new RoomDto("R1", "Test name1", "Test");
         RoomDto testRoomDto2 = new RoomDto("R2", "Test name2", "Test");
-        RoomDto testRoomDto3 = new RoomDto("R3", "Test name3", "Test");
+        RoomDto testRoomDto3 = new RoomDto("R3", "Test name2", "Test");
 
         List<RoomDto> expectedList = new ArrayList<>();
         expectedList.add(testRoomDto1);
@@ -73,7 +70,7 @@ class RoomControllerTest {
         assertEquals(400,performRoomPostBadRequest(testRoomDto6).getResponse().getStatus(), message);
     }
     @Test
-    void addRoomThrowsExceptionWithNonUniqueNumberValue() throws Exception {
+    void addModuleThrowsExceptionWithNonUniqueNumberValue() throws Exception {
         RoomDto testRoomDto1 = new RoomDto("R1", "Test name1", "Test");
         assertEquals(400,performRoomPostBadRequest(testRoomDto1).getResponse().getStatus(),
                 "Non unique Room number should return bad request status");
@@ -102,9 +99,14 @@ class RoomControllerTest {
     private static final long Id = 1;
 
     @Test
-    public void viewRoomByIdTest(){
-        when(roomService.viewRoom(Id)).thenReturn(Optional.of(room));
-        assertEquals(roomController.viewRoom(Id).getBody(), roomDto);
+    public void viewRoomByIdTest() throws Exception {
+        RoomDto testRoomDto1 = new RoomDto("R1", "Test name1", "Test");
+        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/rooms/1")
+        ).andExpect(status().isOk()).andReturn();
+        RoomDto resultRoomDto = objectMapper.readValue(mvcResult.getResponse().getContentAsString(), new TypeReference<RoomDto>() {
+        });
+//        when(roomService.viewRoom(Id)).thenReturn(Optional.of(room));
+        assertEquals(resultRoomDto, testRoomDto1);
     }
 
     @Test

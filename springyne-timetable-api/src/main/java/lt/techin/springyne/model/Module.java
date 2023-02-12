@@ -1,5 +1,6 @@
 package lt.techin.springyne.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -29,6 +30,7 @@ public class Module {
     private boolean deleted = Boolean.FALSE;
 
     @LastModifiedDate
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
     private LocalDateTime modifiedDate;
 
     @PrePersist

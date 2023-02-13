@@ -30,9 +30,9 @@ function App() {
             <Route path="/modules/create" element={<CreateModulePage />} />
             <Route path="/modules/view/:id" element={<ViewModulePage />} />
             <Route path="/modules/edit/:id" element={<EditModulePage />} />
-            <Route path="/modules/create" element={<CreateRoomPage />} />
-            <Route path="/modules/view/:id" element={<ViewRoomPage />} />
-            <Route path="/modules/edit/:id" element={<EditRoomPage />} />
+            <Route path="/rooms/create" element={<CreateRoomPage />} />
+            <Route path="/rooms/view/:id" element={<ViewRoomPage />} />
+            <Route path="/rooms/edit/:id" element={<EditRoomPage />} />
           </Routes>
         </div>
       </HashRouter>

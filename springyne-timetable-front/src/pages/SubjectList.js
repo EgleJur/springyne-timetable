@@ -1,16 +1,16 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { useParams } from "react-router-dom";
-import { useHref } from 'react-router-dom';
+// import { useParams } from "react-router-dom";
+// import { useHref } from 'react-router-dom';
 
 function SubjectListPage() {
   const [subjects, seSubjects] = useState([]);
   const [pageNumber, setPageNumber] = useState(0);
   const [pageSize, setPageSize] = useState(20);
   const [searchName, setSearchName] = useState("");
-  const listUrl = useHref('/');
-  const [error, setError] = useState();
-  const params = useParams();
+  // const listUrl = useHref('/');
+  // const [error, setError] = useState();
+  // const params = useParams();
   const JSON_HEADERS = {
     "Content-Type": "application/json"
 }

@@ -40,7 +40,7 @@ public class RoomController {
         return roomService.getAllRooms();
     }
 
-    @PostMapping("/create")
+    @PostMapping
     public ResponseEntity<Object> addRoom(@Valid @RequestBody RoomDto roomDto) {
         if (roomService.existsByName(roomDto.getName())) {
             return ResponseEntity.badRequest().body("Toks kabinetas jau egzistuoja");

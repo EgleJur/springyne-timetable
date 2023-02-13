@@ -10,9 +10,8 @@ function HomePage() {
         .then(setVersion);
     },[])
 
-    return ( <div className="ms-5">
-        <h1 className="mb-3">Hello</h1>
-        <h1 className="mb-3">Hello from Indre</h1>
+    return ( <div className="mx-3">
+        <h1 className="my-5">Hello</h1>
         <h4>Application version: {version}</h4>
     </div> );
 }

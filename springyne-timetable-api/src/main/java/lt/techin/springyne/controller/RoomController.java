@@ -6,6 +6,7 @@ import lt.techin.springyne.dto.mapper.RoomMapper;
 import lt.techin.springyne.model.Room;
 import lt.techin.springyne.service.RoomService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -39,7 +40,7 @@ public class RoomController {
         return roomService.getAllRooms();
     }
 
-    @PostMapping
+    @PostMapping("/create")
     public ResponseEntity<Object> addRoom(@Valid @RequestBody RoomDto roomDto) {
         if (roomService.existsByName(roomDto.getName())) {
             return ResponseEntity.badRequest().body("Toks kabinetas jau egzistuoja");
@@ -50,17 +51,15 @@ public class RoomController {
     }
 
     @GetMapping("/searchByName")
-    public List<Room> filterRoomsByNamePaged(@RequestParam(required = false) String name,
-                                                 @RequestParam int page, @RequestParam int pageSize) {
-        return roomService.searchByName(name,page,pageSize).stream()
-                .collect(Collectors.toList());
+    public Page<Room> filterRoomsByNamePaged(@RequestParam(required = false) String name,
+                                             @RequestParam int page, @RequestParam int pageSize) {
+        return roomService.searchByName(name,page,pageSize);
     }
 
     @GetMapping("/searchByBuilding")
-    public List<Room> filterRoomsByBuildingPaged(@RequestParam(required = false) String building,
+    public Page<Room> filterRoomsByBuildingPaged(@RequestParam(required = false) String building,
                                              @RequestParam int page, @RequestParam int pageSize) {
-        return roomService.searchByBuilding(building,page,pageSize).stream()
-                .collect(Collectors.toList());
+        return roomService.searchByBuilding(building,page,pageSize);
     }
 
     @GetMapping("/{id}")
@@ -79,12 +78,18 @@ public class RoomController {
 //        return roomService.viewRoom(id);
 //    }
 
-    @PutMapping("/{id}")
+    @PatchMapping("/edit/{id}")
     public ResponseEntity<RoomDto> editRoom(@PathVariable Long id, @RequestBody RoomDto roomDto) {
         var editedRoom = roomService.editRoom(id, toRoom(roomDto));
 
         return ok(toRoomDto(editedRoom));
     }
+
+//    @PatchMapping("/update/{moduleId}")
+//    public ResponseEntity<Module> updateModule(@PathVariable Long moduleId, @Valid @RequestBody ModuleDto moduleDto) {
+//        return ResponseEntity.ok(moduleService.updateModule(moduleId, ModuleMapper.toModule(moduleDto)));
+//    }
+
 
     @PatchMapping("/delete/{id}")
     public ResponseEntity<RoomDto> deleteRoom(@PathVariable Long id) {

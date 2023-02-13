@@ -10,6 +10,9 @@ import TeacherListPage from './pages/TeacherList';
 import CreateModulePage from './pages/CreateModule';
 import ViewModulePage from './pages/ViewModule';
 import EditModulePage from './pages/EditModule';
+import CreateRoomPage from './pages/CreateRoom';
+import ViewRoomPage from './pages/ViewRoom';
+import EditRoomPage from './pages/EditRoom';
 
 function App() {
   return (
@@ -27,6 +30,9 @@ function App() {
             <Route path="/modules/create" element={<CreateModulePage />} />
             <Route path="/modules/view/:id" element={<ViewModulePage />} />
             <Route path="/modules/edit/:id" element={<EditModulePage />} />
+            <Route path="/modules/create" element={<CreateRoomPage />} />
+            <Route path="/modules/view/:id" element={<ViewRoomPage />} />
+            <Route path="/modules/edit/:id" element={<EditRoomPage />} />
           </Routes>
         </div>
       </HashRouter>

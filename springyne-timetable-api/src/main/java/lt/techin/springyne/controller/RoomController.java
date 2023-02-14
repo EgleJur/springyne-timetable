@@ -41,13 +41,14 @@ public class RoomController {
     }
 
     @PostMapping
-    public ResponseEntity<Object> addRoom(@Valid @RequestBody RoomDto roomDto) {
-        if (roomService.existsByName(roomDto.getName())) {
-            return ResponseEntity.badRequest().body("Toks kabinetas jau egzistuoja");
-        }
-
-        Room newRoom = roomService.addRoom(RoomMapper.toRoom(roomDto));
-        return ResponseEntity.ok(RoomMapper.toRoomDto(newRoom));
+    public ResponseEntity<Room> addRoom(@Valid @RequestBody RoomDto roomDto) {
+//        if (roomService.existsByName(roomDto.getName())) {
+//            return ResponseEntity.badRequest().body("Toks kabinetas jau egzistuoja");
+//        }
+//
+//        Room newRoom = roomService.addRoom(RoomMapper.toRoom(roomDto));
+//        return ResponseEntity.ok(RoomMapper.toRoomDto(newRoom));
+        return ResponseEntity.ok(roomService.addRoom(RoomMapper.toRoom(roomDto)));
     }
 
     @GetMapping("/searchByName")

@@ -19,10 +19,15 @@ public class RoomDto {
 
     private boolean deleted;
 
+    //data
+
     public RoomDto(String name, String building, String description) {
         this.name = name;
         this.building = building;
         this.description = description;
+
+
+
     }
 
 //    public RoomDto(String name, String building, String description, boolean deleted) {

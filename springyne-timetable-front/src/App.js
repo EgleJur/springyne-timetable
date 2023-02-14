@@ -14,6 +14,7 @@ import CreateRoomPage from './pages/CreateRoom';
 import ViewRoomPage from './pages/ViewRoom';
 import EditRoomPage from './pages/EditRoom';
 
+
 function App() {
   return (
     <div className="App">
@@ -32,7 +33,7 @@ function App() {
             <Route path="/modules/edit/:id" element={<EditModulePage />} />
             <Route path="/rooms/create" element={<CreateRoomPage />} />
             <Route path="/rooms/view/:id" element={<ViewRoomPage />} />
-            <Route path="/rooms/edit/:id" element={<EditRoomPage />} />
+
           </Routes>
         </div>
       </HashRouter>

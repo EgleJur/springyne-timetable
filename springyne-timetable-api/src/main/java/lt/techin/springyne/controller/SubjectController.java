@@ -8,6 +8,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Optional;
+
 import static lt.techin.springyne.dto.mapper.SubjectMapper.toSubject;
 import static lt.techin.springyne.dto.mapper.SubjectMapper.toSubjectDto;
 import static org.springframework.http.ResponseEntity.ok;
@@ -37,15 +39,10 @@ public class SubjectController {
                                            @RequestParam int pageSize){
         return subjectService.getByModule(name, page, pageSize);
     }
-    @GetMapping("/view/{subjectId}")
-    public ResponseEntity<Subject> getSubject(@PathVariable Long subjectId) {
-        var subjectOptional = subjectService.getById(subjectId);
 
-        var responseEntity = subjectOptional
-                .map(subject -> ok(subject))
-                .orElseGet(() -> ResponseEntity.notFound().build());
-
-        return responseEntity;
+    @GetMapping("/{subjectId}")
+    public Optional<Subject> getSubject(@PathVariable Long subjectId) {
+        return subjectService.getById(subjectId);
     }
 
     @PostMapping
@@ -53,6 +50,10 @@ public class SubjectController {
         var createdSubject = subjectService.create(toSubject(subjectDto));
 
         return ok(toSubjectDto(createdSubject));
+    }
+    @PatchMapping("/test")
+    public void subMod( @RequestParam Long sudId, @RequestParam Long modId){
+        subjectService.subMod(sudId,modId);
     }
 
     @PatchMapping("/edit/{subjectId}")
@@ -77,6 +78,13 @@ public class SubjectController {
         var restoredSubject = subjectService.restore(subjectId);
         return ok(toSubjectDto(restoredSubject));
 
+    }
+
+    @PostMapping("/{subjectId}/addModule/{moduleId}")
+    @ResponseBody
+    public Subject addModuleToSubject(@PathVariable Long subjectId, @PathVariable Long moduleId) {
+
+        return subjectService.addModuleToSubject(subjectId, moduleId);
     }
 
 

@@ -2,39 +2,37 @@ import { Collapse, Alert } from "@mui/material";
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { TextField } from "@mui/material";
+import { ModulesForSubjects } from "../components/ModulesForSubjects";
+
 
 function EditSubjectPage() {
-  const [module, setModule] = useState({});
-  const [numberError, setNumberError] = useState("");
+  const [subject, setSubject] = useState({});
+  const [description, setDescription] = useState("");
   const [nameError, setNameError] = useState("");
+  const [module, setModule] = useState({});
+  const [room, setRoom] = useState("");
   const [success, setSuccess] = useState(false);
   const [failure, setFailure] = useState(false);
   const params = useParams();
 
   useEffect(() => {
-    fetch("/api/v1/modules/" + params.id)
+    fetch("/api/v1/subjects/" + params.id)
       .then((response) => response.json())
-      .then((jsonResponse) => setModule(jsonResponse));
+      .then((jsonResponse) => setSubject(jsonResponse));
   }, [params.id]);
 
-  const editModule = (e) => {
+  const editsubject = (e) => {
     e.preventDefault();
-    setNumberError(false);
     setNameError(false);
-    if (module.name === "" || module.number === "") {
-      if (module.number === "") {
-        setNumberError(true);
-      }
-      if (module.name === "") {
-        setNameError(true);
-      }
+    if (subject.name == "") {
+      setNameError(true);
     } else {
-      fetch("/api/v1/modules/update/" + params.id, {
+      fetch("/api/v1/subjects/edit/" + params.id, {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(module),
+        body: JSON.stringify(subject),
       }).then((result) => {
         if (result.ok) {
           setSuccess(true);
@@ -42,21 +40,38 @@ function EditSubjectPage() {
         } else {
           setFailure(true);
           setSuccess(false);
-          setNumberError(true);
         }
       });
     }
   };
   const updateProperty = (property, event) => {
-    setModule({
-      ...module,
+    setSubject({
+      ...subject,
       [property]: event.target.value,
     });
   };
 
+
+  // const assignModuleToSubject = () => {
+  //   fetch(`api/v1/subjects/test?sudId=${params.id}&modId=${selectModules}`, {
+  //     method: 'POST',
+  //     headers: {
+  //       'Content-Type': 'application/json'
+  //     }
+  //   }).then(response => response.json())
+  //     .then((subject) => params.onSubjectChange(subject));
+  // };
+
+  const selectModules = (event) => {
+    setModule(event.target.value)
+  }
+  const selectRoom = (event) => {
+    setRoom(event.target.value)
+  }
+
   return (
     <div className="mx-3">
-      <h2 className="my-5">Redaguoti modulį</h2>
+      <h2 className="my-5">Redaguoti dalyką</h2>
       <Collapse in={success}>
         <Alert
           onClose={() => {
@@ -81,22 +96,10 @@ function EditSubjectPage() {
       </Collapse>
       <form noValidate>
         <TextField
-          error={!!numberError}
-          onChange={(e) => updateProperty("number", e)}
-          value={module.number}
-          id="create-module-number-with-error"
-          label="Numeris"
-          helperText="Numeris turi būti unikalus ir negali būti tuščias"
-          className="form-control mb-3"
-          size="small"
-          InputLabelProps={{ shrink: true }}
-          required
-        />
-        <TextField
           error={!!nameError}
           onChange={(e) => updateProperty("name", e)}
-          value={module.name}
-          id="create-module-number-with-error"
+          value={subject.name}
+          id="create-subject-number-with-error"
           label="Pavadinimas"
           helperText="Pavadinimas negali būti tuščias"
           className="form-control mb-3"
@@ -104,7 +107,29 @@ function EditSubjectPage() {
           InputLabelProps={{ shrink: true }}
           required
         />
-        <button type="submit" className="btn btn-primary" onClick={editModule}>
+        <TextField
+          onChange={(e) => updateProperty("description", e)}
+          value={subject.description}
+          id="create-subject-number-with-error"
+          label="Aprašymas"
+          className="form-control mb-3"
+          size="small"
+          InputLabelProps={{ shrink: true }}
+
+        />
+
+        <label htmlFor="page-size-select" className="mb-3">
+          Modulis:
+        </label>
+        <ModulesForSubjects id={params.id} onModuleChange={selectModules} />
+
+
+        <label htmlFor="page-size-select" className="mb-3">
+          Kabinetas:
+        </label>
+        <ModulesForSubjects id={params.id} onModuleChange={selectRoom} />
+
+        <button type="submit" className="btn btn-primary" onClick={editsubject}>
           Redaguoti
         </button>
       </form>

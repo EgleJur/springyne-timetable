@@ -4,13 +4,13 @@ import { Link } from "react-router-dom";
 import { Collapse, Alert } from "@mui/material";
 
 function ViewSubjectPage() {
-  const [subject, setSubject] = useState([]);
+  const [subject, setSubject] = useState({});
   const [deleted, setDeleted] = useState(false);
   const [restored, setRestored] = useState(false);
   const params = useParams();
 
   useEffect(() => {
-    fetch("/api/v1/subjects/view/" + params.id)
+    fetch("/api/v1/subjects/" + params.id)
       .then((response) => response.json())
       .then((jsonResponse) => setSubject(jsonResponse));
   }, [params.id]);
@@ -68,6 +68,10 @@ function ViewSubjectPage() {
             <tr>
               <th scope="col">Pavadinimas</th>
               <td>{subject.name}</td>
+            </tr>
+            <tr>
+              <th scope="col">Aprašas</th>
+              <td>{subject.description}</td>
             </tr>
             <tr>
               <th scope="col">Moduliai</th>

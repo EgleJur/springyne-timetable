@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 
-
 import java.util.Optional;
 
 
@@ -77,9 +76,13 @@ public class SubjectService {
         var existingSubject = subjectRepository.findById(id)
                 .orElseThrow(() -> new ScheduleValidationException("Subject does not exist",
                         "id", "Subject not found", id.toString()));
+        if (!existingSubject.isDeleted()) {
+            existingSubject.setDeleted(true);
+            return subjectRepository.save(existingSubject);
+        } else {
+            return existingSubject;
+        }
 
-        existingSubject.setDeleted(true);
-        return subjectRepository.save(existingSubject);
     }
 
 
@@ -88,7 +91,28 @@ public class SubjectService {
                 .orElseThrow(() -> new ScheduleValidationException("Subject does not exist",
                         "id", "Subject not found", id.toString()));
 
-        existingSubject.setDeleted(false);
+        if (existingSubject.isDeleted()) {
+            existingSubject.setDeleted(false);
+            return subjectRepository.save(existingSubject);
+        } else {
+            return existingSubject;
+        }
+    }
+    public void subMod(Long subId, Long modId){ subjectRepository.insertSubjectAndModule(subId,modId);}
+
+
+    public Subject addModuleToSubject(Long subjectId, Long moduleId) {
+
+        var existingSubject = subjectRepository.findById(subjectId)
+                .orElseThrow(() -> new ScheduleValidationException("Subject does not exist",
+                        "id", "Subject not found", subjectId.toString()));
+
+        var existingModule = moduleRepository.findById(moduleId)
+                .orElseThrow(() -> new ScheduleValidationException("Module does not exist",
+                        "id", "Module not found", moduleId.toString()));
+
+        existingSubject.setModule(existingModule);
+
         return subjectRepository.save(existingSubject);
     }
 

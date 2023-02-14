@@ -9,13 +9,22 @@ function EditRoomPage() {
   const [buildingError, setBuildingError] = useState("");
   const [success, setSuccess] = useState(false);
   const [failure, setFailure] = useState(false);
+  const [changed, setChanged] = useState(false);
   const params = useParams();
 
-  useEffect(() => {
+  const fetchRoom = () => {
     fetch("/api/v1/rooms/" + params.id)
       .then((response) => response.json())
       .then((jsonResponse) => setRoom(jsonResponse));
-  }, [params.id]);
+  };
+
+  useEffect(fetchRoom, []);
+
+  // useEffect(() => {
+  //   fetch("/api/v1/rooms/" + params.id)
+  //     .then((response) => response.json())
+  //     .then((jsonResponse) => setRoom(jsonResponse));
+  // }, [params.id]);
 
   const editRoom = (e) => {
     e.preventDefault();
@@ -39,9 +48,13 @@ function EditRoomPage() {
         if (result.ok) {
           setSuccess(true);
           setFailure(false);
+          setChanged(false);
+          fetchRoom();
         } else {
           setFailure(true);
           setSuccess(false);
+          setNameError(true);
+          setBuildingError(false);
         }
       });
     }
@@ -51,6 +64,33 @@ function EditRoomPage() {
       ...room,
       [property]: event.target.value,
     });
+    setChanged(true);
+  };
+
+  const handleDelete = () => {
+    fetch(`/api/v1/rooms/delete/` + params.id, {
+      method: "PATCH",
+    })
+      .then((response) => response.json())
+      .then((jsonResponse) => setRoom(jsonResponse));
+    setSuccess(true);
+    setFailure(false);
+    setNameError(false);
+    setBuildingError(false);
+    setChanged(false);
+  };
+
+  const handleRestore = () => {
+    fetch(`/api/v1/rooms/restore/` + params.id, {
+      method: "PATCH",
+    })
+      .then((response) => response.json())
+      .then((jsonResponse) => setRoom(jsonResponse));
+    setSuccess(true);
+    setFailure(false);
+    setNameError(false);
+    setBuildingError(false);
+    setChanged(false);
   };
 
   return (
@@ -79,45 +119,97 @@ function EditRoomPage() {
         </Alert>
       </Collapse>
       <form noValidate>
-        <TextField
-          error={!!nameError}
-          onChange={(e) => updateProperty("name", e)}
-          value={room.name}
-          id="create-room-number-with-error"
-          label="Pavadinimas"
-          helperText="Pavadinimas negali būti tuščias"
-          className="form-control mb-3"
-          size="small"
-          InputLabelProps={{ shrink: true }}
-          required
-        />
-        <TextField
-          error={!!buildingError}
-          onChange={(e) => updateProperty("building", e)}
-          value={room.building}
-          id="create-room-number-with-error"
-          label="Pastatas"
-          helperText="Pastatas negali būti tuščias"
-          className="form-control mb-3"
-          size="small"
-          InputLabelProps={{ shrink: true }}
-          required
-        />
-        <TextField
-          // error={!!buildingError}
-          onChange={(e) => updateProperty("description", e)}
-          value={room.description}
-          id="create-room-number-with-error"
-          label="Aprašymas"
-          helperText="Neprivaloma"
-          className="form-control mb-3"
-          size="small"
-          InputLabelProps={{ shrink: true }}
-          // required
-        />
-        <button type="submit" className="btn btn-primary" onClick={editRoom}>
+        <table
+          className="table table-hover shadow p-3 mb-5 bg-body rounded
+        align-middle"
+        >
+          <tbody>
+            <tr>
+              <th scope="col">
+                <label htmlFor="edit-room-name-with-error">
+                  Pavadinimas *
+                </label>
+              </th>
+              <td>
+                <TextField
+                  error={!!nameError}
+                  onChange={(e) => updateProperty("name", e)}
+                  value={room.name}
+                  id="edit-room-name-with-error"
+                  // label="Pavadinimas"
+                  helperText="Pavadinimas negali būti tuščias"
+                  className="form-control"
+                  size="small"
+                  InputLabelProps={{ shrink: true }}
+                  required
+                />
+              </td>
+            </tr>
+            <tr>
+              <th scope="col">
+                <label htmlFor="edit-room-building-with-error">Pastatas *</label>
+              </th>
+              <td>
+                <TextField
+                  error={!!buildingError}
+                  onChange={(e) => updateProperty("building", e)}
+                  value={room.building}
+                  id="create-room-building-with-error"
+                  // label="Pastatas"
+                  helperText="Pastatas negali būti tuščias"
+                  className="form-control"
+                  size="small"
+                  InputLabelProps={{ shrink: true }}
+                  required
+                />
+              </td>
+            </tr>
+            <tr>
+            <th scope="col">
+                <label htmlFor="edit-room-description">Aprašymas</label>
+              </th>
+              <td>
+                <TextField
+                  // error={!!buildingError}
+                  onChange={(e) => updateProperty("description", e)}
+                  value={room.description}
+                  id="create-room-description"
+                  // label="Aprašymas"
+                  helperText="Neprivaloma"
+                  className="form-control"
+                  size="small"
+                  InputLabelProps={{ shrink: true }}
+                  // required
+                />
+              </td>
+            </tr>
+            <tr>
+              <th scope="col">Būsena</th>
+              <td>{room.deleted ? "Kabinetas ištrintas" : "Aktyvus"}</td>
+            </tr>
+            <tr>
+              <th scope="col">Paskutinį kartą modifikuotas:</th>
+              <td>{room.lastModifiedDate}</td>
+            </tr>
+          </tbody>
+        </table>
+        <button
+          type="submit"
+          className="btn btn-primary me-2"
+          onClick={editRoom}
+          disabled={!changed}
+        >
           Redaguoti
         </button>
+        {room.deleted ? (
+          <button className="btn btn-secondary me-2" onClick={handleRestore}>
+            Atstatyti
+          </button>
+        ) : (
+          <button className="btn btn-danger me-2" onClick={handleDelete}>
+            Ištrinti
+          </button>
+        )}
       </form>
     </div>
   );

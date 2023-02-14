@@ -26,9 +26,6 @@ public class RoomDto {
         this.name = name;
         this.building = building;
         this.description = description;
-
-
-
     }
 
 //    public RoomDto(String name, String building, String description, boolean deleted) {

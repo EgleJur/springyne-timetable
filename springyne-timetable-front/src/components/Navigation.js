@@ -48,7 +48,7 @@ function Navigation() {
                     </Link>
                   </div>
                   <div className="nav-item">
-                    <Link to="/teacher" className="nav-link">
+                    <Link to="/teachers" className="nav-link">
                       Mokytojai
                     </Link>
                   </div>

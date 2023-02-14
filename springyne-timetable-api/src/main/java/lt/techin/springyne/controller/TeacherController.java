@@ -1,78 +1,67 @@
 package lt.techin.springyne.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import lt.techin.springyne.dto.TeacherDto;
+import lt.techin.springyne.dto.mapper.TeacherMapper;
 import lt.techin.springyne.model.Teacher;
-import lt.techin.springyne.repository.TeacherRepository;
-
+import lt.techin.springyne.service.TeacherService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
-@CrossOrigin("http://localhost:3000")
+@RequestMapping("api/v1/teachers")
 public class TeacherController {
-    private final TeacherRepository repository;
 
-    public TeacherController(TeacherRepository repository) {
-        this.repository = repository;
+    @Autowired
+    TeacherService teacherService;
+
+    @Autowired
+    ObjectMapper objectMapper;
+
+    public TeacherController(TeacherService teacherService) {
+        this.teacherService = teacherService;
     }
 
-  /*  @GetMapping("/teachers")
-    public Page<Teacher> getAllTeachers(
-            @RequestParam(value = "name", required = false) String name,
-            @RequestParam(value = "page", defaultValue = "0") int page,
-            @RequestParam(value = "size", defaultValue = "10") int size) {
-
-        Pageable pageable = PageRequest.of(page, size);
-        if (name != null) {
-            return (Page<Teacher>) repository.findByNameContaining(name, (Pageable) pageable);
-        }
-        return repository.findAll(pageable);
-    }*/
-    @GetMapping("/teachers")
+    @GetMapping
     public List<Teacher> getAllTeachers() {
-      return repository.findAll();
-  }
-
-    @PostMapping("/teachers")
-    public Teacher addTeacher(@RequestBody Teacher teacher) {
-        if (teacher.getName() == null || teacher.getName().trim().isEmpty() ||
-                teacher.getLastname() == null || teacher.getLastname().trim().isEmpty() ||
-                teacher.getEmail() == null || teacher.getEmail().trim().isEmpty() ||
-                teacher.getSubject() == null || teacher.getSubject().trim().isEmpty() ||
-                teacher.getShift() == null || teacher.getShift().trim().isEmpty()) {
-            throw new IllegalArgumentException("Name, Lastname, Email, Subject, and Shift are required fields");
-        }
-        return repository.save(teacher);
+        return teacherService.getAllTeachers();
     }
 
-    @PutMapping("/teachers/{id}")
-    public Teacher updateTeacher(@PathVariable Long id, @RequestBody Teacher teacher) {
-        Teacher existingTeacher = repository.findById(id).orElse(null);
-        if (existingTeacher == null) {
-            throw new IllegalArgumentException("Teacher with id " + id + " not found");
-        }
-
-        if (teacher.getName() == null || teacher.getName().trim().isEmpty() ||
-                teacher.getLastname() == null || teacher.getLastname().trim().isEmpty() ||
-                teacher.getEmail() == null || teacher.getEmail().trim().isEmpty() ||
-                teacher.getSubject() == null || teacher.getSubject().trim().isEmpty() ||
-                teacher.getShift() == null || teacher.getShift().trim().isEmpty()) {
-            throw new IllegalArgumentException("Name, Lastname, Email, Subject, and Shift are required fields");
-        }
-
-        existingTeacher.setName(teacher.getName());
-        existingTeacher.setLastname(teacher.getLastname());
-        existingTeacher.setTeams_email(teacher.getTeams_email());
-        existingTeacher.setEmail(teacher.getEmail());
-        existingTeacher.setPhone_number(teacher.getPhone_number());
-        existingTeacher.setHours(teacher.getHours());
-        existingTeacher.setSubject(teacher.getSubject());
-        existingTeacher.setShift(teacher.getShift());
-        return repository.save(existingTeacher);
+    @PostMapping
+    public ResponseEntity<Teacher> addTeacher(@Valid @RequestBody TeacherDto teacherDto) {
+        return ResponseEntity.ok(teacherService.addTeacher(TeacherMapper.toTeacher(teacherDto)));
     }
-    @DeleteMapping("/teachers/{id}")
-    public void deleteTeacher(@PathVariable Long id) {
-        repository.deleteById(id);
+
+    @GetMapping("/search")
+    public Page<Teacher> filterTeachersByNamePaged(@RequestParam(required = false) String name,
+                                                   @RequestParam int page, @RequestParam int pageSize) {
+        return teacherService.searchByName(name,page,pageSize);
     }
+
+    @GetMapping("/{teacherId}")
+    public Optional<Teacher> getTeacherById(@PathVariable Long teacherId) {
+        return teacherService.getTeacherById(teacherId);
+    }
+
+    @PatchMapping("/delete/{teacherId}")
+    public ResponseEntity<Teacher> deleteTeacher(@PathVariable Long teacherId) {
+        return ResponseEntity.ok(teacherService.deleteTeacher(teacherId));
+    }
+
+    @PatchMapping("/restore/{teacherId}")
+    public ResponseEntity<Teacher> restoreTeacher(@PathVariable Long teacherId) {
+        return ResponseEntity.ok(teacherService.restoreTeacher(teacherId));
+    }
+
+    @PatchMapping("/update/{teacherId}")
+    public ResponseEntity<Teacher> updateTeacher(@PathVariable Long teacherId, @Valid @RequestBody TeacherDto teacherDto) {
+        return ResponseEntity.ok(teacherService.updateTeacher(teacherId, TeacherMapper.toTeacher(teacherDto)));
+    }
+
 }
-

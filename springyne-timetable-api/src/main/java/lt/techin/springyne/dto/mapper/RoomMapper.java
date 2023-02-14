@@ -3,6 +3,8 @@ package lt.techin.springyne.dto.mapper;
 import lt.techin.springyne.dto.RoomDto;
 import lt.techin.springyne.model.Room;
 
+import java.time.LocalDateTime;
+
 public class RoomMapper {
 
     public static Room toRoom(RoomDto roomDto) {
@@ -12,8 +14,7 @@ public class RoomMapper {
         room.setBuilding(roomDto.getBuilding());
         room.setDescription(roomDto.getDescription());
         room.setDeleted(roomDto.isDeleted());
-        //data
-        //deleted
+        room.setLastModifiedDate(roomDto.getLastModifiedDate());
 
         return room;
     }
@@ -25,6 +26,7 @@ public class RoomMapper {
         roomDto.setBuilding(room.getBuilding());
         roomDto.setDescription(room.getDescription());
         roomDto.setDeleted(room.isDeleted());
+        roomDto.setLastModifiedDate((room.getLastModifiedDate()));
 
         return roomDto;
     }

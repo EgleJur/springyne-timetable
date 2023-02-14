@@ -86,12 +86,6 @@ public class RoomController {
         return ok(toRoomDto(editedRoom));
     }
 
-//    @PatchMapping("/update/{moduleId}")
-//    public ResponseEntity<Module> updateModule(@PathVariable Long moduleId, @Valid @RequestBody ModuleDto moduleDto) {
-//        return ResponseEntity.ok(moduleService.updateModule(moduleId, ModuleMapper.toModule(moduleDto)));
-//    }
-
-
     @PatchMapping("/delete/{id}")
     public ResponseEntity<RoomDto> deleteRoom(@PathVariable Long id) {
 

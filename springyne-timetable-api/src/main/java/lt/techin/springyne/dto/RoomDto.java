@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotBlank;
+import java.time.LocalDateTime;
 
 @Data
 @AllArgsConstructor
@@ -19,7 +20,7 @@ public class RoomDto {
 
     private boolean deleted;
 
-    //data
+    private LocalDateTime lastModifiedDate;
 
     public RoomDto(String name, String building, String description) {
         this.name = name;

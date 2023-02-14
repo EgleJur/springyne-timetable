@@ -8,6 +8,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 
 import static lt.techin.springyne.dto.mapper.SubjectMapper.toSubject;
@@ -26,6 +27,11 @@ public class SubjectController {
         this.subjectService = subjectService;
     }
 
+    @GetMapping
+    public List<Subject> getAllSubjects() {
+        return subjectService.getAllSubjects();
+    }
+
     @GetMapping("/search")
     public Page<Subject> searchByNamePaged(@RequestParam(required = false) String name,
                                            @RequestParam int page,
@@ -36,7 +42,7 @@ public class SubjectController {
     @GetMapping("/byModule/search")
 
     public Page<Subject> getByModule(@RequestParam String name, @RequestParam int page,
-                                           @RequestParam int pageSize){
+                                     @RequestParam int pageSize) {
         return subjectService.getByModule(name, page, pageSize);
     }
 
@@ -46,19 +52,27 @@ public class SubjectController {
     }
 
     @PostMapping
-     public ResponseEntity<SubjectDto> createSubject(@RequestBody SubjectDto subjectDto) {
-        var createdSubject = subjectService.create(toSubject(subjectDto));
+    public ResponseEntity<SubjectDto> createSubject(@RequestBody SubjectDto subjectDto) {
+        var createdSubject = subjectService.createSubjectDto(toSubject(subjectDto));
 
         return ok(toSubjectDto(createdSubject));
     }
+    @PostMapping(value = "/createSubject")
+    public ResponseEntity<SubjectDto> createSubject1(@RequestBody SubjectDto subjectDto,
+                                                     @RequestParam Long moduleId,
+                                                     @RequestParam(required = false) Long roomId) {
+        var createdSubject = subjectService.createSubject1(moduleId, roomId, toSubject(subjectDto));
+        return ok(toSubjectDto(createdSubject));
+    }
+
     @PatchMapping("/test")
-    public void subMod( @RequestParam Long sudId, @RequestParam Long modId){
-        subjectService.subMod(sudId,modId);
+    public void subRoom(@RequestParam Long sudId, @RequestParam Long modId) {
+        subjectService.subRoom(sudId, modId);
     }
 
     @PatchMapping("/edit/{subjectId}")
     public ResponseEntity<Subject> editSubject(@PathVariable Long subjectId,
-                                                  @RequestBody SubjectDto subjectDto) {
+                                               @RequestBody SubjectDto subjectDto) {
         var updatedSubject = subjectService.edit(subjectId, toSubject(subjectDto));
 
         return ok(updatedSubject);
@@ -72,6 +86,7 @@ public class SubjectController {
         return ok(toSubjectDto(updatedSubject));
 
     }
+
     @PatchMapping("/restore/{subjectId}")
     public ResponseEntity<SubjectDto> restoreSubject(@PathVariable Long subjectId) {
 
@@ -80,11 +95,9 @@ public class SubjectController {
 
     }
 
-    @PostMapping("/{subjectId}/addModule/{moduleId}")
-    @ResponseBody
-    public Subject addModuleToSubject(@PathVariable Long subjectId, @PathVariable Long moduleId) {
-
-        return subjectService.addModuleToSubject(subjectId, moduleId);
+    @PatchMapping("/{subjectId}/addModule/{moduleId}")
+    public ResponseEntity<Subject> addModuleToSubject(@PathVariable Long subjectId, @PathVariable Long moduleId) {
+        return ResponseEntity.ok(subjectService.addModuleToSubject(subjectId, moduleId));
     }
 
 

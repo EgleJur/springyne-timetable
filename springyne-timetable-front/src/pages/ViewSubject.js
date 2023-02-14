@@ -75,9 +75,7 @@ function ViewSubjectPage() {
             </tr>
             <tr>
               <th scope="col">Moduliai</th>
-              <td>{subject.module?.map((mod) => (
-                <p key={mod.id} id={mod.id}>{mod.name}</p>
-              ))}</td>
+              <td>{subject.module?.name}</td>
             </tr>
             <tr>
               <th scope="col">Kabinetai</th>

@@ -1,6 +1,7 @@
 package lt.techin.springyne.service;
 
 import lt.techin.springyne.exception.ScheduleValidationException;
+import lt.techin.springyne.model.Module;
 import lt.techin.springyne.model.Subject;
 import lt.techin.springyne.repository.ModuleRepository;
 import lt.techin.springyne.repository.RoomRepository;
@@ -8,7 +9,9 @@ import lt.techin.springyne.repository.SubjectRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 
@@ -17,44 +20,53 @@ public class SubjectService {
 
     @Autowired
     SubjectRepository subjectRepository;
+    @Autowired
     ModuleRepository moduleRepository;
+    @Autowired
     RoomRepository roomRepository;
 
 
-    public SubjectService(SubjectRepository subjectRepository) {
+    public SubjectService(SubjectRepository subjectRepository, ModuleRepository moduleRepository, RoomRepository roomRepository) {
         this.subjectRepository = subjectRepository;
+        this.moduleRepository = moduleRepository;
+        this.roomRepository = roomRepository;
 
     }
 
     private static final ExampleMatcher SEARCH_CONTAINS_NAME = ExampleMatcher.matchingAny()
             .withMatcher("name", ExampleMatcher.GenericPropertyMatchers.contains().ignoreCase())
-            .withIgnorePaths("id","deleted","last_updated");
+            .withIgnorePaths("id", "deleted", "last_updated");
 
+
+    public List<Subject> getAllSubjects() {
+        return subjectRepository.findAll();
+    }
 
     public Page<Subject> searchByNamePaged(String name, int page, int pageSize) {
 
         Subject subject = new Subject();
-        if(name != null) {
+        if (name != null) {
             subject.setName(name);
         }
         Example<Subject> subjectExample = Example.of(subject, SEARCH_CONTAINS_NAME);
-        Pageable pageable = PageRequest.of(page,pageSize, Sort.by("deleted").and(Sort.by("name")));
+        Pageable pageable = PageRequest.of(page, pageSize, Sort.by("deleted").and(Sort.by("name")));
         return subjectRepository.findAll(subjectExample, pageable);
     }
 
-    public Page<Subject> getByModule(String name, int page, int pageSize){
-        Pageable pageable = PageRequest.of(page,pageSize);
+    public Page<Subject> getByModule(String name, int page, int pageSize) {
+        Pageable pageable = PageRequest.of(page, pageSize);
         return subjectRepository.findByModuleName(name, pageable);
     }
 
     public Optional<Subject> getById(Long id) {
         return subjectRepository.findById(id);
     }
+
     public boolean existsByName(String name) {
         return subjectRepository.existsByNameIgnoreCase(name);
     }
 
-    public Subject create(Subject subject) {
+    public Subject createSubjectDto(Subject subject) {
         if (existsByName(subject.getName())) {
             throw new ScheduleValidationException("Subject name must be unique", "name", "Name already exists", subject.getName());
         }
@@ -98,24 +110,49 @@ public class SubjectService {
             return existingSubject;
         }
     }
-    public void subMod(Long subId, Long modId){ subjectRepository.insertSubjectAndModule(subId,modId);}
+
+    @Transactional
+    public void subRoom(Long subId, Long modId) {
+        subjectRepository.insertSubjectAndRoom(subId, modId);
+    }
 
 
     public Subject addModuleToSubject(Long subjectId, Long moduleId) {
-
-        var existingSubject = subjectRepository.findById(subjectId)
-                .orElseThrow(() -> new ScheduleValidationException("Subject does not exist",
-                        "id", "Subject not found", subjectId.toString()));
-
-        var existingModule = moduleRepository.findById(moduleId)
-                .orElseThrow(() -> new ScheduleValidationException("Module does not exist",
-                        "id", "Module not found", moduleId.toString()));
-
-        existingSubject.setModule(existingModule);
-
-        return subjectRepository.save(existingSubject);
+        Module moduleToAdd = moduleRepository.findById(moduleId)
+                .orElseThrow(() -> new ScheduleValidationException("Module does not exist", "id",
+                        "Module not found", String.valueOf(moduleId)));
+        Subject updatedSubject = subjectRepository.findById(subjectId)
+                .orElseThrow(() -> new ScheduleValidationException("Subject does not exist", "id",
+                        "Subject not found", String.valueOf(subjectId)));
+        updatedSubject.setModule(moduleToAdd);
+        return subjectRepository.save(updatedSubject);
     }
 
+
+    public Subject createSubject1(Long moduleId, Long roomId, Subject subject) {
+        if (existsByName(subject.getName())) {
+            throw new ScheduleValidationException("Subject name must be unique", "name", "Name already exists", subject.getName());
+        }
+        if (moduleId != null) {
+            Module moduleById = moduleRepository.findById(moduleId)
+                    .orElseThrow(() -> new ScheduleValidationException("Module does not exist", "id",
+                            "Module not found", String.valueOf(moduleId)));
+
+
+            subject.setModule(moduleById);
+        }
+        Subject subject1 = subjectRepository.save(subject);
+        if (roomId != null) {
+            roomRepository.findById(roomId)
+                    .orElseThrow(() -> new ScheduleValidationException("Room does not exist", "id",
+                            "Room not found", String.valueOf(moduleId)));
+
+            subjectRepository.insertSubjectAndRoom(subject1.getId(), roomId);
+        }
+
+        return subject1;
+
+    }
 
 //        if(moduleId!=null) {
 //
@@ -123,7 +160,7 @@ public class SubjectService {
 //                    .orElseThrow(() -> new ScheduleValidationException("Module does not exist",
 //                            "id", "Subject not found", moduleId.toString()));
 
-        //}
+    //}
 
 //        if(roomId!=null){
 //
@@ -145,13 +182,8 @@ public class SubjectService {
 //        existingSubject.setDescription(subject.getDescription());
 //         existingSubject.setModule(existingModule);
 //         existingSubject.setRooms(existingRoom);
-       // existingSubject.setModule(subject.getModule());
-       // existingSubject.setRooms(subject.getRooms());
-
-
-
-
-
+    // existingSubject.setModule(subject.getModule());
+    // existingSubject.setRooms(subject.getRooms());
 
 
 //    @Transactional

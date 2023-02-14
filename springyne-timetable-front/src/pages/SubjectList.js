@@ -175,10 +175,8 @@ function SubjectListPage() {
           {subjects.content?.map((subject) => (
             <tr key={subject.id} id={subject.id}>
               <td>{subject.name}</td>
-              <td>{subject.module.map((mod) => (
-                <p key={mod.id} id={mod.id}>{mod.name}</p>
-              ))}</td>
-              <td>{subject.deleted ? "Ištrintas" : "Aktyvus"}</td>
+              <td>{subject.module?.name}</td>
+              <td>{subject.deleted ? "Ištrintas" : ""}</td>
               <td>
                 <button className="btn btn-outline-primary">
                   <Link className="nav-link" to={"/subjects/view/" + subject.id}>

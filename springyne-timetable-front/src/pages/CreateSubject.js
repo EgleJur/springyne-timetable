@@ -15,15 +15,34 @@ function CreateSubjectPage() {
   const [success, setSuccess] = useState(false);
   const [failure, setFailure] = useState(false);
   const params = useParams();
+  const [modules, setModules] = useState([]);
+    const [selectedModule, setSelectedModule] = useState('');
+
+    const [rooms, setRooms] = useState([]);
+    const [selectedRoom, setSelectedRoom] = useState('');
+
+    useEffect(() => {
+      fetch('api/v1/modules/')
+          .then(response => response.json())
+          .then(setModules)
+          
+  }, []);
+
+  useEffect(() => {
+    fetch('api/v1/rooms/')
+        .then(response => response.json())
+        .then(setRooms)
+        
+}, []);
 
 
   const createNewSubject = (e) => {
-    e.preventDefault();
+    e.preventDefault(); 
     setNameError(false);
     if (name === "") {
       setNameError(true);
     } else {
-      fetch("/api/v1/subjects/", {
+      fetch(`/api/v1/subjects/createSubject?moduleId=${selectedModule}&roomId=${selectedRoom}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -31,7 +50,8 @@ function CreateSubjectPage() {
         body: JSON.stringify({
           name,
           description,
-        }),
+        })
+        ,
       }).then((result) => {
         if (result.ok) {
           setName("");
@@ -48,7 +68,7 @@ function CreateSubjectPage() {
 
 
   const selectModules = (event) => {
-    setModule(event.target.value)
+     setModule(event.target.value)
   }
   const selectRoom = (event) => {
     setRoom(event.target.value)
@@ -104,13 +124,37 @@ function CreateSubjectPage() {
         <label htmlFor="page-size-select" className="mb-3">
           Modulis:
         </label>
-        <ModulesForSubjects id={params.id} onModuleChange={selectModules}/>
-
-
-        <label htmlFor="page-size-select" className="mb-3">
+        
+        <select
+            value={selectedModule}
+            onChange={(e) => setSelectedModule(e.target.value)}
+            className="form-control mb-3">
+            <option value =''>---</option>
+            {
+                modules.map(
+                    (mod) =>
+                    (<option key={mod.id} 
+                        value={mod.id}>{mod.name}</option>)
+                )
+            }
+        </select>
+        
+         <label htmlFor="page-size-select" className="mb-3">
           Kabinetas:
         </label>
-        <ModulesForSubjects id={params.id} onModuleChange={selectRoom}/>
+        <select
+            value={selectedRoom}
+            onChange={(e) => setSelectedRoom(e.target.value)}
+            className="form-control mb-3">
+            <option value =''>---</option>
+            {
+                rooms.map(
+                    (room) =>
+                    (<option key={room.id} 
+                        value={room.id}>{room.name}</option>)
+                )
+            }
+        </select>
 
         <button
           type="submit"

@@ -9,6 +9,7 @@ export function ModulesForSubjects(props) {
         fetch('api/v1/modules/')
             .then(response => response.json())
             .then(setModules)
+            
     }, []);
 
     // const assignAnimalTomod = () => {

@@ -4,12 +4,13 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.LastModifiedDate;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 //@Builder
@@ -18,7 +19,7 @@ import java.time.LocalDateTime;
 //@Where(clause = "deleted=false")
 @Data
 @AllArgsConstructor
-@NoArgsConstructor
+//@NoArgsConstructor
 @EqualsAndHashCode
 
 public class Subject {
@@ -45,16 +46,15 @@ public class Subject {
     @JoinColumn(name = "module_id")
     private Module module;
 
-//    @ManyToMany(fetch = FetchType.EAGER)
-//    @JoinTable(name = "subjects_in_rooms",
-//            joinColumns = @JoinColumn(name = "subject_id", referencedColumnName = "id"),
-//            inverseJoinColumns = @JoinColumn(name = "room_id", referencedColumnName = "id"))
-//    private Set<Room> rooms;
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "subjects_in_rooms",
+            joinColumns = @JoinColumn(name = "subject_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "room_id", referencedColumnName = "id"))
+    private Set<Room> rooms;
 
-//    public Subject() {
-//
-//        this.rooms = new HashSet<>();
-//    }
+    public Subject() {
+        this.rooms = new HashSet<>();
+    }
 
 //    public void addModule(Module module){
 //    this.modules.add(module);

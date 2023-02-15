@@ -13,8 +13,6 @@ public class RoomMapper {
         room.setName(roomDto.getName());
         room.setBuilding(roomDto.getBuilding());
         room.setDescription(roomDto.getDescription());
-        room.setDeleted(roomDto.isDeleted());
-        room.setLastModifiedDate(roomDto.getLastModifiedDate());
 
         return room;
     }
@@ -25,8 +23,6 @@ public class RoomMapper {
         roomDto.setName(room.getName());
         roomDto.setBuilding(room.getBuilding());
         roomDto.setDescription(room.getDescription());
-        roomDto.setDeleted(room.isDeleted());
-        roomDto.setLastModifiedDate((room.getLastModifiedDate()));
 
         return roomDto;
     }

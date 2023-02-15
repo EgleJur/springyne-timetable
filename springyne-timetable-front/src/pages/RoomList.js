@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { TextField } from "@mui/material";
 import { Select, MenuItem, Pagination } from "@mui/material";
+import { Collapse, Alert } from "@mui/material";
 
 
 function RoomListPage() {
@@ -11,10 +12,14 @@ function RoomListPage() {
   const [searchName, setSearchName] = useState("");
   const [searchBuinding, setSearchBuilding] = useState("");
   const [page, setPage] = useState(1);
+  const [deleted, setDeleted] = useState(false);
+  const [restored, setRestored] = useState(false);
+
 
   const JSON_HEADERS = {
     "Content-Type": "application/json"
   }
+
   const fectchRooms = () => {
     fetch(`/api/v1/rooms/searchByName?name=${searchName}&page=${pageNumber}&pageSize=${pageSize}`)
       .then((response) => response.json())
@@ -60,6 +65,8 @@ function RoomListPage() {
       headers: JSON_HEADERS,
     })
       .then(fectchRooms);
+      setDeleted(true);
+      setRestored(false);
   };
 
   const restoreRoom = (id) => {
@@ -68,11 +75,36 @@ function RoomListPage() {
       headers: JSON_HEADERS,
     })
       .then(fectchRooms);
+      setDeleted(false);
+      setRestored(true);
   };
 
   return (
     <div className="mx-3">
       <h2 className="my-5">Kabinetai</h2>
+      <Collapse in={deleted}>
+        <Alert
+          onClose={() => {
+            setDeleted(false);
+          }}
+          severity="info"
+          className="mb-3"
+        >
+          Įrašas sėkmingai ištrintas
+        </Alert>
+      </Collapse>
+
+      <Collapse in={restored}>
+        <Alert
+          onClose={() => {
+            setRestored(false);
+          }}
+          severity="success"
+          className="mb-3"
+        >
+          Įrašas sėkmingai atstatytas
+        </Alert>
+      </Collapse>
       
 
       <div className="d-flex justify-content-end">

@@ -10,6 +10,9 @@ import TeacherListPage from './pages/TeacherList';
 import CreateModulePage from './pages/CreateModule';
 import ViewModulePage from './pages/ViewModule';
 import EditModulePage from './pages/EditModule';
+import CreateSubjectPage from './pages/CreateSubject';
+import ViewSubjectPage from './pages/ViewSubject';
+import EditSubjectPage from './pages/EditSubject';
 import CreateRoomPage from './pages/CreateRoom';
 import ViewRoomPage from './pages/ViewRoom';
 import EditRoomPage from './pages/EditRoom';
@@ -31,6 +34,9 @@ function App() {
             <Route path="/modules/create" element={<CreateModulePage />} />
             <Route path="/modules/view/:id" element={<ViewModulePage />} />
             <Route path="/modules/edit/:id" element={<EditModulePage />} />
+            <Route path="/subjects/create" element={<CreateSubjectPage />} />
+            <Route path="/subjects/view/:id" element={<ViewSubjectPage />} />
+            <Route path="/subjects/edit/:id" element={<EditSubjectPage />} />
             <Route path="/rooms/create" element={<CreateRoomPage />} />
             <Route path="/rooms/view/:id" element={<ViewRoomPage />} />
 

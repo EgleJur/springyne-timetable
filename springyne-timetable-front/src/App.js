@@ -39,6 +39,7 @@ function App() {
             <Route path="/subjects/edit/:id" element={<EditSubjectPage />} />
             <Route path="/rooms/create" element={<CreateRoomPage />} />
             <Route path="/rooms/view/:id" element={<ViewRoomPage />} />
+            <Route path="/rooms/edit/:id" element={<EditRoomPage />} />
 
           </Routes>
         </div>

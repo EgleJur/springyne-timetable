@@ -192,6 +192,18 @@ function ModuleListPage() {
             </tr>
           ))}
         </tbody>
+        <tfoot className="table-light">
+          <tr>
+            <td>
+              {modules.totalElements == "0"
+                ? "Įrašų nerasta"
+                : `Rasta įrašų: ${modules.totalElements}`}
+            </td>
+            <td></td>
+            <td></td>
+            <td></td>
+          </tr>
+        </tfoot>
       </table>
     </div>
   );

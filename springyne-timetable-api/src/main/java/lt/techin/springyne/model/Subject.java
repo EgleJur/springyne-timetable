@@ -1,9 +1,10 @@
 package lt.techin.springyne.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
-import org.springframework.data.annotation.CreatedDate;
+import lombok.EqualsAndHashCode;
+import org.springframework.data.annotation.LastModifiedDate;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -12,37 +13,38 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Builder
+//@Builder
 @Table(name = "SUBJECT_TABLE")
 //@SQLDelete(sql = "UPDATE Subject SET deleted = true WHERE id=?")
 //@Where(clause = "deleted=false")
 @Data
 @AllArgsConstructor
+//@NoArgsConstructor
+@EqualsAndHashCode
 
 public class Subject {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
+//    @Column(name = "id")
     private Long id;
 
     @NotBlank
-    @Column(name = "name")
+//    @Column(name = "name")
     private String name;
 
-    @Column(name = "description")
+//    @Column(name = "description")
     private String description;
 
-    @CreatedDate
-    @Column(name = "LAST_UPDATED")
-    private LocalDateTime lastUpdated;
+    @LastModifiedDate
+//    @Column(name = "LAST_UPDATED")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime last_Updated;
 
     private boolean deleted = Boolean.FALSE;
 
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "subject_and_modules",
-            joinColumns = @JoinColumn(name = "subject_id", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "module_id", referencedColumnName = "id"))
-private Set<Module> module;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "module_id")
+    private Module module;
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "subjects_in_rooms",
@@ -51,7 +53,6 @@ private Set<Module> module;
     private Set<Room> rooms;
 
     public Subject() {
-        this.module = new HashSet<>();
         this.rooms = new HashSet<>();
     }
 
@@ -67,12 +68,12 @@ private Set<Module> module;
 
     @PrePersist
     private void prePersist() {
-        lastUpdated = LocalDateTime.now();
+        last_Updated = LocalDateTime.now();
     }
 
     @PreUpdate
     private void preUpdate() {
-        lastUpdated = LocalDateTime.now();
+        last_Updated = LocalDateTime.now();
     }
 
 }

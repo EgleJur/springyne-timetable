@@ -6,15 +6,13 @@ import lt.techin.springyne.dto.mapper.RoomMapper;
 import lt.techin.springyne.model.Room;
 import lt.techin.springyne.service.RoomService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
-import static java.util.stream.Collectors.toList;
 import static lt.techin.springyne.dto.mapper.RoomMapper.toRoom;
 import static lt.techin.springyne.dto.mapper.RoomMapper.toRoomDto;
 import static org.springframework.http.ResponseEntity.ok;
@@ -52,17 +50,17 @@ public class RoomController {
     }
 
     @GetMapping("/searchByName")
-    public List<Room> filterRoomsByNamePaged(@RequestParam(required = false) String name,
-                                                 @RequestParam int page, @RequestParam int pageSize) {
-        return roomService.searchByName(name,page,pageSize).stream()
-                .collect(Collectors.toList());
+    public Page<Room> filterRoomsByNamePaged(@RequestParam(required = false) String name,
+                                             @RequestParam int page,
+                                             @RequestParam int pageSize) {
+        return roomService.searchByName(name,page,pageSize);
     }
 
     @GetMapping("/searchByBuilding")
-    public List<Room> filterRoomsByBuildingPaged(@RequestParam(required = false) String building,
-                                             @RequestParam int page, @RequestParam int pageSize) {
-        return roomService.searchByBuilding(building,page,pageSize).stream()
-                .collect(Collectors.toList());
+    public Page<Room> filterRoomsByBuildingPaged(@RequestParam(required = false) String building,
+                                             @RequestParam int page,
+                                                 @RequestParam int pageSize) {
+        return roomService.searchByBuilding(building,page,pageSize);
     }
 
     @GetMapping("/{id}")

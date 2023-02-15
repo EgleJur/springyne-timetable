@@ -135,7 +135,8 @@ function EditSubjectPage() {
                 modules.map(
                     (mod) =>
                     (<option key={mod.id} 
-                        value={mod.id}>{mod.name}</option>)
+                        value={mod.id}
+                        disabled={mod.deleted}>{mod.name}</option>)
                 )
             }
         </select>
@@ -151,7 +152,8 @@ function EditSubjectPage() {
             className="btn btn-light"
             value={room.id}
             onClick={(e) => deleteRoom(e.target.value)}
-            key={room.id} id={room.id}>{room.name}</button>
+            key={room.id} id={room.id}
+            >{room.name}</button>
         ))}</div>
 
         <select
@@ -163,7 +165,8 @@ function EditSubjectPage() {
             rooms.map(
               (room) =>
               (<option key={room.id} 
-                  value={room.id}>{room.name}</option>)
+                  value={room.id} 
+                  disabled={room.deleted}>{room.name}</option>)
           )
           }
         </select>

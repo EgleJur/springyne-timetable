@@ -36,12 +36,13 @@ public class Room {
 
     @PrePersist
     private void prePersist() {
+
         lastModifiedDate = LocalDateTime.now();
     }
 
     @PreUpdate
     private void preUpdate() {
-        lastModifiedDate = LocalDateTime.now();
 
+        lastModifiedDate = LocalDateTime.now();
     }
 }

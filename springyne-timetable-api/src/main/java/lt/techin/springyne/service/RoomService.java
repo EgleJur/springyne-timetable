@@ -1,13 +1,12 @@
 package lt.techin.springyne.service;
 
-import lt.techin.springyne.dto.RoomDto;
 import lt.techin.springyne.exception.RoomValidationEception;
+import lt.techin.springyne.exception.ScheduleValidationException;
 import lt.techin.springyne.model.Room;
 import lt.techin.springyne.repository.RoomRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -20,11 +19,11 @@ public class RoomService {
 
     private static final ExampleMatcher SEARCH_CONTAINS_NAME = ExampleMatcher.matchingAny()
             .withMatcher("name", ExampleMatcher.GenericPropertyMatchers.contains().ignoreCase())
-            .withIgnorePaths("id", "deleted","lastModifiedDate");
+            .withIgnorePaths("id", "deleted","building", "lastModifiedDate");
 
     private static final ExampleMatcher SEARCH_CONTAINS_BUILDING = ExampleMatcher.matchingAny()
             .withMatcher("building", ExampleMatcher.GenericPropertyMatchers.contains().ignoreCase())
-            .withIgnorePaths("id", "deleted","lastModifiedDate");
+            .withIgnorePaths("id", "deleted", "name", "lastModifiedDate");
 
     public RoomService(RoomRepository roomRepository) {
 
@@ -33,12 +32,15 @@ public class RoomService {
 
     public List<Room> getAllRooms() {
 
-        return roomRepository.findAll();
+        return roomRepository.findAllByOrderByDeletedAscIdAsc();
     }
 
-    public Room addRoom(Room room){
+    public Room addRoom(Room room) {
 
-        return roomRepository.save(room);
+        if (existsByName(room.getName())) {
+        throw new ScheduleValidationException("Room name must be unique", "name", "Name already exists", room.getName());
+    }
+    return roomRepository.save(room);
     }
 
     public boolean existsByName(String name) {
@@ -77,9 +79,6 @@ public class RoomService {
 
         return roomRepository.findById(id);
     }
-//    public Room viewRoom(Long id){
-//        return roomRepository.findById(id).orElseThrow(() -> new RuntimeException("Not found"));
-//    }
 
     public Room editRoom(Long id, Room room) {
         Room existingRoom = roomRepository.findById(id)

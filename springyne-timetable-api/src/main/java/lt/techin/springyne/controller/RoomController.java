@@ -3,6 +3,7 @@ package lt.techin.springyne.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lt.techin.springyne.dto.RoomDto;
 import lt.techin.springyne.dto.mapper.RoomMapper;
+import lt.techin.springyne.model.Module;
 import lt.techin.springyne.model.Room;
 import lt.techin.springyne.service.RoomService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static lt.techin.springyne.dto.mapper.RoomMapper.toRoom;
@@ -36,18 +38,11 @@ public class RoomController {
 
     @GetMapping
     public List<Room> getAllRooms(){
-
         return roomService.getAllRooms();
     }
 
     @PostMapping
     public ResponseEntity<Room> addRoom(@Valid @RequestBody RoomDto roomDto) {
-//        if (roomService.existsByName(roomDto.getName())) {
-//            return ResponseEntity.badRequest().body("Toks kabinetas jau egzistuoja");
-//        }
-//
-//        Room newRoom = roomService.addRoom(RoomMapper.toRoom(roomDto));
-//        return ResponseEntity.ok(RoomMapper.toRoomDto(newRoom));
         return ResponseEntity.ok(roomService.addRoom(RoomMapper.toRoom(roomDto)));
     }
 
@@ -64,40 +59,22 @@ public class RoomController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<RoomDto> viewRoom(@PathVariable Long id) {
-        var roomOptional = roomService.viewRoom(id);
-
-        var responseEntity = roomOptional
-                .map(room -> ok(toRoomDto(room)))
-                .orElseGet(() -> ResponseEntity.notFound().build());
-
-        return responseEntity;
+    public Optional<Room> viewRoom(@PathVariable Long id) {
+        return roomService.viewRoom(id);
     }
 
-//    @GetMapping("/{id}")
-//    public Room viewRoom(@PathVariable Long id) {
-//        return roomService.viewRoom(id);
-//    }
-
     @PatchMapping("/edit/{id}")
-    public ResponseEntity<RoomDto> editRoom(@PathVariable Long id, @RequestBody RoomDto roomDto) {
-        var editedRoom = roomService.editRoom(id, toRoom(roomDto));
-
-        return ok(toRoomDto(editedRoom));
+    public ResponseEntity<Room> editRoom(@PathVariable Long id, @Valid @RequestBody RoomDto roomDto) {
+        return ResponseEntity.ok(roomService.editRoom(id, RoomMapper.toRoom(roomDto)));
     }
 
     @PatchMapping("/delete/{id}")
-    public ResponseEntity<RoomDto> deleteRoom(@PathVariable Long id) {
-
-        var updatedRoom = roomService.delete(id);
-        return ok(toRoomDto(updatedRoom));
-
+    public ResponseEntity<Room> deleteRoom(@PathVariable Long id) {
+        return ResponseEntity.ok(roomService.delete(id));
     }
+
     @PatchMapping("/restore/{id}")
-    public ResponseEntity<RoomDto> restoreRoom(@PathVariable Long id) {
-
-        var restoredRoom = roomService.restore(id);
-        return ok(toRoomDto(restoredRoom));
-
+    public ResponseEntity<Room> restoreRoom(@PathVariable Long id) {
+        return ResponseEntity.ok(roomService.restore(id));
     }
 }

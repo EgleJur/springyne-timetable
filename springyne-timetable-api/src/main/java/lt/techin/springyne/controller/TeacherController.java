@@ -39,9 +39,14 @@ public class TeacherController {
     }
 
     @GetMapping("/search")
-    public Page<Teacher> filterTeachersByNamePaged(@RequestParam(required = false) String name,
-                                                   @RequestParam int page, @RequestParam int pageSize) {
-        return teacherService.searchByName(name,page,pageSize);
+    public Page<Teacher> filterTeachersByNamePaged(
+            @RequestParam(required = false) String name,
+            @RequestParam(required = false) String subject,
+            @RequestParam(required = false) String shift,
+            @RequestParam int page,
+            @RequestParam int pageSize) {
+
+        return teacherService.searchByNameAndSubjectAndShift(name, subject, shift, page, pageSize);
     }
 
     @GetMapping("/{teacherId}")

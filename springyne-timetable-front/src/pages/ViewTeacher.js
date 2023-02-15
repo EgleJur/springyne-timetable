@@ -65,10 +65,6 @@ function ViewTeacherPage() {
         <table className="table table-hover shadow p-3 mb-5 bg-body rounded align-middle">
           <tbody>
             <tr>
-              <th scope="col">Numeris</th>
-              <td>{teacher.number}</td>
-            </tr>
-            <tr>
               <th scope="col">Vardas</th>
               <td>{teacher.name}</td>
             </tr>
@@ -77,7 +73,31 @@ function ViewTeacherPage() {
               <td>{teacher.lastname}</td>
             </tr>
             <tr>
-              <th scope="col">Detalės</th>
+            <th scope="col">Teams vardas(email)</th>
+            <td>{teacher.teams_mail}</td>
+            </tr>
+            <tr>
+            <th scope="col">Kontaktinis email</th>
+            <td>{teacher.email}</td>
+            </tr>
+            <tr>
+            <th scope="col">Kontaktinis telefonas</th>
+            <td>{teacher.phone}</td>
+            </tr>
+            <tr>
+            <th scope="col">Valandų skaičius</th>
+            <td>{teacher.hours}</td>
+            </tr>
+            <tr>
+            <th scope="col">Dalykas</th>
+            <td>{teacher.subject}</td>
+            </tr>
+            <tr>
+            <th scope="col">Pamaina</th>
+            <td>{teacher.shift}</td>
+            </tr>
+            <tr>
+              <th scope="col">Būsena</th>
               <td>{teacher.deleted ? "Mokytojas ištrintas" : ""}</td>
             </tr>
             <tr>

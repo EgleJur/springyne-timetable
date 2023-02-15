@@ -28,7 +28,7 @@ public class TeacherControllerMockDbTest {
 
     @Test
     void addTeacherReturnsSavedTeacher() {
-        TeacherDto testTeacherDto = new TeacherDto(LocalDateTime.now().toString(), "Test", "test");
+        TeacherDto testTeacherDto = new TeacherDto(LocalDateTime.now().toString(), "Test", "test", "test", "test", "test", "test", "test", "test");
 // TeacherDto testTeacherDto1 = new TeacherDto(null, null);
 // TeacherDto testTeacherDto2 = new TeacherDto("T2", "Test");
         Teacher testTeacher = TeacherMapper.toTeacher(testTeacherDto);

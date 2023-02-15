@@ -41,15 +41,20 @@ public class TeacherService {
         return teacherRepository.existsByNumberIgnoreCase(number);
     }
 
-    public Page<Teacher> searchByName(String name, int page, int pageSize) {
-
+    public Page<Teacher> searchByNameAndSubjectAndShift(String name, String subject, String shift, int page, int pageSize) {
         Teacher teacher = new Teacher();
-        if(name != null) {
+        if (name != null) {
             teacher.setName(name);
         }
-        Example<Teacher> teacherExample = Example.of(teacher, SEARCH_CONTAINS_NAME);
-        Pageable pageable = PageRequest.of(page,pageSize, Sort.by("deleted").and(Sort.by("id")));
-        return teacherRepository.findAll(teacherExample,pageable);
+        if (subject != null) {
+            teacher.setSubject(subject);
+        }
+        if (shift != null) {
+            teacher.setShift(shift);
+        }
+        Example<Teacher> teacherExample = Example.of(teacher, ExampleMatcher.matchingAll().withIgnoreCase("name", "subject", "shift").withStringMatcher(ExampleMatcher.StringMatcher.CONTAINING));
+        Pageable pageable = PageRequest.of(page, pageSize, Sort.by("deleted").and(Sort.by("id")));
+        return teacherRepository.findAll(teacherExample, pageable);
     }
 
     public Optional<Teacher> getTeacherById(Long teacherId) {

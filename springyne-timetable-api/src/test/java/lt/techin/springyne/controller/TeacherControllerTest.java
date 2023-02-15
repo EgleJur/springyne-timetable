@@ -34,9 +34,9 @@ ObjectMapper objectMapper;
 @Test
 void getAllTeachersContainsCorrectDtos() throws Exception {
 
-        TeacherDto testTeacherDto1 = new TeacherDto("T1", "Test name1", "Test lastname1");
-        TeacherDto testTeacherDto2 = new TeacherDto("T2", "Test name2", "Test lastname2");
-        TeacherDto testTeacherDto3 = new TeacherDto("T3", "Test name3", "Test lastname3");
+        TeacherDto testTeacherDto1 = new TeacherDto("T1", "Test name1", "Test lastname1", "Test teams mail1", "Test email1", "+37000000001", "1", "Test subject1", "Test shift1");
+        TeacherDto testTeacherDto2 = new TeacherDto("T2", "Test name2", "Test lastname2", "Test teams mail2", "Test email2", "+37000000002", "2", "Test subject2", "Test shift2");
+        TeacherDto testTeacherDto3 = new TeacherDto("T3", "Test name3", "Test lastname3", "Test teams mail3", "Test email3", "+37000000003", "3", "Test subject3", "Test shift3");
 
         List<TeacherDto> expectedList = new ArrayList<>();
         expectedList.add(testTeacherDto1);
@@ -54,10 +54,10 @@ void getAllTeachersContainsCorrectDtos() throws Exception {
 
     @Test
     void addTeacherThrowsExceptionWithNullOrEmptyValues() throws Exception {
-        TeacherDto testTeacherDto4 = new TeacherDto("", "Test name4", "Test lastname4");
-        TeacherDto testTeacherDto5 = new TeacherDto(null, "Test name5", "Test lastname5");
-        TeacherDto testTeacherDto6 = new TeacherDto("T6", "", "");
-        TeacherDto testTeacherDto7 = new TeacherDto("T7", null, null);
+        TeacherDto testTeacherDto4 = new TeacherDto("", "Test name4", "Test lastname4", "Test teams mail4", "Test email4", "+37000000004", "4", "Test subject4", "Test shift4");
+        TeacherDto testTeacherDto5 = new TeacherDto(null, "Test name5", "Test lastname5", "Test teams mail5", "Test email5", "+37000000005", "5", "Test subject5", "Test shift5");
+        TeacherDto testTeacherDto6 = new TeacherDto("T6", "", "", "", "", "", "", "", "");
+        TeacherDto testTeacherDto7 = new TeacherDto("T7",  null, null, null, null, null, null, null, null);
         String message = "Null or empty values should return bad request status";
 
         assertEquals(400,performTeacherPostBadRequest(testTeacherDto4).getResponse().getStatus(), message);
@@ -68,7 +68,7 @@ void getAllTeachersContainsCorrectDtos() throws Exception {
 
     @Test
     void addTeacherThrowsExceptionWithNonUniqueNumberValue() throws Exception {
-        TeacherDto testTeacherDto1 = new TeacherDto("T1", "Test", "Test");
+        TeacherDto testTeacherDto1 = new TeacherDto("T1", "Test", "Test", "Test","Test","Test","Test","Test","Test");
         assertEquals(400,performTeacherPostBadRequest(testTeacherDto1).getResponse().getStatus(),
                 "Non unique Teacher number should return bad request status");
     }
@@ -91,14 +91,14 @@ void getAllTeachersContainsCorrectDtos() throws Exception {
 
     @Test
     void editTeacherThrowsExceptionWithNonUniqueNumberValue() throws Exception {
-        TeacherDto testTeacherDto5 = new TeacherDto("T1", "Test", "Test");
+        TeacherDto testTeacherDto5 = new TeacherDto("T1", "Test", "Test","Test","Test","Test","Test","Test","Test");
         MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.patch("/api/v1/teachers/update/5").contentType(MediaType.APPLICATION_JSON).
                 content(objectMapper.writeValueAsString(testTeacherDto5))).andReturn();
         assertEquals(400, mvcResult.getResponse().getStatus(),"Non unique Teacher number should return bad request status");
     }
     @Test
     void editTeacherThrowsExceptionWithEmptyValues() throws Exception {
-        TeacherDto testTeacherDto5 = new TeacherDto("", "", "");
+        TeacherDto testTeacherDto5 = new TeacherDto("", "", "", "", "", "", "", "", "");
         MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.patch("/api/v1/teachers/update/5").contentType(MediaType.APPLICATION_JSON).
                 content(objectMapper.writeValueAsString(testTeacherDto5))).andReturn();
 
@@ -106,7 +106,7 @@ void getAllTeachersContainsCorrectDtos() throws Exception {
     }
     @Test
     void editTeacherAllowsSavingWithUniqueNumber() throws Exception {
-        TeacherDto testTeacherDto4 = new TeacherDto(LocalDateTime.now().toString(), "test", "test");
+        TeacherDto testTeacherDto4 = new TeacherDto(LocalDateTime.now().toString(), "test", "test", "test", "test", "test", "test", "test", "test");
         MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.patch("/api/v1/teachers/update/4").contentType(MediaType.APPLICATION_JSON).
                 content(objectMapper.writeValueAsString(testTeacherDto4))).andReturn();
 

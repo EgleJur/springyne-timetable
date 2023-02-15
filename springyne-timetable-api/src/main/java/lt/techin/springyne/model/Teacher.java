@@ -29,6 +29,18 @@ public class Teacher {
 
     @NotBlank
     private String lastname;
+    @NotBlank
+    private String teams_mail;
+    @NotBlank
+    private String email;
+    @NotBlank
+    private String phone;
+    @NotBlank
+    private String hours;
+    @NotBlank
+    private String subject;
+    @NotBlank
+    private String shift;
 
     private boolean deleted = Boolean.FALSE;
 

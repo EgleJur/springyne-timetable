@@ -1,13 +1,11 @@
 package lt.techin.springyne.service;
 
-import lt.techin.springyne.dto.RoomDto;
 import lt.techin.springyne.exception.RoomValidationEception;
 import lt.techin.springyne.model.Room;
 import lt.techin.springyne.repository.RoomRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;

@@ -13,6 +13,10 @@ import EditModulePage from './pages/EditModule';
 import CreateSubjectPage from './pages/CreateSubject';
 import ViewSubjectPage from './pages/ViewSubject';
 import EditSubjectPage from './pages/EditSubject';
+import CreateRoomPage from './pages/CreateRoom';
+import ViewRoomPage from './pages/ViewRoom';
+import EditRoomPage from './pages/EditRoom';
+
 
 function App() {
   return (
@@ -33,6 +37,10 @@ function App() {
             <Route path="/subjects/create" element={<CreateSubjectPage />} />
             <Route path="/subjects/view/:id" element={<ViewSubjectPage />} />
             <Route path="/subjects/edit/:id" element={<EditSubjectPage />} />
+            <Route path="/rooms/create" element={<CreateRoomPage />} />
+            <Route path="/rooms/view/:id" element={<ViewRoomPage />} />
+            <Route path="/rooms/edit/:id" element={<EditRoomPage />} />
+
           </Routes>
         </div>
       </HashRouter>

@@ -10,7 +10,6 @@ function RoomListPage() {
   const [pageSize, setPageSize] = useState(25);
   const [searchName, setSearchName] = useState("");
   const [searchBuinding, setSearchBuilding] = useState("");
-  const [searchModName, setSearchModName] = useState("");
   const [page, setPage] = useState(1);
 
   const JSON_HEADERS = {

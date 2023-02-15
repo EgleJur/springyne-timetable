@@ -25,7 +25,7 @@ function EditModuleSubjects(props) {
   useEffect(() => fetchAvailableSubjects, []);
 
   const handleAddModule = () => {
-    fetch(`/api/v1/subject/${chosenSubject}/addModule/` + params.id, {
+    fetch(`/api/v1/subjects/${chosenSubject}/addModule/` + params.id, {
       method: "PATCH",
     })
       .then(fetchSubjects)
@@ -43,7 +43,7 @@ function EditModuleSubjects(props) {
                 <div className="row mb-2" key={subject.id}>
                   <div className="col-md">{subject.name}</div>
                   <div className="col-md">{subject.description}</div>
-                  <div className="col-md">{subject.lastUpdated}</div>
+                  <div className="col-md">{subject.last_Updated}</div>
                   {subject.deleted ? (
                     <div className="col-md">Dalykas ištrintas</div>
                   ) : (

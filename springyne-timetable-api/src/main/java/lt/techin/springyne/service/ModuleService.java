@@ -116,7 +116,7 @@ public class ModuleService {
 
     public List<Subject> getAllSubjectsAvailableByModule(Long moduleId) {
         if (moduleRepository.existsById(moduleId)) {
-            return subjectRepository.findByDeletedFalseAndModuleIdNot(moduleId);
+            return subjectRepository.findByDeletedFalseAndModuleIdNotOrModuleIdIsNull(moduleId);
         } else {
             throw new ScheduleValidationException("Module does not exist", "id", "Module not found", String.valueOf(moduleId));
         }

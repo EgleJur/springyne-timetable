@@ -32,7 +32,7 @@ class SubjectServiceTest {
     @Test
     public void saveSubject(){
         Subject subject = mock(Subject.class);
-        subjectService.create(subject);
+        subjectService.createSubjectDto(subject);
         verify(subjectRepository).save(subject);
     }
 
@@ -42,7 +42,7 @@ class SubjectServiceTest {
         when(subject.getName()).thenReturn("R1");
         when(subject.getDescription()).thenReturn("Test");
         when(subjectRepository.findById(Id)).thenReturn(Optional.of(subject));
-        subjectService.edit(Id, subject);
+        subjectService.edit(Id, subject, null, null);
         verify(subjectRepository).save(subject);
     }
 

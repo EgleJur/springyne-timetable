@@ -183,11 +183,23 @@ function SubjectListPage() {
                     Žiūrėti
                   </Link>
                 </button>
-                <button className="btn btn-outline-primary ms-2">
-                  <Link className="nav-link" to={"/subjects/edit/" + subject.id}>
+
+                {subject.deleted ? (
+                  <button
+                    className="btn btn-outline-danger ms-2"
+                    disabled>
+                    Redaguoti
+                  </button>
+                ) : (
+
+                  <button
+                    className="btn btn-outline-danger ms-2">
+                    <Link className="nav-link" to={"/subjects/edit/" + subject.id}>
                     Redaguoti
                   </Link>
-                </button>
+                  </button>
+                )}
+
                 {subject.deleted ? (
                   <button
                     className="btn btn-outline-danger ms-2"

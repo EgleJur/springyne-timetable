@@ -13,10 +13,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-//@Builder
 @Table(name = "SUBJECT_TABLE")
-//@SQLDelete(sql = "UPDATE Subject SET deleted = true WHERE id=?")
-//@Where(clause = "deleted=false")
 @Data
 @AllArgsConstructor
 //@NoArgsConstructor
@@ -25,18 +22,14 @@ import java.util.Set;
 public class Subject {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-//    @Column(name = "id")
     private Long id;
 
     @NotBlank
-//    @Column(name = "name")
     private String name;
 
-//    @Column(name = "description")
     private String description;
 
     @LastModifiedDate
-//    @Column(name = "LAST_UPDATED")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime last_Updated;
 
@@ -55,16 +48,6 @@ public class Subject {
     public Subject() {
         this.rooms = new HashSet<>();
     }
-
-//    public void addModule(Module module){
-//    this.modules.add(module);
-//    module.getSubj().add(this);
-//
-//}
-//    public void addRoom(Room room){
-//        this.rooms.add(room);
-//    }
-
 
     @PrePersist
     private void prePersist() {

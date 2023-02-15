@@ -14,19 +14,19 @@ import org.springframework.transaction.annotation.Transactional;
 public interface SubjectRepository extends JpaRepository<Subject, Long> {
 
 
-//    List<Subject> findAllByOrderByDeletedAcsNameAsc();
-
-//    @Query("select s from Subject s join Module m where m.name = :moduleName")
-//    List<Subject> findByModule_ModuleName(@Param("moduleName") String moduleName);
-
     Page<Subject> findByModuleName(String name, Pageable pageable);
+
     boolean existsByNameIgnoreCase(String name);
 
     @Transactional
     @Modifying
-    @Query(value = "INSERT INTO SUBJECTS_IN_ROOMS (SUBJECT_ID, ROOM_ID) VALUES (:SUB_ID, :R_ID)",
+    @Query(value = "INSERT INTO SUBJECTS_IN_ROOMS (SUBJECT_ID, ROOM_ID) VALUES (:SUBJECT_ID, :ROOM_ID)",
             nativeQuery = true)
-    void insertSubjectAndRoom(@Param("SUB_ID") Long subID, @Param("R_ID") Long modId);
-//@EntityGraph(attributePaths="module")
-//Optional<Subject> findModuleWithSubjectById(Long id);
+    void insertSubjectAndRoom(@Param("SUBJECT_ID") Long subjectID, @Param("ROOM_ID") Long roomId);
+
+    @Transactional
+    @Modifying
+    @Query(value = "DELETE FROM SUBJECTS_IN_ROOMS WHERE SUBJECT_ID= :SUBJECT_ID AND ROOM_ID = :ROOM_ID",
+            nativeQuery = true)
+    void deleteRoomFromSubject(@Param("SUBJECT_ID") Long subjectID, @Param("ROOM_ID") Long roomId);
 }

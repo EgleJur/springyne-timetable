@@ -2,14 +2,11 @@ import { useState, useEffect } from "react";
 import { Alert, Collapse } from "@mui/material";
 import { TextField } from "@mui/material";
 import { useParams } from "react-router-dom";
-import { ModulesForSubjects } from "../components/ModulesForSubjects";
-import { RoomsForSubjects } from "../components/RoomsForSubjects";
 
 
 function CreateSubjectPage() {
   const [description, setDescription] = useState("");
   const [name, setName] = useState("");
-  const [module, setModule] = useState({});
   const [room, setRoom] = useState("");
   const [nameError, setNameError] = useState("");
   const [success, setSuccess] = useState(false);
@@ -67,13 +64,6 @@ function CreateSubjectPage() {
   };
 
 
-  const selectModules = (event) => {
-     setModule(event.target.value)
-  }
-  const selectRoom = (event) => {
-    setRoom(event.target.value)
-  }
-
   return (
     <div className="mx-3">
       <h2 className="my-5">Pridėti naują dalyką</h2>
@@ -129,7 +119,6 @@ function CreateSubjectPage() {
             value={selectedModule}
             onChange={(e) => setSelectedModule(e.target.value)}
             className="form-control mb-3">
-            <option value =''>---</option>
             {
                 modules.map(
                     (mod) =>

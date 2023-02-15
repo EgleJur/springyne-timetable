@@ -93,11 +93,22 @@ function ViewSubjectPage() {
             </tr>
           </tbody>
         </table>
-        <button className="btn btn-primary me-2">
-          <Link to={"/subjects/edit/" + params.id} className="nav-link">
+
+        {subject.deleted ? (
+          <button
+            className="btn btn-outline-danger ms-2"
+            disabled>
             Redaguoti
-          </Link>
-        </button>
+          </button>
+        ) : (
+
+          <button
+            className="btn btn-outline-danger ms-2">
+            <Link className="nav-link" to={"/subjects/edit/" + subject.id}>
+              Redaguoti
+            </Link>
+          </button>
+        )}
         {subject.deleted ? (
           <button className="btn btn-secondary me-2" onClick={handleRestore}>
             Atstatyti

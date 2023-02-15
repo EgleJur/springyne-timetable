@@ -3,7 +3,6 @@ package lt.techin.springyne.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lt.techin.springyne.dto.RoomDto;
 import lt.techin.springyne.dto.mapper.RoomMapper;
-import lt.techin.springyne.model.Module;
 import lt.techin.springyne.model.Room;
 import lt.techin.springyne.service.RoomService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,11 +13,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
-
-import static lt.techin.springyne.dto.mapper.RoomMapper.toRoom;
-import static lt.techin.springyne.dto.mapper.RoomMapper.toRoomDto;
-import static org.springframework.http.ResponseEntity.ok;
 
 @RestController
 @RequestMapping("/api/v1/rooms")

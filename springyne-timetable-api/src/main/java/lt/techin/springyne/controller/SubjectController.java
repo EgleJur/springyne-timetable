@@ -59,8 +59,8 @@ public class SubjectController {
     }
     @PostMapping(value = "/createSubject")
     public ResponseEntity<SubjectDto> createSubject(@RequestBody SubjectDto subjectDto,
-                                                     @RequestParam Long moduleId,
-                                                     @RequestParam(required = false) Long roomId) {
+                                                    @RequestParam Long moduleId,
+                                                    @RequestParam(required = false) Long roomId) {
         var createdSubject = subjectService.createSubject(moduleId, roomId, toSubject(subjectDto));
         return ok(toSubjectDto(createdSubject));
     }

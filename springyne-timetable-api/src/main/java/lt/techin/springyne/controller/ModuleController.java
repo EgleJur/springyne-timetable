@@ -40,7 +40,7 @@ public class ModuleController {
 
     @GetMapping("/search")
     public Page<Module> filterModulesByNamePaged(@RequestParam(required = false) String name,
-                                                 @RequestParam int page, @RequestParam int pageSize) {
+                                               @RequestParam int page, @RequestParam int pageSize) {
         return moduleService.searchByName(name,page,pageSize);
     }
 

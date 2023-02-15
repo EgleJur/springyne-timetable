@@ -34,7 +34,7 @@ function Navigation() {
                   </div>
                   <div className="nav-item">
                     <Link to="/rooms" className="nav-link">
-                      Kambariai
+                      Kabinetai
                     </Link>
                   </div>
                   <div className="nav-item">

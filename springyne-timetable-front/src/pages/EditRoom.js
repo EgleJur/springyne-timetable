@@ -3,93 +3,99 @@ import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { TextField } from "@mui/material";
 
-function EditModulePage() {
-  const [module, setModule] = useState({});
-  const [numberError, setNumberError] = useState("");
+function EditRoomPage() {
+  const [room, setRoom] = useState({});
   const [nameError, setNameError] = useState("");
+  const [buildingError, setBuildingError] = useState("");
   const [success, setSuccess] = useState(false);
   const [failure, setFailure] = useState(false);
   const [changed, setChanged] = useState(false);
   const params = useParams();
 
-  const fetchModule = () => {
-    fetch("/api/v1/modules/" + params.id)
+  const fetchRoom = () => {
+    fetch("/api/v1/rooms/" + params.id)
       .then((response) => response.json())
-      .then((jsonResponse) => setModule(jsonResponse));
+      .then((jsonResponse) => setRoom(jsonResponse));
   };
 
-  useEffect(fetchModule, []);
+  useEffect(fetchRoom, []);
 
-  const editModule = (e) => {
+  // useEffect(() => {
+  //   fetch("/api/v1/rooms/" + params.id)
+  //     .then((response) => response.json())
+  //     .then((jsonResponse) => setRoom(jsonResponse));
+  // }, [params.id]);
+
+  const editRoom = (e) => {
     e.preventDefault();
-    setNumberError(false);
     setNameError(false);
-    if (module.name === "" || module.number === "") {
-      if (module.number === "") {
-        setNumberError(true);
-      }
-      if (module.name === "") {
+    setBuildingError(false);
+    if (room.name === "" || room.building === "") {
+      if (room.name === "") {
         setNameError(true);
       }
+      if (room.building === "") {
+        setBuildingError(true);
+      }
     } else {
-      fetch("/api/v1/modules/update/" + params.id, {
+      fetch("/api/v1/rooms/edit/" + params.id, {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(module),
+        body: JSON.stringify(room),
       }).then((result) => {
         if (result.ok) {
           setSuccess(true);
           setFailure(false);
           setChanged(false);
-          fetchModule();
+          fetchRoom();
         } else {
           setFailure(true);
           setSuccess(false);
-          setNumberError(true);
-          setNameError(false);
+          setNameError(true);
+          setBuildingError(false);
         }
       });
     }
   };
   const updateProperty = (property, event) => {
-    setModule({
-      ...module,
+    setRoom({
+      ...room,
       [property]: event.target.value,
     });
     setChanged(true);
   };
 
   const handleDelete = () => {
-    fetch(`/api/v1/modules/delete/` + params.id, {
+    fetch(`/api/v1/rooms/delete/` + params.id, {
       method: "PATCH",
     })
       .then((response) => response.json())
-      .then((jsonResponse) => setModule(jsonResponse));
+      .then((jsonResponse) => setRoom(jsonResponse));
     setSuccess(true);
     setFailure(false);
-    setNumberError(false);
     setNameError(false);
+    setBuildingError(false);
     setChanged(false);
   };
 
   const handleRestore = () => {
-    fetch(`/api/v1/modules/restore/` + params.id, {
+    fetch(`/api/v1/rooms/restore/` + params.id, {
       method: "PATCH",
     })
       .then((response) => response.json())
-      .then((jsonResponse) => setModule(jsonResponse));
+      .then((jsonResponse) => setRoom(jsonResponse));
     setSuccess(true);
     setFailure(false);
-    setNumberError(false);
     setNameError(false);
+    setBuildingError(false);
     setChanged(false);
   };
 
   return (
     <div className="mx-3">
-      <h2 className="my-5">Redaguoti modulį</h2>
+      <h2 className="my-5">Redaguoti kabinetą</h2>
       <Collapse in={success}>
         <Alert
           onClose={() => {
@@ -120,25 +126,7 @@ function EditModulePage() {
           <tbody>
             <tr>
               <th scope="col">
-                <label htmlFor="edit-module-number-with-error">Numeris *</label>
-              </th>
-              <td>
-                <TextField
-                  error={!!numberError}
-                  onChange={(e) => updateProperty("number", e)}
-                  value={module.number}
-                  id="edit-module-number-with-error"
-                  helperText="Numeris turi būti unikalus ir negali būti tuščias"
-                  className="form-control"
-                  size="small"
-                  InputLabelProps={{ shrink: true }}
-                  required
-                />
-              </td>
-            </tr>
-            <tr>
-              <th scope="col">
-                <label htmlFor="edit-module-name-with-error">
+                <label htmlFor="edit-room-name-with-error">
                   Pavadinimas *
                 </label>
               </th>
@@ -146,8 +134,9 @@ function EditModulePage() {
                 <TextField
                   error={!!nameError}
                   onChange={(e) => updateProperty("name", e)}
-                  value={module.name}
-                  id="edit-module-number-with-error"
+                  value={room.name}
+                  id="edit-room-name-with-error"
+                  // label="Pavadinimas"
                   helperText="Pavadinimas negali būti tuščias"
                   className="form-control"
                   size="small"
@@ -157,19 +146,62 @@ function EditModulePage() {
               </td>
             </tr>
             <tr>
-              <th scope="col">Detalės</th>
-              <td>{module.deleted ? "Modulis ištrintas" : ""}</td>
+              <th scope="col">
+                <label htmlFor="edit-room-building-with-error">Pastatas *</label>
+              </th>
+              <td>
+                <TextField
+                  error={!!buildingError}
+                  onChange={(e) => updateProperty("building", e)}
+                  value={room.building}
+                  id="create-room-building-with-error"
+                  // label="Pastatas"
+                  helperText="Pastatas negali būti tuščias"
+                  className="form-control"
+                  size="small"
+                  InputLabelProps={{ shrink: true }}
+                  required
+                />
+              </td>
+            </tr>
+            <tr>
+            <th scope="col">
+                <label htmlFor="edit-room-description">Aprašymas</label>
+              </th>
+              <td>
+                <TextField
+                  // error={!!buildingError}
+                  onChange={(e) => updateProperty("description", e)}
+                  value={room.description}
+                  id="create-room-description"
+                  // label="Aprašymas"
+                  helperText="Neprivaloma"
+                  className="form-control"
+                  size="small"
+                  InputLabelProps={{ shrink: true }}
+                  // required
+                />
+              </td>
+            </tr>
+            <tr>
+              <th scope="col">Būsena</th>
+              <td>{room.deleted ? "Kabinetas ištrintas" : "Aktyvus"}</td>
             </tr>
             <tr>
               <th scope="col">Paskutinį kartą modifikuotas:</th>
-              <td>{module.modifiedDate}</td>
+              <td>{room.lastModifiedDate}</td>
             </tr>
           </tbody>
         </table>
-        <button type="submit" className="btn btn-primary me-2" onClick={editModule} disabled={!changed}>
+        <button
+          type="submit"
+          className="btn btn-primary me-2"
+          onClick={editRoom}
+          disabled={!changed}
+        >
           Redaguoti
         </button>
-        {module.deleted ? (
+        {room.deleted ? (
           <button className="btn btn-secondary me-2" onClick={handleRestore}>
             Atstatyti
           </button>
@@ -183,4 +215,4 @@ function EditModulePage() {
   );
 }
 
-export default EditModulePage;
+export default EditRoomPage;

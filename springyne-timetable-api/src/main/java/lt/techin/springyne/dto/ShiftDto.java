@@ -4,14 +4,14 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+
+
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
-public class SubjectDto {
-
-//    private Long id;
+@AllArgsConstructor
+public class ShiftDto {
     private String name;
-    private String description;
-
-
+    private int starts;
+    private int ends;
+    private int visible;
 }

@@ -1,0 +1,7 @@
+INSERT INTO SHIFT (NAME,STARTS,ENDS,LAST_UPDATED,VISIBLE ) VALUES
+
+('Test name1', 1, 4,'2023-02-06 15:38:00.000',1),
+('Test name2', 1, 6, '2023-02-06 15:39:00.000',1),
+('Test name3', 4, 8, '2023-02-06 15:40:00.000', 0),
+('Test name4', 6, 12, '2023-02-07 15:40:00.000',1),
+('Test name5', 8, 12, '2023-02-07 15:41:00.000',1);

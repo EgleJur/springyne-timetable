@@ -3,6 +3,8 @@ package lt.techin.springyne.dto.mapper;
 import lt.techin.springyne.dto.RoomDto;
 import lt.techin.springyne.model.Room;
 
+import java.time.LocalDateTime;
+
 public class RoomMapper {
 
     public static Room toRoom(RoomDto roomDto) {

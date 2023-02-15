@@ -1,26 +1,32 @@
 package lt.techin.springyne.repository;
 
-import lt.techin.springyne.model.Module;
 import lt.techin.springyne.model.Subject;
-import org.springframework.data.jpa.repository.EntityGraph;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
-
-import java.util.List;
-import java.util.Optional;
+import org.springframework.transaction.annotation.Transactional;
 
 @Repository
 public interface SubjectRepository extends JpaRepository<Subject, Long> {
 
-    @Query(value = "SELECT * FROM SUBJECT_TABLE ORDER BY Deleted ASC",
+
+    Page<Subject> findByModuleName(String name, Pageable pageable);
+
+    boolean existsByNameIgnoreCase(String name);
+
+    @Transactional
+    @Modifying
+    @Query(value = "INSERT INTO SUBJECTS_IN_ROOMS (SUBJECT_ID, ROOM_ID) VALUES (:SUBJECT_ID, :ROOM_ID)",
             nativeQuery = true)
-    List<Subject> findAllSubjects();
-//
-    @Query(value = "INSERT INTO SUBJECT_AND_MODULES (SUBJECT_ID, MODULE_ID) VALUES (subId, modId)",
+    void insertSubjectAndRoom(@Param("SUBJECT_ID") Long subjectID, @Param("ROOM_ID") Long roomId);
+
+    @Transactional
+    @Modifying
+    @Query(value = "DELETE FROM SUBJECTS_IN_ROOMS WHERE SUBJECT_ID= :SUBJECT_ID AND ROOM_ID = :ROOM_ID",
             nativeQuery = true)
-    List<Subject> insertSubjects(@Param ("SUBJECT_ID") Long subID, @Param("MODULE_ID") Long modId);
-//@EntityGraph(attributePaths="module")
-//Optional<Subject> findModuleWithSubjectById(Long id);
+    void deleteRoomFromSubject(@Param("SUBJECT_ID") Long subjectID, @Param("ROOM_ID") Long roomId);
 }

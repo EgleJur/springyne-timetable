@@ -83,6 +83,11 @@ public class SubjectControler {
                 .collect(Collectors.toList());
     }
 
+    @PatchMapping("/{subjectId}/addModule/{moduleId}")
+    public ResponseEntity<Subject> addModuleToSubject(@PathVariable Long subjectId, @PathVariable Long moduleId) {
+        return ResponseEntity.ok(subjectService.addModuleToSubject(subjectId, moduleId));
+    }
+
 
 
 }

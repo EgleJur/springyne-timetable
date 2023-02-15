@@ -1,6 +1,7 @@
 package lt.techin.springyne.service;
 
 import lt.techin.springyne.exception.ScheduleValidationException;
+import lt.techin.springyne.model.Module;
 import lt.techin.springyne.model.Subject;
 import lt.techin.springyne.repository.ModuleRepository;
 import lt.techin.springyne.repository.RoomRepositoryE;
@@ -18,13 +19,15 @@ public class SubjectService {
 
     @Autowired
     SubjectRepository subjectRepository;
+    @Autowired
     ModuleRepository moduleRepository;
+    @Autowired
     RoomRepositoryE roomRepository;
 
-
-    public SubjectService(SubjectRepository subjectRepository) {
+    public SubjectService(SubjectRepository subjectRepository, ModuleRepository moduleRepository, RoomRepositoryE roomRepository) {
         this.subjectRepository = subjectRepository;
-
+        this.moduleRepository = moduleRepository;
+        this.roomRepository = roomRepository;
     }
 
     private static final ExampleMatcher SEARCH_CONTAINS_NAME = ExampleMatcher.matchingAny()
@@ -64,6 +67,15 @@ public class SubjectService {
         Example<Subject> subjectExample = Example.of(subject, SEARCH_CONTAINS_NAME);
         Pageable pageable = PageRequest.of(page,pageSize, Sort.by("deleted").and(Sort.by("name")));
         return subjectRepository.findAll(subjectExample, pageable);
+    }
+
+    public Subject addModuleToSubject(Long subjectId, Long moduleId) {
+        Module moduleToAdd = moduleRepository.findById(moduleId).orElseThrow(
+                () -> new ScheduleValidationException("Module does not exist", "id", "Module not found", String.valueOf(moduleId)));
+        Subject updatedSubject = subjectRepository.findById(subjectId).orElseThrow(
+                () -> new ScheduleValidationException("Subject does not exist", "id", "Subject not found", String.valueOf(subjectId)));
+        updatedSubject.setModule(moduleToAdd);
+        return subjectRepository.save(updatedSubject);
     }
 
 //        if(moduleId!=null) {

@@ -2,7 +2,9 @@ package lt.techin.springyne.service;
 
 import lt.techin.springyne.exception.ScheduleValidationException;
 import lt.techin.springyne.model.Module;
+import lt.techin.springyne.model.Subject;
 import lt.techin.springyne.repository.ModuleRepository;
+import lt.techin.springyne.repository.SubjectRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
@@ -15,6 +17,9 @@ public class ModuleService {
 
     @Autowired
     ModuleRepository moduleRepository;
+
+    @Autowired
+    SubjectRepository subjectRepository;
 
     private static final ExampleMatcher SEARCH_CONTAINS_NAME = ExampleMatcher.matchingAny()
             .withMatcher("name", ExampleMatcher.GenericPropertyMatchers.contains().ignoreCase())
@@ -98,9 +103,40 @@ public class ModuleService {
                 updatedModule.setName(module.getName());
             }
         }
-//        if (updatedModule.isDeleted() != module.isDeleted()) {
-//            updatedModule.setDeleted(module.isDeleted());
-//        }
         return moduleRepository.save(updatedModule);
     }
+
+    public List<Subject> getAllSubjectsByModule(Long moduleId) {
+        if (moduleRepository.existsById(moduleId)) {
+            return subjectRepository.findByModuleIdOrderByDeletedAscIdAsc(moduleId);
+        } else {
+            throw new ScheduleValidationException("Module does not exist", "id", "Module not found", String.valueOf(moduleId));
+        }
+    }
+
+    public List<Subject> getAllSubjectsAvailableByModule(Long moduleId) {
+        if (moduleRepository.existsById(moduleId)) {
+            return subjectRepository.findByDeletedFalseAndModuleIdNot(moduleId);
+        } else {
+            throw new ScheduleValidationException("Module does not exist", "id", "Module not found", String.valueOf(moduleId));
+        }
+    }
+
+//    public Subject addModuleToSubject(Long moduleId, Long subjectId) {
+//        Module moduleToAdd = moduleRepository.findById(moduleId).orElseThrow(
+//                () -> new ScheduleValidationException("Module does not exist", "id", "Module not found", String.valueOf(moduleId)));
+//        Subject updatedSubject = subjectRepository.findById(subjectId).orElseThrow(
+//                () -> new ScheduleValidationException("Subject does not exist", "id", "Subject not found", String.valueOf(subjectId)));
+//        updatedSubject.getModule().add(moduleToAdd);
+//        return subjectRepository.save(updatedSubject);
+//    }
+//
+//    public Subject removeModuleFromSubject(Long moduleId, Long subjectId) {
+//        Module moduleToRemove = moduleRepository.findById(moduleId).orElseThrow(
+//                () -> new ScheduleValidationException("Module does not exist", "id", "Module not found", String.valueOf(moduleId)));
+//        Subject updatedSubject = subjectRepository.findById(subjectId).orElseThrow(
+//                () -> new ScheduleValidationException("Subject does not exist", "id", "Subject not found", String.valueOf(subjectId)));
+//        updatedSubject.getModule().remove(moduleToRemove);
+//        return subjectRepository.save(updatedSubject);
+//    }
 }

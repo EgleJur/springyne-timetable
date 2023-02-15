@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lt.techin.springyne.dto.ModuleDto;
 import lt.techin.springyne.dto.mapper.ModuleMapper;
 import lt.techin.springyne.model.Module;
+import lt.techin.springyne.model.Subject;
 import lt.techin.springyne.service.ModuleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -64,4 +65,13 @@ public class ModuleController {
         return ResponseEntity.ok(moduleService.updateModule(moduleId, ModuleMapper.toModule(moduleDto)));
     }
 
+    @GetMapping("/subjects/{moduleId}")
+    public List<Subject> getAllSubjectsByModule(@PathVariable Long moduleId) {
+        return moduleService.getAllSubjectsByModule(moduleId);
+    }
+
+    @GetMapping("/subjects/available/{moduleId}")
+    public List<Subject> getAllSubjectsAvailableByModule(@PathVariable Long moduleId) {
+        return moduleService.getAllSubjectsAvailableByModule(moduleId);
+    }
 }

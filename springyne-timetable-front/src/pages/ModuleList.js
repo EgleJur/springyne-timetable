@@ -157,7 +157,7 @@ function ModuleListPage() {
             <tr
               key={module.id}
               id={module.id}
-              className={module.deleted && "text-black-50"}
+              className={module.deleted ? "text-black-50" : ""}
             >
               <td>{module.number}</td>
               <td>{module.name}</td>
@@ -168,7 +168,10 @@ function ModuleListPage() {
                     Žiūrėti
                   </Link>
                 </button>
-                <button className="btn btn-outline-primary me-2 my-1">
+                <button
+                  className="btn btn-outline-primary me-2 my-1"
+                  disabled={module.deleted}
+                >
                   <Link className="nav-link" to={"/modules/edit/" + module.id}>
                     Redaguoti
                   </Link>

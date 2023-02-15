@@ -2,18 +2,21 @@ import { Collapse, Alert } from "@mui/material";
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { TextField } from "@mui/material";
-import { ModulesForSubjects } from "../components/ModulesForSubjects";
+
 
 
 function EditSubjectPage() {
   const [subject, setSubject] = useState({});
-  const [description, setDescription] = useState("");
   const [nameError, setNameError] = useState("");
   const [module, setModule] = useState({});
   const [room, setRoom] = useState("");
   const [success, setSuccess] = useState(false);
   const [failure, setFailure] = useState(false);
   const params = useParams();
+  const [rooms, setRooms] = useState([]);
+  const [selectedRoom, setSelectedRoom] = useState("");
+  const [selectedModule, setSelectedModule] = useState('');
+  const [modules, setModules] = useState([]);
 
   useEffect(() => {
     fetch("/api/v1/subjects/" + params.id)
@@ -21,13 +24,34 @@ function EditSubjectPage() {
       .then((jsonResponse) => setSubject(jsonResponse));
   }, [params.id]);
 
+  useEffect(() => {
+    fetch('api/v1/rooms/')
+      .then(response => response.json())
+      .then(setRooms)
+
+  }, []);
+  
+  useEffect(() => {
+    fetch('api/v1/modules/')
+      .then(response => response.json())
+      .then(setModules)
+
+  }, []);
+  
+  const deleteRoom  = (e) => {
+    fetch(`/api/v1/subjects/${params.id}/deleteRoom/${e}`, {
+      method: "PATCH",
+    }).then(window.location.reload(true))
+  };
+
   const editsubject = (e) => {
     e.preventDefault();
     setNameError(false);
     if (subject.name == "") {
       setNameError(true);
     } else {
-      fetch("/api/v1/subjects/edit/" + params.id, {
+      fetch(`/api/v1/subjects/edit/${params.id}?
+      roomId=${selectedRoom}&moduleId=${selectedModule}`, {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
@@ -50,24 +74,6 @@ function EditSubjectPage() {
       [property]: event.target.value,
     });
   };
-
-
-  // const assignModuleToSubject = () => {
-  //   fetch(`api/v1/subjects/test?sudId=${params.id}&modId=${selectModules}`, {
-  //     method: 'POST',
-  //     headers: {
-  //       'Content-Type': 'application/json'
-  //     }
-  //   }).then(response => response.json())
-  //     .then((subject) => params.onSubjectChange(subject));
-  // };
-
-  const selectModules = (event) => {
-    setModule(event.target.value)
-  }
-  const selectRoom = (event) => {
-    setRoom(event.target.value)
-  }
 
   return (
     <div className="mx-3">
@@ -117,18 +123,53 @@ function EditSubjectPage() {
           InputLabelProps={{ shrink: true }}
 
         />
-
         <label htmlFor="page-size-select" className="mb-3">
-          Modulis:
-        </label>
-        <ModulesForSubjects id={params.id} onModuleChange={selectModules} />
+        Modulis:
+      </label>
+      <select
+            value={selectedModule}
+            onChange={(e) => setSelectedModule(e.target.value)}
+            className="form-control mb-3">
+              <option value=''>{subject.module?.name}</option>
+            {
+                modules.map(
+                    (mod) =>
+                    (<option key={mod.id} 
+                        value={mod.id}
+                        disabled={mod.deleted}>{mod.name}</option>)
+                )
+            }
+        </select>
 
-
+      
         <label htmlFor="page-size-select" className="mb-3">
-          Kabinetas:
+          Kabinetai:
         </label>
-        <ModulesForSubjects id={params.id} onModuleChange={selectRoom} />
+        <div className="d-grid gap-6 d-md-block">
+          {subject.rooms?.map((room) => (
+          <button
+            type="submit"
+            className="btn btn-light"
+            value={room.id}
+            onClick={(e) => deleteRoom(e.target.value)}
+            key={room.id} id={room.id}
+            >{room.name}</button>
+        ))}</div>
 
+        <select
+          value={selectedRoom}
+          onChange={(e) => setSelectedRoom(e.target.value)}
+          className="form-control mb-3">
+          <option value=''>---</option>
+          {
+            rooms.map(
+              (room) =>
+              (<option key={room.id} 
+                  value={room.id} 
+                  disabled={room.deleted}>{room.name}</option>)
+          )
+          }
+        </select>
         <button type="submit" className="btn btn-primary" onClick={editsubject}>
           Redaguoti
         </button>

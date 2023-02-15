@@ -52,52 +52,55 @@ public class SubjectController {
     }
 
     @PostMapping
-    public ResponseEntity<SubjectDto> createSubject(@RequestBody SubjectDto subjectDto) {
+    public ResponseEntity<SubjectDto> createSubjectDto(@RequestBody SubjectDto subjectDto) {
         var createdSubject = subjectService.createSubjectDto(toSubject(subjectDto));
 
         return ok(toSubjectDto(createdSubject));
     }
     @PostMapping(value = "/createSubject")
-    public ResponseEntity<SubjectDto> createSubject1(@RequestBody SubjectDto subjectDto,
+    public ResponseEntity<SubjectDto> createSubject(@RequestBody SubjectDto subjectDto,
                                                      @RequestParam Long moduleId,
                                                      @RequestParam(required = false) Long roomId) {
-        var createdSubject = subjectService.createSubject1(moduleId, roomId, toSubject(subjectDto));
+        var createdSubject = subjectService.createSubject(moduleId, roomId, toSubject(subjectDto));
         return ok(toSubjectDto(createdSubject));
     }
 
-    @PatchMapping("/test")
-    public void subRoom(@RequestParam Long sudId, @RequestParam Long modId) {
-        subjectService.subRoom(sudId, modId);
-    }
 
     @PatchMapping("/edit/{subjectId}")
     public ResponseEntity<Subject> editSubject(@PathVariable Long subjectId,
-                                               @RequestBody SubjectDto subjectDto) {
-        var updatedSubject = subjectService.edit(subjectId, toSubject(subjectDto));
+                                               @RequestBody SubjectDto subjectDto,
+                                               @RequestParam(required = false) Long roomId,
+                                               @RequestParam(required = false) Long moduleId) {
+        var updatedSubject = subjectService.edit(subjectId, toSubject(subjectDto), roomId, moduleId);
 
         return ok(updatedSubject);
     }
 
 
     @PatchMapping("/delete/{subjectId}")
-    public ResponseEntity<SubjectDto> deleteSubject(@PathVariable Long subjectId) {
+    public ResponseEntity<Subject> deleteSubject(@PathVariable Long subjectId) {
 
         var updatedSubject = subjectService.delete(subjectId);
-        return ok(toSubjectDto(updatedSubject));
+        return ok(updatedSubject);
 
     }
 
     @PatchMapping("/restore/{subjectId}")
-    public ResponseEntity<SubjectDto> restoreSubject(@PathVariable Long subjectId) {
+    public ResponseEntity<Subject> restoreSubject(@PathVariable Long subjectId) {
 
         var restoredSubject = subjectService.restore(subjectId);
-        return ok(toSubjectDto(restoredSubject));
+        return ok(restoredSubject);
 
     }
 
     @PatchMapping("/{subjectId}/addModule/{moduleId}")
     public ResponseEntity<Subject> addModuleToSubject(@PathVariable Long subjectId, @PathVariable Long moduleId) {
         return ResponseEntity.ok(subjectService.addModuleToSubject(subjectId, moduleId));
+    }
+
+    @PatchMapping("/{subjectId}/deleteRoom/{roomId}")
+    public void deleteRoomFromSubject(@PathVariable Long subjectId, @PathVariable Long roomId) {
+        subjectService.deleteRoomFromSubject(subjectId, roomId);
     }
 
 

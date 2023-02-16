@@ -5,20 +5,21 @@ import { Select, MenuItem, Pagination } from "@mui/material";
 import { Collapse, Alert } from "@mui/material";
 
 function TeacherListPage() {
-  const [teachers, setTeachers] = useState({});
+  const [teachers, setTeachers] = useState([]);
   const [pageNumber, setPageNumber] = useState(0);
   const [pageSize, setPageSize] = useState(25);
   const [searchName, setSearchName] = useState("");
-  const [searchLastname, setSearchLastname] = useState("");
   const [searchSubject, setSearchSubject] = useState("");
   const [searchShift, setSearchShift] = useState("");
   const [page, setPage] = useState(1);
   const [deleted, setDeleted] = useState(false);
   const [restored, setRestored] = useState(false);
+  const [subjects, setSubjects] = useState([]);
+  const [shifts, setShifts] = useState([]);
 
   const fetchTeachers = () => {
     fetch(
-      `/api/v1/teachers/search?shift=${searchShift}&subject=${searchSubject}&lastname=${searchLastname}&name=${searchName}&page=${pageNumber}&pageSize=${pageSize}`
+      `/api/v1/teachers/search?name=${searchName}&shiftId=${searchShift}&subjectId=${searchSubject}&page=${pageNumber}&pageSize=${pageSize}`
     )
       .then((response) => response.json())
       .then((jsonResponse) => setTeachers(jsonResponse));
@@ -26,11 +27,23 @@ function TeacherListPage() {
 
   useEffect(fetchTeachers, []);
 
+  useEffect(() => {
+    fetch(`/api/v1/subjects`)
+      .then((response) => response.json())
+      .then((jsonResponse) => setSubjects(jsonResponse));
+  }, []);
+
+  useEffect(() => {
+    fetch(`/api/v1/shifts`)
+      .then((response) => response.json())
+      .then((jsonResponse) => setShifts(jsonResponse));
+  }, []);
+
   const handlePageChange = (e, value) => {
     setPage(value);
     setPageNumber(value - 1);
     fetch(
-      `/api/v1/teachers/search?shift=${searchShift}&subject=${searchSubject}&lastname=${searchLastname}&name=${searchName}&page=${
+      `/api/v1/teachers/search?name=${searchName}&shiftId=${searchShift}&subjectId=${searchSubject}&page=${
         value - 1
       }&pageSize=${pageSize}`
     )
@@ -43,7 +56,7 @@ function TeacherListPage() {
     setPage(1);
     setPageNumber(0);
     fetch(
-      `/api/v1/teachers/search?shift=${searchShift}&subject=${searchSubject}&lastname=${searchLastname}&name=${searchName}&page=${0}&pageSize=${
+      `/api/v1/teachers/search?name=&shiftId=${searchShift}&subjectId=${searchSubject}&page=${0}&pageSize=${
         e.target.value
       }`
     )
@@ -101,11 +114,10 @@ function TeacherListPage() {
         </button>
       </div>
 
-      <div className="d-flex justify-content-end">
+      {/* <div className="d-flex justify-content-end">
         <div className="mb-4">
           <form className="d-flex" role="search">
-            <label htmlFor="page-size-select" className="me-2">
-            </label>
+            <label htmlFor="page-size-select" className="me-2"></label>
             <TextField
               onChange={(e) => setSearchName(e.target.value)}
               value={searchName}
@@ -127,8 +139,7 @@ function TeacherListPage() {
       <div className="d-flex justify-content-end">
         <div className="mb-4">
           <form className="d-flex" role="search">
-            <label htmlFor="page-size-select" className="me-2">
-            </label>
+            <label htmlFor="page-size-select" className="me-2"></label>
             <TextField
               onChange={(e) => setSearchSubject(e.target.value)}
               value={searchSubject}
@@ -150,8 +161,7 @@ function TeacherListPage() {
       <div className="d-flex justify-content-end">
         <div className="mb-4">
           <form className="d-flex" role="search">
-            <label htmlFor="page-size-select" className="me-2">
-            </label>
+            <label htmlFor="page-size-select" className="me-2"></label>
             <TextField
               onChange={(e) => setSearchShift(e.target.value)}
               value={searchShift}
@@ -169,14 +179,11 @@ function TeacherListPage() {
             </button>
           </form>
         </div>
-      </div>
+      </div> */}
       <div className="d-flex justify-content-end">
         <div className="mb-4">
-          
           <form className="d-flex" role="search">
-            
             <label htmlFor="page-size-select" className="me-2">
-              
               Puslapyje:
             </label>
             <Select
@@ -203,14 +210,12 @@ function TeacherListPage() {
           />
         </div>
       </div>
-      
 
       <table className="table table-hover shadow p-3 mb-5 bg-body rounded align-middle">
         <thead className="table-light">
           <tr>
-            <th>Vardas</th>
-            <th>Pavardė</th>
-            <th>Dalykas</th>
+            <th>Vardas ir Pavardė</th>
+            <th>Dalykai</th>
             <th>Pamaina</th>
             <th>Būsena</th>
             <th>Veiksmai</th>
@@ -221,21 +226,35 @@ function TeacherListPage() {
             <tr
               key={teacher.id}
               id={teacher.id}
-              className={teacher.deleted && "text-black-50"}
+              className={teacher.deleted ? "text-black-50" : ""}
             >
               <td>{teacher.name}</td>
-              <td>{teacher.lastname}</td>
-              <td>{teacher.subject}</td>
-              <td>{teacher.shift}</td>
+              <td>
+                {teacher.subjects?.map((subject) => (
+                  <div key={subject.id} id={subject.id}>
+                    {subject.name}
+                  </div>
+                ))}
+              </td>
+              <td>{teacher.shift.name}</td>
               <td>{teacher.deleted ? "Mokytojas ištrintas" : ""}</td>
               <td>
                 <button className="btn btn-outline-primary me-2 my-1">
-                  <Link className="nav-link" to={"/teachers/view/" + teacher.id}>
+                  <Link
+                    className="nav-link"
+                    to={"/teachers/view/" + teacher.id}
+                  >
                     Žiūrėti
                   </Link>
                 </button>
-                <button className="btn btn-outline-primary me-2 my-1">
-                  <Link className="nav-link" to={"/teachers/edit/" + teacher.id}>
+                <button
+                  className="btn btn-outline-primary me-2 my-1"
+                  disabled={teacher.deleted}
+                >
+                  <Link
+                    className="nav-link"
+                    to={"/teachers/edit/" + teacher.id}
+                  >
                     Redaguoti
                   </Link>
                 </button>
@@ -258,6 +277,15 @@ function TeacherListPage() {
             </tr>
           ))}
         </tbody>
+        <tfoot className="table-light">
+          <tr>
+            <td colSpan={5}>
+              {teachers.totalElements == "0"
+                ? "Įrašų nerasta"
+                : `Rasta įrašų: ${teachers.totalElements}`}
+            </td>
+          </tr>
+        </tfoot>
       </table>
     </div>
   );

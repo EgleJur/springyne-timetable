@@ -56,9 +56,19 @@ function TeacherListPage() {
     setPage(1);
     setPageNumber(0);
     fetch(
-      `/api/v1/teachers/search?name=&shiftId=${searchShift}&subjectId=${searchSubject}&page=${0}&pageSize=${
+      `/api/v1/teachers/search?name=${searchName}&shiftId=${searchShift}&subjectId=${searchSubject}&page=${0}&pageSize=${
         e.target.value
       }`
+    )
+      .then((response) => response.json())
+      .then((jsonResponse) => setTeachers(jsonResponse));
+  };
+
+  const handleSearch = () => {
+    setPage(1);
+    setPageNumber(0);
+    fetch(
+      `/api/v1/teachers/search?name=${searchName}&shiftId=${searchShift}&subjectId=${searchSubject}&page=${0}&pageSize=${pageSize}`
     )
       .then((response) => response.json())
       .then((jsonResponse) => setTeachers(jsonResponse));
@@ -114,72 +124,6 @@ function TeacherListPage() {
         </button>
       </div>
 
-      {/* <div className="d-flex justify-content-end">
-        <div className="mb-4">
-          <form className="d-flex" role="search">
-            <label htmlFor="page-size-select" className="me-2"></label>
-            <TextField
-              onChange={(e) => setSearchName(e.target.value)}
-              value={searchName}
-              id="search-name-input"
-              label="Ieškoti pagal Varda"
-              className="form-control me-2"
-              size="small"
-            />
-            <button
-              className="btn btn-outline-primary"
-              type="submit"
-              onClick={fetchTeachers}
-            >
-              Ieškoti
-            </button>
-          </form>
-        </div>
-      </div>
-      <div className="d-flex justify-content-end">
-        <div className="mb-4">
-          <form className="d-flex" role="search">
-            <label htmlFor="page-size-select" className="me-2"></label>
-            <TextField
-              onChange={(e) => setSearchSubject(e.target.value)}
-              value={searchSubject}
-              id="search-subject-input"
-              label="Ieškoti pagal Dalyka"
-              className="form-control me-2"
-              size="small"
-            />
-            <button
-              className="btn btn-outline-primary"
-              type="submit"
-              onClick={fetchTeachers}
-            >
-              Ieškoti
-            </button>
-          </form>
-        </div>
-      </div>
-      <div className="d-flex justify-content-end">
-        <div className="mb-4">
-          <form className="d-flex" role="search">
-            <label htmlFor="page-size-select" className="me-2"></label>
-            <TextField
-              onChange={(e) => setSearchShift(e.target.value)}
-              value={searchShift}
-              id="search-shift-input"
-              label="Ieškoti pagal Pamaina"
-              className="form-control me-2"
-              size="small"
-            />
-            <button
-              className="btn btn-outline-primary"
-              type="submit"
-              onClick={fetchTeachers}
-            >
-              Ieškoti
-            </button>
-          </form>
-        </div>
-      </div> */}
       <div className="d-flex justify-content-end">
         <div className="mb-4">
           <form className="d-flex" role="search">
@@ -198,6 +142,59 @@ function TeacherListPage() {
               <MenuItem value={50}>50</MenuItem>
               <MenuItem value={100}>100</MenuItem>
             </Select>
+            <label htmlFor="select-subject" className="me-2">
+              Dalykas:
+            </label>
+            <Select
+              id="select-subject"
+              size="small"
+              className="me-2"
+              fullWidth
+              value={searchSubject}
+              onChange={(e) => setSearchSubject(e.target.value)}
+            >
+              <MenuItem value={""}>-</MenuItem>
+              {subjects?.map((subject) => (
+                <MenuItem value={subject.id} key={subject.id}>
+                  {subject.name}
+                </MenuItem>
+              ))}
+            </Select>
+
+            <label htmlFor="select-shift" className="me-2">
+              Pamaina:
+            </label>
+            <Select
+              id="select-shift"
+              size="small"
+              className="me-2"
+              fullWidth
+              value={searchShift}
+              onChange={(e) => setSearchShift(e.target.value)}
+            >
+              <MenuItem value={""}>-</MenuItem>
+              {shifts?.map((shift) => (
+                <MenuItem value={shift.id} key={shift.id}>
+                  {shift.name}
+                </MenuItem>
+              ))}
+            </Select>
+
+            <TextField
+              onChange={(e) => setSearchName(e.target.value)}
+              value={searchName}
+              id="search-name-input"
+              label="Ieškoti vardo"
+              className="form-control me-2"
+              size="small"
+            />
+            <button
+              className="btn btn-outline-primary"
+              type="submit"
+              onClick={handleSearch}
+            >
+              Ieškoti
+            </button>
           </form>
         </div>
         <div>

@@ -43,24 +43,11 @@ function CreateTeacherPage() {
     setEmailError(false);
     setPhoneError(false);
     setHoursError(false);
-    if (name === "" || teams_mail === "" || email === ""|| phone === ""|| hours === "") {
-      if (name === "") {
+    if (name === "") {
         setNameError(true);
-      }
-      if (teams_mail === "") {
-        setTeams_mailError(true);
-      }
-      if (email === "") {
-        setEmailError(true);
-      }
-      if (phone === "") {
-        setPhoneError(true);
-      }
-      if (hours === "") {
-        setHoursError(true);
-      }
+      
     } else {
-      fetch(`/api/v1/teachers/createTeacher?shiftId=${selectedShifts}&subjectId=${selectedSubject}`, {
+      fetch(`/api/v1/teachers?shiftId=${selectedShifts}&subjectId=${selectedSubject}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -133,7 +120,7 @@ function CreateTeacherPage() {
           value={teams_mail}
           id="create-teacher-teams_mail-with-error"
           label="Teams Vardas(email)"
-          helperText="Teams Vardas negali būti tuščias"
+          helperText="Neprivaloma"
           className="form-control mb-3"
           size="small"
         />
@@ -163,7 +150,7 @@ function CreateTeacherPage() {
           value={hours}
           id="create-teacher-hours-with-error"
           label="Valandų skaičius"
-          helperText="Valandų skaičiaus laukas negali būti tuščias"
+          helperText="Neprivaloma"
           className="form-control mb-3"
           size="small"
         />
@@ -187,26 +174,34 @@ function CreateTeacherPage() {
         </select>
 
         <label htmlFor="page-size-select" className="mb-3">
-          Pamaina:
-        </label>
-        <select
-          value={selectedShifts}
-          onChange={(e) => setSelectedShifts(e.target.value)}
-          className="form-control mb-3"
-          required // Add the required attribute to the select element
-        >
-          {
-            shifts.map((shift) => (
-              <option
-                key={shift.id}
-                value={shift.id}
-                disabled={shift.deleted}
-              >
-                {shift.name}
-              </option>
-            ))
-          }
-        </select>
+  Pamaina:
+</label>
+<select
+  value={selectedShifts}
+  onChange={(e) => setSelectedShifts(e.target.value)}
+  className={`form-control mb-3 ${selectedShifts ? "" : "border-danger"}`}
+  required
+>
+  <option value="">Pasirinkite pamainą</option>
+  {
+    shifts.map((shift) => (
+      <option
+        key={shift.id}
+        value={shift.id}
+        disabled={shift.deleted}
+      >
+        {shift.name}
+      </option>
+    ))
+  }
+</select>
+{!selectedShifts && (
+  <div className="form-text text-danger">
+    Prašome pasirinkti pamainą iš sąrašo.
+  </div>
+)}
+
+
 
         <button
           type="submit"

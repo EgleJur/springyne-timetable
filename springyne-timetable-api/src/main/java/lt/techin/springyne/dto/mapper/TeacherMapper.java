@@ -10,6 +10,7 @@ public class TeacherMapper {
         Teacher teacher = new Teacher();
         teacher.setName(teacherDto.getName());
         teacher.setEmail(teacherDto.getEmail());
+        teacher.setTeamsEmail(teacherDto.getTeamsEmail());
         teacher.setPhone(teacherDto.getPhone());
         teacher.setHours(teacherDto.getHours());
         teacher.setDeleted(teacherDto.isDeleted());
@@ -21,6 +22,7 @@ public class TeacherMapper {
 
         TeacherDto teacherDto = new TeacherDto();
         teacherDto.setName(teacher.getName());
+        teacherDto.setTeamsEmail(teacher.getTeamsEmail());
         teacherDto.setEmail(teacherDto.getEmail());
         teacherDto.setPhone(teacherDto.getPhone());
         teacherDto.setHours(teacherDto.getHours());

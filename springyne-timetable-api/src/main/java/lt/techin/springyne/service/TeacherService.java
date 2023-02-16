@@ -1,7 +1,11 @@
 package lt.techin.springyne.service;
 
 import lt.techin.springyne.exception.ScheduleValidationException;
+import lt.techin.springyne.model.Shift;
+import lt.techin.springyne.model.Subject;
 import lt.techin.springyne.model.Teacher;
+import lt.techin.springyne.repository.ShiftRepository;
+import lt.techin.springyne.repository.SubjectRepository;
 import lt.techin.springyne.repository.TeacherRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.*;
@@ -16,45 +20,52 @@ public class TeacherService {
     @Autowired
     TeacherRepository teacherRepository;
 
-    private static final ExampleMatcher SEARCH_CONTAINS_NAME = ExampleMatcher.matchingAny()
-            .withMatcher("name", ExampleMatcher.GenericPropertyMatchers.contains().ignoreCase())
-            .withIgnorePaths("id", "number","deleted","modifiedDate");
+    @Autowired
+    ShiftRepository shiftRepository;
 
-
-    public TeacherService(TeacherRepository teacherRepository) {
+    @Autowired
+    SubjectRepository subjectRepository;
+    
+    public TeacherService(TeacherRepository teacherRepository, ShiftRepository shiftRepository, SubjectRepository subjectRepository) {
         this.teacherRepository = teacherRepository;
+        this.shiftRepository = shiftRepository;
+        this.subjectRepository = subjectRepository;
     }
-
 
     public List<Teacher> getAllTeachers() {
         return teacherRepository.findAllByOrderByDeletedAscIdAsc();
     }
 
-    public Teacher addTeacher(Teacher teacher) {
-        if (existsByNumber(teacher.getNumber())) {
-            throw new ScheduleValidationException("Teacher number must be unique", "number", "Number already exists", teacher.getNumber());
+    public Teacher addTeacher(Long shiftId, Long subjectId, Teacher teacher) {
+        if (shiftId != null) {
+            Shift shiftToAdd = shiftRepository.findById(shiftId).orElseThrow(() -> new ScheduleValidationException("Shift does not exist", "id",
+                    "Shift not found", String.valueOf(shiftId)));
+            teacher.setShift(shiftToAdd);
         }
+        if(subjectId != null) {
+            Subject subjectToAdd = subjectRepository.findById(subjectId).orElseThrow(() -> new ScheduleValidationException("Subject does not exist", "id",
+                    "Subject not found", String.valueOf(subjectId)));
+            teacher.getSubjects().add(subjectToAdd);
+        }
+
         return teacherRepository.save(teacher);
     }
 
-    public boolean existsByNumber(String number) {
-        return teacherRepository.existsByNumberIgnoreCase(number);
-    }
-
-    public Page<Teacher> searchByNameAndSubjectAndShift(String name, String subject, String shift, int page, int pageSize) {
-        Teacher teacher = new Teacher();
-        if (name != null) {
-            teacher.setName(name);
+    public Page<Teacher> searchByNameShiftSubjectPaged(String name, Long shiftId, Long subjectId, int page, int pageSize) {
+        if (name==null) {
+            name = "";
         }
-        if (subject != null) {
-            teacher.setSubject(subject);
+        Pageable pageable = PageRequest.of(page,pageSize, Sort.by("deleted").and(Sort.by("id")));
+        if (shiftId == null && subjectId == null) {
+            return teacherRepository.findAllByNameIgnoreCaseContaining(name,pageable);
         }
-        if (shift != null) {
-            teacher.setShift(shift);
+        if (shiftId == null) {
+            return teacherRepository.findAllByNameIgnoreCaseContainingAndSubjects_Id(name,subjectId,pageable);
         }
-        Example<Teacher> teacherExample = Example.of(teacher, ExampleMatcher.matchingAll().withIgnoreCase("name", "subject", "shift").withStringMatcher(ExampleMatcher.StringMatcher.CONTAINING));
-        Pageable pageable = PageRequest.of(page, pageSize, Sort.by("deleted").and(Sort.by("id")));
-        return teacherRepository.findAll(teacherExample, pageable);
+        if (subjectId == null) {
+            return teacherRepository.findAllByNameIgnoreCaseContainingAndShiftId(name, shiftId, pageable);
+        }
+        return teacherRepository.findAllByNameIgnoreCaseContainingAndShiftIdAndSubjects_Id(name, shiftId, subjectId, pageable);
     }
 
     public Optional<Teacher> getTeacherById(Long teacherId) {
@@ -86,32 +97,18 @@ public class TeacherService {
     public Teacher updateTeacher(long teacherId, Teacher teacher) {
         Teacher updatedTeacher = teacherRepository.findById(teacherId).orElseThrow(
                 () -> new ScheduleValidationException("Teacher does not exist", "id", "Teacher not found", String.valueOf(teacherId)));
-        if (!updatedTeacher.getNumber().equals(teacher.getNumber())) {
-            if(updatedTeacher.getNumber().equalsIgnoreCase(teacher.getNumber())) {
-                updatedTeacher.setNumber(teacher.getNumber());
-            } else if (teacherRepository.existsByNumberIgnoreCase(teacher.getNumber())) {
-                throw new ScheduleValidationException("Teacher number must be unique", "number", "Number already exists", teacher.getNumber());
-            } else {
-                updatedTeacher.setNumber(teacher.getNumber());
-            }
-        }
-        if (!updatedTeacher.getName().equals(teacher.getName())) {
+
             if (teacher.getName().equals("") || teacher.getName() == null) {
                 throw new ScheduleValidationException("Teacher name cannot be empty", "name", "Name is empty", teacher.getName());
             } else {
                 updatedTeacher.setName(teacher.getName());
             }
-        }
-        if (!updatedTeacher.getLastname().equals(teacher.getLastname())) {
-            if (teacher.getLastname().equals("") || teacher.getLastname() == null) {
-                throw new ScheduleValidationException("Teacher lastname cannot be empty", "lastname", "Lastname is empty", teacher.getLastname());
-            } else {
-                updatedTeacher.setLastname(teacher.getLastname());
-            }
-        }
-//        if (updatedTeacher.isDeleted() != teacher.isDeleted()) {
-//            updatedTeacher.setDeleted(teacher.isDeleted());
-//        }
+
+        updatedTeacher.setEmail(teacher.getEmail());
+        updatedTeacher.setTeamsEmail(teacher.getTeamsEmail());
+        updatedTeacher.setPhone(teacher.getPhone());
+        updatedTeacher.setHours(teacher.getHours());
+
         return teacherRepository.save(updatedTeacher);
     }
 }

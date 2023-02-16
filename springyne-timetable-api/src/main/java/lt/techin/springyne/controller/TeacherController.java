@@ -34,19 +34,21 @@ public class TeacherController {
     }
 
     @PostMapping
-    public ResponseEntity<Teacher> addTeacher(@Valid @RequestBody TeacherDto teacherDto) {
-        return ResponseEntity.ok(teacherService.addTeacher(TeacherMapper.toTeacher(teacherDto)));
+    public ResponseEntity<Teacher> addTeacher(@Valid @RequestBody TeacherDto teacherDto,
+                                              @RequestParam Long shiftId,
+                                              @RequestParam(required = false) Long subjectId) {
+        return ResponseEntity.ok(teacherService.addTeacher(shiftId, subjectId, TeacherMapper.toTeacher(teacherDto)));
     }
 
     @GetMapping("/search")
-    public Page<Teacher> filterTeachersByNamePaged(
+    public Page<Teacher> filterTeachersByNameShiftSubjectPaged(
             @RequestParam(required = false) String name,
-            @RequestParam(required = false) String subject,
-            @RequestParam(required = false) String shift,
+            @RequestParam(required = false) Long shiftId,
+            @RequestParam(required = false) Long subjectId,
             @RequestParam int page,
             @RequestParam int pageSize) {
 
-        return teacherService.searchByNameAndSubjectAndShift(name, subject, shift, page, pageSize);
+        return teacherService.searchByNameShiftSubjectPaged(name, shiftId, subjectId, page, pageSize);
     }
 
     @GetMapping("/{teacherId}")

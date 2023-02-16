@@ -3,19 +3,18 @@ package lt.techin.springyne.model;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.LastModifiedDate;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
 @Table(name="TEACHER_TABLE")
 @Data
 @AllArgsConstructor
-@NoArgsConstructor
 public class Teacher {
 
     @Id
@@ -23,31 +22,35 @@ public class Teacher {
     private Long id;
 
     @NotBlank
-    private String number;
-
-    @NotBlank
     private String name;
 
-    @NotBlank
-    private String lastname;
-    @NotBlank
-    private String teams_mail;
-    @NotBlank
+    private String teamsEmail;
+
     private String email;
-    @NotBlank
+
     private String phone;
-    @NotBlank
-    private String hours;
-    @NotBlank
-    private String subject;
-    @NotBlank
-    private String shift;
+
+    private Integer hours;
+
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "teachers_and_subjects",
+            joinColumns = @JoinColumn(name = "teacher_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "subject_id", referencedColumnName = "id"))
+    private Set<Subject> subjects;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "shift_id")
+    private Shift shift;
 
     private boolean deleted = Boolean.FALSE;
 
     @LastModifiedDate
     @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
     private LocalDateTime modifiedDate;
+
+    public Teacher() {
+        this.subjects = new HashSet<>();
+    }
 
     @PrePersist
     private void prePersist() {

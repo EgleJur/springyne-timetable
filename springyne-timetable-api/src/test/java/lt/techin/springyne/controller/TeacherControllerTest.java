@@ -1,101 +1,122 @@
-//package lt.techin.springyne.controller;
-//
-//import com.fasterxml.jackson.core.type.TypeReference;
-//import com.fasterxml.jackson.databind.ObjectMapper;
-//import lt.techin.springyne.dto.TeacherDto;
-//import lt.techin.springyne.model.Teacher;
-//import org.junit.jupiter.api.Assertions;
-//import org.junit.jupiter.api.Test;
-//import org.springframework.beans.factory.annotation.Autowired;
-//import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-//import org.springframework.boot.test.context.SpringBootTest;
-//import org.springframework.http.MediaType;
-//import org.springframework.test.web.servlet.MockMvc;
-//import org.springframework.test.web.servlet.MvcResult;
-//import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-//
-//import java.time.LocalDateTime;
-//import java.util.ArrayList;
-//import java.util.List;
-//
-//import static org.junit.jupiter.api.Assertions.assertEquals;
-//import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-//
-//@SpringBootTest
-//@AutoConfigureMockMvc
-//class TeacherControllerTest {
-//
-//@Autowired
-//MockMvc mockMvc;
-//
-//@Autowired
-//ObjectMapper objectMapper;
-//
-//@Test
-//void getAllTeachersContainsCorrectDtos() throws Exception {
-//
-//        TeacherDto testTeacherDto1 = new TeacherDto("T1", "Test name1", "Test lastname1", "Test teams mail1", "Test email1", "+37000000001", "1", "Test subject1", "Test shift1");
-//        TeacherDto testTeacherDto2 = new TeacherDto("T2", "Test name2", "Test lastname2", "Test teams mail2", "Test email2", "+37000000002", "2", "Test subject2", "Test shift2");
-//        TeacherDto testTeacherDto3 = new TeacherDto("T3", "Test name3", "Test lastname3", "Test teams mail3", "Test email3", "+37000000003", "3", "Test subject3", "Test shift3");
-//
-//        List<TeacherDto> expectedList = new ArrayList<>();
-//        expectedList.add(testTeacherDto1);
-//        expectedList.add(testTeacherDto2);
-//        expectedList.add(testTeacherDto3);
-//
-//        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/teachers")
-//        ).andExpect(status().isOk()).andReturn();
-//
-//        List<TeacherDto> resultList = objectMapper.readValue(mvcResult.getResponse().getContentAsString(), new TypeReference<List<TeacherDto>>() {
-//        });
-//
-//        Assertions.assertTrue(resultList.containsAll(expectedList));
+package lt.techin.springyne.controller;
+
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import lt.techin.springyne.dto.TeacherDto;
+import lt.techin.springyne.model.Teacher;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+@SpringBootTest
+@AutoConfigureMockMvc
+class TeacherControllerTest {
+
+@Autowired
+MockMvc mockMvc;
+
+@Autowired
+ObjectMapper objectMapper;
+
+@Test
+void getAllTeachersContainsCorrectDtos() throws Exception {
+
+        TeacherDto testTeacherDto1 = new TeacherDto("Test name1");
+        TeacherDto testTeacherDto2 = new TeacherDto("Test name2");
+        TeacherDto testTeacherDto3 = new TeacherDto("Test name3");
+
+        List<TeacherDto> expectedList = new ArrayList<>();
+        expectedList.add(testTeacherDto1);
+        expectedList.add(testTeacherDto2);
+        expectedList.add(testTeacherDto3);
+
+        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/teachers")
+        ).andExpect(status().isOk()).andReturn();
+
+        List<TeacherDto> resultList = objectMapper.readValue(mvcResult.getResponse().getContentAsString(), new TypeReference<List<TeacherDto>>() {
+        });
+
+        Assertions.assertTrue(resultList.containsAll(expectedList));
+        }
+
+    @Test
+    void addTeacherThrowsExceptionWithNullOrEmptyValues() throws Exception {
+        TeacherDto testTeacherDto4 = new TeacherDto("");
+        TeacherDto testTeacherDto5 = new TeacherDto(null);
+        String message = "Null or empty values should return bad request status";
+
+
+        assertEquals(400,performTeacherPostBadRequest(testTeacherDto4).getResponse().getStatus(), message);
+        assertEquals(400,performTeacherPostBadRequest(testTeacherDto5).getResponse().getStatus(), message);
+    }
+
+    @Test
+    void addTeacherThrowsExceptionWithNonExistingShiftValue() throws Exception {
+        TeacherDto testTeacherDto1 = new TeacherDto("Test Name");
+        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/teachers?shiftId=0").contentType(MediaType.APPLICATION_JSON).
+                        content(objectMapper.writeValueAsString(testTeacherDto1)))
+                .andExpect(status().isBadRequest()).andReturn();
+        assertEquals(400,mvcResult.getResponse().getStatus(),
+                "Non existing Shift id should return bad request status");
+    }
+
+        @Test
+        void addTeacherThrowsExceptionWithNonExistingSubjectValue() throws Exception {
+                TeacherDto testTeacherDto1 = new TeacherDto("Test Name");
+                MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/teachers?shiftId=1&subjectId=0").contentType(MediaType.APPLICATION_JSON).
+                                content(objectMapper.writeValueAsString(testTeacherDto1)))
+                        .andExpect(status().isBadRequest()).andReturn();
+                assertEquals(400,mvcResult.getResponse().getStatus(),
+                        "Non existing Subject id should return bad request status");
+        }
+
+//        creates test data in database
+//        @Test
+//        void addTeacherAllowsSavingWithCorrectValues() throws Exception {
+//            TeacherDto testTeacherDto = new TeacherDto("Test Name" + LocalDateTime.now());
+//            MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/teachers?shiftId=1").contentType(MediaType.APPLICATION_JSON).
+//                            content(objectMapper.writeValueAsString(testTeacherDto)))
+//                    .andExpect(status().isOk()).andReturn();
+//            assertEquals(200, mvcResult.getResponse().getStatus(), "Correct values should allow creating new teacher");
 //        }
-//
-//    @Test
-//    void addTeacherThrowsExceptionWithNullOrEmptyValues() throws Exception {
-//        TeacherDto testTeacherDto4 = new TeacherDto("", "Test name4", "Test lastname4", "Test teams mail4", "Test email4", "+37000000004", "4", "Test subject4", "Test shift4");
-//        TeacherDto testTeacherDto5 = new TeacherDto(null, "Test name5", "Test lastname5", "Test teams mail5", "Test email5", "+37000000005", "5", "Test subject5", "Test shift5");
-//        TeacherDto testTeacherDto6 = new TeacherDto("T6", "", "", "", "", "", "", "", "");
-//        TeacherDto testTeacherDto7 = new TeacherDto("T7",  null, null, null, null, null, null, null, null);
-//        String message = "Null or empty values should return bad request status";
-//
-//        assertEquals(400,performTeacherPostBadRequest(testTeacherDto4).getResponse().getStatus(), message);
-//        assertEquals(400,performTeacherPostBadRequest(testTeacherDto5).getResponse().getStatus(), message);
-//        assertEquals(400,performTeacherPostBadRequest(testTeacherDto6).getResponse().getStatus(), message);
-//        assertEquals(400,performTeacherPostBadRequest(testTeacherDto7).getResponse().getStatus(), message);
-//    }
-//
-//    @Test
-//    void addTeacherThrowsExceptionWithNonUniqueNumberValue() throws Exception {
-//        TeacherDto testTeacherDto1 = new TeacherDto("T1", "Test", "Test", "Test","Test","Test","Test","Test","Test");
-//        assertEquals(400,performTeacherPostBadRequest(testTeacherDto1).getResponse().getStatus(),
-//                "Non unique Teacher number should return bad request status");
-//    }
-//
-//    @Test
-//    void deleteTeacherSetsDeletedPropertyToTrue() throws Exception {
-//        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.patch("/api/v1/teachers/delete/4").contentType(MediaType.APPLICATION_JSON))
-//                .andExpect(status().isOk()).andReturn();
-//        Teacher resultTeacher = objectMapper.readValue(mvcResult.getResponse().getContentAsString(), new TypeReference<Teacher>() {});
-//        Assertions.assertTrue(resultTeacher.isDeleted());
-//    }
-//
-//    @Test
-//    void restoreTeacherSetsDeletedPropertyToFalse() throws Exception {
-//        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.patch("/api/v1/teachers/restore/4").contentType(MediaType.APPLICATION_JSON))
-//                .andExpect(status().isOk()).andReturn();
-//        Teacher resultTeacher = objectMapper.readValue(mvcResult.getResponse().getContentAsString(), new TypeReference<Teacher>() {});
-//        Assertions.assertFalse(resultTeacher.isDeleted());
-//    }
-//
-//    @Test
-//    void editTeacherThrowsExceptionWithNonUniqueNumberValue() throws Exception {
-//        TeacherDto testTeacherDto5 = new TeacherDto("T1", "Test", "Test","Test","Test","Test","Test","Test","Test");
-//        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.patch("/api/v1/teachers/update/5").contentType(MediaType.APPLICATION_JSON).
-//                content(objectMapper.writeValueAsString(testTeacherDto5))).andReturn();
-//        assertEquals(400, mvcResult.getResponse().getStatus(),"Non unique Teacher number should return bad request status");
-//    }
+
+    @Test
+    void deleteTeacherSetsDeletedPropertyToTrue() throws Exception {
+        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.patch("/api/v1/teachers/delete/4").contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk()).andReturn();
+        Teacher resultTeacher = objectMapper.readValue(mvcResult.getResponse().getContentAsString(), new TypeReference<Teacher>() {});
+        Assertions.assertTrue(resultTeacher.isDeleted());
+    }
+
+    @Test
+    void restoreTeacherSetsDeletedPropertyToFalse() throws Exception {
+        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.patch("/api/v1/teachers/restore/4").contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk()).andReturn();
+        Teacher resultTeacher = objectMapper.readValue(mvcResult.getResponse().getContentAsString(), new TypeReference<Teacher>() {});
+        Assertions.assertFalse(resultTeacher.isDeleted());
+    }
+
+    @Test
+    void getTeacherByIdReturnsCorrectDto() throws Exception {
+        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/teachers/1")
+        ).andExpect(status().isOk()).andReturn();
+        TeacherDto result = objectMapper.readValue(mvcResult.getResponse().getContentAsString(), new TypeReference<TeacherDto>() {
+        });
+        Assertions.assertEquals(result.getName(), "Test name1","Get teacher by Id should return teacher with correct name");
+    }
+
 //    @Test
 //    void editTeacherThrowsExceptionWithEmptyValues() throws Exception {
 //        TeacherDto testTeacherDto5 = new TeacherDto("", "", "", "", "", "", "", "", "");
@@ -112,13 +133,10 @@
 //
 //        assertEquals(200, mvcResult.getResponse().getStatus(),"Unique value number and non empty name should return ok status");
 //    }
-//
-//
-//
-//    public MvcResult performTeacherPostBadRequest(TeacherDto teacherDto) throws Exception {
-//
-//        return mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/teachers").contentType(MediaType.APPLICATION_JSON).
-//                        content(objectMapper.writeValueAsString(teacherDto)))
-//                .andExpect(status().isBadRequest()).andReturn();
-//    }
-//}
+    public MvcResult performTeacherPostBadRequest(TeacherDto teacherDto) throws Exception {
+
+        return mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/teachers?shiftId=1").contentType(MediaType.APPLICATION_JSON).
+                        content(objectMapper.writeValueAsString(teacherDto)))
+                .andExpect(status().isBadRequest()).andReturn();
+    }
+}

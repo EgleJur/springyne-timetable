@@ -8,7 +8,10 @@ import lt.techin.springyne.repository.ShiftRepository;
 import lt.techin.springyne.repository.SubjectRepository;
 import lt.techin.springyne.repository.TeacherRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.*;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -25,7 +28,7 @@ public class TeacherService {
 
     @Autowired
     SubjectRepository subjectRepository;
-    
+
     public TeacherService(TeacherRepository teacherRepository, ShiftRepository shiftRepository, SubjectRepository subjectRepository) {
         this.teacherRepository = teacherRepository;
         this.shiftRepository = shiftRepository;
@@ -37,6 +40,9 @@ public class TeacherService {
     }
 
     public Teacher addTeacher(Long shiftId, Long subjectId, Teacher teacher) {
+        if (teacher.getName() == null || teacher.getName().equals("")) {
+            throw new ScheduleValidationException("Teacher name cannot be empty", "name", "Name is empty", teacher.getName());
+        }
         if (shiftId != null) {
             Shift shiftToAdd = shiftRepository.findById(shiftId).orElseThrow(() -> new ScheduleValidationException("Shift does not exist", "id",
                     "Shift not found", String.valueOf(shiftId)));
@@ -94,7 +100,7 @@ public class TeacherService {
         }
     }
 
-    public Teacher updateTeacher(long teacherId, Teacher teacher) {
+    public Teacher updateTeacher(long teacherId, Teacher teacher, Long shiftId, Long subjectId) {
         Teacher updatedTeacher = teacherRepository.findById(teacherId).orElseThrow(
                 () -> new ScheduleValidationException("Teacher does not exist", "id", "Teacher not found", String.valueOf(teacherId)));
 
@@ -109,6 +115,27 @@ public class TeacherService {
         updatedTeacher.setPhone(teacher.getPhone());
         updatedTeacher.setHours(teacher.getHours());
 
+        if(shiftId != null) {
+            Shift shift = shiftRepository.findById(shiftId).orElseThrow(() -> new ScheduleValidationException("Shift does not exist", "shiftId",
+                    "Shift not found", String.valueOf(shiftId)));
+            updatedTeacher.setShift(shift);
+        }
+        if (subjectId != null) {
+            Subject subject = subjectRepository.findById(subjectId).orElseThrow(() -> new ScheduleValidationException("Subject does not exist", "id",
+                    "Subject not found", String.valueOf(subjectId)));
+            updatedTeacher.getSubjects().add(subject);
+        }
+
         return teacherRepository.save(updatedTeacher);
+    }
+
+    public Teacher removeSubjectFromTeacher(Long teacherId, Long subjectId) {
+        Teacher teacherToUpdate = teacherRepository.findById(teacherId).orElseThrow(() -> new ScheduleValidationException("Teacher does not exist", "teacherId",
+                "Teacher not found", String.valueOf(teacherId)));
+        Subject subject = subjectRepository.findById(subjectId)
+                .orElseThrow(() -> new ScheduleValidationException("Subject does not exist", "subjectId", "Subject not found",
+                        String.valueOf(subjectId)));
+        teacherToUpdate.getSubjects().remove(subject);
+        return teacherRepository.save(teacherToUpdate);
     }
 }

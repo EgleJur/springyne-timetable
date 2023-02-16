@@ -67,8 +67,15 @@ public class TeacherController {
     }
 
     @PatchMapping("/update/{teacherId}")
-    public ResponseEntity<Teacher> updateTeacher(@PathVariable Long teacherId, @Valid @RequestBody TeacherDto teacherDto) {
-        return ResponseEntity.ok(teacherService.updateTeacher(teacherId, TeacherMapper.toTeacher(teacherDto)));
+    public ResponseEntity<Teacher> updateTeacher(@PathVariable Long teacherId, @Valid @RequestBody TeacherDto teacherDto,
+                                                 @RequestParam(required = false) Long shiftId,
+                                                 @RequestParam(required = false) Long subjectId) {
+        return ResponseEntity.ok(teacherService.updateTeacher(teacherId, TeacherMapper.toTeacher(teacherDto), shiftId, subjectId));
+    }
+
+    @PatchMapping("/{teacherId}/removeSubject/{subjectId}")
+    public ResponseEntity<Teacher> removeSubjectFromTeacher(@PathVariable Long teacherId, @PathVariable Long subjectId) {
+        return ResponseEntity.ok(teacherService.removeSubjectFromTeacher(teacherId,subjectId));
     }
 
 }

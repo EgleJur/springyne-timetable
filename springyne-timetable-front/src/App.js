@@ -18,6 +18,9 @@ import ViewRoomPage from './pages/ViewRoom';
 import EditRoomPage from './pages/EditRoom';
 import CreateShiftPage from './pages/CreateShift';
 import EditShiftPage from './pages/EditShift';
+import CreateTeacherPage from './pages/CreateTeacher';
+import EditTeacherPage from "./pages/EditTeacher";
+import ViewTeacherPage from "./pages/ViewTeacher";
 
 
 function App() {
@@ -35,6 +38,9 @@ function App() {
             <Route path="/shifts/edit/:id" element={<EditShiftPage />} />
             <Route path="/subjects" element={<SubjectListPage />} />
             <Route path="/teachers" element={<TeacherListPage />} />
+            <Route path="/teachers/create" element={<CreateTeacherPage />} />
+            <Route path="/teachers/edit/:id" element={<EditTeacherPage />} />
+            <Route path="/teachers/view/:id" element ={<ViewTeacherPage/>} />
             <Route path="/modules/create" element={<CreateModulePage />} />
             <Route path="/modules/view/:id" element={<ViewModulePage />} />
             <Route path="/modules/edit/:id" element={<EditModulePage />} />
@@ -44,7 +50,6 @@ function App() {
             <Route path="/rooms/create" element={<CreateRoomPage />} />
             <Route path="/rooms/view/:id" element={<ViewRoomPage />} />
             <Route path="/rooms/edit/:id" element={<EditRoomPage />} />
-
           </Routes>
         </div>
       </HashRouter>

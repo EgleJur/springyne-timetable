@@ -68,35 +68,38 @@ function ViewTeacherPage() {
               <th scope="col">Vardas ir Pavardė</th>
               <td>{teacher.name}</td>
             </tr>
-            
+
             <tr>
-            <th scope="col">Teams vardas(email)</th>
-            <td>{teacher.teams_mail}</td>
+              <th scope="col">Teams vardas(email)</th>
+              <td>{teacher.teams_mail}</td>
             </tr>
             <tr>
-            <th scope="col">Kontaktinis email</th>
-            <td>{teacher.email}</td>
+              <th scope="col">Kontaktinis email</th>
+              <td>{teacher.email}</td>
             </tr>
             <tr>
-            <th scope="col">Kontaktinis telefonas</th>
-            <td>{teacher.phone}</td>
+              <th scope="col">Kontaktinis telefonas</th>
+              <td>{teacher.phone}</td>
             </tr>
             <tr>
-            <th scope="col">Valandų skaičius</th>
-            <td>{teacher.hours}</td>
+              <th scope="col">Valandų skaičius</th>
+              <td>{teacher.hours}</td>
             </tr>
             <tr>
               <th scope="col">Dalykai</th>
-              <td>{teacher.subjects?.map((subject) => (
-                <p key={subject.id} id={subject.id}>{subject.name}</p>
-              ))}</td>
+              <td>
+                {teacher.subjects?.map((subject) => (
+                  <p key={subject.id} id={subject.id}>
+                    {subject.name}
+                  </p>
+                ))}
+              </td>
             </tr>
             <tr>
               <th scope="col">Pamaina</th>
               <td>{teacher.shift?.name}</td>
             </tr>
-            
-            
+
             <tr>
               <th scope="col">Būsena</th>
               <td>{teacher.deleted ? "Ištrintas" : "Aktyvus"}</td>
@@ -107,7 +110,7 @@ function ViewTeacherPage() {
             </tr>
           </tbody>
         </table>
-        <button className="btn btn-primary me-2">
+        <button className="btn btn-primary me-2" disabled={teacher.deleted}>
           <Link to={"/teachers/edit/" + params.id} className="nav-link">
             Redaguoti
           </Link>

@@ -101,8 +101,8 @@ public class SubjectService {
                     .orElseThrow(() -> new ScheduleValidationException("Module does not exist", "id",
                             "Module not found", String.valueOf(moduleId)));
 
-        updatedSubject.setModule(moduleToAdd);
-    }
+            updatedSubject.setModule(moduleToAdd);
+        }
 
         if (roomId != null) {
             var newRoom = roomRepository.findById(roomId)

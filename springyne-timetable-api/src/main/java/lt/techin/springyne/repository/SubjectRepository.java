@@ -10,6 +10,8 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Repository
 public interface SubjectRepository extends JpaRepository<Subject, Long> {
 
@@ -29,4 +31,7 @@ public interface SubjectRepository extends JpaRepository<Subject, Long> {
     @Query(value = "DELETE FROM SUBJECTS_IN_ROOMS WHERE SUBJECT_ID= :SUBJECT_ID AND ROOM_ID = :ROOM_ID",
             nativeQuery = true)
     void deleteRoomFromSubject(@Param("SUBJECT_ID") Long subjectID, @Param("ROOM_ID") Long roomId);
+
+    List<Subject> findByModuleIdOrderByDeletedAscIdAsc(Long moduleId);
+    List<Subject> findByDeletedFalseAndModuleIdNotOrModuleIdIsNull(Long moduleId);
 }

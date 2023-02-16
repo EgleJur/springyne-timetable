@@ -2,6 +2,7 @@ import { Collapse, Alert } from "@mui/material";
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { TextField } from "@mui/material";
+import EditModuleSubjects from "../components/EditModuleSubjects";
 
 function EditModulePage() {
   const [module, setModule] = useState({});
@@ -112,73 +113,91 @@ function EditModulePage() {
           Įrašo nepavyko atnaujinti
         </Alert>
       </Collapse>
-      <form noValidate>
-        <table
-          className="table table-hover shadow p-3 mb-5 bg-body rounded
-        align-middle"
-        >
-          <tbody>
-            <tr>
-              <th scope="col">
-                <label htmlFor="edit-module-number-with-error">Numeris *</label>
-              </th>
-              <td>
-                <TextField
-                  error={!!numberError}
-                  onChange={(e) => updateProperty("number", e)}
-                  value={module.number}
-                  id="edit-module-number-with-error"
-                  helperText="Numeris turi būti unikalus ir negali būti tuščias"
-                  className="form-control"
-                  size="small"
-                  InputLabelProps={{ shrink: true }}
-                  required
-                />
-              </td>
-            </tr>
-            <tr>
-              <th scope="col">
-                <label htmlFor="edit-module-name-with-error">
-                  Pavadinimas *
-                </label>
-              </th>
-              <td>
-                <TextField
-                  error={!!nameError}
-                  onChange={(e) => updateProperty("name", e)}
-                  value={module.name}
-                  id="edit-module-number-with-error"
-                  helperText="Pavadinimas negali būti tuščias"
-                  className="form-control"
-                  size="small"
-                  InputLabelProps={{ shrink: true }}
-                  required
-                />
-              </td>
-            </tr>
-            <tr>
-              <th scope="col">Detalės</th>
-              <td>{module.deleted ? "Modulis ištrintas" : ""}</td>
-            </tr>
-            <tr>
-              <th scope="col">Paskutinį kartą modifikuotas:</th>
-              <td>{module.modifiedDate}</td>
-            </tr>
-          </tbody>
-        </table>
-        <button type="submit" className="btn btn-primary me-2" onClick={editModule} disabled={!changed}>
-          Redaguoti
-        </button>
-        {module.deleted ? (
+      <div className="container-fluid shadow p-3 mb-4 mb-md-5 bg-body rounded">
+        <form noValidate>
+          <div className="row">
+            <div className="col-md-4 mb-2 mb-md-0 fw-bold">
+              <label htmlFor="edit-module-number-with-error">Numeris *</label>
+            </div>
+            <div className="col-md-8 mb-2 mb-md-0">
+              <TextField
+                error={!!numberError}
+                onChange={(e) => updateProperty("number", e)}
+                value={module.number}
+                id="edit-module-number-with-error"
+                helperText="Numeris turi būti unikalus ir negali būti tuščias"
+                className="form-control"
+                size="small"
+                InputLabelProps={{ shrink: true }}
+                disabled={module.deleted}
+                required
+              />
+            </div>
+          </div>
+          <div className="row">
+            <div className="col-md-4 mb-2 mb-md-0 fw-bold">
+              <label htmlFor="edit-module-name-with-error">Pavadinimas *</label>
+            </div>
+            <div className="col-md-8 mb-2">
+              <TextField
+                error={!!nameError}
+                onChange={(e) => updateProperty("name", e)}
+                value={module.name}
+                id="edit-module-name-with-error"
+                helperText="Pavadinimas negali būti tuščias"
+                className="form-control"
+                size="small"
+                InputLabelProps={{ shrink: true }}
+                disabled={module.deleted}
+                required
+              />
+            </div>
+          </div>
+        </form>
+        <div className="row mb-md-4">
+          <div className="col-md-4 mb-2 mb-md-0 fw-bold">
+            Paskutinį kartą modifikuotas
+          </div>
+          <div className="col-md-8 mb-2 mb-md-0">{module.modifiedDate}</div>
+        </div>
+        <div className="row mb-md-4">
+          <div className="col-md-4 mb-2 mb-md-0 fw-bold">Detalės</div>
+          <div className="col-md-8 mb-2 mb-md-0">
+            {module.deleted ? "Modulis ištrintas" : ""}
+          </div>
+        </div>
+        <EditModuleSubjects disabled={module.deleted} />
+      </div>
+
+      {module.deleted ? (
+        <div>
+          <button
+            type="submit"
+            className="btn btn-primary me-2"
+            onClick={editModule}
+            disabled
+          >
+            Redaguoti
+          </button>
           <button className="btn btn-secondary me-2" onClick={handleRestore}>
             Atstatyti
           </button>
-        ) : (
+        </div>
+      ) : (
+        <div>
+          <button
+            type="submit"
+            className="btn btn-primary me-2"
+            onClick={editModule}
+            disabled={!changed}
+          >
+            Redaguoti
+          </button>
           <button className="btn btn-danger me-2" onClick={handleDelete}>
             Ištrinti
           </button>
-        )}
-      </form>
+        </div>
+      )}
     </div>
   );
 }

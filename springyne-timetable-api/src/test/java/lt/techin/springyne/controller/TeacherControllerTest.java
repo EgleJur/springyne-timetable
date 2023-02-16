@@ -14,6 +14,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -117,22 +118,43 @@ void getAllTeachersContainsCorrectDtos() throws Exception {
         Assertions.assertEquals(result.getName(), "Test name1","Get teacher by Id should return teacher with correct name");
     }
 
-//    @Test
-//    void editTeacherThrowsExceptionWithEmptyValues() throws Exception {
-//        TeacherDto testTeacherDto5 = new TeacherDto("", "", "", "", "", "", "", "", "");
-//        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.patch("/api/v1/teachers/update/5").contentType(MediaType.APPLICATION_JSON).
-//                content(objectMapper.writeValueAsString(testTeacherDto5))).andReturn();
-//
-//        assertEquals(400, mvcResult.getResponse().getStatus(),"Empty value number and name should return bad request status");
-//    }
-//    @Test
-//    void editTeacherAllowsSavingWithUniqueNumber() throws Exception {
-//        TeacherDto testTeacherDto4 = new TeacherDto(LocalDateTime.now().toString(), "test", "test", "test", "test", "test", "test", "test", "test");
-//        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.patch("/api/v1/teachers/update/4").contentType(MediaType.APPLICATION_JSON).
-//                content(objectMapper.writeValueAsString(testTeacherDto4))).andReturn();
-//
-//        assertEquals(200, mvcResult.getResponse().getStatus(),"Unique value number and non empty name should return ok status");
-//    }
+    @Test
+    void editTeacherThrowsExceptionWithEmptyValues() throws Exception {
+        TeacherDto testTeacherDto1 = new TeacherDto("");
+        TeacherDto testTeacherDto2 = new TeacherDto(null);
+        MvcResult mvcResult1 = mockMvc.perform(MockMvcRequestBuilders.patch("/api/v1/teachers/update/5").contentType(MediaType.APPLICATION_JSON).
+                content(objectMapper.writeValueAsString(testTeacherDto1))).andReturn();
+        MvcResult mvcResult2 = mockMvc.perform(MockMvcRequestBuilders.patch("/api/v1/teachers/update/5").contentType(MediaType.APPLICATION_JSON).
+                content(objectMapper.writeValueAsString(testTeacherDto2))).andReturn();
+
+        assertEquals(400, mvcResult1.getResponse().getStatus(),"Empty value name should return bad request status");
+        assertEquals(400, mvcResult1.getResponse().getStatus(),"Null value name should return bad request status");
+    }
+    @Test
+    void editTeacherAllowsSavingWithCorrectValues() throws Exception {
+        TeacherDto testTeacherDto6 = new TeacherDto(LocalDateTime.now().toString());
+        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.patch("/api/v1/teachers/update/5?shiftId=1&subjectId=1").contentType(MediaType.APPLICATION_JSON).
+                content(objectMapper.writeValueAsString(testTeacherDto6))).andReturn();
+
+        assertEquals(200, mvcResult.getResponse().getStatus(),"Unique non empty name should return ok status");
+    }
+    @Test
+    void editTeacherThrowsExceptionWithInvalidShiftValue() throws Exception {
+        TeacherDto testTeacherDto = new TeacherDto("Test Name");
+        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.patch("/api/v1/teachers/update/5?shiftId=0").contentType(MediaType.APPLICATION_JSON).
+                content(objectMapper.writeValueAsString(testTeacherDto))).andReturn();
+        assertEquals(400,mvcResult.getResponse().getStatus(),
+                "Non existing Shift id should return bad request status");
+    }
+    @Test
+    void editTeacherThrowsExceptionWithInvalidSubjectValue() throws Exception {
+        TeacherDto testTeacherDto = new TeacherDto("Test Name");
+        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.patch("/api/v1/teachers/update/5?shiftId=1&subjectId=0").contentType(MediaType.APPLICATION_JSON).
+                content(objectMapper.writeValueAsString(testTeacherDto))).andReturn();
+        assertEquals(400,mvcResult.getResponse().getStatus(),
+                "Non existing subject id should return bad request status");
+    }
+
     public MvcResult performTeacherPostBadRequest(TeacherDto teacherDto) throws Exception {
 
         return mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/teachers?shiftId=1").contentType(MediaType.APPLICATION_JSON).

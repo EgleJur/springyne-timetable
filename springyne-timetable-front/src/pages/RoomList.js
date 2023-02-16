@@ -4,7 +4,6 @@ import { TextField } from "@mui/material";
 import { Select, MenuItem, Pagination } from "@mui/material";
 import { Collapse, Alert } from "@mui/material";
 
-
 function RoomListPage() {
   const [rooms, setRooms] = useState({});
   const [pageNumber, setPageNumber] = useState(0);
@@ -15,32 +14,35 @@ function RoomListPage() {
   const [deleted, setDeleted] = useState(false);
   const [restored, setRestored] = useState(false);
 
-
   const JSON_HEADERS = {
-    "Content-Type": "application/json"
-  }
+    "Content-Type": "application/json",
+  };
 
   const fectchRooms = () => {
-    fetch(`/api/v1/rooms/searchByName?name=${searchName}&page=${pageNumber}&pageSize=${pageSize}`)
+    fetch(
+      `/api/v1/rooms/searchByName?name=${searchName}&page=${pageNumber}&pageSize=${pageSize}`
+    )
       .then((response) => response.json())
       .then((jsonResponse) => setRooms(jsonResponse));
-
   };
 
   useEffect(fectchRooms, []);
 
   const fectchRoomsByBuildings = () => {
-    fetch(`/api/v1/rooms/searchByBuilding?building=${searchBuinding}&page=${pageNumber}&pageSize=${pageSize}`)
+    fetch(
+      `/api/v1/rooms/searchByBuilding?building=${searchBuinding}&page=${pageNumber}&pageSize=${pageSize}`
+    )
       .then((response) => response.json())
       .then((jsonResponse) => setRooms(jsonResponse));
-
   };
 
   const handlePageChange = (e, value) => {
     setPage(value);
     setPageNumber(value - 1);
     fetch(
-      `/api/v1/rooms/searchByName?name=${searchName}&page=${value - 1}&pageSize=${pageSize}`
+      `/api/v1/rooms/searchByName?name=${searchName}&page=${
+        value - 1
+      }&pageSize=${pageSize}`
     )
       .then((response) => response.json())
       .then((jsonResponse) => setRooms(jsonResponse));
@@ -51,32 +53,30 @@ function RoomListPage() {
     setPage(1);
     setPageNumber(0);
     fetch(
-      `/api/v1/rooms/searchByName?name=${searchName}&page=${0}&pageSize=${e.target.value
+      `/api/v1/rooms/searchByName?name=${searchName}&page=${0}&pageSize=${
+        e.target.value
       }`
     )
       .then((response) => response.json())
       .then((jsonResponse) => setRooms(jsonResponse));
   };
 
-
   const deleteRoom = (id) => {
-    fetch('/api/v1/rooms/delete/' + id, {
-      method: 'PATCH',
+    fetch("/api/v1/rooms/delete/" + id, {
+      method: "PATCH",
       headers: JSON_HEADERS,
-    })
-      .then(fectchRooms);
-      setDeleted(true);
-      setRestored(false);
+    }).then(fectchRooms);
+    setDeleted(true);
+    setRestored(false);
   };
 
   const restoreRoom = (id) => {
-    fetch('/api/v1/rooms/restore/' + id, {
-      method: 'PATCH',
+    fetch("/api/v1/rooms/restore/" + id, {
+      method: "PATCH",
       headers: JSON_HEADERS,
-    })
-      .then(fectchRooms);
-      setDeleted(false);
-      setRestored(true);
+    }).then(fectchRooms);
+    setDeleted(false);
+    setRestored(true);
   };
 
   return (
@@ -207,11 +207,15 @@ function RoomListPage() {
                     Žiūrėti
                   </Link>
                 </button>
-                <button className="btn btn-outline-primary ms-2">
-                  <Link className="nav-link" to={"/rooms/edit/" + room.id}>
+                <button
+                  className="btn btn-outline-primary ms-2"
+                  disabled={room.deleted}
+                >
+                  <Link className="nav-link" to={"/subjects/edit/" + room.id}>
                     Redaguoti
                   </Link>
                 </button>
+
                 {room.deleted ? (
                   <button
                     className="btn btn-outline-danger ms-2"
@@ -233,11 +237,14 @@ function RoomListPage() {
         </tbody>
         <tfoot className="table-light">
           <tr>
-            <td colSpan={4}>
+            <td>
               {rooms.totalElements == "0"
                 ? "Įrašų nerasta"
                 : `Rasta įrašų: ${rooms.totalElements}`}
             </td>
+            <td></td>
+            <td></td>
+            <td></td>
           </tr>
         </tfoot>
       </table>

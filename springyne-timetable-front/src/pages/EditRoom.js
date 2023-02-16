@@ -1,6 +1,6 @@
 import { Collapse, Alert } from "@mui/material";
 import { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { TextField } from "@mui/material";
 
 function EditRoomPage() {
@@ -201,6 +201,7 @@ function EditRoomPage() {
         >
           Redaguoti
         </button>
+
         {room.deleted ? (
           <button className="btn btn-secondary me-2" onClick={handleRestore}>
             Atstatyti

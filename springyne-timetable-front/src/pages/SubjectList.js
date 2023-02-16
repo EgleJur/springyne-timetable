@@ -3,7 +3,6 @@ import { Link } from "react-router-dom";
 import { TextField } from "@mui/material";
 import { Select, MenuItem, Pagination } from "@mui/material";
 
-
 function SubjectListPage() {
   const [subjects, setSubjects] = useState({});
   const [pageNumber, setPageNumber] = useState(0);
@@ -13,29 +12,33 @@ function SubjectListPage() {
   const [page, setPage] = useState(1);
 
   const JSON_HEADERS = {
-    "Content-Type": "application/json"
-  }
+    "Content-Type": "application/json",
+  };
   const fetchSubjects = () => {
-    fetch(`/api/v1/subjects/search?name=${searchName}&page=${pageNumber}&pageSize=${pageSize}`)
+    fetch(
+      `/api/v1/subjects/search?name=${searchName}&page=${pageNumber}&pageSize=${pageSize}`
+    )
       .then((response) => response.json())
       .then((jsonResponse) => setSubjects(jsonResponse));
-
   };
 
   useEffect(fetchSubjects, []);
 
   const fetchSubjectsByModules = () => {
-    fetch(`/api/v1/subjects/byModule/search?name=${searchModName}&page=${pageNumber}&pageSize=${pageSize}`)
+    fetch(
+      `/api/v1/subjects/byModule/search?name=${searchModName}&page=${pageNumber}&pageSize=${pageSize}`
+    )
       .then((response) => response.json())
       .then((jsonResponse) => setSubjects(jsonResponse));
-
   };
 
   const handlePageChange = (e, value) => {
     setPage(value);
     setPageNumber(value - 1);
     fetch(
-      `/api/v1/subjects/search?name=${searchName}&page=${value - 1}&pageSize=${pageSize}`
+      `/api/v1/subjects/search?name=${searchName}&page=${
+        value - 1
+      }&pageSize=${pageSize}`
     )
       .then((response) => response.json())
       .then((jsonResponse) => setSubjects(jsonResponse));
@@ -46,47 +49,42 @@ function SubjectListPage() {
     setPage(1);
     setPageNumber(0);
     fetch(
-      `/api/v1/subjects/search?name=${searchName}&page=${0}&pageSize=${e.target.value
+      `/api/v1/subjects/search?name=${searchName}&page=${0}&pageSize=${
+        e.target.value
       }`
     )
       .then((response) => response.json())
       .then((jsonResponse) => setSubjects(jsonResponse));
   };
 
-
   const deleteSubject = (id) => {
-    fetch('/api/v1/subjects/delete/' + id, {
-      method: 'PATCH',
+    fetch("/api/v1/subjects/delete/" + id, {
+      method: "PATCH",
       headers: JSON_HEADERS,
-    })
-      .then(fetchSubjects);
+    }).then(fetchSubjects);
   };
 
   const restoreSubject = (id) => {
-    fetch('/api/v1/subjects/restore/' + id, {
-      method: 'PATCH',
+    fetch("/api/v1/subjects/restore/" + id, {
+      method: "PATCH",
       headers: JSON_HEADERS,
-    })
-      .then(fetchSubjects);
+    }).then(fetchSubjects);
   };
 
   return (
     <div className="mx-3">
       <h2 className="my-5">Dalykai</h2>
-      
 
       <div className="d-flex justify-content-end">
         <div className="me-auto d-flex">
-        <button className="btn btn-primary mb-4">
-          <Link to="/subjects/create" className="nav-link">
-            Pridėti naują dalyką
-          </Link>
-        </button>
-      </div>
+          <button className="btn btn-primary mb-4">
+            <Link to="/subjects/create" className="nav-link">
+              Pridėti naują dalyką
+            </Link>
+          </button>
+        </div>
         <div className="mb-4">
-
           <form className="d-flex" role="search">
-
             <TextField
               onChange={(e) => setSearchName(e.target.value)}
               value={searchName}
@@ -102,14 +100,12 @@ function SubjectListPage() {
             >
               Ieškoti
             </button>
-
           </form>
         </div>
       </div>
       <div className="d-flex justify-content-end">
         <div className="mb-4">
           <form className="d-flex" role="search">
-
             <TextField
               onChange={(e) => setSearchModName(e.target.value)}
               value={searchModName}
@@ -125,7 +121,6 @@ function SubjectListPage() {
             >
               Ieškoti
             </button>
-
           </form>
         </div>
       </div>
@@ -147,8 +142,6 @@ function SubjectListPage() {
               <MenuItem value={50}>50</MenuItem>
               <MenuItem value={100}>100</MenuItem>
             </Select>
-
-
           </form>
         </div>
         <div>
@@ -179,29 +172,38 @@ function SubjectListPage() {
               <td>{subject.deleted ? "Ištrintas" : ""}</td>
               <td>
                 <button className="btn btn-outline-primary">
-                  <Link className="nav-link" to={"/subjects/view/" + subject.id}>
+                  <Link
+                    className="nav-link"
+                    to={"/subjects/view/" + subject.id}
+                  >
                     Žiūrėti
                   </Link>
                 </button>
 
-                  <button
-                    className="btn btn-outline-danger ms-2" disabled={subject.deleted}>
-                    <Link className="nav-link" to={"/subjects/edit/" + subject.id}>
+                <button
+                  className="btn btn-outline-danger ms-2"
+                  disabled={subject.deleted}
+                >
+                  <Link
+                    className="nav-link"
+                    to={"/subjects/edit/" + subject.id}
+                  >
                     Redaguoti
                   </Link>
-                  </button>
+                </button>
 
                 {subject.deleted ? (
                   <button
                     className="btn btn-outline-danger ms-2"
-                    onClick={() => restoreSubject(subject.id)}>
+                    onClick={() => restoreSubject(subject.id)}
+                  >
                     Atstatyti
                   </button>
                 ) : (
-
                   <button
                     className="btn btn-outline-danger ms-2"
-                    onClick={() => deleteSubject(subject.id)}>
+                    onClick={() => deleteSubject(subject.id)}
+                  >
                     Ištrinti
                   </button>
                 )}
@@ -209,6 +211,15 @@ function SubjectListPage() {
             </tr>
           ))}
         </tbody>
+        <tfoot className="table-light">
+          <tr>
+            <td colSpan={5}>
+              {subjects.totalElements == "0"
+                ? "Įrašų nerasta"
+                : `Rasta įrašų: ${subjects.totalElements}`}
+            </td>
+          </tr>
+        </tfoot>
       </table>
     </div>
   );

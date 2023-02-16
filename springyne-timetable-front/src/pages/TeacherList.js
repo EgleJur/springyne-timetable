@@ -119,7 +119,7 @@ function TeacherListPage() {
       <div className="d-flex">
         <button className="btn btn-primary mb-5">
           <Link to="/teachers/create" className="nav-link">
-            Pridėti naują mokytoja
+            Pridėti naują mokytoją
           </Link>
         </button>
       </div>

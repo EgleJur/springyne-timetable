@@ -179,7 +179,7 @@ function EditTeacherPage() {
           disabled={teacher.deleted}
           InputLabelProps={{ shrink: true }}
         />
-        <div className="mb-2">Pašalinti Dalyką:</div>
+        {teacher.subjects ? <div className="mb-2">Pašalinti Dalyką:</div> : ""}
 
         <div className="d-grid gap-6 d-md-block">
           {teacher.subjects?.map((subject) => (

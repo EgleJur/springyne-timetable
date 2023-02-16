@@ -105,20 +105,17 @@ function RoomListPage() {
           Įrašas sėkmingai atstatytas
         </Alert>
       </Collapse>
-      
 
       <div className="d-flex justify-content-end">
         <div className="me-auto d-flex">
-        <button className="btn btn-primary mb-4">
-          <Link to="/rooms/create" className="nav-link">
-            Pridėti naują kabinetą
-          </Link>
-        </button>
-      </div>
+          <button className="btn btn-primary mb-4">
+            <Link to="/rooms/create" className="nav-link">
+              Pridėti naują kabinetą
+            </Link>
+          </button>
+        </div>
         <div className="mb-4">
-
           <form className="d-flex" role="search">
-
             <TextField
               onChange={(e) => setSearchName(e.target.value)}
               value={searchName}
@@ -134,14 +131,12 @@ function RoomListPage() {
             >
               Ieškoti
             </button>
-
           </form>
         </div>
       </div>
       <div className="d-flex justify-content-end">
         <div className="mb-4">
           <form className="d-flex" role="search">
-
             <TextField
               onChange={(b) => setSearchBuilding(b.target.value)}
               value={searchBuinding}
@@ -157,7 +152,6 @@ function RoomListPage() {
             >
               Ieškoti
             </button>
-
           </form>
         </div>
       </div>
@@ -179,8 +173,6 @@ function RoomListPage() {
               <MenuItem value={50}>50</MenuItem>
               <MenuItem value={100}>100</MenuItem>
             </Select>
-
-
           </form>
         </div>
         <div>
@@ -223,14 +215,15 @@ function RoomListPage() {
                 {room.deleted ? (
                   <button
                     className="btn btn-outline-danger ms-2"
-                    onClick={() => restoreRoom(room.id)}>
+                    onClick={() => restoreRoom(room.id)}
+                  >
                     Atstatyti
                   </button>
                 ) : (
-
                   <button
                     className="btn btn-outline-danger ms-2"
-                    onClick={() => deleteRoom(room.id)}>
+                    onClick={() => deleteRoom(room.id)}
+                  >
                     Ištrinti
                   </button>
                 )}
@@ -238,6 +231,15 @@ function RoomListPage() {
             </tr>
           ))}
         </tbody>
+        <tfoot className="table-light">
+          <tr>
+            <td colSpan={4}>
+              {rooms.totalElements == "0"
+                ? "Įrašų nerasta"
+                : `Rasta įrašų: ${rooms.totalElements}`}
+            </td>
+          </tr>
+        </tfoot>
       </table>
     </div>
   );

@@ -19,7 +19,8 @@ import EditRoomPage from './pages/EditRoom';
 import CreateShiftPage from './pages/CreateShift';
 import EditShiftPage from './pages/EditShift';
 import CreateTeacherPage from './pages/CreateTeacher';
-import EditTeacherPage from "./pages/EditTeacher"
+import EditTeacherPage from "./pages/EditTeacher";
+import ViewTeacherPage from "./pages/ViewTeacher";
 
 
 function App() {
@@ -38,7 +39,8 @@ function App() {
             <Route path="/subjects" element={<SubjectListPage />} />
             <Route path="/teachers" element={<TeacherListPage />} />
             <Route path="/teachers/create" element={<CreateTeacherPage />} />
-            <Route path="/teachers/edit:id" element={<EditTeacherPage />} />
+            <Route path="/teachers/edit/:id" element={<EditTeacherPage />} />
+            <Route path="/teachers/view/:id" element ={<ViewTeacherPage/>} />
             <Route path="/modules/create" element={<CreateModulePage />} />
             <Route path="/modules/view/:id" element={<ViewModulePage />} />
             <Route path="/modules/edit/:id" element={<EditModulePage />} />

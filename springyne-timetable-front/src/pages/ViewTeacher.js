@@ -58,20 +58,17 @@ function ViewTeacherPage() {
           severity="success"
           className="mb-3"
         >
-         Įrašas sėkmingai atstatytas
+          Įrašas sėkmingai atstatytas
         </Alert>
       </Collapse>
       <div className="">
         <table className="table table-hover shadow p-3 mb-5 bg-body rounded align-middle">
           <tbody>
             <tr>
-              <th scope="col">Vardas</th>
+              <th scope="col">Vardas ir Pavardė</th>
               <td>{teacher.name}</td>
             </tr>
-            <tr>
-              <th scope="col">Pavardė</th>
-              <td>{teacher.lastname}</td>
-            </tr>
+            
             <tr>
             <th scope="col">Teams vardas(email)</th>
             <td>{teacher.teams_mail}</td>
@@ -89,16 +86,20 @@ function ViewTeacherPage() {
             <td>{teacher.hours}</td>
             </tr>
             <tr>
-            <th scope="col">Dalykas</th>
-            <td>{teacher.subject}</td>
+              <th scope="col">Dalykai</th>
+              <td>{teacher.subjects?.map((subject) => (
+                <p key={subject.id} id={subject.id}>{subject.name}</p>
+              ))}</td>
             </tr>
             <tr>
-            <th scope="col">Pamaina</th>
-            <td>{teacher.shift}</td>
+              <th scope="col">Pamaina</th>
+              <td>{teacher.shift?.name}</td>
             </tr>
+            
+            
             <tr>
               <th scope="col">Būsena</th>
-              <td>{teacher.deleted ? "Mokytojas ištrintas" : ""}</td>
+              <td>{teacher.deleted ? "Ištrintas" : "Aktyvus"}</td>
             </tr>
             <tr>
               <th scope="col">Paskutinį kartą modifikuotas:</th>

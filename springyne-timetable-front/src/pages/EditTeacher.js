@@ -5,17 +5,17 @@ import { TextField } from "@mui/material";
 
 function EditTeacherPage() {
   const [teacher, setTeacher] = useState({});
-  const [numberError, setNumberError] = useState("");
   const [nameError, setNameError] = useState("");
-  const [lastnameError, setLastnameError] = useState("");
   const [teams_mailError, setTeams_mailError] = useState("");
   const [emailError, setEmailError] = useState("");
   const [phoneError, setPhoneError] = useState("");
   const [hoursError, setHoursError] = useState("");
-  const [subjectError, setSubjectError] = useState("");
-  const [shiftError, setShiftError] = useState("");
   const [success, setSuccess] = useState(false);
   const [failure, setFailure] = useState(false);
+  const [shifts, setShifts] = useState([]);
+  const [subjects, setSubjects] = useState([]);
+  const [selectedShift, setSelectedShift] = useState('');
+  const [selectedSubject, setSelectedSubject] = useState('');
   const params = useParams();
 
   useEffect(() => {
@@ -24,52 +24,45 @@ function EditTeacherPage() {
       .then((jsonResponse) => setTeacher(jsonResponse));
   }, [params.id]);
 
+  useEffect(() => {
+    fetch('api/v1/subjects/')
+      .then(response => response.json())
+      .then(setSubjects)
+
+  }, []);
+  
+  useEffect(() => {
+    fetch('api/v1/shifts/')
+      .then(response => response.json())
+      .then(setShifts)
+
+  }, []);
+
+  const deleteSubject  = (e) => {
+    fetch(`/api/v1/teachers/${params.id}/deleteSubject/${e}`, {
+      method: "PATCH",
+    }).then(window.location.reload(true))
+  };
+
   const editTeacher = (e) => {
     e.preventDefault();
-    setNumberError(false);
     setNameError(false);
-    setLastnameError(false);
     setTeams_mailError(false);
     setEmailError(false);
     setPhoneError(false);
     setHoursError(false);
-    setSubjectError(false);
-    setShiftError(false);
-    if (teacher.shift === "" ||teacher.subject === "" ||teacher.hours === "" ||teacher.phone === "" ||teacher.email === "" ||teacher.teams_mail === "" ||teacher.lastname === "" || teacher.name === "" || teacher.number === "") {
-      if (teacher.number === "") {
-        setNumberError(true);
-      }
+    if (teacher.name === "") {
       if (teacher.name === "") {
         setNameError(true);
       }
-      if (teacher.lastname === "") {
-        setLastnameError(true);
-      }
-      if (teacher.teams_mail === "") {
-        setTeams_mailError(true);
-      }
-      if (teacher.email === "") {
-        setEmailError(true);
-      }
-      if (teacher.phone === "") {
-        setPhoneError(true);
-      }
-      if (teacher.hours === "") {
-        setHoursError(true);
-      }
-      if (teacher.subject === "") {
-        setSubjectError(true);
-      }
-      if (teacher.shift === "") {
-        setShiftError(true);
-      }
     } else {
-      fetch("/api/v1/teachers/update/" + params.id, {
+      fetch(`/api/v1/teachers/edit/${params.id}?
+      subjectId=${selectedSubject}&shiftId=${selectedShift}`, {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(teacher),
+        body: JSON.stringify(subjects),
       }).then((result) => {
         if (result.ok) {
           setSuccess(true);
@@ -77,7 +70,6 @@ function EditTeacherPage() {
         } else {
           setFailure(true);
           setSuccess(false);
-          setNumberError(true);
         }
       });
     }
@@ -120,20 +112,8 @@ function EditTeacherPage() {
           onChange={(e) => updateProperty("name", e)}
           value={teacher.name}
           id="create-teacher-name-with-error"
-          label="Vardas"
+          label="Vardas ir Pavardė"
           helperText="Vardas negali būti tuščias"
-          className="form-control mb-3"
-          size="small"
-          InputLabelProps={{ shrink: true }}
-          required
-        />
-        <TextField
-          error={!!lastnameError}
-          onChange={(e) => updateProperty("lastname", e)}
-          value={teacher.lastname}
-          id="create-teacher-lastname-with-error"
-          label="Pavardė"
-          helperText="Pavardes laukas negali būti tuščias"
           className="form-control mb-3"
           size="small"
           InputLabelProps={{ shrink: true }}
@@ -145,11 +125,10 @@ function EditTeacherPage() {
           value={teacher.teams_mail}
           id="create-teacher-teams_mail-with-error"
           label="Teams Vardas(email)"
-          helperText="Teams Vardas negali būti tuščias"
+          helperText="Neprivaloma"
           className="form-control mb-3"
           size="small"
           InputLabelProps={{ shrink: true }}
-          required
         />
         <TextField
           error={!!emailError}
@@ -179,36 +158,59 @@ function EditTeacherPage() {
           value={teacher.hours}
           id="create-teacher-hours-with-error"
           label="Valandu skaicius"
-          helperText="Valandų skaičiaus laukas negali būti tuščias"
+          helperText="Neprivaloma"
           className="form-control mb-3"
           size="small"
           InputLabelProps={{ shrink: true }}
           required
         />
-        <TextField
-          error={!!subjectError}
-          onChange={(e) => updateProperty("subject", e)}
-          value={teacher.subject}
-          id="create-teacher-subject-with-error"
-          label="Dalykas"
-          helperText="Dalykas negali būti tuščias"
-          className="form-control mb-3"
-          size="small"
-          InputLabelProps={{ shrink: true }}
-          required
-        />
-        <TextField
-          error={!!shiftError}
-          onChange={(e) => updateProperty("shift", e)}
-          value={teacher.shift}
-          id="create-teacher-shift-with-error"
-          label="Pamaina"
-          helperText="Pamainos laukas negali būti tuščias"
-          className="form-control mb-3"
-          size="small"
-          InputLabelProps={{ shrink: true }}
-          required
-        />
+        <label htmlFor="page-size-select" className="mb-3">
+          Dalykai:
+        </label>
+        <div className="d-grid gap-6 d-md-block">
+          {teacher.subjects?.map((subject) => (
+          <button
+            type="submit"
+            className="btn btn-light"
+            value={subject.id}
+            onClick={(e) => deleteSubject(e.target.value)}
+            key={subject.id} id={subject.id}
+            >{subject.name}</button>
+        ))}</div>
+
+        <select
+          value={selectedSubject}
+          onChange={(e) => setSelectedSubject(e.target.value)}
+          className="form-control mb-3">
+          <option value=''>---</option>
+          {
+            subjects.map(
+              (subject) =>
+              (<option key={subject.id} 
+                  value={subject.id} 
+                  disabled={subject.deleted}>{subject.name}</option>)
+          )
+          }
+        </select>
+        
+        <label htmlFor="page-size-select" className="mb-3">
+        Pamaina:
+      </label>
+      <select
+            value={selectedShift}
+            onChange={(e) => setSelectedShift(e.target.value)}
+            className="form-control mb-3">
+              <option value=''>{teacher.shift?.name}</option>
+            {
+                shifts.map(
+                    (shift) =>
+                    (<option key={shift.id} 
+                        value={shift.id}
+                        disabled={shift.deleted}>{shift.name}</option>)
+                )
+            }
+        </select>
+        
         <button type="submit" className="btn btn-primary" onClick={editTeacher}>
           Redaguoti
         </button>

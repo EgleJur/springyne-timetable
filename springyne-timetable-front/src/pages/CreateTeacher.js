@@ -1,43 +1,51 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Alert,Collapse } from "@mui/material";
 import { TextField } from "@mui/material";
 
 function CreateTeacherPage() {
   const [name, setName] = useState("");
-  const [lastname, setLastname] = useState("");
   const [teams_mail, setTeams_mail] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
   const [hours, setHours] = useState("");
-  const [subject, setSubject] = useState("");
-  const [shift, setShift] = useState("");
   const [nameError, setNameError] = useState("");
-  const [lastnameError, setLastnameError] = useState("");
   const [teams_mailError, setTeams_mailError] = useState("");
   const [emailError, setEmailError] = useState("");
   const [phoneError, setPhoneError] = useState("");
   const [hoursError, setHoursError] = useState("");
-  const [subjectError, setSubjectError] = useState("");
-  const [shiftError, setShiftError] = useState("");
   const [success, setSuccess] = useState(false);
   const [failure, setFailure] = useState(false);
+  const [shifts, setShifts] = useState([]);
+    const [selectedShifts, setSelectedShifts] = useState('');
+
+    const [subjects, setSubjects] = useState([]);
+    const [selectedSubject, setSelectedSubject] = useState('');
+
+
+    useEffect(() => {
+      fetch('api/v1/shifts/')
+          .then(response => response.json())
+          .then(setShifts)
+          
+  }, []);
+
+  useEffect(() => {
+    fetch('api/v1/subjects/')
+        .then(response => response.json())
+        .then(setSubjects)
+        
+}, []);
 
   const createNewTeacher = (e) => {
     e.preventDefault();
     setNameError(false); 
-    setLastnameError(false);
     setTeams_mailError(false);
     setEmailError(false);
     setPhoneError(false);
     setHoursError(false);
-    setSubjectError(false);
-    setShiftError(false);
-    if (lastname ==="" || name === "" || teams_mail === "" || email === ""|| phone === ""|| hours === ""|| subject === ""|| shift === "") {
+    if (name === "" || teams_mail === "" || email === ""|| phone === ""|| hours === "") {
       if (name === "") {
         setNameError(true);
-      }
-      if (lastname === "") {
-        setLastnameError(true);
       }
       if (teams_mail === "") {
         setTeams_mailError(true);
@@ -51,38 +59,26 @@ function CreateTeacherPage() {
       if (hours === "") {
         setHoursError(true);
       }
-      if (subject === "") {
-        setSubjectError(true);
-      }
-      if (shift === "") {
-        setShiftError(true);
-      }
     } else {
-      fetch("/api/v1/teachers/", {
+      fetch(`/api/v1/teachers/createTeacher?shiftId=${selectedShifts}&subjectId=${selectedSubject}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
           name,
-          lastname,
           teams_mail,
           email,
           phone,
           hours,
-          subject,
-          shift,
         }),
       }).then((result) => {
         if (result.ok) {
           setName("");
-          setLastname("");
           setTeams_mail("");
           setEmail("");
           setPhone("");
           setHours("");
-          setSubject("");
-          setShift("");
           setSuccess(true);
           setFailure(false);
         } else {
@@ -124,20 +120,9 @@ function CreateTeacherPage() {
           error={!!nameError}
           onChange={(e) => setName(e.target.value)}
           value={name}
-          id="create-teacher-number-with-error"
-          label="Vardas"
-          helperText="Vardas negali būti tuščias"
-          className="form-control mb-3"
-          size="small"
-          required
-        />
-        <TextField
-          error={!!lastnameError}
-          onChange={(e) => setLastname(e.target.value)}
-          value={lastname}
-          id="create-teacher-number-with-error"
-          label="Pavardė"
-          helperText="Pavardes laukas negali būti tuščias"
+          id="create-teacher-name-with-error"
+          label="Vardas ir Pavardė"
+          helperText="Vardas ir Pavardė negali būti tuščias"
           className="form-control mb-3"
           size="small"
           required
@@ -151,7 +136,6 @@ function CreateTeacherPage() {
           helperText="Teams Vardas negali būti tuščias"
           className="form-control mb-3"
           size="small"
-          required
         />
         <TextField
           error={!!emailError}
@@ -182,30 +166,48 @@ function CreateTeacherPage() {
           helperText="Valandų skaičiaus laukas negali būti tuščias"
           className="form-control mb-3"
           size="small"
-          required
         />
-        <TextField
-          error={!!subjectError}
-          onChange={(e) => setSubject(e.target.value)}
-          value={subject}
-          id="create-teacher-subject-with-error"
-          label="Dalykas"
-          helperText="Dalykas negali būti tuščias"
+        <label htmlFor="page-size-select" className="mb-3">
+          Dalykas:
+        </label>
+        
+        <select
+            value={selectedSubject}
+            onChange={(e) => setSelectedSubject(e.target.value)}
+            className="form-control mb-3">
+              <option value =''>---</option>
+            {
+                subjects.map(
+                    (sub) =>
+                    (<option key={sub.id} 
+                        value={sub.id} 
+                        disabled={sub.deleted}>{sub.name}</option>)
+                )
+            }
+        </select>
+
+        <label htmlFor="page-size-select" className="mb-3">
+          Pamaina:
+        </label>
+        <select
+          value={selectedShifts}
+          onChange={(e) => setSelectedShifts(e.target.value)}
           className="form-control mb-3"
-          size="small"
-          required
-        />
-        <TextField
-          error={!!shiftError}
-          onChange={(e) => setShift(e.target.value)}
-          value={shift}
-          id="create-teacher-shift-with-error"
-          label="Pamaina"
-          helperText="Pamainos laukas negali būti tuščias"
-          className="form-control mb-3"
-          size="small"
-          required
-        />
+          required // Add the required attribute to the select element
+        >
+          {
+            shifts.map((shift) => (
+              <option
+                key={shift.id}
+                value={shift.id}
+                disabled={shift.deleted}
+              >
+                {shift.name}
+              </option>
+            ))
+          }
+        </select>
+
         <button
           type="submit"
           className="btn btn-primary"

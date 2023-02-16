@@ -45,4 +45,10 @@ public class Room {
 
         lastModifiedDate = LocalDateTime.now();
     }
+
+//    public Room(String name, String building, String description) {
+//        this.name = name;
+//        this.building = building;
+//        this.description = description;
+//    }
 }

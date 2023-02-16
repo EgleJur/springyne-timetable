@@ -238,6 +238,20 @@ function RoomListPage() {
             </tr>
           ))}
         </tbody>
+        <tfoot className="table-light">
+          <tr>
+            <td>
+              {rooms.totalElements == "0"
+                ? "Įrašų nerasta"
+                : `Rasta įrašų: ${rooms.totalElements}`}
+            </td>
+            <td></td>
+            <td></td>
+            <td></td>
+          </tr>
+        </tfoot>
+
+
       </table>
     </div>
   );

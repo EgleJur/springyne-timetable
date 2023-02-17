@@ -36,9 +36,13 @@ public class ShiftService {
     public Shift editShift(Long shiftId, Shift shift) {
         var tempShift = shiftRepository.findById(shiftId)
                 .orElseThrow(() -> new ScheduleValidationException("Shift id error", "id", "Shift not found", Long.toString(shift.getId())));
-        if(shiftRepository.findOneByNameIgnoreCase(shift.getName()).getId() != shiftId) {
-            throw new ScheduleValidationException("Shift name already taken", "name", "Name already exists", shift.getName());
-        } else if (shift.getStarts() > shift.getEnds()) {
+        var testFindName = shiftRepository.findOneByNameIgnoreCase(shift.getName());
+        if (testFindName != null){
+            if(testFindName.getId() != shiftId) {
+                throw new ScheduleValidationException("Shift name already taken", "name", "Name already exists", shift.getName());
+            }
+        }
+        if (shift.getStarts() > shift.getEnds()) {
             throw new ScheduleValidationException("Shift starts must be less than or equal to ends", "starts", "Starts ir greater than ends", Integer.toString(shift.getStarts()));
         }
         tempShift.setName(shift.getName());

@@ -94,32 +94,41 @@ public class SubjectService {
                         "Subject not found", String.valueOf(subjectId)));
 
         if (roomId != null) {
-           Room newRoom = roomRepository.findById(roomId)
+            Room newRoom = roomRepository.findById(roomId)
                     .orElseThrow(() -> new ScheduleValidationException("Room does not exist", "id",
                             "Room not found", String.valueOf(roomId)));
 
             Set<Room> existingRoom = updatedSubject.getRooms();
-            if(!existingRoom.contains(newRoom)){
+            if (!existingRoom.contains(newRoom)) {
                 subjectRepository.insertSubjectAndRoom(subjectId, roomId);
             }
         }
     }
 
     public Subject edit(Long id, Subject subject, Long moduleId) {
-        Subject updatedSubject = subjectRepository.findById(id)
-                .orElseThrow(() -> new ScheduleValidationException("Subject does not exist", "id",
-                        "Subject not found", String.valueOf(id)));
-
-        updatedSubject.setName(subject.getName());
-        updatedSubject.setDescription(subject.getDescription());
-
-        if (moduleId != null){
-            Module moduleToAdd = moduleRepository.findById(moduleId)
-                    .orElseThrow(() -> new ScheduleValidationException("Module does not exist", "id",
-                            "Module not found", String.valueOf(moduleId)));
-
-            updatedSubject.setModule(moduleToAdd);
+        if (subject.getName() == null || subject.getName().equals("")){
+            throw new ScheduleValidationException("Subject name cannot be empty", "name",
+                    "Name is empty", subject.getName());
         }
+
+            Subject updatedSubject = subjectRepository.findById(id)
+                    .orElseThrow(() -> new ScheduleValidationException("Subject does not exist", "id",
+                            "Subject not found", String.valueOf(id)));
+        if (subjectRepository.existsByNameIgnoreCase(subject.getName())){
+            throw new ScheduleValidationException("Subject name must be unique",
+                    "name", "Name already exists", subject.getName());
+
+        }
+            updatedSubject.setName(subject.getName());
+            updatedSubject.setDescription(subject.getDescription());
+
+            if (moduleId != null) {
+                Module moduleToAdd = moduleRepository.findById(moduleId)
+                        .orElseThrow(() -> new ScheduleValidationException("Module does not exist", "id",
+                                "Module not found", String.valueOf(moduleId)));
+
+                updatedSubject.setModule(moduleToAdd);
+            }
 
 //        if (roomId != null) {
 //            var newRoom = roomRepository.findById(roomId)
@@ -131,68 +140,68 @@ public class SubjectService {
 //            }
 //        }
 
-        return subjectRepository.save(updatedSubject);
-    }
-    public void deleteRoomFromSubject(Long subjectId, Long roomId){
-        Room roomToRemove = roomRepository.findById(roomId)
-                .orElseThrow(() -> new ScheduleValidationException("Room does not exist", "id",
-                        "Room not found", String.valueOf(roomId)));
-        Subject updatedSubject = subjectRepository.findById(subjectId)
-                .orElseThrow(() -> new ScheduleValidationException("Subject does not exist", "id",
-                        "Subject not found", String.valueOf(subjectId)));
-        subjectRepository.deleteRoomFromSubject(subjectId, roomId);
-
-    }
-
-    public boolean existsByName(String name) {
-        return subjectRepository.existsByNameIgnoreCase(name);
-    }
-
-    public Subject createSubjectDto(Subject subject) {
-        if (existsByName(subject.getName())) {
-            throw new ScheduleValidationException("Subject name must be unique", "name", "Name already exists", subject.getName());
+            return subjectRepository.save(updatedSubject);
         }
-        return subjectRepository.save(subject);
-    }
+        public void deleteRoomFromSubject (Long subjectId, Long roomId){
+            Room roomToRemove = roomRepository.findById(roomId)
+                    .orElseThrow(() -> new ScheduleValidationException("Room does not exist", "id",
+                            "Room not found", String.valueOf(roomId)));
+            Subject updatedSubject = subjectRepository.findById(subjectId)
+                    .orElseThrow(() -> new ScheduleValidationException("Subject does not exist", "id",
+                            "Subject not found", String.valueOf(subjectId)));
+            subjectRepository.deleteRoomFromSubject(subjectId, roomId);
 
-
-    public Subject delete(Long id) {
-        var existingSubject = subjectRepository.findById(id)
-                .orElseThrow(() -> new ScheduleValidationException("Subject does not exist",
-                        "id", "Subject not found", id.toString()));
-        if (!existingSubject.isDeleted()) {
-            existingSubject.setDeleted(true);
-            return subjectRepository.save(existingSubject);
-        } else {
-            return existingSubject;
         }
 
-    }
-
-
-    public Subject restore(Long id) {
-        var existingSubject = subjectRepository.findById(id)
-                .orElseThrow(() -> new ScheduleValidationException("Subject does not exist",
-                        "id", "Subject not found", id.toString()));
-
-        if (existingSubject.isDeleted()) {
-            existingSubject.setDeleted(false);
-            return subjectRepository.save(existingSubject);
-        } else {
-            return existingSubject;
+        public boolean existsByName (String name){
+            return subjectRepository.existsByNameIgnoreCase(name);
         }
+
+        public Subject createSubjectDto (Subject subject){
+            if (existsByName(subject.getName())) {
+                throw new ScheduleValidationException("Subject name must be unique", "name", "Name already exists", subject.getName());
+            }
+            return subjectRepository.save(subject);
+        }
+
+
+        public Subject delete (Long id){
+            var existingSubject = subjectRepository.findById(id)
+                    .orElseThrow(() -> new ScheduleValidationException("Subject does not exist",
+                            "id", "Subject not found", id.toString()));
+            if (!existingSubject.isDeleted()) {
+                existingSubject.setDeleted(true);
+                return subjectRepository.save(existingSubject);
+            } else {
+                return existingSubject;
+            }
+
+        }
+
+
+        public Subject restore (Long id){
+            var existingSubject = subjectRepository.findById(id)
+                    .orElseThrow(() -> new ScheduleValidationException("Subject does not exist",
+                            "id", "Subject not found", id.toString()));
+
+            if (existingSubject.isDeleted()) {
+                existingSubject.setDeleted(false);
+                return subjectRepository.save(existingSubject);
+            } else {
+                return existingSubject;
+            }
+        }
+
+
+        public Subject addModuleToSubject (Long subjectId, Long moduleId){
+            Module moduleToAdd = moduleRepository.findById(moduleId)
+                    .orElseThrow(() -> new ScheduleValidationException("Module does not exist", "id",
+                            "Module not found", String.valueOf(moduleId)));
+            Subject updatedSubject = subjectRepository.findById(subjectId)
+                    .orElseThrow(() -> new ScheduleValidationException("Subject does not exist", "id",
+                            "Subject not found", String.valueOf(subjectId)));
+            updatedSubject.setModule(moduleToAdd);
+            return subjectRepository.save(updatedSubject);
+        }
+
     }
-
-
-    public Subject addModuleToSubject(Long subjectId, Long moduleId) {
-        Module moduleToAdd = moduleRepository.findById(moduleId)
-                .orElseThrow(() -> new ScheduleValidationException("Module does not exist", "id",
-                        "Module not found", String.valueOf(moduleId)));
-        Subject updatedSubject = subjectRepository.findById(subjectId)
-                .orElseThrow(() -> new ScheduleValidationException("Subject does not exist", "id",
-                        "Subject not found", String.valueOf(subjectId)));
-        updatedSubject.setModule(moduleToAdd);
-        return subjectRepository.save(updatedSubject);
-    }
-
-}

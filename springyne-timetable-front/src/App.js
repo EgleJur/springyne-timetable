@@ -23,6 +23,7 @@ import EditTeacherPage from "./pages/EditTeacher";
 import ViewTeacherPage from "./pages/ViewTeacher";
 
 
+
 function App() {
   return (
     <div className="App">

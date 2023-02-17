@@ -42,7 +42,7 @@ class SubjectServiceTest {
         when(subject.getName()).thenReturn("R1");
         when(subject.getDescription()).thenReturn("Test");
         when(subjectRepository.findById(Id)).thenReturn(Optional.of(subject));
-        subjectService.edit(Id, subject, null, null);
+        subjectService.edit(Id, subject, null);
         verify(subjectRepository).save(subject);
     }
 

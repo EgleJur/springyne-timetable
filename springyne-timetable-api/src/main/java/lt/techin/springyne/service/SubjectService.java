@@ -105,7 +105,7 @@ public class SubjectService {
         }
     }
 
-    public Subject edit(Long id, Subject subject, Long roomId, Long moduleId) {
+    public Subject edit(Long id, Subject subject, Long moduleId) {
         Subject updatedSubject = subjectRepository.findById(id)
                 .orElseThrow(() -> new ScheduleValidationException("Subject does not exist", "id",
                         "Subject not found", String.valueOf(id)));

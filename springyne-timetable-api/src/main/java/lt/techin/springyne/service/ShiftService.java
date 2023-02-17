@@ -5,7 +5,7 @@ import lt.techin.springyne.model.Shift;
 import lt.techin.springyne.repository.ShiftRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import javax.validation.ValidationException;
+
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -34,6 +34,10 @@ public class ShiftService {
         return shiftRepository.save(shift);
     }
     public Shift editShift(Long shiftId, Shift shift) {
+
+        if (shift.getName().equals("") || shift.getName() == null) {
+            throw new ScheduleValidationException("Shift name cannot be empty", "name", "Name is empty", Long.toString(shift.getId()));
+        }
         var tempShift = shiftRepository.findById(shiftId)
                 .orElseThrow(() -> new ScheduleValidationException("Shift id error", "id", "Shift not found", Long.toString(shift.getId())));
         var testFindName = shiftRepository.findOneByNameIgnoreCase(shift.getName());

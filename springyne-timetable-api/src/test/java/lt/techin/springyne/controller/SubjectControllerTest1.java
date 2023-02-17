@@ -29,7 +29,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
-class SubjectControllerTest {
+class SubjectControllerTest1 {
     @Autowired
     MockMvc mockMvc;
 
@@ -105,7 +105,7 @@ class SubjectControllerTest {
     }
     @Test
     void deleteSubjectSetsDeletedPropertyToTrue() throws Exception {
-        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.patch("/api/v1/subjects/delete/4").contentType(MediaType.APPLICATION_JSON))
+        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.patch("/api/v1/subjects/delete/1").contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk()).andReturn();
         Subject resultSubject = objectMapper.readValue(mvcResult.getResponse().getContentAsString(), new TypeReference<Subject>() {});
         Assertions.assertTrue(resultSubject.isDeleted());

@@ -89,7 +89,7 @@ function ViewSubjectPage() {
             </tr>
             <tr>
               <th scope="col">Paskutinį kartą modifikuotas:</th>
-              <td>{subject.lastUpdated}</td>
+              <td>{subject.last_Updated}</td>
             </tr>
           </tbody>
         </table>

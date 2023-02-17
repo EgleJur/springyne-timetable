@@ -88,6 +88,23 @@ public class SubjectService {
 
     }
 
+    public void addRoomFromSubject(Long subjectId, Long roomId) {
+        Subject updatedSubject = subjectRepository.findById(subjectId)
+                .orElseThrow(() -> new ScheduleValidationException("Subject does not exist", "id",
+                        "Subject not found", String.valueOf(subjectId)));
+
+        if (roomId != null) {
+           Room newRoom = roomRepository.findById(roomId)
+                    .orElseThrow(() -> new ScheduleValidationException("Room does not exist", "id",
+                            "Room not found", String.valueOf(roomId)));
+
+            Set<Room> existingRoom = updatedSubject.getRooms();
+            if(!existingRoom.contains(newRoom)){
+                subjectRepository.insertSubjectAndRoom(subjectId, roomId);
+            }
+        }
+    }
+
     public Subject edit(Long id, Subject subject, Long roomId, Long moduleId) {
         Subject updatedSubject = subjectRepository.findById(id)
                 .orElseThrow(() -> new ScheduleValidationException("Subject does not exist", "id",
@@ -104,15 +121,15 @@ public class SubjectService {
         updatedSubject.setModule(moduleToAdd);
     }
 
-        if (roomId != null) {
-            var newRoom = roomRepository.findById(roomId)
-                    .orElseThrow(() -> new ScheduleValidationException("Room does not exist", "id",
-                            "Room not found", String.valueOf(roomId)));
-            Set<Room> existingRoom = updatedSubject.getRooms();
-            if(!existingRoom.contains(newRoom)){
-                subjectRepository.insertSubjectAndRoom(id, roomId);
-            }
-        }
+//        if (roomId != null) {
+//            var newRoom = roomRepository.findById(roomId)
+//                    .orElseThrow(() -> new ScheduleValidationException("Room does not exist", "id",
+//                            "Room not found", String.valueOf(roomId)));
+//            Set<Room> existingRoom = updatedSubject.getRooms();
+//            if(!existingRoom.contains(newRoom)){
+//                subjectRepository.insertSubjectAndRoom(id, roomId);
+//            }
+//        }
 
         return subjectRepository.save(updatedSubject);
     }

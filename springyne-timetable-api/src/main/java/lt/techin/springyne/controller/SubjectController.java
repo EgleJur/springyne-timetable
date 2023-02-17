@@ -102,6 +102,10 @@ public class SubjectController {
     public void deleteRoomFromSubject(@PathVariable Long subjectId, @PathVariable Long roomId) {
         subjectService.deleteRoomFromSubject(subjectId, roomId);
     }
+    @PatchMapping("/{subjectId}/addRoom/{roomId}")
+    public void addRoomFromSubject(@PathVariable Long subjectId, @PathVariable Long roomId) {
+        subjectService.addRoomFromSubject(subjectId, roomId);
+    }
 
 
 }

@@ -18,11 +18,13 @@ function EditSubjectPage() {
   const [selectedModule, setSelectedModule] = useState('');
   const [modules, setModules] = useState([]);
 
-  useEffect(() => {
+  const fetchSubject =()=>{
     fetch("/api/v1/subjects/" + params.id)
-      .then((response) => response.json())
-      .then((jsonResponse) => setSubject(jsonResponse));
-  }, [params.id]);
+  .then((response) => response.json())
+  .then((jsonResponse) => setSubject(jsonResponse));
+};
+  
+  useEffect(() => fetchSubject, [params.id]);
 
   useEffect(() => {
     fetch('api/v1/rooms/')
@@ -41,7 +43,12 @@ function EditSubjectPage() {
   const deleteRoom  = (e) => {
     fetch(`/api/v1/subjects/${params.id}/deleteRoom/${e}`, {
       method: "PATCH",
-    }).then(window.location.reload(true))
+    }).then(fetchSubject)
+  };
+  const addRoom  = (e) => {
+    fetch(`/api/v1/subjects/${params.id}/addRoom/${e}`, {
+      method: "PATCH",
+    }).then(fetchSubject)
   };
 
   const editsubject = (e) => {
@@ -51,7 +58,7 @@ function EditSubjectPage() {
       setNameError(true);
     } else {
       fetch(`/api/v1/subjects/edit/${params.id}?
-      roomId=${selectedRoom}&moduleId=${selectedModule}`, {
+      moduleId=${selectedModule}`, {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
@@ -158,7 +165,7 @@ function EditSubjectPage() {
 
         <select
           value={selectedRoom}
-          onChange={(e) => setSelectedRoom(e.target.value)}
+          onChange={(e) => addRoom(e.target.value)}
           className="form-control mb-3">
           <option value=''>---</option>
           {
@@ -166,7 +173,7 @@ function EditSubjectPage() {
               (room) =>
               (<option key={room.id} 
                   value={room.id} 
-                  disabled={room.deleted}>{room.name}</option>)
+                  disabled={room.deleted}>{room.id}</option>)
           )
           }
         </select>

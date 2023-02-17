@@ -13,7 +13,7 @@ function CreateSubjectPage() {
   const [failure, setFailure] = useState(false);
   const params = useParams();
   const [modules, setModules] = useState([]);
-    const [selectedModule, setSelectedModule] = useState('');
+    const [selectedModule, setSelectedModule] = useState("");
 
     const [rooms, setRooms] = useState([]);
     const [selectedRoom, setSelectedRoom] = useState('');

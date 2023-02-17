@@ -10,8 +10,8 @@ function CreateTeacherPage() {
   const [hours, setHours] = useState("");
   const [nameError, setNameError] = useState("");
   const [teams_mailError, setTeams_mailError] = useState("");
-  const [emailError, setEmailError] = useState("");
-  const [phoneError, setPhoneError] = useState("");
+  // const [emailError, setEmailError] = useState("");
+  // const [phoneError, setPhoneError] = useState("");
   const [hoursError, setHoursError] = useState("");
   const [success, setSuccess] = useState(false);
   const [failure, setFailure] = useState(false);
@@ -40,8 +40,10 @@ function CreateTeacherPage() {
     e.preventDefault();
     setNameError(false); 
     setTeams_mailError(false);
-    setEmailError(false);
-    setPhoneError(false);
+    // setEmailError(false);
+    // setPhoneError(false);
+    setEmail();
+    setPhone();
     setHoursError(false);
     if (name === "") {
         setNameError(true);
@@ -125,7 +127,7 @@ function CreateTeacherPage() {
           size="small"
         />
         <TextField
-          error={!!emailError}
+          // error={!!emailError}
           onChange={(e) => setEmail(e.target.value)}
           value={email}
           id="create-teacher-email-with-error"
@@ -135,7 +137,7 @@ function CreateTeacherPage() {
           size="small"
         />
         <TextField
-          error={!!phoneError}
+          // error={!!phoneError}
           onChange={(e) => setPhone(e.target.value)}
           value={phone}
           id="create-teacher-phone-with-error"

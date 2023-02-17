@@ -23,9 +23,9 @@ public class TeacherMapper {
         TeacherDto teacherDto = new TeacherDto();
         teacherDto.setName(teacher.getName());
         teacherDto.setTeamsEmail(teacher.getTeamsEmail());
-        teacherDto.setEmail(teacherDto.getEmail());
-        teacherDto.setPhone(teacherDto.getPhone());
-        teacherDto.setHours(teacherDto.getHours());
+        teacherDto.setEmail(teacher.getEmail());
+        teacherDto.setPhone(teacher.getPhone());
+        teacherDto.setHours(teacher.getHours());
         teacherDto.setDeleted(teacher.isDeleted());
 
         return teacherDto;

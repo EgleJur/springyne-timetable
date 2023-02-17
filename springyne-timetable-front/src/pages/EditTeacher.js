@@ -2,10 +2,13 @@ import { Collapse, Alert } from "@mui/material";
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { TextField } from "@mui/material";
+import { TextCenter } from "react-bootstrap-icons";
 
 function EditTeacherPage() {
   const [teacher, setTeacher] = useState({});
   const [nameError, setNameError] = useState("");
+  const [hoursError, setHoursError] = useState("");
+  const [teamsError, setTeamsError] = useState("");
   const [success, setSuccess] = useState(false);
   const [failure, setFailure] = useState(false);
   const [shifts, setShifts] = useState([]);
@@ -20,7 +23,8 @@ function EditTeacherPage() {
       .then((jsonResponse) => setTeacher(jsonResponse));
   };
 
-  useEffect(() => fetchTeacher, [params.id]);
+  // useEffect(() => fetchTeacher, [params.id]);
+  useEffect(() => fetchTeacher, []);
 
   useEffect(() => {
     fetch("api/v1/subjects/")
@@ -43,10 +47,21 @@ function EditTeacherPage() {
   const editTeacher = (e) => {
     e.preventDefault();
     setNameError(false);
-    if (teacher.name === "") {
+    setTeamsError(false)
+    setHoursError(false)
+    if (teacher.name === "" || teacher.teamsEmail === "" || teacher.hours === "") {
       if (teacher.name === "") {
         setNameError(true);
       }
+      if (teacher.teamsEmail === "") {
+        setTeamsError(true);
+      }
+      if (teacher.hours === "") {
+        setHoursError(true);
+      }
+
+
+
     } else {
       fetch(
         `/api/v1/teachers/update/${params.id}?
@@ -140,14 +155,17 @@ function EditTeacherPage() {
           required
         />
         <TextField
+        error={!!teamsError}
           onChange={(e) => updateProperty("teamsEmail", e)}
           value={teacher.teamsEmail}
           id="create-teacher-teams_mail"
           label="Teams vartotojo vardas"
+          helperText="Teams vardas negali būti tuščias laukas"
           className="form-control mb-3"
           size="small"
           disabled={teacher.deleted}
           InputLabelProps={{ shrink: true }}
+          required
         />
         <TextField
           onChange={(e) => updateProperty("email", e)}
@@ -170,14 +188,17 @@ function EditTeacherPage() {
           InputLabelProps={{ shrink: true }}
         />
         <TextField
+        error={!!hoursError}
           onChange={(e) => updateProperty("hours", e)}
           value={teacher.hours}
           id="create-teacher-hours"
           label="Valandų skaičius"
+          helperText="Valandų skaičius negali būti tuščias laukas"
           className="form-control mb-3"
           size="small"
           disabled={teacher.deleted}
           InputLabelProps={{ shrink: true }}
+          required
         />
         {teacher.subjects ? <div className="mb-2">Pašalinti Dalyką:</div> : ""}
 

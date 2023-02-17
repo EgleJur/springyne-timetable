@@ -57,8 +57,7 @@ function EditSubjectPage() {
     if (subject.name === "") {
       setNameError(true);
     } else {
-      fetch(`/api/v1/subjects/edit/${params.id}?
-      moduleId=${selectedModule}`, {
+      fetch(`api/v1/subjects/edit/${params.id}?moduleId=${selectedModule}`, {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",

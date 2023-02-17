@@ -69,9 +69,8 @@ public class SubjectController {
     @PatchMapping("/edit/{subjectId}")
     public ResponseEntity<Subject> editSubject(@PathVariable Long subjectId,
                                                @RequestBody SubjectDto subjectDto,
-                                               @RequestParam(required = false) Long roomId,
                                                @RequestParam(required = false) Long moduleId) {
-        var updatedSubject = subjectService.edit(subjectId, toSubject(subjectDto), roomId, moduleId);
+        var updatedSubject = subjectService.edit(subjectId, toSubject(subjectDto), moduleId);
 
         return ok(updatedSubject);
     }

@@ -59,6 +59,22 @@ class RoomControllerTest {
 //        assertTrue(resultList.containsAll(expectedList));
 //    }
 
+    @Test
+    public void testRoomDto() {
+        RoomDto room = new RoomDto("R1", "Test name1", "");
+
+        assertEquals("R1", room.getName());
+        assertEquals("Test name1", room.getBuilding());
+        assertEquals("", room.getDescription());
+
+        room.setName("R2");
+        room.setBuilding("Test name2");
+        room.setDescription("Test");
+
+        assertEquals("R2", room.getName());
+        assertEquals("Test name2", room.getBuilding());
+        assertEquals("Test", room.getDescription());
+    }
 
     @Test
     void addRoomThrowsExceptionWithNullOrEmptyValues() throws Exception {

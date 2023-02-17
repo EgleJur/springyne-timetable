@@ -11,7 +11,9 @@ function ShiftListPage() {
   const [page, setPage] = useState(1);
   const [deleted, setDeleted] = useState(false);
   const [restored, setRestored] = useState(false);
+
   const fetchShifts = () => {
+    setPage(1);
     fetch('/api/v1/shifts')
     .then(response => response.json())
     .then(jsonResponse => setShifts(jsonResponse

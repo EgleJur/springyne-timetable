@@ -128,7 +128,7 @@ void getAllTeachersContainsCorrectDtos() throws Exception {
                 content(objectMapper.writeValueAsString(testTeacherDto2))).andReturn();
 
         assertEquals(400, mvcResult1.getResponse().getStatus(),"Empty value name should return bad request status");
-        assertEquals(400, mvcResult1.getResponse().getStatus(),"Null value name should return bad request status");
+        assertEquals(400, mvcResult2.getResponse().getStatus(),"Null value name should return bad request status");
     }
     @Test
     void editTeacherAllowsSavingWithCorrectValues() throws Exception {

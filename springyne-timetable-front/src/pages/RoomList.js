@@ -211,7 +211,7 @@ function RoomListPage() {
                   className="btn btn-outline-primary ms-2"
                   disabled={room.deleted}
                 >
-                  <Link className="nav-link" to={"/subjects/edit/" + room.id}>
+                  <Link className="nav-link" to={"/rooms/edit/" + room.id}>
                     Redaguoti
                   </Link>
                 </button>

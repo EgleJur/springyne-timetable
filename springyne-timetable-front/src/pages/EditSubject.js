@@ -54,7 +54,7 @@ function EditSubjectPage() {
   const editsubject = (e) => {
     e.preventDefault();
     setNameError(false);
-    if (subject.name == "") {
+    if (subject.name === "") {
       setNameError(true);
     } else {
       fetch(`/api/v1/subjects/edit/${params.id}?
@@ -82,9 +82,32 @@ function EditSubjectPage() {
     });
   };
 
+  const handleDelete = () => {
+    fetch(`/api/v1/subjects/delete/` + params.id, {
+      method: "PATCH",
+    })
+      .then((response) => response.json())
+      .then((jsonResponse) => setSubject(jsonResponse));
+    setSuccess(true);
+    setFailure(false);
+    setNameError(false);
+  };
+  const handleRestore = () => {
+    fetch(`/api/v1/subjects/restore/` + params.id, {
+      method: "PATCH",
+    })
+      .then((response) => response.json())
+      .then((jsonResponse) => setSubject(jsonResponse));
+    setSuccess(true);
+    setFailure(false);
+    setNameError(false);
+  };
   return (
     <div className="mx-3">
       <h2 className="my-5">Redaguoti dalyką</h2>
+      {subject.deleted ? <p className="mb-2">Dalykas ištrintas</p> : ""}
+      <p className="mb-5">Paskutinį kartą redaguotas: {subject.last_Updated}</p>
+      
       <Collapse in={success}>
         <Alert
           onClose={() => {
@@ -117,6 +140,7 @@ function EditSubjectPage() {
           helperText="Pavadinimas negali būti tuščias"
           className="form-control mb-3"
           size="small"
+          disabled={subject.deleted}
           InputLabelProps={{ shrink: true }}
           required
         />
@@ -127,6 +151,7 @@ function EditSubjectPage() {
           label="Aprašymas"
           className="form-control mb-3"
           size="small"
+          disabled={subject.deleted}
           InputLabelProps={{ shrink: true }}
 
         />
@@ -136,6 +161,7 @@ function EditSubjectPage() {
       <select
             value={selectedModule}
             onChange={(e) => setSelectedModule(e.target.value)}
+            disabled={subject.deleted}
             className="form-control mb-3">
               <option value=''>{subject.module?.name}</option>
             {
@@ -157,16 +183,19 @@ function EditSubjectPage() {
           <button
             type="submit"
             className="btn btn-light"
+            disabled={subject.deleted}
             value={room.id}
             onClick={(e) => deleteRoom(e.target.value)}
             key={room.id} id={room.id}
             >{room.name}</button>
         ))}</div>
-
+<div>
+        
         <select
           value={selectedRoom}
           onChange={(e) => addRoom(e.target.value)}
-          className="form-control mb-3">
+          className="form-control mb-3"
+          disabled={subject.deleted}>
           <option value=''>---</option>
           {
             rooms.map(
@@ -177,9 +206,30 @@ function EditSubjectPage() {
           )
           }
         </select>
-        <button type="submit" className="btn btn-primary" onClick={editsubject}>
+        </div>
+        <div>
+        <button type="submit" 
+        className="btn btn-primary me-2 mt-2 mb-5" 
+        onClick={editsubject}
+        disabled={subject.deleted}>
           Redaguoti
         </button>
+        {subject.deleted ? (
+            <button
+              className="btn btn-secondary me-2 mt-2 mb-5"
+              onClick={handleRestore}
+            >
+              Atstatyti
+            </button>
+          ) : (
+            <button
+              className="btn btn-danger me-2 mt-2 mb-5"
+              onClick={handleDelete}
+            >
+              Ištrinti
+            </button>
+          )}
+          </div>
       </form>
     </div>
   );

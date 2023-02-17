@@ -35,7 +35,7 @@ public class ShiftService {
     }
     public Shift editShift(Long shiftId, Shift shift) {
 
-        if (shift.getName().equals("") || shift.getName() == null) {
+        if (shift.getName() == null || shift.getName().equals("")) {
             throw new ScheduleValidationException("Shift name cannot be empty", "name", "Name is empty", Long.toString(shift.getId()));
         }
         var tempShift = shiftRepository.findById(shiftId)

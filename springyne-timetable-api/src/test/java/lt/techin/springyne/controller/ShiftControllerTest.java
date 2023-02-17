@@ -82,22 +82,22 @@ class ShiftControllerTest {
 
 
 //status is 500 instead
-//    @Test
-//    void editShiftThrowsExceptionWithNullOrEmptyValues() throws Exception{
-//        ShiftDto testShiftDto1 = new ShiftDto("",1,4,1);
-//        ShiftDto testShiftDto2 = new ShiftDto(null,1,4,1);
-//        String message = "Null or empty values should return bad request status";
-//
-//
-//        MvcResult mvcResult1 = mockMvc.perform(MockMvcRequestBuilders.patch("/api/v1/shifts/5").contentType(MediaType.APPLICATION_JSON).
-//                content(objectMapper.writeValueAsString(testShiftDto1))).andReturn();
-//        MvcResult mvcResult2 = mockMvc.perform(MockMvcRequestBuilders.patch("/api/v1/shifts/5").contentType(MediaType.APPLICATION_JSON).
-//                content(objectMapper.writeValueAsString(testShiftDto2))).andReturn();
-//
-//        assertEquals(400, mvcResult1.getResponse().getStatus(),"Empty value name should return bad request status");
-//        assertEquals(400, mvcResult2.getResponse().getStatus(),"Null value name should return bad request status");
-//
-//    }
+    @Test
+    void editShiftThrowsExceptionWithNullOrEmptyValues() throws Exception{
+        ShiftDto testShiftDto1 = new ShiftDto("",1,4,1);
+        ShiftDto testShiftDto2 = new ShiftDto(null,1,4,1);
+        String message = "Null or empty values should return bad request status";
+
+
+        MvcResult mvcResult1 = mockMvc.perform(MockMvcRequestBuilders.patch("/api/v1/shifts/5").contentType(MediaType.APPLICATION_JSON).
+                content(objectMapper.writeValueAsString(testShiftDto1))).andReturn();
+        MvcResult mvcResult2 = mockMvc.perform(MockMvcRequestBuilders.patch("/api/v1/shifts/5").contentType(MediaType.APPLICATION_JSON).
+                content(objectMapper.writeValueAsString(testShiftDto2))).andReturn();
+
+       assertEquals(400, mvcResult2.getResponse().getStatus(),"Null value name should return bad request status");
+       assertEquals(400, mvcResult1.getResponse().getStatus(),"Empty value name should return bad request status");
+
+    }
 
     @Test
     void editShiftThrowsExceptionWithEndEarlierThanStart() throws Exception{

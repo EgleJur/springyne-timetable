@@ -6,14 +6,14 @@ import { Collapse, Alert } from "@mui/material";
 
 function ShiftListPage() {
   const [shifts, setShifts] = useState([]);
-  const [pageNumber, setPageNumber] = useState(0);
   const [pageSize, setPageSize] = useState(25);
   const [searchName, setSearchName] = useState("");
   const [page, setPage] = useState(1);
   const [deleted, setDeleted] = useState(false);
   const [restored, setRestored] = useState(false);
-  const [temp, setTemp] = useState([]);
+
   const fetchShifts = () => {
+    setPage(1);
     fetch('/api/v1/shifts')
     .then(response => response.json())
     .then(jsonResponse => setShifts(jsonResponse
@@ -26,13 +26,11 @@ function ShiftListPage() {
 
   const handlePageChange = (e, value) => {
     setPage(value);
-    setPageNumber(value - 1);
   };
 
   const handlePageSizeChange = (e) => {
     setPageSize(e.target.value);
     setPage(1);
-    setPageNumber(0);
 
   };
 
@@ -124,7 +122,7 @@ function ShiftListPage() {
             <button
               className="btn btn-outline-primary"
               type="submit"
-              onClick={(e) =>{fetchShifts(); handlePageChange(e, 1);}}
+              onClick={fetchShifts}
             >
               Ieškoti
             </button>
@@ -165,7 +163,7 @@ function ShiftListPage() {
               <td>{shift.lastUpdated}</td>
               <td>{((shift.visible === 1) ? false : true) ? "Pamaina ištrinta" : ""}</td>
               <td>
-                <button className="btn btn-outline-primary me-2 my-1">
+                <button className="btn btn-outline-primary me-2 my-1" disabled={(shift.visible === 0) ? true : false}>
                   <Link className="nav-link" to={"/shifts/edit/" + shift.id}>
                     Redaguoti
                   </Link>
@@ -189,6 +187,20 @@ function ShiftListPage() {
             </tr>
           ))}
         </tbody>
+        <tfoot className="table-light">
+          <tr>
+            <td>
+              {(shifts.length === 0)
+                ? "Įrašų nerasta"
+                : `Rasta įrašų: ${shifts.length}`}
+            </td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+          </tr>
+        </tfoot>
       </table>
     </div>
   );

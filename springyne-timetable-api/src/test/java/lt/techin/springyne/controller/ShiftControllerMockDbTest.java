@@ -1,0 +1,38 @@
+package lt.techin.springyne.controller;
+
+import lt.techin.springyne.dto.ShiftDto;
+import lt.techin.springyne.dto.mapper.ShiftMapper;
+import lt.techin.springyne.model.Shift;
+import lt.techin.springyne.repository.ShiftRepository;
+import lt.techin.springyne.service.ShiftService;
+import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+
+import java.time.LocalDateTime;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+@SpringBootTest
+@AutoConfigureMockMvc
+public class ShiftControllerMockDbTest {
+
+    @MockBean
+    ShiftRepository shiftRepository;
+
+    @Autowired
+    ShiftService shiftService;
+
+    @Test
+    void addShiftReturnsSavedShift() {
+        ShiftDto testShiftDto = new ShiftDto(LocalDateTime.now().toString(),1,4,1);
+        Shift testShift = ShiftMapper.toShift(testShiftDto);
+        Mockito.when(shiftRepository.save(testShift)).thenReturn(testShift);
+        assertEquals(testShift, shiftService.createShift(testShift), "Should be able to add new Shift with unique number");
+
+    }
+
+}

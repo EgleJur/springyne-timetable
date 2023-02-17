@@ -1,5 +1,6 @@
 package lt.techin.springyne.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
@@ -32,6 +33,7 @@ public class Room {
     private boolean deleted = Boolean.FALSE;
 
     @LastModifiedDate
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime lastModifiedDate;
 
     @PrePersist
@@ -46,9 +48,4 @@ public class Room {
         lastModifiedDate = LocalDateTime.now();
     }
 
-//    public Room(String name, String building, String description) {
-//        this.name = name;
-//        this.building = building;
-//        this.description = description;
-//    }
 }

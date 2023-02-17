@@ -9,7 +9,6 @@ function CreateRoomPage() {
   const [description, setDescription] = useState("");
   const [nameError, setNameError] = useState("");
   const [buildingError, setBuildingError] = useState("");
-  // const [descriptionError, setDescriptionError] = useState("");
   const [success, setSuccess] = useState(false);
   const [failure, setFailure] = useState(false);
 
@@ -35,6 +34,7 @@ function CreateRoomPage() {
         body: JSON.stringify({
           name,
           building,
+          description
         }),
       }).then((result) => {
         if (result.ok) {

@@ -1,5 +1,6 @@
 package lt.techin.springyne.service;
 
+import lt.techin.springyne.exception.ScheduleValidationException;
 import lt.techin.springyne.model.Shift;
 import lt.techin.springyne.repository.ShiftRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +25,9 @@ public class ShiftService {
     }
     public Shift createShift(Shift shift) {
         if(shiftRepository.existsByNameIgnoreCase(shift.getName())) {
-            throw new IllegalArgumentException();
+            throw new ScheduleValidationException("Shift name must be unique", "name", "Name already exists", shift.getName());
+        } else if (shift.getStarts() > shift.getEnds()) {
+            throw new ScheduleValidationException("Shift starts must be less than or equal to ends", "starts", "Starts ir greater than ends", Integer.toString(shift.getStarts()));
         }
         shift.setLastUpdated(LocalDateTime.now());
         shift.setVisible(1);
@@ -32,7 +35,12 @@ public class ShiftService {
     }
     public Shift editShift(Long shiftId, Shift shift) {
         var tempShift = shiftRepository.findById(shiftId)
-                .orElseThrow(() -> new ValidationException());
+                .orElseThrow(() -> new ScheduleValidationException("Shift id error", "id", "Shift not found", Long.toString(shift.getId())));
+        if(shiftRepository.findOneByNameIgnoreCase(shift.getName()).getId() != shiftId) {
+            throw new ScheduleValidationException("Shift name already taken", "name", "Name already exists", shift.getName());
+        } else if (shift.getStarts() > shift.getEnds()) {
+            throw new ScheduleValidationException("Shift starts must be less than or equal to ends", "starts", "Starts ir greater than ends", Integer.toString(shift.getStarts()));
+        }
         tempShift.setName(shift.getName());
         tempShift.setStarts(shift.getStarts());
         tempShift.setEnds(shift.getEnds());

@@ -17,8 +17,13 @@ function CreateShiftPage() {
     e.preventDefault();
     setNumberError(false);
     setNameError(false);
-    if (name === "") {
+    if (name === "" || starts > ends) {
+      if (name === ""){
         setNameError(true);
+      }
+      if(starts > ends){
+        setNumberError(true);
+      }
     } else {
     fetch('/api/v1/shifts', {
     method: 'POST',
@@ -43,7 +48,7 @@ function CreateShiftPage() {
             } else {
               setFailure(true);
               setSuccess(false);
-              setNumberError(true);
+              setNameError(true);
             }
           });
     };
@@ -82,7 +87,7 @@ function CreateShiftPage() {
           value={name}
           id="create-shift-name"
           label="Pavadinimas"
-          helperText="Pavadinimas negali būti tuščias"
+          helperText="Pavadinimas turi būti unikalus ir negali būti tuščias"
           className="form-control mb-3"
           size="small"
           required
@@ -92,6 +97,7 @@ function CreateShiftPage() {
             </label>
         <Select
               id="starts-select"
+              error={!!numberError}
               value={starts}
               size="small"
               className="me-2"
@@ -115,6 +121,7 @@ function CreateShiftPage() {
             </label>
         <Select
               id="ends-select"
+              error={!!numberError}
               value={ends}
               size="small"
               className="me-2"

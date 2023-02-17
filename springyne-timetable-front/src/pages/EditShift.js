@@ -32,8 +32,13 @@ function EditShiftPage() {
     setNumberError(false);
     setNameError(false);
 
-    if (shift.name === "") {
+    if (shift.name === "" || shift.starts > shift.ends) {
+      if (shift.name === ""){
         setNameError(true);
+      }
+      if(shift.starts > shift.ends){
+        setNumberError(true);
+      }
       } else {
         fetch('/api/v1/shifts/' + params.id, {
             method: 'PATCH',
@@ -46,6 +51,7 @@ function EditShiftPage() {
           setSuccess(true);
           setFailure(false);
         } else {
+          setNameError(true);
           setFailure(true);
           setSuccess(false);
         }
@@ -138,7 +144,7 @@ function EditShiftPage() {
           value={shift.name}
           id="create-module-number-with-error"
           label="Pavadinimas"
-          helperText="Pavadinimas negali būti tuščias"
+          helperText="Pavadinimas turi būti unikalus ir negali būti tuščias"
           className="form-control mb-3"
           size="small"
           InputLabelProps={{ shrink: true }}
@@ -149,6 +155,7 @@ function EditShiftPage() {
             </label>
         <Select
               id="starts-select"
+              error={!!numberError}
               value={shift.starts}
               size="small"
               className="me-2"
@@ -172,6 +179,7 @@ function EditShiftPage() {
             </label>
         <Select
               id="ends-select"
+              error={!!numberError}
               value={shift.ends}
               size="small"
               className="me-2"

@@ -2,11 +2,12 @@ package lt.techin.springyne.controller;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import lt.techin.springyne.dto.SubjectDto;
+import lt.techin.springyne.subject.SubjectController;
+import lt.techin.springyne.subject.SubjectDto;
 import lt.techin.springyne.model.Module;
 import lt.techin.springyne.model.Room;
-import lt.techin.springyne.model.Subject;
-import lt.techin.springyne.service.SubjectService;
+import lt.techin.springyne.subject.Subject;
+import lt.techin.springyne.subject.SubjectService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -19,7 +20,9 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -51,27 +54,27 @@ class SubjectControllerTest {
     Subject subject;
 
     private static final long Id = 1;
-//    @Test
-//    void getAllSubjectsContainsCorrectDtos() throws Exception {
-//
-//
-//        SubjectDto testSubjectDto1 = new SubjectDto("R1", "Test name1");
-//        SubjectDto testSubjectDto2 = new SubjectDto("R2", "Test name2");
-//        SubjectDto testSubjectDto3 = new SubjectDto("R3", "Test name3");
-//
-//        List<SubjectDto> expectedList = new ArrayList<>();
-//        expectedList.add(testSubjectDto1);
-//        expectedList.add(testSubjectDto2);
-//        expectedList.add(testSubjectDto3);
-//
-//        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/subjects")
-//        ).andExpect(status().isOk()).andReturn();
-//
-//        List<SubjectDto> resultList = objectMapper.readValue(mvcResult.getResponse().getContentAsString(), new TypeReference<List<SubjectDto>>() {
-//        });
-//
-//        Assertions.assertTrue(resultList.containsAll(expectedList));
-//    }
+    @Test
+    void getAllSubjectsContainsCorrectDtos() throws Exception {
+
+
+        SubjectDto testSubjectDto1 = new SubjectDto("S1", "Test name1");
+        SubjectDto testSubjectDto2 = new SubjectDto("S2", "Test name2");
+        SubjectDto testSubjectDto3 = new SubjectDto("S3", "Test name3");
+
+        List<SubjectDto> expectedList = new ArrayList<>();
+        expectedList.add(testSubjectDto1);
+        expectedList.add(testSubjectDto2);
+        expectedList.add(testSubjectDto3);
+
+        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/subjects")
+        ).andExpect(status().isOk()).andReturn();
+
+        List<SubjectDto> resultList = objectMapper.readValue(mvcResult.getResponse().getContentAsString(), new TypeReference<List<SubjectDto>>() {
+        });
+
+        Assertions.assertTrue(resultList.containsAll(expectedList));
+    }
 
     @Test
     void addSubjectThrowsExceptionWithNullOrEmptyValues() throws Exception {
@@ -111,7 +114,7 @@ class SubjectControllerTest {
 
     @Test
     void restoreSubjectSetsDeletedPropertyToFalse() throws Exception {
-        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.patch("/api/v1/subjects/restore/4").contentType(MediaType.APPLICATION_JSON))
+        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.patch("/api/v1/subjects/restore/1").contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk()).andReturn();
         Subject resultSubject = objectMapper.readValue(mvcResult.getResponse().getContentAsString(), new TypeReference<Subject>() {});
         Assertions.assertFalse(resultSubject.isDeleted());
@@ -138,7 +141,7 @@ class SubjectControllerTest {
     @Test
     void editSubjectAllowsSavingWithUniqueName() throws Exception {
         SubjectDto testSubjectDto4 = new SubjectDto("subjectDto","test");
-        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.patch("/api/v1/subjects/edit/4?moduleId=4").contentType(MediaType.APPLICATION_JSON).
+        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.patch("/api/v1/subjects/edit/1?moduleId=1&roomId=1").contentType(MediaType.APPLICATION_JSON).
                 content(objectMapper.writeValueAsString(testSubjectDto4))).andReturn();
 
         assertEquals(200, mvcResult.getResponse().getStatus(),"Unique value non empty name should return ok status");

@@ -57,7 +57,7 @@ function EditSubjectPage() {
     if (subject.name === "") {
       setNameError(true);
     } else {
-      fetch(`api/v1/subjects/edit/${params.id}?moduleId=${selectedModule}`, {
+      fetch(`api/v1/subjects/edit/${params.id}?moduleId=${selectedModule}&roomId=${selectedRoom}`, {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
@@ -71,7 +71,7 @@ function EditSubjectPage() {
           setFailure(true);
           setSuccess(false);
         }
-      });
+      }).then(fetchSubject);
     }
   };
   const updateProperty = (property, event) => {
@@ -192,7 +192,7 @@ function EditSubjectPage() {
         
         <select
           value={selectedRoom}
-          onChange={(e) => addRoom(e.target.value)}
+          onChange={(e) => setSelectedRoom(e.target.value)}
           className="form-control mb-3"
           disabled={subject.deleted}>
           <option value=''>---</option>

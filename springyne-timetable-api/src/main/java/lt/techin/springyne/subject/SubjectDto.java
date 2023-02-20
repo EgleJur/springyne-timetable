@@ -1,4 +1,4 @@
-package lt.techin.springyne.dto;
+package lt.techin.springyne.subject;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

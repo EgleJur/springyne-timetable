@@ -1,10 +1,10 @@
 package lt.techin.springyne.controller;
 
-import lt.techin.springyne.dto.SubjectDto;
-import lt.techin.springyne.dto.mapper.SubjectMapper;
-import lt.techin.springyne.model.Subject;
-import lt.techin.springyne.repository.SubjectRepository;
-import lt.techin.springyne.service.SubjectService;
+import lt.techin.springyne.subject.SubjectDto;
+import lt.techin.springyne.subject.SubjectMapper;
+import lt.techin.springyne.subject.Subject;
+import lt.techin.springyne.subject.SubjectRepository;
+import lt.techin.springyne.subject.SubjectService;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;

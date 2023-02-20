@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lt.techin.springyne.dto.ModuleDto;
 import lt.techin.springyne.dto.mapper.ModuleMapper;
 import lt.techin.springyne.model.Module;
-import lt.techin.springyne.model.Subject;
+import lt.techin.springyne.subject.Subject;
 import lt.techin.springyne.service.ModuleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;

@@ -7,6 +7,7 @@ import {
   Select,
   MenuItem,
   InputLabel,
+  OutlinedInput,
 } from "@mui/material";
 
 function EditTeacherPage() {
@@ -252,17 +253,20 @@ function EditTeacherPage() {
         </FormControl>
 
         <FormControl fullWidth size="small" className="mb-3">
-          <InputLabel id="select-shift-label">Pamaina</InputLabel>
+          <InputLabel id="select-shift-label" shrink>
+            Pamaina
+          </InputLabel>
           <Select
             disabled={teacher.deleted}
             labelId="select-shift-label"
-            InputLabelProps={{ shrink: true }}
             id="select-shift"
-            label="Pamaina"
+            displayEmpty
+            input={<OutlinedInput notched label="Pamaina" />}
             fullWidth
             value={selectedShift}
             onChange={(e) => setSelectedShift(e.target.value)}
           >
+            <MenuItem value={""}>{teacher.shift?.name}</MenuItem>
             {shifts?.map((subject) => (
               <MenuItem value={subject.id} key={subject.id}>
                 {subject.name}

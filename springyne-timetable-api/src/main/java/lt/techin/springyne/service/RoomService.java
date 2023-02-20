@@ -1,6 +1,5 @@
 package lt.techin.springyne.service;
 
-import lt.techin.springyne.exception.RoomValidationEception;
 import lt.techin.springyne.exception.ScheduleValidationException;
 import lt.techin.springyne.model.Room;
 import lt.techin.springyne.repository.RoomRepository;
@@ -82,7 +81,7 @@ public class RoomService {
 
     public Room editRoom(Long id, Room room) {
         Room existingRoom = roomRepository.findById(id)
-                .orElseThrow(() -> new RoomValidationEception("Room does not exist",
+                .orElseThrow(() -> new ScheduleValidationException("Room does not exist",
                         "id", "Room not found", id.toString()));
 
         existingRoom.setName(room.getName());
@@ -94,7 +93,7 @@ public class RoomService {
 
     public Room delete(Long id) {
         var existingRoom = roomRepository.findById(id)
-                .orElseThrow(() -> new RoomValidationEception("Room does not exist",
+                .orElseThrow(() -> new ScheduleValidationException("Room does not exist",
                         "id", "Room not found", id.toString()));
 
         existingRoom.setDeleted(true);
@@ -103,7 +102,7 @@ public class RoomService {
 
     public Room restore(Long id) {
         var existingRoom = roomRepository.findById(id)
-                .orElseThrow(() -> new RoomValidationEception("Room does not exist",
+                .orElseThrow(() -> new ScheduleValidationException("Room does not exist",
                         "id", "Room not found", id.toString()));
 
         existingRoom.setDeleted(false);

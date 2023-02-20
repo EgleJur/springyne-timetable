@@ -181,7 +181,7 @@ function TeacherListPage() {
             </Select>
 
             <TextField
-              onChange={(e) => setSearchName(e.target.value)}
+              onChange={(e) => setSearchName(e.target.value.replace(/[^\w\s]/gi, ""))}
               value={searchName}
               id="search-name-input"
               label="Ieškoti vardo"

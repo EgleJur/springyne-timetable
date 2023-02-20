@@ -15,8 +15,9 @@ import java.util.List;
 public interface SubjectRepository extends JpaRepository<Subject, Long> {
 
 
-    Page<Subject> findByModuleName(String name, Pageable pageable);
+    Page<Subject> findAllByModuleNameIgnoreCaseContaining(String name, Pageable pageable);
 
+    Page<Subject> findAllByNameIgnoreCaseContainingOrModuleNameIgnoreCaseContaining(String name,String moduleName, Pageable pageable);
     boolean existsByNameIgnoreCase(String name);
 
     @Transactional

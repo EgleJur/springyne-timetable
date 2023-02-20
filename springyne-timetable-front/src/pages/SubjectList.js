@@ -20,7 +20,7 @@ function SubjectListPage() {
 
   const fetchSubjects = () => {
     fetch(
-      `/api/v1/subjects/search?name=${searchName}&page=${pageNumber}&pageSize=${pageSize}`
+      `api/v1/subjects/search?name=${searchName}&moduleName=${searchModName}&page=${pageNumber}&pageSize=${pageSize}`
     )
       .then((response) => response.json())
       .then((jsonResponse) => setSubjects(jsonResponse));
@@ -40,7 +40,8 @@ function SubjectListPage() {
     setPage(value);
     setPageNumber(value - 1);
     fetch(
-      `/api/v1/subjects/search?name=${searchName}&page=${
+      `/api/v1/subjects/search?name=${searchName}&moduleName=${searchModName}
+      &page=${
         value - 1
       }&pageSize=${pageSize}`
     )
@@ -53,7 +54,8 @@ function SubjectListPage() {
     setPage(1);
     setPageNumber(0);
     fetch(
-      `/api/v1/subjects/search?name=${searchName}&page=${0}&pageSize=${
+      `/api/v1/subjects/search?name=${searchName}&moduleName=${searchModName}
+      &page=${0}&pageSize=${
         e.target.value
       }`
     )
@@ -123,6 +125,14 @@ function SubjectListPage() {
               className="form-control me-2"
               size="small"
             />
+            <TextField
+              onChange={(e) => setSearchModName(e.target.value)}
+              value={searchModName}
+              id="search-module-input"
+              label="Ieškoti pagal modulį"
+              className="form-control me-2"
+              size="small"
+            />
             <button
               className="btn btn-outline-primary"
               type="submit"
@@ -133,7 +143,7 @@ function SubjectListPage() {
           </form>
         </div>
       </div>
-      <div className="d-flex justify-content-end">
+      {/* <div className="d-flex justify-content-end">
         <div className="mb-4">
           <form className="d-flex" role="search">
             <TextField
@@ -153,7 +163,7 @@ function SubjectListPage() {
             </button>
           </form>
         </div>
-      </div>
+      </div> */}
       
 
       <table className="table table-hover shadow p-3 mb-5 bg-body rounded align-middle">

@@ -31,9 +31,10 @@ public class SubjectController {
 
     @GetMapping("/search")
     public Page<Subject> searchByNamePaged(@RequestParam(required = false) String name,
+                                           @RequestParam(required = false) String moduleName,
                                            @RequestParam int page,
                                            @RequestParam int pageSize) {
-        return subjectService.searchByNamePaged(name, page, pageSize);
+        return subjectService.searchByNamePaged(name, moduleName, page, pageSize);
     }
 
     @GetMapping("/byModule/search")

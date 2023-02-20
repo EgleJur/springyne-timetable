@@ -47,9 +47,13 @@ function EditTeacherPage() {
   const editTeacher = (e) => {
     e.preventDefault();
     setNameError(false);
-    setTeamsError(false)
-    setHoursError(false)
-    if (teacher.name === "" || teacher.teamsEmail === "" || teacher.hours === "") {
+    setTeamsError(false);
+    setHoursError(false);
+    if (
+      teacher.name === "" ||
+      teacher.teamsEmail === "" ||
+      teacher.hours === ""
+    ) {
       if (teacher.name === "") {
         setNameError(true);
       }
@@ -59,13 +63,9 @@ function EditTeacherPage() {
       if (teacher.hours === "") {
         setHoursError(true);
       }
-
-
-
     } else {
       fetch(
-        `/api/v1/teachers/update/${params.id}?
-      shiftId=${selectedShift}&subjectId=${selectedSubject}`,
+        `/api/v1/teachers/update/${params.id}?shiftId=${selectedShift}&subjectId=${selectedSubject}`,
         {
           method: "PATCH",
           headers: {
@@ -155,7 +155,7 @@ function EditTeacherPage() {
           required
         />
         <TextField
-        error={!!teamsError}
+          error={!!teamsError}
           onChange={(e) => updateProperty("teamsEmail", e)}
           value={teacher.teamsEmail}
           id="create-teacher-teams_mail"
@@ -188,7 +188,7 @@ function EditTeacherPage() {
           InputLabelProps={{ shrink: true }}
         />
         <TextField
-        error={!!hoursError}
+          error={!!hoursError}
           onChange={(e) => updateProperty("hours", e)}
           value={teacher.hours}
           id="create-teacher-hours"

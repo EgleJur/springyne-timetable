@@ -35,7 +35,7 @@ public class SubjectService {
 
     private static final ExampleMatcher SEARCH_CONTAINS_NAME = ExampleMatcher.matchingAny()
             .withMatcher("name", ExampleMatcher.GenericPropertyMatchers.contains().ignoreCase())
-            .withIgnorePaths("id", "deleted", "last_updated");
+            .withIgnorePaths("id", "module","deleted", "last_updated");
 
     private Subject getSubjectById(Long id) {
         return subjectRepository.findById(id)
@@ -73,20 +73,30 @@ public class SubjectService {
         return subjectRepository.findAll();
     }
 
-    public Page<Subject> searchByNamePaged(String name, int page, int pageSize) {
+    public Page<Subject> searchByNamePaged(String name, String moduleName, int page, int pageSize) {
 
         Subject subject = new Subject();
         if (name != null) {
             subject.setName(name);
         }
-        Example<Subject> subjectExample = Example.of(subject, SEARCH_CONTAINS_NAME);
+
         Pageable pageable = PageRequest.of(page, pageSize, Sort.by("deleted").and(Sort.by("name")));
-        return subjectRepository.findAll(subjectExample, pageable);
+        if(moduleName == null || moduleName.isEmpty() || moduleName.isBlank()) {
+            Example<Subject> subjectExample = Example.of(subject, SEARCH_CONTAINS_NAME);
+            return subjectRepository.findAll(subjectExample, pageable);
+        }
+        if(name == null || name.isEmpty()|| name.isBlank() || name.equals("")) {
+
+            return subjectRepository.findAllByModuleNameIgnoreCaseContaining(moduleName, pageable);
+        }
+        return  subjectRepository.findAllByNameIgnoreCaseContainingOrModuleNameIgnoreCaseContaining(name,moduleName, pageable);
+
     }
 
     public Page<Subject> getByModule(String name, int page, int pageSize) {
+
         Pageable pageable = PageRequest.of(page, pageSize);
-        return subjectRepository.findByModuleName(name, pageable);
+        return subjectRepository.findAllByModuleNameIgnoreCaseContaining(name, pageable);
     }
 
     public Optional<Subject> getById(Long id) {

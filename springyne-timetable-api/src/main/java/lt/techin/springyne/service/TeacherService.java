@@ -2,10 +2,10 @@ package lt.techin.springyne.service;
 
 import lt.techin.springyne.exception.ScheduleValidationException;
 import lt.techin.springyne.model.Shift;
-import lt.techin.springyne.model.Subject;
+import lt.techin.springyne.subject.Subject;
 import lt.techin.springyne.model.Teacher;
 import lt.techin.springyne.repository.ShiftRepository;
-import lt.techin.springyne.repository.SubjectRepository;
+import lt.techin.springyne.subject.SubjectRepository;
 import lt.techin.springyne.repository.TeacherRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;

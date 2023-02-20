@@ -1,7 +1,7 @@
-package lt.techin.springyne.dto.mapper;
+package lt.techin.springyne.subject;
 
-import lt.techin.springyne.dto.SubjectDto;
-import lt.techin.springyne.model.Subject;
+import lt.techin.springyne.subject.SubjectDto;
+import lt.techin.springyne.subject.Subject;
 
 public class SubjectMapper {
 

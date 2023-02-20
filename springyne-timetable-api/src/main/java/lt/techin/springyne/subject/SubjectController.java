@@ -1,8 +1,5 @@
-package lt.techin.springyne.controller;
+package lt.techin.springyne.subject;
 
-import lt.techin.springyne.dto.SubjectDto;
-import lt.techin.springyne.model.Subject;
-import lt.techin.springyne.service.SubjectService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
@@ -11,8 +8,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Optional;
 
-import static lt.techin.springyne.dto.mapper.SubjectMapper.toSubject;
-import static lt.techin.springyne.dto.mapper.SubjectMapper.toSubjectDto;
+import static lt.techin.springyne.subject.SubjectMapper.toSubject;
+import static lt.techin.springyne.subject.SubjectMapper.toSubjectDto;
 import static org.springframework.http.ResponseEntity.ok;
 
 @RestController
@@ -69,8 +66,9 @@ public class SubjectController {
     @PatchMapping("/edit/{subjectId}")
     public ResponseEntity<Subject> editSubject(@PathVariable Long subjectId,
                                                @RequestBody SubjectDto subjectDto,
-                                               @RequestParam(required = false) Long moduleId) {
-        var updatedSubject = subjectService.edit(subjectId, toSubject(subjectDto), moduleId);
+                                               @RequestParam(required = false) Long moduleId,
+                                               @RequestParam(required = false) Long roomId) {
+        var updatedSubject = subjectService.edit(subjectId, toSubject(subjectDto), moduleId, roomId);
 
         return ok(updatedSubject);
     }

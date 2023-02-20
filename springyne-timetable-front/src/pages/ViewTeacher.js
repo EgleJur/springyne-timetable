@@ -68,10 +68,9 @@ function ViewTeacherPage() {
               <th scope="col">Vardas ir Pavardė</th>
               <td>{teacher.name}</td>
             </tr>
-
             <tr>
               <th scope="col">Teams vardas(email)</th>
-              <td>{teacher.teams_mail}</td>
+              <td>{teacher.teamsEmail}</td>
             </tr>
             <tr>
               <th scope="col">Kontaktinis email</th>

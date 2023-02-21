@@ -21,11 +21,11 @@ public class Shift {
     @NotNull
     private String name;
     @Min(value=1)
-    @Max(value=12)
+    @Max(value=14)
     @NotNull
     private int starts;
     @Min(value=1)
-    @Max(value=12)
+    @Max(value=14)
     @NotNull
     private int ends;
     @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")

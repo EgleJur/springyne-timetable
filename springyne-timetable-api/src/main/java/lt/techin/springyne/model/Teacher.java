@@ -3,7 +3,6 @@ package lt.techin.springyne.model;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lt.techin.springyne.subject.Subject;
 import org.springframework.data.annotation.LastModifiedDate;
 
 import javax.persistence.*;

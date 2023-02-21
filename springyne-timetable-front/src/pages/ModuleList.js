@@ -116,7 +116,7 @@ function ModuleListPage() {
               <MenuItem value={100}>100</MenuItem>
             </Select>
             <TextField
-              onChange={(e) => setSearchName(e.target.value.replace(/[^\w\s]/gi, ""))}
+              onChange={(e) => setSearchName(e.target.value)}
               value={searchName}
               id="search-name-input"
               label="Ieškoti pavadinimo"

@@ -1,5 +1,8 @@
-package lt.techin.springyne.subject;
+package lt.techin.springyne.controller;
 
+import lt.techin.springyne.model.Subject;
+import lt.techin.springyne.service.SubjectService;
+import lt.techin.springyne.dto.SubjectDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
@@ -8,8 +11,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Optional;
 
-import static lt.techin.springyne.subject.SubjectMapper.toSubject;
-import static lt.techin.springyne.subject.SubjectMapper.toSubjectDto;
+import static lt.techin.springyne.dto.mapper.SubjectMapper.toSubject;
+import static lt.techin.springyne.dto.mapper.SubjectMapper.toSubjectDto;
 import static org.springframework.http.ResponseEntity.ok;
 
 @RestController

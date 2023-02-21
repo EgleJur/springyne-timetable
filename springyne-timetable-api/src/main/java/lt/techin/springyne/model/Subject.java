@@ -1,11 +1,9 @@
-package lt.techin.springyne.subject;
+package lt.techin.springyne.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lt.techin.springyne.model.Module;
-import lt.techin.springyne.model.Room;
 import org.springframework.data.annotation.LastModifiedDate;
 
 import javax.persistence.*;

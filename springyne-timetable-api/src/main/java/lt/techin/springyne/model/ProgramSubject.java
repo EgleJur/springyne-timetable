@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lt.techin.springyne.subject.Subject;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;

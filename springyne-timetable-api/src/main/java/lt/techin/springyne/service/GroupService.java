@@ -77,20 +77,19 @@ public class GroupService {
     public Page<Group> searchByNamePaged(String name, String programName, String year, int page, int pageSize) {
 
         Pageable pageable = PageRequest.of(page, pageSize, Sort.by("deleted").and(Sort.by("name")));
-        if((programName == null || programName.isEmpty() || programName.isBlank() || programName.equals(""))
+        if ((programName == null || programName.isEmpty() || programName.isBlank() || programName.equals(""))
                 && (year == null || year.isEmpty() || year.isBlank() || year.equals(""))
-                && (name == null || name.isEmpty() || name.isBlank() || name.equals("")))
-        {
+                && (name == null || name.isEmpty() || name.isBlank() || name.equals(""))) {
             return groupRepository.findAll(pageable);
         }
-        if (programName == null || programName.isEmpty() || programName.isBlank()) {
-            if (year == null || year.isEmpty() || year.isBlank()) {
+        if (programName == null || programName.isEmpty() || programName.isBlank() || programName.equals("")) {
+            if (year == null || year.isEmpty() || year.isBlank() || year.equals("")) {
                 return groupRepository.findAllByNameIgnoreCaseContaining(name, pageable);
             }
             return groupRepository.findAllByNameIgnoreCaseContainingOrYearIgnoreCaseContaining(name, year, pageable);
 
         }
-        if (year == null || year.isEmpty() || year.isBlank()) {
+        if (year == null || year.isEmpty() || year.isBlank() || year.equals("")) {
             if (name == null || name.isEmpty() || name.isBlank() || name.equals("")) {
 
                 return groupRepository.findAllByProgramNameIgnoreCaseContaining(programName, pageable);

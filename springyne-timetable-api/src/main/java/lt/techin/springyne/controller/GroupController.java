@@ -4,12 +4,10 @@ import lt.techin.springyne.model.Group;
 import lt.techin.springyne.service.GroupService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/v1/groups")
@@ -44,10 +42,10 @@ public class GroupController {
 //        return groupService.getByModule(name, page, pageSize);
 //    }
 //
-//    @GetMapping("/{groupId}")
-//    public Optional<Group> getGroup(@PathVariable Long groupId) {
-//        return groupService.getById(groupId);
-//    }
+    @GetMapping("/{groupId}")
+    public Optional<Group> viewGroup(@PathVariable Long groupId) {
+        return groupService.getById(groupId);
+    }
 
 //    @PostMapping
 //    public ResponseEntity<GroupDto> createGroupDto(@RequestBody GroupDto groupDto) {

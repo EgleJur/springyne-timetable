@@ -37,7 +37,7 @@ public class ProgramController {
     }
 
     @GetMapping("/{programId}")
-    public Optional<Program> getModuleById(@PathVariable Long programId) {
+    public Optional<Program> getProgramById(@PathVariable Long programId) {
         return programService.getProgramById(programId);
     }
 

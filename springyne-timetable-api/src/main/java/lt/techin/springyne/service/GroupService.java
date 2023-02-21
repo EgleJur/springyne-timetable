@@ -2,8 +2,10 @@ package lt.techin.springyne.service;
 
 import lt.techin.springyne.exception.ScheduleValidationException;
 import lt.techin.springyne.model.Group;
+import lt.techin.springyne.model.Program;
 import lt.techin.springyne.model.Shift;
 import lt.techin.springyne.repository.GroupRepository;
+import lt.techin.springyne.repository.ProgramRepository;
 import lt.techin.springyne.repository.ShiftRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.*;
@@ -21,18 +23,16 @@ public class GroupService {
 
     @Autowired
     ShiftRepository shiftRepository;
+    @Autowired
+    ProgramRepository programRepository;
 
 
-    public GroupService(GroupRepository groupRepository,  ShiftRepository shiftRepository) {
+    public GroupService(GroupRepository groupRepository, ShiftRepository shiftRepository, ProgramRepository programRepository) {
         this.groupRepository = groupRepository;
-
+        this.programRepository = programRepository;
         this.shiftRepository = shiftRepository;
 
     }
-
-    private static final ExampleMatcher SEARCH_CONTAINS_NAME = ExampleMatcher.matchingAny()
-            .withMatcher("name", ExampleMatcher.GenericPropertyMatchers.contains().ignoreCase())
-            .withIgnorePaths("id","deleted", "modifiedDate");
 
     private Group getGroupById(Long id) {
         return groupRepository.findById(id)
@@ -40,10 +40,16 @@ public class GroupService {
                         "Group not found", String.valueOf(id)));
     }
 
-      private Shift getShiftById(Long id) {
+    private Shift getShiftById(Long id) {
         return shiftRepository.findById(id)
                 .orElseThrow(() -> new ScheduleValidationException("Shift does not exist", "id",
                         "Shift not found", String.valueOf(id)));
+    }
+
+    private Program getProgramById(Long id) {
+        return programRepository.findById(id)
+                .orElseThrow(() -> new ScheduleValidationException("Program does not exist", "id",
+                        "Program not found", String.valueOf(id)));
     }
 
     private void checkGroupNameEmpty(String name) {
@@ -54,36 +60,46 @@ public class GroupService {
     }
 
     private void checkGroupNameUnique(String name) {
-       if (existsByName(name)) {
+        if (existsByName(name)) {
             throw new ScheduleValidationException("Group name must be unique",
                     "name", "Name already exists", name);
         }
     }
+
     public boolean existsByName(String name) {
         return groupRepository.existsByNameIgnoreCase(name);
     }
+
     public List<Group> getAllGroups() {
         return groupRepository.findAll();
     }
 
-    public Page<Group> searchByNamePaged(String name, int page, int pageSize) {
-
-        Group group = new Group();
-        if (name != null) {
-            group.setName(name);
-        }
+    public Page<Group> searchByNamePaged(String name, String programName, String year, int page, int pageSize) {
 
         Pageable pageable = PageRequest.of(page, pageSize, Sort.by("deleted").and(Sort.by("name")));
-//        if(moduleName == null || moduleName.isEmpty() || moduleName.isBlank()) {
-            Example<Group> groupExample = Example.of(group, SEARCH_CONTAINS_NAME);
-            return groupRepository.findAll(groupExample, pageable);
-//        }
-//        if(name == null || name.isEmpty()|| name.isBlank() || name.equals("")) {
-//
-//            return groupRepository.findAllByModuleNameIgnoreCaseContaining(moduleName, pageable);
-//        }
-//        return  groupRepository.findAllByNameIgnoreCaseContainingOrModuleNameIgnoreCaseContaining(name, pageable);
+        if ((programName == null || programName.isEmpty() || programName.isBlank() || programName.equals(""))
+                && (year == null || year.isEmpty() || year.isBlank() || year.equals(""))
+                && (name == null || name.isEmpty() || name.isBlank() || name.equals(""))) {
+            return groupRepository.findAll(pageable);
+        }
+        if (programName == null || programName.isEmpty() || programName.isBlank() || programName.equals("")) {
+            if (year == null || year.isEmpty() || year.isBlank() || year.equals("")) {
+                return groupRepository.findAllByNameIgnoreCaseContaining(name, pageable);
+            }
+            return groupRepository.findAllByNameIgnoreCaseContainingOrYearIgnoreCaseContaining(name, year, pageable);
 
+        }
+        if (year == null || year.isEmpty() || year.isBlank() || year.equals("")) {
+            if (name == null || name.isEmpty() || name.isBlank() || name.equals("")) {
+
+                return groupRepository.findAllByProgramNameIgnoreCaseContaining(programName, pageable);
+            }
+            return groupRepository.findAllByNameIgnoreCaseContainingOrProgramNameIgnoreCaseContaining(name, programName, pageable);
+        }
+        if (name == null || name.isEmpty() || name.isBlank() || name.equals("")) {
+            return groupRepository.findAllByProgramNameIgnoreCaseContainingOrYearIgnoreCaseContaining(programName, year, pageable);
+        }
+        return groupRepository.findAllByNameIgnoreCaseContainingOrProgramNameIgnoreCaseContainingOrYearIgnoreCaseContaining(name, programName, year, pageable);
     }
 
 //    public Page<Group> getByModule(String name, int page, int pageSize) {
@@ -103,7 +119,7 @@ public class GroupService {
 //        if (moduleId != null) {
 //            group.setModule(getModuleById(moduleId));
 //        }
- //       //Subject createdSubject = subjectRepository.save(subject);
+    //       //Subject createdSubject = subjectRepository.save(subject);
 //        if (roomId != null) {
 //            Room roomToAdd = getRoomById(roomId);
 //            group.getRooms().add(roomToAdd);
@@ -137,7 +153,7 @@ public class GroupService {
 //            checkGroupNameUnique(group.getName());
 //        }
 //        updatedGroup.setName(group.getName());
-     //   updatedGroup.setDescription(group.getDescription());
+    //   updatedGroup.setDescription(group.getDescription());
 
 //        if (moduleId != null) {
 //            Module moduleToAdd = getModuleById(moduleId);

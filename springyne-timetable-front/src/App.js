@@ -21,6 +21,7 @@ import EditShiftPage from './pages/EditShift';
 import CreateTeacherPage from './pages/CreateTeacher';
 import EditTeacherPage from "./pages/EditTeacher";
 import ViewTeacherPage from "./pages/ViewTeacher";
+import GroupListPage from "./pages/GroupList";
 
 
 
@@ -39,6 +40,7 @@ function App() {
             <Route path="/shifts/edit/:id" element={<EditShiftPage />} />
             <Route path="/subjects" element={<SubjectListPage />} />
             <Route path="/teachers" element={<TeacherListPage />} />
+            <Route path="/groups" element={<GroupListPage />} />
             <Route path="/teachers/create" element={<CreateTeacherPage />} />
             <Route path="/teachers/edit/:id" element={<EditTeacherPage />} />
             <Route path="/teachers/view/:id" element ={<ViewTeacherPage/>} />

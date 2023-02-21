@@ -4,10 +4,11 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lt.techin.springyne.controller.GroupController;
 import lt.techin.springyne.dto.GroupDto;
-import lt.techin.springyne.dto.RoomDto;
 import lt.techin.springyne.model.Group;
 import lt.techin.springyne.model.Program;
-import lt.techin.springyne.model.Room;
+import lt.techin.springyne.dto.GroupDto;
+import lt.techin.springyne.model.Group;
+import lt.techin.springyne.model.Program;
 import lt.techin.springyne.model.Shift;
 import lt.techin.springyne.service.GroupService;
 import org.junit.jupiter.api.Assertions;
@@ -27,6 +28,11 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
+
+import java.util.ArrayList;
+import java.util.List;
+
+
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
@@ -70,6 +76,7 @@ class GroupControllerTest {
         ).andExpect(status().isOk()).andReturn();
 
         List<GroupDto> resultList = objectMapper.readValue(mvcResult.getResponse().getContentAsString(StandardCharsets.UTF_8), new TypeReference<List<GroupDto>>() {
+
         });
 
         Assertions.assertTrue(resultList.containsAll(expectedList));
@@ -105,6 +112,7 @@ class GroupControllerTest {
         when(GroupService.getAllGroups()).thenReturn(groups);
         assertEquals(GroupController.getAllGroups().size(), groups.size());
     }
+
 
 //    @Test
 //    void addGroupThrowsExceptionWithNullOrEmptyValues() throws Exception {
@@ -171,6 +179,7 @@ class GroupControllerTest {
 //        assertEquals(400, mvcResult.getResponse().getStatus(),"Empty value name should return bad request status");
 //    }
 //
+
 //    @Test
 //    void editGroupAllowsSavingWithUniqueName() throws Exception {
 //

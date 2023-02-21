@@ -27,7 +27,7 @@ public class Group {
     private String name;
 
     @Column(name="group_year")
-    private String year;
+    private String groupYear;
 
     private int students;
 

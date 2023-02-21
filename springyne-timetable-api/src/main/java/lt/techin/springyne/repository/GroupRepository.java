@@ -14,11 +14,13 @@ Page<Group> findAllByNameIgnoreCaseContaining(String name, Pageable pageable);
 
     Page<Group> findAllByNameIgnoreCaseContainingOrProgramNameIgnoreCaseContaining(String name,String programName, Pageable pageable);
 
-    Page<Group> findAllByNameIgnoreCaseContainingOrProgramNameIgnoreCaseContainingOrYearIgnoreCaseContaining(String name,String programName,String year, Pageable pageable);
+    Page<Group> findAllByNameIgnoreCaseContainingOrProgramNameIgnoreCaseContainingOrGroupYearIgnoreCaseContaining(String name,String programName,String groupYear, Pageable pageable);
 
-    Page<Group> findAllByNameIgnoreCaseContainingOrYearIgnoreCaseContaining(String name, String year, Pageable pageable);
+    Page<Group> findAllByNameIgnoreCaseContainingOrGroupYearIgnoreCaseContaining(String name, String groupYear, Pageable pageable);
 
-    Page<Group> findAllByProgramNameIgnoreCaseContainingOrYearIgnoreCaseContaining(String programName, String year, Pageable pageable);
+    Page<Group> findAllByProgramNameIgnoreCaseContainingOrGroupYearIgnoreCaseContaining(String programName, String groupYear, Pageable pageable);
+
+    Page<Group> findAllByGroupYearIgnoreCaseContaining (String groupYear, Pageable pageable);
 
 
     boolean existsByNameIgnoreCase(String name);

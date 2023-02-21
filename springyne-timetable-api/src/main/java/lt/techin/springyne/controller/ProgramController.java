@@ -46,4 +46,15 @@ public class ProgramController {
                                                  @RequestParam int page, @RequestParam int pageSize) {
         return programService.searchByName(name,page,pageSize);
     }
+
+    @PatchMapping("/delete/{programId}")
+    public ResponseEntity<Program> deleteProgram(@PathVariable Long programId) {
+        return ResponseEntity.ok(programService.deleteProgram(programId));
+    }
+
+    @PatchMapping("/restore/{programId}")
+    public ResponseEntity<Program> restoreProgram(@PathVariable Long programId) {
+        return ResponseEntity.ok(programService.restoreProgram(programId));
+    }
+
 }

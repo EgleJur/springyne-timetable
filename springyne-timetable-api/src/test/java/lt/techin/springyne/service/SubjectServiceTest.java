@@ -39,8 +39,8 @@ class SubjectServiceTest {
     @Test
     public void editSubject() {
         Subject subject = mock(Subject.class);
-        when(subject.getName()).thenReturn("R1");
-        when(subject.getDescription()).thenReturn("Test");
+        when(subject.getName()).thenReturn("Tinklapiai");
+        when(subject.getDescription()).thenReturn("HTML, CSS, Bootstrap");
         when(subjectRepository.findById(Id)).thenReturn(Optional.of(subject));
         subjectService.edit(Id, subject, null, null);
         verify(subjectRepository).save(subject);

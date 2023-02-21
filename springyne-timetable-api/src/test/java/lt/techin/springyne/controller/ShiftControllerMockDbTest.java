@@ -28,7 +28,7 @@ public class ShiftControllerMockDbTest {
 
     @Test
     void addShiftReturnsSavedShift() {
-        ShiftDto testShiftDto = new ShiftDto(LocalDateTime.now().toString(),1,4,1);
+        ShiftDto testShiftDto = new ShiftDto(LocalDateTime.now().toString(),1,7,1);
         Shift testShift = ShiftMapper.toShift(testShiftDto);
         Mockito.when(shiftRepository.save(testShift)).thenReturn(testShift);
         assertEquals(testShift, shiftService.createShift(testShift), "Should be able to add new Shift with unique number");

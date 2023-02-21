@@ -28,7 +28,7 @@ public class ModuleControllerMockDbTest {
 
     @Test
     void addModuleReturnsSavedModule() {
-        ModuleDto testModuleDto = new ModuleDto(LocalDateTime.now().toString(), "Test");
+        ModuleDto testModuleDto = new ModuleDto(LocalDateTime.now().toString(), "Įvadinis modulis");
         Module testModule = ModuleMapper.toModule(testModuleDto);
         Mockito.when(moduleRepository.save(testModule)).thenReturn(testModule);
         assertEquals(testModule, moduleService.addModule(testModule), "Should be able to add new Module with unique number");

@@ -1,58 +1,60 @@
 import { useState } from "react";
-import { Alert,Collapse } from "@mui/material";
+import { Alert, Collapse } from "@mui/material";
 import { TextField } from "@mui/material";
-import { Select, MenuItem, Pagination } from "@mui/material";
+import { Select, MenuItem} from "@mui/material";
 
 function CreateShiftPage() {
-  const [number, setNumber] = useState("");
   const [name, setName] = useState("");
   const [starts, setStarts] = useState(1);
-  const [ends, setEnds] = useState(12);
-  const [numberError, setNumberError] = useState("");
+  const [ends, setEnds] = useState(14);
   const [nameError, setNameError] = useState("");
+  const [startError, setStartError] = useState(false); // added state for start error
+  const [endError, setEndError] = useState(false); // added state for end error
   const [success, setSuccess] = useState(false);
   const [failure, setFailure] = useState(false);
 
   const createNewShift = (e) => {
     e.preventDefault();
-    setNumberError(false);
-    setNameError(false);
+    setNameError("");
+    setStartError(false);
+    setEndError(false);
     if (name === "" || starts > ends) {
-      if (name === ""){
-        setNameError(true);
+      if (name === "") {
+        setNameError("Pavadinimas negali būti tuščias.");
       }
-      if(starts > ends){
-        setNumberError(true);
+      if (starts > ends) {
+        setStartError(true);
+        setEndError(true);
       }
     } else {
-    fetch('/api/v1/shifts', {
-    method: 'POST',
-    headers: {
-        'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(
-        {
+      fetch('/api/v1/shifts', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(
+          {
             name,
             starts,
             ends,
             visible: 1
+          }
+        )
+      }).then((result) => {
+        if (result.ok) {
+          setStarts(1);
+          setEnds(14);
+          setName("");
+          setSuccess(true);
+          setFailure(false);
+        } else {
+          setFailure(true);
+          setSuccess(false);
+          setNameError("Įrašo nepavyko sukurti.");
         }
-    ) 
-        }).then((result) => {
-            if (result.ok) {
-              setStarts("1");
-              setEnds("12");
-              setName("");
-              setSuccess(true);
-              setFailure(false);
-            } else {
-              setFailure(true);
-              setSuccess(false);
-              setNameError(true);
-            }
-          });
-    };
-}
+      });
+    }
+  }
 
   return (
     <div className="mx-3">
@@ -77,7 +79,7 @@ function CreateShiftPage() {
           severity="error"
           className="mb-3"
         >
-          Įrašo nepavyko sukurti
+          {nameError}
         </Alert>
       </Collapse>
       <form noValidate>
@@ -93,63 +95,53 @@ function CreateShiftPage() {
           required
         />
         <label htmlFor="starts-select" className="me-2">
-              Pradžia:
-            </label>
+          Pradžia:
+        </label>
         <Select
-              id="starts-select"
-              error={!!numberError}
-              value={starts}
-              size="small"
-              className="me-2"
-              onChange={(e) => setStarts(e.target.value)}
-            >
-              <MenuItem value="1">1</MenuItem>
-              <MenuItem value="2">2</MenuItem>
-              <MenuItem value="3">3</MenuItem>
-              <MenuItem value="4">4</MenuItem>
-              <MenuItem value="5">5</MenuItem>
-              <MenuItem value="6">6</MenuItem>
-              <MenuItem value="7">7</MenuItem>
-              <MenuItem value="8">8</MenuItem>
-              <MenuItem value="9">9</MenuItem>
-              <MenuItem value="10">10</MenuItem>
-              <MenuItem value="11">11</MenuItem>
-              <MenuItem value="12">12</MenuItem>
-            </Select>
-            <label htmlFor="starts-select" className="me-2">
-              Pabaiga:
-            </label>
+          id="starts-select"
+          error={startError}
+          value={starts}
+          size="small"
+          className="me-2"
+          onChange={(e) => setStarts(parseInt(e.target.value))}
+        >
+          {Array.from(Array(14)).map((_, i) => (
+            <MenuItem key={i+1} value={i+1}>
+              {i+1}
+            </MenuItem>
+          ))}
+        </Select>
+
+        <label htmlFor="ends-select" className="me-2">
+          Pabaiga:
+        </label>
         <Select
-              id="ends-select"
-              error={!!numberError}
-              value={ends}
-              size="small"
-              className="me-2"
-              onChange={(e) => setEnds(e.target.value)}
-            >
-              <MenuItem value="1">1</MenuItem>
-              <MenuItem value="2">2</MenuItem>
-              <MenuItem value="3">3</MenuItem>
-              <MenuItem value="4">4</MenuItem>
-              <MenuItem value="5">5</MenuItem>
-              <MenuItem value="6">6</MenuItem>
-              <MenuItem value="7">7</MenuItem>
-              <MenuItem value="8">8</MenuItem>
-              <MenuItem value="9">9</MenuItem>
-              <MenuItem value="10">10</MenuItem>
-              <MenuItem value="11">11</MenuItem>
-              <MenuItem value="12">12</MenuItem>
-            </Select>
+          id="ends-select"
+          error={endError}
+          value={ends}
+          size="small"
+          className="me-2"
+          onChange={(e) => setEnds(parseInt(e.target.value))}
+        >
+          {Array.from(Array(14)).map((_, i) => (
+            <MenuItem key={i + 1} value={i + 1}>
+              {i + 1}
+            </MenuItem>
+          ))}
+        </Select>
+        <div className="mt-4">
+
+        </div>
         <button
           type="submit"
-          className="btn btn-primary"
+          className="btn btn-primary my-3"
           onClick={createNewShift}
         >
-          Pridėti
+          Sukurti pamainą
         </button>
       </form>
     </div>
   );
 }
 
-export default CreateShiftPage;
+export default CreateShiftPage;  

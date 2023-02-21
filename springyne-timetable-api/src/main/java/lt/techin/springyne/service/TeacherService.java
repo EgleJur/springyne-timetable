@@ -109,26 +109,29 @@ public class TeacherService {
             } else {
                 updatedTeacher.setName(teacher.getName());
             }
-        if (!teacher.getEmail().equals(updatedTeacher.getEmail())) {
-            if (!(teacher.getEmail().equals("") || teacher.getEmail() == null)) {
-                updatedTeacher.setEmail(teacher.getEmail());
-            }
-        }
+//        if (!teacher.getEmail().equals(updatedTeacher.getEmail())) {
+//            if (!(teacher.getEmail().equals("") || teacher.getEmail() == null)) {
+//                updatedTeacher.setEmail(teacher.getEmail());
+//            }
+//        }
         if (!teacher.getTeamsEmail().equals(updatedTeacher.getTeamsEmail())) {
             if (!(teacher.getTeamsEmail().equals("") || teacher.getTeamsEmail() == null)) {
                 updatedTeacher.setTeamsEmail(teacher.getTeamsEmail());
             }
         }
-        if (!teacher.getPhone().equals(updatedTeacher.getPhone())) {
-            if (!(teacher.getPhone().equals("") || teacher.getPhone() == null)) {
-                updatedTeacher.setPhone(teacher.getPhone());
-            }
-        }
+//        if (!teacher.getPhone().equals(updatedTeacher.getPhone())) {
+//            if (!(teacher.getPhone().equals("") || teacher.getPhone() == null)) {
+//                updatedTeacher.setPhone(teacher.getPhone());
+//            }
+//        }
         if (!teacher.getHours().equals(updatedTeacher.getHours())) {
             if (!(teacher.getHours() == null)) {
                 updatedTeacher.setHours(teacher.getHours());
             }
         }
+
+        updatedTeacher.setEmail(teacher.getEmail());
+        updatedTeacher.setPhone(teacher.getPhone());
 
         if(shiftId != null) {
             Shift shift = shiftRepository.findById(shiftId).orElseThrow(() -> new ScheduleValidationException("Shift does not exist", "shiftId",

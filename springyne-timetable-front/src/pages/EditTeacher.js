@@ -1,14 +1,20 @@
 import { Collapse, Alert } from "@mui/material";
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import { TextField } from "@mui/material";
-import { TextCenter } from "react-bootstrap-icons";
+import {
+  TextField,
+  FormControl,
+  Select,
+  MenuItem,
+  InputLabel,
+  OutlinedInput,
+} from "@mui/material";
 
 function EditTeacherPage() {
   const [teacher, setTeacher] = useState({});
-  const [nameError, setNameError] = useState("");
-  const [hoursError, setHoursError] = useState("");
-  const [teamsError, setTeamsError] = useState("");
+  const [nameError, setNameError] = useState(false);
+  const [hoursError, setHoursError] = useState(false);
+  const [teamsError, setTeamsError] = useState(false);
   const [success, setSuccess] = useState(false);
   const [failure, setFailure] = useState(false);
   const [shifts, setShifts] = useState([]);
@@ -194,13 +200,17 @@ function EditTeacherPage() {
           id="create-teacher-hours"
           label="Valandų skaičius"
           helperText="Valandų skaičius negali būti tuščias laukas"
-          className="form-control mb-3"
+          className="form-control mb-2"
           size="small"
           disabled={teacher.deleted}
           InputLabelProps={{ shrink: true }}
           required
         />
-        {teacher.subjects ? <div className="mb-2">Pašalinti Dalyką:</div> : ""}
+        {teacher.subjects?.length === 0 ? (
+          ""
+        ) : (
+          <div className="mb-2">Pašalinti Dalyką:</div>
+        )}
 
         <div className="d-grid gap-6 d-md-block">
           {teacher.subjects?.map((subject) => (
@@ -218,44 +228,53 @@ function EditTeacherPage() {
           ))}
         </div>
 
-        <label htmlFor="add-select-subject" className="my-2">
-          Pridėti Dalyką
-        </label>
-        <select
-          value={selectedSubject}
-          onChange={(e) => setSelectedSubject(e.target.value)}
-          id="add-select-subject"
-          className="form-control mb-3"
-          disabled={teacher.deleted}
-        >
-          <option value="">---</option>
-          {subjects.map((subject) => (
-            <option
-              key={subject.id}
-              value={subject.id}
-              disabled={subject.deleted}
-            >
-              {subject.name}
-            </option>
-          ))}
-        </select>
+        <FormControl fullWidth size="small" className="my-3">
+          <InputLabel id="select-subject-label">Pridėti dalyką</InputLabel>
+          <Select
+            disabled={teacher.deleted}
+            labelId="select-subject-label"
+            InputLabelProps={{ shrink: true }}
+            id="add-select-subject"
+            label="Pridėti dalyką"
+            fullWidth
+            value={selectedSubject}
+            onChange={(e) => setSelectedSubject(e.target.value)}
+          >
+            {subjects?.map((subject) => (
+              <MenuItem
+                value={subject.id}
+                key={subject.id}
+                disabled={subject.deleted}
+              >
+                {subject.name}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
 
-        <label htmlFor="page-size-select" className="mb-2">
-          Pamaina:
-        </label>
-        <select
-          value={selectedShift}
-          onChange={(e) => setSelectedShift(e.target.value)}
-          className="form-control mb-3"
-          disabled={teacher.deleted}
-        >
-          <option value="">{teacher.shift?.name}</option>
-          {shifts.map((shift) => (
-            <option key={shift.id} value={shift.id} disabled={shift.deleted}>
-              {shift.name}
-            </option>
-          ))}
-        </select>
+        <FormControl fullWidth size="small" className="mb-3">
+          <InputLabel id="select-shift-label" shrink>
+            Pamaina
+          </InputLabel>
+          <Select
+            disabled={teacher.deleted}
+            labelId="select-shift-label"
+            id="select-shift"
+            displayEmpty
+            input={<OutlinedInput notched label="Pamaina" />}
+            fullWidth
+            value={selectedShift}
+            onChange={(e) => setSelectedShift(e.target.value)}
+          >
+            <MenuItem value={""}>{teacher.shift?.name}</MenuItem>
+            {shifts?.map((subject) => (
+              <MenuItem value={subject.id} key={subject.id}>
+                {subject.name}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+
         <div>
           <button
             type="submit"

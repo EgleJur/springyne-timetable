@@ -9,35 +9,38 @@ function CreateSubjectPage() {
   const [name, setName] = useState("");
   const [room, setRoom] = useState("");
   const [nameError, setNameError] = useState("");
+  const [moduleError, setModuleError] = useState("");
   const [success, setSuccess] = useState(false);
   const [failure, setFailure] = useState(false);
   const params = useParams();
   const [modules, setModules] = useState([]);
-    const [selectedModule, setSelectedModule] = useState("");
+  const [selectedModule, setSelectedModule] = useState("");
 
-    const [rooms, setRooms] = useState([]);
-    const [selectedRoom, setSelectedRoom] = useState('');
+  const [rooms, setRooms] = useState([]);
+  const [selectedRoom, setSelectedRoom] = useState('');
 
-    useEffect(() => {
-      fetch('api/v1/modules/')
-          .then(response => response.json())
-          .then(setModules)
-          
+  useEffect(() => {
+    fetch('api/v1/modules/')
+      .then(response => response.json())
+      .then(setModules)
+
   }, []);
 
   useEffect(() => {
     fetch('api/v1/rooms/')
-        .then(response => response.json())
-        .then(setRooms)
-        
-}, []);
+      .then(response => response.json())
+      .then(setRooms)
+
+  }, []);
 
 
   const createNewSubject = (e) => {
-    e.preventDefault(); 
+    e.preventDefault();
     setNameError(false);
+    setModuleError(false);
     if (name === "") {
       setNameError(true);
+      setModuleError(true);
     } else {
       fetch(`/api/v1/subjects/createSubject?moduleId=${selectedModule}&roomId=${selectedRoom}`, {
         method: "POST",
@@ -114,37 +117,45 @@ function CreateSubjectPage() {
         <label htmlFor="page-size-select" className="mb-3">
           Modulis:
         </label>
-        
+
         <select
-            value={selectedModule}
-            onChange={(e) => setSelectedModule(e.target.value)}
-            className="form-control mb-3">
-            {
-                modules.map(
-                    (mod) =>
-                    (<option key={mod.id} 
-                        value={mod.id} 
-                        disabled={mod.deleted}>{mod.name}</option>)
-                )
-            }
+          value={selectedModule}
+          // defaultValue={"default"}
+          onChange={(e) => setSelectedModule(e.target.value)}
+          className={`form-control mb-3 ${selectedModule ? "" : "border-danger"}`}
+          required>
+          <option value="" disabled>Pasirinkite modulį</option>
+          {
+            modules.map(
+              (mod) =>
+              (<option key={mod.id}
+                value={mod.id}
+                disabled={mod.deleted}>{mod.name}</option>)
+            )
+          }
         </select>
-        
-         <label htmlFor="page-size-select" className="mb-3">
+        {!selectedModule && (
+          <div className="form-text text-danger">
+            Prašome pasirinkti modulį iš sąrašo.
+          </div>
+        )}
+
+        <label htmlFor="page-size-select" className="mb-3">
           Kabinetas:
         </label>
         <select
-            value={selectedRoom}
-            onChange={(e) => setSelectedRoom(e.target.value)}
-            className="form-control mb-3">
-            <option value =''>---</option>
-            {
-                rooms.map(
-                    (room) =>
-                    (<option key={room.id} 
-                        value={room.id}
-                        disabled={room.deleted}>{room.name}</option>)
-                )
-            }
+          value={selectedRoom}
+          onChange={(e) => setSelectedRoom(e.target.value)}
+          className="form-control mb-3">
+          <option value=''>---</option>
+          {
+            rooms.map(
+              (room) =>
+              (<option key={room.id}
+                value={room.id}
+                disabled={room.deleted}>{room.name}</option>)
+            )
+          }
         </select>
 
         <button

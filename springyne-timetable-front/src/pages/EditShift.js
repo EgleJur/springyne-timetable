@@ -177,6 +177,8 @@ function EditShiftPage() {
           <MenuItem value="10">10</MenuItem>
           <MenuItem value="11">11</MenuItem>
           <MenuItem value="12">12</MenuItem>
+          <MenuItem value="13">13</MenuItem>
+          <MenuItem value="14">14</MenuItem>
         </Select>
         <label htmlFor="starts-select" className="me-2">
           Pabaiga:
@@ -202,6 +204,8 @@ function EditShiftPage() {
           <MenuItem value="10">10</MenuItem>
           <MenuItem value="11">11</MenuItem>
           <MenuItem value="12">12</MenuItem>
+          <MenuItem value="13">13</MenuItem>
+          <MenuItem value="14">14</MenuItem>
         </Select>
         <p>Redaguota: {shift.lastUpdated}</p>
         <p>

@@ -19,7 +19,9 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -51,27 +53,27 @@ class SubjectControllerTest {
     Subject subject;
 
     private static final long Id = 1;
-//    @Test
-//    void getAllSubjectsContainsCorrectDtos() throws Exception {
-//
-//
-//        SubjectDto testSubjectDto1 = new SubjectDto("R1", "Test name1");
-//        SubjectDto testSubjectDto2 = new SubjectDto("R2", "Test name2");
-//        SubjectDto testSubjectDto3 = new SubjectDto("R3", "Test name3");
-//
-//        List<SubjectDto> expectedList = new ArrayList<>();
-//        expectedList.add(testSubjectDto1);
-//        expectedList.add(testSubjectDto2);
-//        expectedList.add(testSubjectDto3);
-//
-//        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/subjects")
-//        ).andExpect(status().isOk()).andReturn();
-//
-//        List<SubjectDto> resultList = objectMapper.readValue(mvcResult.getResponse().getContentAsString(), new TypeReference<List<SubjectDto>>() {
-//        });
-//
-//        Assertions.assertTrue(resultList.containsAll(expectedList));
-//    }
+    @Test
+    void getAllSubjectsContainsCorrectDtos() throws Exception {
+
+
+        SubjectDto testSubjectDto1 = new SubjectDto("S1", "Test name1");
+        SubjectDto testSubjectDto2 = new SubjectDto("S2", "Test name2");
+        SubjectDto testSubjectDto3 = new SubjectDto("S3", "Test name3");
+
+        List<SubjectDto> expectedList = new ArrayList<>();
+        expectedList.add(testSubjectDto1);
+        expectedList.add(testSubjectDto2);
+        expectedList.add(testSubjectDto3);
+
+        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/subjects")
+        ).andExpect(status().isOk()).andReturn();
+
+        List<SubjectDto> resultList = objectMapper.readValue(mvcResult.getResponse().getContentAsString(), new TypeReference<List<SubjectDto>>() {
+        });
+
+        Assertions.assertTrue(resultList.containsAll(expectedList));
+    }
 
     @Test
     void addSubjectThrowsExceptionWithNullOrEmptyValues() throws Exception {
@@ -89,7 +91,9 @@ class SubjectControllerTest {
 
     @Test
     void addSubjectThrowsExceptionWithNonUniqueNameValue() throws Exception {
+
         SubjectDto testSubjectDto1 = new SubjectDto("Tinklapiai", "HTML, CSS, Bootstrap");
+
         assertEquals(400, performSubjectPostBadRequest(testSubjectDto1).getResponse().getStatus(),
                 "Non unique Subject name should return bad request status");
     }
@@ -111,7 +115,7 @@ class SubjectControllerTest {
 
     @Test
     void restoreSubjectSetsDeletedPropertyToFalse() throws Exception {
-        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.patch("/api/v1/subjects/restore/4").contentType(MediaType.APPLICATION_JSON))
+        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.patch("/api/v1/subjects/restore/1").contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk()).andReturn();
         Subject resultSubject = objectMapper.readValue(mvcResult.getResponse().getContentAsString(), new TypeReference<Subject>() {});
         Assertions.assertFalse(resultSubject.isDeleted());
@@ -137,8 +141,10 @@ class SubjectControllerTest {
 
     @Test
     void editSubjectAllowsSavingWithUniqueName() throws Exception {
+
         SubjectDto testSubjectDto4 = new SubjectDto("Tarnybinės stotys ir operacinės sistemos2","Serveriai, programiniai paketai");
         MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.patch("/api/v1/subjects/edit/4?moduleId=4").contentType(MediaType.APPLICATION_JSON).
+
                 content(objectMapper.writeValueAsString(testSubjectDto4))).andReturn();
 
         assertEquals(200, mvcResult.getResponse().getStatus(),"Unique value non empty name should return ok status");

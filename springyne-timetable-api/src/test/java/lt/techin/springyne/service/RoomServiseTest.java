@@ -43,9 +43,9 @@ public class RoomServiseTest {
     @Test
     public void editRoom() {
         Room room = mock(Room.class);
-        when(room.getName()).thenReturn("R1");
-        when(room.getBuilding()).thenReturn("Test name1");
-        when(room.getDescription()).thenReturn("Test");
+        when(room.getName()).thenReturn("101");
+        when(room.getBuilding()).thenReturn("Lakūnų g. 3, LT-09108 Vilnius");
+        when(room.getDescription()).thenReturn("Akademija.IT");
         when(roomRepository.findById(Id)).thenReturn(Optional.of(room));
         roomService.editRoom(Id, room);
         verify(roomRepository).save(room);

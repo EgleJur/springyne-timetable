@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lt.techin.springyne.dto.ShiftDto;
 import lt.techin.springyne.dto.SubjectDto;
+import lt.techin.springyne.dto.TeacherDto;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,9 +34,9 @@ class ShiftControllerTest {
 
     @Test
     void getAllShiftsContainsCorrectDtos() throws Exception {
-        ShiftDto testShiftDto1 = new ShiftDto("Test name1", 1, 4, 1);
-        ShiftDto testShiftDto2 = new ShiftDto("Test name2", 1, 6, 1);
-        ShiftDto testShiftDto3 = new ShiftDto("Test name3", 4, 8, 0);
+        ShiftDto testShiftDto1 = new ShiftDto("Rytinė", 1, 4, 1);
+        ShiftDto testShiftDto2 = new ShiftDto("Dieninė", 1, 6, 1);
+        ShiftDto testShiftDto3 = new ShiftDto("Vakarinė", 4, 8, 0);
 
         List<ShiftDto> expectedList = new ArrayList<>();
         expectedList.add(testShiftDto1);
@@ -64,7 +65,7 @@ class ShiftControllerTest {
 
     @Test
     void createShiftThrowsExceptionWithEndEarlierThanStart() throws Exception {
-        ShiftDto testShiftDto1 = new ShiftDto("Test shift" + LocalDateTime.now(),6,4,1);
+        ShiftDto testShiftDto1 = new ShiftDto("Vakarinė" + LocalDateTime.now(),6,4,1);
         String message = "End time cannot be before start time";
 
         assertEquals(400,performShiftPostBadRequest(testShiftDto1).getResponse().getStatus(), message);
@@ -101,11 +102,11 @@ class ShiftControllerTest {
 
     @Test
     void editShiftThrowsExceptionWithEndEarlierThanStart() throws Exception{
-        ShiftDto testShiftDto1 = new ShiftDto("Test name",5,4,1);
+        ShiftDto testShiftDto1 = new ShiftDto("Vakarinė",5,4,1);
         String message = "End time cannot be before start time";
 
 
-        MvcResult mvcResult1 = mockMvc.perform(MockMvcRequestBuilders.patch("/api/v1/shifts/5").contentType(MediaType.APPLICATION_JSON).
+        MvcResult mvcResult1 = mockMvc.perform(MockMvcRequestBuilders.patch("/api/v1/shifts/3").contentType(MediaType.APPLICATION_JSON).
                 content(objectMapper.writeValueAsString(testShiftDto1))).andReturn();
 
         assertEquals(400, mvcResult1.getResponse().getStatus(),message);
@@ -114,11 +115,11 @@ class ShiftControllerTest {
 
     @Test
     void editShiftAllowsSavingWithCorrectValues() throws Exception{
-        ShiftDto testShiftDto1 = new ShiftDto("Test name" + LocalDateTime.now(),1,4,1);
+        ShiftDto testShiftDto1 = new ShiftDto("Rytinė" + LocalDateTime.now(),1,4,1);
         String message = "Correct values should allow to edit the shift";
 
 
-        MvcResult mvcResult1 = mockMvc.perform(MockMvcRequestBuilders.patch("/api/v1/shifts/5").contentType(MediaType.APPLICATION_JSON).
+        MvcResult mvcResult1 = mockMvc.perform(MockMvcRequestBuilders.patch("/api/v1/shifts/1").contentType(MediaType.APPLICATION_JSON).
                 content(objectMapper.writeValueAsString(testShiftDto1))).andReturn();
 
         assertEquals(200, mvcResult1.getResponse().getStatus(),message);
@@ -131,7 +132,7 @@ class ShiftControllerTest {
         ).andReturn();
         SubjectDto result = objectMapper.readValue(mvcResult.getResponse().getContentAsString(), new TypeReference<SubjectDto>() {
         });
-        Assertions.assertEquals(result.getName(), "Test name1","Get teacher by Id should return teacher with correct name");
+        Assertions.assertEquals(result.getName(), "Rytinė","Get teacher by Id should return teacher with correct name");
     }
 
     public MvcResult performShiftPostBadRequest(ShiftDto shiftDto) throws Exception {

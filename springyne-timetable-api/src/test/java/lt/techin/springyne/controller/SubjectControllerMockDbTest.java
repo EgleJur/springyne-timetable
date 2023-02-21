@@ -28,7 +28,7 @@ public class SubjectControllerMockDbTest {
 
     @Test
     void addSubjectReturnsSavedSubject() {
-        SubjectDto testSubjectDto = new SubjectDto(LocalDateTime.now().toString(), "Test");
+        SubjectDto testSubjectDto = new SubjectDto(LocalDateTime.now().toString(), "Įvadas į profesiją");
         Subject testSubject = SubjectMapper.toSubject(testSubjectDto);
         Mockito.when(subjectRepository.save(testSubject)).thenReturn(testSubject);
         assertEquals(testSubject, subjectService.createSubject(1L,null,testSubject), "Should be able to add new Subject with unique number");

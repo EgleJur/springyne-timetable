@@ -1,7 +1,6 @@
-import { useState } from "react";
-import { Alert,Collapse } from "@mui/material";
+import { useEffect, useState } from "react";
+import { Alert, Collapse } from "@mui/material";
 import { TextField } from "@mui/material";
-
 
 function CreateRoomPage() {
   const [name, setName] = useState("");
@@ -12,13 +11,14 @@ function CreateRoomPage() {
   const [success, setSuccess] = useState(false);
   const [failure, setFailure] = useState(false);
 
+
+
   const createNewRoom = (e) => {
     e.preventDefault();
     setNameError(false);
     setBuildingError(false);
     setDescription();
-    if (name === "" || building === ""){
-      
+    if (name === "" || building === "") {
       if (name === "") {
         setNameError(true);
       }
@@ -34,7 +34,7 @@ function CreateRoomPage() {
         body: JSON.stringify({
           name,
           building,
-          description
+          description,
         }),
       }).then((result) => {
         if (result.ok) {
@@ -89,7 +89,7 @@ function CreateRoomPage() {
           size="small"
           required
         />
-         <TextField
+        <TextField
           error={!!buildingError}
           onChange={(e) => setBuilding(e.target.value)}
           value={building}

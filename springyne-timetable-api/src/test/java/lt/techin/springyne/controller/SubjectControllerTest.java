@@ -75,8 +75,8 @@ class SubjectControllerTest {
 
     @Test
     void addSubjectThrowsExceptionWithNullOrEmptyValues() throws Exception {
-        SubjectDto testSubjectDto4 = new SubjectDto("", "Test name4");
-        SubjectDto testSubjectDto5 = new SubjectDto(null, "Test name5");
+        SubjectDto testSubjectDto4 = new SubjectDto("", "Serveriai, programiniai paketai");
+        SubjectDto testSubjectDto5 = new SubjectDto(null, "Scrum procesas");
         SubjectDto testSubjectDto6 = new SubjectDto(null, null);
 
 
@@ -88,8 +88,8 @@ class SubjectControllerTest {
     }
 
     @Test
-    void addSubjectThrowsExceptionWithNonUniqueNumberValue() throws Exception {
-        SubjectDto testSubjectDto1 = new SubjectDto("S1", "Test name1");
+    void addSubjectThrowsExceptionWithNonUniqueNameValue() throws Exception {
+        SubjectDto testSubjectDto1 = new SubjectDto("Tinklapiai", "HTML, CSS, Bootstrap");
         assertEquals(400, performSubjectPostBadRequest(testSubjectDto1).getResponse().getStatus(),
                 "Non unique Subject name should return bad request status");
     }
@@ -119,7 +119,7 @@ class SubjectControllerTest {
 
     @Test
     void editSubjectThrowsExceptionWithNonUniqueNameValue() throws Exception {
-        SubjectDto testSubjectDto5 = new SubjectDto("S1", "");
+        SubjectDto testSubjectDto5 = new SubjectDto("Tinklapiai", "");
         MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.patch("/api/v1/subjects/edit/1?moduleId=4").contentType(MediaType.APPLICATION_JSON).
                 content(objectMapper.writeValueAsString(testSubjectDto5))).andReturn();
 
@@ -127,7 +127,7 @@ class SubjectControllerTest {
     }
     @Test
     void editSubjectThrowsExceptionWithEmptyValues() throws Exception {
-        SubjectDto testSubjectDto5 = new SubjectDto("", "test");
+        SubjectDto testSubjectDto5 = new SubjectDto("", "HTML, CSS, Bootstrap");
         MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.patch("/api/v1/subjects/edit/4?moduleId=4").contentType(MediaType.APPLICATION_JSON).
                 content(objectMapper.writeValueAsString(testSubjectDto5))).andReturn();
 
@@ -137,7 +137,7 @@ class SubjectControllerTest {
 
     @Test
     void editSubjectAllowsSavingWithUniqueName() throws Exception {
-        SubjectDto testSubjectDto4 = new SubjectDto("subjectDto","test");
+        SubjectDto testSubjectDto4 = new SubjectDto("Tarnybinės stotys ir operacinės sistemos2","Serveriai, programiniai paketai");
         MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.patch("/api/v1/subjects/edit/4?moduleId=4").contentType(MediaType.APPLICATION_JSON).
                 content(objectMapper.writeValueAsString(testSubjectDto4))).andReturn();
 

@@ -108,8 +108,4 @@ public class RoomService {
         existingRoom.setDeleted(false);
         return roomRepository.save(existingRoom);
     }
-
-    public Page<Room> searchByNameAndBuilding(String name, String building, int page, int pageSize) {
-        return roomRepository.findByNameContainingIgnoreCaseAndBuildingContainingIgnoreCaseAndDeletedIsFalse(name, building, PageRequest.of(page, pageSize, Sort.by("deleted").and(Sort.by("name"))));
-    }
 }

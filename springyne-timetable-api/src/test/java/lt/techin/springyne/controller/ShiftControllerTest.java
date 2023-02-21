@@ -3,8 +3,6 @@ package lt.techin.springyne.controller;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lt.techin.springyne.dto.ShiftDto;
-import lt.techin.springyne.dto.GroupDto;
-import lt.techin.springyne.dto.TeacherDto;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +13,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -35,8 +34,8 @@ class ShiftControllerTest {
     @Test
     void getAllShiftsContainsCorrectDtos() throws Exception {
         ShiftDto testShiftDto1 = new ShiftDto("Rytinė", 1, 4, 1);
-        ShiftDto testShiftDto2 = new ShiftDto("Dieninė", 1, 6, 1);
-        ShiftDto testShiftDto3 = new ShiftDto("Vakarinė", 4, 8, 0);
+        ShiftDto testShiftDto2 = new ShiftDto("Popietinė", 5, 8, 1);
+        ShiftDto testShiftDto3 = new ShiftDto("Vakarinė", 9, 12, 1);
 
         List<ShiftDto> expectedList = new ArrayList<>();
         expectedList.add(testShiftDto1);
@@ -46,7 +45,7 @@ class ShiftControllerTest {
         MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/shifts")
         ).andExpect(status().isOk()).andReturn();
 
-        List<ShiftDto> resultList = objectMapper.readValue(mvcResult.getResponse().getContentAsString(), new TypeReference<List<ShiftDto>>() {
+        List<ShiftDto> resultList = objectMapper.readValue(mvcResult.getResponse().getContentAsString(StandardCharsets.UTF_8), new TypeReference<List<ShiftDto>>() {
         });
 
         Assertions.assertTrue(resultList.containsAll(expectedList));
@@ -102,11 +101,11 @@ class ShiftControllerTest {
 
     @Test
     void editShiftThrowsExceptionWithEndEarlierThanStart() throws Exception{
-        ShiftDto testShiftDto1 = new ShiftDto("Vakarinė",5,4,1);
+        ShiftDto testShiftDto1 = new ShiftDto("Dieninė",5,4,1);
         String message = "End time cannot be before start time";
 
 
-        MvcResult mvcResult1 = mockMvc.perform(MockMvcRequestBuilders.patch("/api/v1/shifts/3").contentType(MediaType.APPLICATION_JSON).
+        MvcResult mvcResult1 = mockMvc.perform(MockMvcRequestBuilders.patch("/api/v1/shifts/4").contentType(MediaType.APPLICATION_JSON).
                 content(objectMapper.writeValueAsString(testShiftDto1))).andReturn();
 
         assertEquals(400, mvcResult1.getResponse().getStatus(),message);
@@ -115,11 +114,11 @@ class ShiftControllerTest {
 
     @Test
     void editShiftAllowsSavingWithCorrectValues() throws Exception{
-        ShiftDto testShiftDto1 = new ShiftDto("Rytinė" + LocalDateTime.now(),1,4,1);
+        ShiftDto testShiftDto1 = new ShiftDto("Dieninė" + LocalDateTime.now(),2,7,1);
         String message = "Correct values should allow to edit the shift";
 
 
-        MvcResult mvcResult1 = mockMvc.perform(MockMvcRequestBuilders.patch("/api/v1/shifts/1").contentType(MediaType.APPLICATION_JSON).
+        MvcResult mvcResult1 = mockMvc.perform(MockMvcRequestBuilders.patch("/api/v1/shifts/4").contentType(MediaType.APPLICATION_JSON).
                 content(objectMapper.writeValueAsString(testShiftDto1))).andReturn();
 
         assertEquals(200, mvcResult1.getResponse().getStatus(),message);
@@ -130,7 +129,8 @@ class ShiftControllerTest {
     void getShiftByIdReturnsCorrectDto() throws Exception {
         MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/shifts/1")
         ).andReturn();
-        GroupDto result = objectMapper.readValue(mvcResult.getResponse().getContentAsString(), new TypeReference<GroupDto>() {
+        ShiftDto result = objectMapper.readValue(mvcResult.getResponse().getContentAsString(StandardCharsets.UTF_8), new TypeReference<ShiftDto>() {
+
         });
         Assertions.assertEquals(result.getName(), "Rytinė","Get teacher by Id should return teacher with correct name");
     }

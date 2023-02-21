@@ -2,7 +2,6 @@ package lt.techin.springyne.controller;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import lt.techin.springyne.dto.ModuleDto;
 import lt.techin.springyne.dto.TeacherDto;
 import lt.techin.springyne.model.Teacher;
 import org.junit.jupiter.api.Assertions;
@@ -36,9 +35,9 @@ ObjectMapper objectMapper;
 @Test
 void getAllTeachersContainsCorrectDtos() throws Exception {
 
-        TeacherDto testTeacherDto1 = new TeacherDto("Jonas Jonaitis");
-        TeacherDto testTeacherDto2 = new TeacherDto("Petras Petraitis");
-        TeacherDto testTeacherDto3 = new TeacherDto("Antanas Antanaitis");
+        TeacherDto testTeacherDto1 = new TeacherDto("Jonas Jonaitis", "JonasJ", "jonas@gmail.com", "822 555 22222", 10, false);
+        TeacherDto testTeacherDto2 = new TeacherDto("Petras Petraitis", "PetrasP", "petras@gmail.com", "822 555 11111", 20, false);
+        TeacherDto testTeacherDto3 = new TeacherDto("Antanas Antanaitis", "AntanasA", "antanas@gmail.com", "822 555 33333", 15, false);
 
         List<TeacherDto> expectedList = new ArrayList<>();
         expectedList.add(testTeacherDto1);
@@ -57,8 +56,8 @@ void getAllTeachersContainsCorrectDtos() throws Exception {
 
     @Test
     void addTeacherThrowsExceptionWithNullOrEmptyValues() throws Exception {
-        TeacherDto testTeacherDto4 = new TeacherDto("");
-        TeacherDto testTeacherDto5 = new TeacherDto(null);
+        TeacherDto testTeacherDto4 = new TeacherDto("","","","",null,false);
+        TeacherDto testTeacherDto5 = new TeacherDto(null, null, null, null, null, false);
         String message = "Null or empty values should return bad request status";
 
 
@@ -68,7 +67,7 @@ void getAllTeachersContainsCorrectDtos() throws Exception {
 
     @Test
     void addTeacherThrowsExceptionWithNonExistingShiftValue() throws Exception {
-        TeacherDto testTeacherDto1 = new TeacherDto("Pranas Pranaitis");
+        TeacherDto testTeacherDto1 = new TeacherDto("Pranas Pranaitis", "PranasP", "pranas@test.com", "pranas' test phone", 40, false);
         MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/teachers?shiftId=0").contentType(MediaType.APPLICATION_JSON).
                         content(objectMapper.writeValueAsString(testTeacherDto1)))
                 .andExpect(status().isBadRequest()).andReturn();
@@ -78,7 +77,7 @@ void getAllTeachersContainsCorrectDtos() throws Exception {
 
         @Test
         void addTeacherThrowsExceptionWithNonExistingSubjectValue() throws Exception {
-                TeacherDto testTeacherDto1 = new TeacherDto("Pranas Pranaitis");
+                TeacherDto testTeacherDto1 = new TeacherDto("Pranas Pranaitis", "PranasP", "pranas@test.com", "pranas' test phone", 40, false);
                 MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/teachers?shiftId=1&subjectId=0").contentType(MediaType.APPLICATION_JSON).
                                 content(objectMapper.writeValueAsString(testTeacherDto1)))
                         .andExpect(status().isBadRequest()).andReturn();
@@ -89,7 +88,7 @@ void getAllTeachersContainsCorrectDtos() throws Exception {
 //        creates test data in database
 //        @Test
 //        void addTeacherAllowsSavingWithCorrectValues() throws Exception {
-//            TeacherDto testTeacherDto = new TeacherDto("Test Name" + LocalDateTime.now());
+//            TeacherDto testTeacherDto = new TeacherDto("Test Name" + LocalDateTime.now(), "test teams","test email","test phone",40,false);
 //            MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/teachers?shiftId=1").contentType(MediaType.APPLICATION_JSON).
 //                            content(objectMapper.writeValueAsString(testTeacherDto)))
 //                    .andExpect(status().isOk()).andReturn();
@@ -123,7 +122,7 @@ void getAllTeachersContainsCorrectDtos() throws Exception {
 
     @Test
     void editTeacherThrowsExceptionWithEmptyValues() throws Exception {
-        TeacherDto testTeacherDto1 = new TeacherDto("");
+        TeacherDto testTeacherDto1 = new TeacherDto("","","","",null, false);
 //        TeacherDto testTeacherDto2 = new TeacherDto(null);
         MvcResult mvcResult1 = mockMvc.perform(MockMvcRequestBuilders.patch("/api/v1/teachers/update/5").contentType(MediaType.APPLICATION_JSON).
                 content(objectMapper.writeValueAsString(testTeacherDto1))).andReturn();
@@ -135,15 +134,22 @@ void getAllTeachersContainsCorrectDtos() throws Exception {
     }
     @Test
     void editTeacherAllowsSavingWithCorrectValues() throws Exception {
-        TeacherDto testTeacherDto2 = new TeacherDto(LocalDateTime.now().toString());
-        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.patch("/api/v1/teachers/update/1?shiftId=1&subjectId=1").contentType(MediaType.APPLICATION_JSON).
+        TeacherDto testTeacherDto2 = new TeacherDto("Alma Almaitė" + LocalDateTime.now().toString(), "AlmaA", "almaA@gmail.com", "822 555 44445", 40, false);
+        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.patch("/api/v1/teachers/update/4?shiftId=1&subjectId=1").contentType(MediaType.APPLICATION_JSON).
                 content(objectMapper.writeValueAsString(testTeacherDto2))).andReturn();
 
+        Teacher resultTeacher = objectMapper.readValue(mvcResult.getResponse().getContentAsString(), new TypeReference<Teacher>() {});
+
         assertEquals(200, mvcResult.getResponse().getStatus(),"Unique non empty name should return ok status");
+        assertEquals("AlmaA", resultTeacher.getTeamsEmail(), "Should allow editing teams email");
+        assertEquals("almaA@gmail.com", resultTeacher.getEmail(), "Should allow editing email");
+        assertEquals("822 555 44445", resultTeacher.getPhone(), "Should allow editing phone");
+        assertEquals(40, resultTeacher.getHours(), "Should allow editing hours");
+
     }
     @Test
     void editTeacherThrowsExceptionWithInvalidShiftValue() throws Exception {
-        TeacherDto testTeacherDto = new TeacherDto("Jonė Jonienė");
+        TeacherDto testTeacherDto = new TeacherDto("Jonė Jonienė", "JoneJ", "jone@gmail.com", "822 555 55555", 5, false);
         MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.patch("/api/v1/teachers/update/5?shiftId=0").contentType(MediaType.APPLICATION_JSON).
                 content(objectMapper.writeValueAsString(testTeacherDto))).andReturn();
         assertEquals(400,mvcResult.getResponse().getStatus(),
@@ -151,7 +157,7 @@ void getAllTeachersContainsCorrectDtos() throws Exception {
     }
     @Test
     void editTeacherThrowsExceptionWithInvalidSubjectValue() throws Exception {
-        TeacherDto testTeacherDto = new TeacherDto("Jonė Jonienė");
+        TeacherDto testTeacherDto = new TeacherDto("Jonė Jonienė", "JoneJ", "jone@gmail.com", "822 555 55555", 5, false);
         MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.patch("/api/v1/teachers/update/5?shiftId=3&subjectId=0").contentType(MediaType.APPLICATION_JSON).
                 content(objectMapper.writeValueAsString(testTeacherDto))).andReturn();
         assertEquals(400,mvcResult.getResponse().getStatus(),

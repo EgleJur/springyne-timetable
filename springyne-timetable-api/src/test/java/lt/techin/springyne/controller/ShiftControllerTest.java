@@ -131,7 +131,7 @@ class ShiftControllerTest {
     void getShiftByIdReturnsCorrectDto() throws Exception {
         MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/shifts/1")
         ).andReturn();
-        SubjectDto result = objectMapper.readValue(mvcResult.getResponse().getContentAsString(StandardCharsets.UTF_8), new TypeReference<SubjectDto>() {
+        ShiftDto result = objectMapper.readValue(mvcResult.getResponse().getContentAsString(StandardCharsets.UTF_8), new TypeReference<ShiftDto>() {
 
         });
         Assertions.assertEquals(result.getName(), "Rytinė","Get teacher by Id should return teacher with correct name");

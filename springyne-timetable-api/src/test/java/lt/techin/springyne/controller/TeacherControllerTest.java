@@ -2,6 +2,7 @@ package lt.techin.springyne.controller;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lt.techin.springyne.dto.ModuleDto;
 import lt.techin.springyne.dto.TeacherDto;
 import lt.techin.springyne.model.Teacher;
 import org.junit.jupiter.api.Assertions;
@@ -14,6 +15,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -46,10 +48,11 @@ void getAllTeachersContainsCorrectDtos() throws Exception {
         MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/teachers")
         ).andExpect(status().isOk()).andReturn();
 
-        List<TeacherDto> resultList = objectMapper.readValue(mvcResult.getResponse().getContentAsString(), new TypeReference<List<TeacherDto>>() {
+        List<TeacherDto> resultList = objectMapper.readValue(mvcResult.getResponse().getContentAsString(StandardCharsets.UTF_8), new TypeReference<List<TeacherDto>>() {
         });
 
         Assertions.assertTrue(resultList.containsAll(expectedList));
+
         }
 
     @Test

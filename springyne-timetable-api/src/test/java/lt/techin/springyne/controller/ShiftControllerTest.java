@@ -15,6 +15,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -46,7 +47,7 @@ class ShiftControllerTest {
         MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/shifts")
         ).andExpect(status().isOk()).andReturn();
 
-        List<ShiftDto> resultList = objectMapper.readValue(mvcResult.getResponse().getContentAsString(), new TypeReference<List<ShiftDto>>() {
+        List<ShiftDto> resultList = objectMapper.readValue(mvcResult.getResponse().getContentAsString(StandardCharsets.UTF_8), new TypeReference<List<ShiftDto>>() {
         });
 
         Assertions.assertTrue(resultList.containsAll(expectedList));
@@ -130,7 +131,7 @@ class ShiftControllerTest {
     void getShiftByIdReturnsCorrectDto() throws Exception {
         MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/shifts/1")
         ).andReturn();
-        SubjectDto result = objectMapper.readValue(mvcResult.getResponse().getContentAsString(), new TypeReference<SubjectDto>() {
+        SubjectDto result = objectMapper.readValue(mvcResult.getResponse().getContentAsString(StandardCharsets.UTF_8), new TypeReference<SubjectDto>() {
         });
         Assertions.assertEquals(result.getName(), "Rytinė","Get teacher by Id should return teacher with correct name");
     }

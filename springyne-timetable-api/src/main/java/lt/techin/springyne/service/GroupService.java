@@ -74,32 +74,32 @@ public class GroupService {
         return groupRepository.findAll();
     }
 
-    public Page<Group> searchByNamePaged(String name, String programName, String year, int page, int pageSize) {
+    public Page<Group> searchByNamePaged(String name, String programName, String groupYear, int page, int pageSize) {
 
         Pageable pageable = PageRequest.of(page, pageSize, Sort.by("deleted").and(Sort.by("name")));
         if ((programName == null || programName.isEmpty() || programName.isBlank() || programName.equals(""))
-                && (year == null || year.isEmpty() || year.isBlank() || year.equals(""))
+                && (groupYear == null || groupYear.isEmpty() || groupYear.isBlank() || groupYear.equals(""))
                 && (name == null || name.isEmpty() || name.isBlank() || name.equals(""))) {
             return groupRepository.findAll(pageable);
         }
-        if (programName == null || programName.isEmpty() || programName.isBlank() || programName.equals("")) {
-            if (year == null || year.isEmpty() || year.isBlank() || year.equals("")) {
+        if (programName == null || programName.isEmpty() || programName.isBlank()) {
+            if (groupYear == null || groupYear.isEmpty() || groupYear.isBlank()) {
                 return groupRepository.findAllByNameIgnoreCaseContaining(name, pageable);
+            } else if (name == null || name.isEmpty() || name.isBlank()) {
+                return groupRepository.findAllByGroupYearIgnoreCaseContaining(groupYear, pageable);
             }
-            return groupRepository.findAllByNameIgnoreCaseContainingOrYearIgnoreCaseContaining(name, year, pageable);
+            return groupRepository.findAllByNameIgnoreCaseContainingOrGroupYearIgnoreCaseContaining(name, groupYear, pageable);
 
-        }
-        if (year == null || year.isEmpty() || year.isBlank() || year.equals("")) {
-            if (name == null || name.isEmpty() || name.isBlank() || name.equals("")) {
+        } else if (groupYear == null || groupYear.isEmpty() || groupYear.isBlank()) {
+            if (name == null || name.isEmpty() || name.isBlank()) {
 
                 return groupRepository.findAllByProgramNameIgnoreCaseContaining(programName, pageable);
             }
             return groupRepository.findAllByNameIgnoreCaseContainingOrProgramNameIgnoreCaseContaining(name, programName, pageable);
+        } else if (name == null || name.isEmpty() || name.isBlank() || name.equals("")) {
+            return groupRepository.findAllByProgramNameIgnoreCaseContainingOrGroupYearIgnoreCaseContaining(programName, groupYear, pageable);
         }
-        if (name == null || name.isEmpty() || name.isBlank() || name.equals("")) {
-            return groupRepository.findAllByProgramNameIgnoreCaseContainingOrYearIgnoreCaseContaining(programName, year, pageable);
-        }
-        return groupRepository.findAllByNameIgnoreCaseContainingOrProgramNameIgnoreCaseContainingOrYearIgnoreCaseContaining(name, programName, year, pageable);
+        return groupRepository.findAllByNameIgnoreCaseContainingOrProgramNameIgnoreCaseContainingOrGroupYearIgnoreCaseContaining(name, programName, groupYear, pageable);
     }
 
 //    public Page<Group> getByModule(String name, int page, int pageSize) {

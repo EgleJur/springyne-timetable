@@ -10,7 +10,7 @@ public class GroupMapper {
         Group group = new Group();
 
         group.setName(groupDto.getName());
-        group.setYear(groupDto.getYear());
+        group.setGroupYear(groupDto.getGroupYear());
 
         return group;
     }
@@ -21,7 +21,7 @@ public class GroupMapper {
 
 
         groupDto.setName(group.getName());
-        groupDto.setYear(group.getYear());
+        groupDto.setGroupYear(group.getGroupYear());
 
         return groupDto;
     }

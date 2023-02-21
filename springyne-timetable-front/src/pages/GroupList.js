@@ -21,10 +21,8 @@ function GroupListPage() {
 
   const fetchGroups = () => {
     fetch(
-      `api/v1/groups/search?name=${searchName}
-      &programName=${searchProgName}&year=${searchYear}
-      &page=${pageNumber}&pageSize=${pageSize}`
-    )
+      `/api/v1/groups/search?name=${searchName}&programName=${searchProgName}&groupYear=${searchYear}&page=${pageNumber}&pageSize=${pageSize}`)
+      // `/api/v1/groups/search?name=${searchName}&programName=${searchProgName}&groupYear=${searchYear}&page=${pageNumber}&pageSize=${pageSize}`)
       .then((response) => response.json())
       .then((jsonResponse) => setGroups(jsonResponse));
   };
@@ -157,7 +155,7 @@ function GroupListPage() {
             <th>Metai</th>
             <th>Studentai</th>
             <th>Būsena</th>
-            <th>Veiksmai</th>
+            <th className="d-flex justify-content-center">Veiksmai</th>
           </tr>
         </thead>
         <tbody>
@@ -167,11 +165,11 @@ function GroupListPage() {
               className={group.deleted ? "text-black-50" : ""}>
               <td>{group.name}</td>
               <td>{group.program?.name}</td>
-              <td>{group.year}</td>
+              <td>{group.groupYear}</td>
               <td>{group.students}</td>
               <td>{group.deleted ? "Ištrintas" : ""}</td>
-              <td>
-                <button className="btn btn-outline-primary me-2 my-1">
+              <td className="d-flex justify-content-end">
+                <button className="btn btn-outline-primary me-2 my-1 ">
                   <Link
                     className="nav-link"
                     to={"/groups/view/" + group.id}
@@ -201,7 +199,7 @@ function GroupListPage() {
                   </button>
                 ) : (
                   <button
-                    className="btn btn-outline-danger ms-2"
+                    className="btn btn-outline-danger ms-2 "
                     onClick={() => deleteGroup(group.id)}
                   >
                     Ištrinti

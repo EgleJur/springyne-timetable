@@ -31,10 +31,10 @@ public class GroupController {
     @GetMapping("/search")
     public Page<Group> searchByNamePaged(@RequestParam(required = false) String name,
                                            @RequestParam(required = false) String programName,
-                                         @RequestParam(required = false) String year,
+                                         @RequestParam(required = false) String groupYear,
                                            @RequestParam int page,
                                            @RequestParam int pageSize) {
-        return groupService.searchByNamePaged(name,programName, year, page, pageSize);
+        return groupService.searchByNamePaged(name,programName, groupYear, page, pageSize);
     }
 
 //    @GetMapping("/byModule/search")

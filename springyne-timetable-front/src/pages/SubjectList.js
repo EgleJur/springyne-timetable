@@ -142,29 +142,7 @@ function SubjectListPage() {
             </button>
           </form>
         </div>
-      </div>
-      {/* <div className="d-flex justify-content-end">
-        <div className="mb-4">
-          <form className="d-flex" role="search">
-            <TextField
-              onChange={(e) => setSearchModName(e.target.value)}
-              value={searchModName}
-              id="search-name-input"
-              label="Ieškoti pagal modulį"
-              className="form-control me-2"
-              size="small"
-            />
-            <button
-              className="btn btn-outline-primary"
-              type="submit"
-              onClick={fetchSubjectsByModules}
-            >
-              Ieškoti
-            </button>
-          </form>
-        </div>
-      </div> */}
-      
+      </div>      
 
       <table className="table table-hover shadow p-3 mb-5 bg-body rounded align-middle">
         <thead className="table-light">

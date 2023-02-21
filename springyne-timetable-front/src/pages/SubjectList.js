@@ -150,7 +150,7 @@ function SubjectListPage() {
             <th>Pavadinimas</th>
             <th>Modulis</th>
             <th>Būsena</th>
-            <th>Veiksmai</th>
+            <th className="d-flex justify-content-center">Veiksmai</th>
           </tr>
         </thead>
         <tbody>
@@ -161,7 +161,7 @@ function SubjectListPage() {
               <td>{subject.name}</td>
               <td>{subject.module?.name}</td>
               <td>{subject.deleted ? "Ištrintas" : ""}</td>
-              <td>
+              <td className="d-flex justify-content-end">
                 <button className="btn btn-outline-primary me-2 my-1">
                   <Link
                     className="nav-link"

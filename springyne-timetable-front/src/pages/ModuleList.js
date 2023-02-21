@@ -100,7 +100,7 @@ function ModuleListPage() {
       <div className="d-flex justify-content-end">
         <div className="mb-4">
           <form className="d-flex" role="search">
-            <label htmlFor="page-size-select" className="me-2">
+            {/* <label htmlFor="page-size-select" className="me-2">
               Puslapyje:
             </label>
             <Select
@@ -114,7 +114,7 @@ function ModuleListPage() {
               <MenuItem value={25}>25</MenuItem>
               <MenuItem value={50}>50</MenuItem>
               <MenuItem value={100}>100</MenuItem>
-            </Select>
+            </Select> */}
             <TextField
               onChange={(e) => setSearchName(e.target.value)}
               value={searchName}
@@ -132,7 +132,7 @@ function ModuleListPage() {
             </button>
           </form>
         </div>
-        <div>
+        {/* <div>
           <Pagination
             count={modules.totalPages}
             defaultPage={1}
@@ -140,7 +140,7 @@ function ModuleListPage() {
             onChange={handlePageChange}
             value={page}
           />
-        </div>
+        </div> */}
       </div>
 
       <table className="table table-hover shadow p-3 mb-5 bg-body rounded align-middle">
@@ -149,7 +149,7 @@ function ModuleListPage() {
             <th>Numeris</th>
             <th>Pavadinimas</th>
             <th>Detalės</th>
-            <th>Veiksmai</th>
+            <th className="d-flex justify-content-center">Veiksmai</th>
           </tr>
         </thead>
         <tbody>
@@ -162,7 +162,7 @@ function ModuleListPage() {
               <td>{module.number}</td>
               <td>{module.name}</td>
               <td>{module.deleted ? "Modulis ištrintas" : ""}</td>
-              <td>
+              <td className="d-flex justify-content-end">
                 <button className="btn btn-outline-primary me-2 my-1">
                   <Link className="nav-link" to={"/modules/view/" + module.id}>
                     Žiūrėti
@@ -208,6 +208,36 @@ function ModuleListPage() {
           </tr>
         </tfoot>
       </table>
+      <div className="d-flex justify-content-end">
+        <div className="mb-4">
+          <form className="d-flex" role="search">
+            <label htmlFor="page-size-select" className="me-2">
+              Puslapyje:
+            </label>
+            <Select
+              id="page-size-select"
+              value={pageSize}
+              size="small"
+              className="me-2"
+              onChange={handlePageSizeChange}
+            >
+              <MenuItem value={10}>10</MenuItem>
+              <MenuItem value={25}>25</MenuItem>
+              <MenuItem value={50}>50</MenuItem>
+              <MenuItem value={100}>100</MenuItem>
+            </Select>
+          </form>
+        </div>
+        <div>
+          <Pagination
+            count={modules.totalPages}
+            defaultPage={1}
+            siblingCount={0}
+            onChange={handlePageChange}
+            value={page}
+          />
+        </div>
+      </div>
     </div>
   );
 }

@@ -95,7 +95,7 @@ function ViewSubjectPage() {
         </table>
 
           <button
-            className="btn btn-outline-danger ms-2" disabled={subject.deleted}>
+            className="btn btn-primary me-2" disabled={subject.deleted}>
             <Link className="nav-link" to={"/subjects/edit/" + subject.id}>
               Redaguoti
             </Link>

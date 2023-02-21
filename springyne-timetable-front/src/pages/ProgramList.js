@@ -135,7 +135,7 @@ function ProgramListPage() {
             <th>Pavadinimas</th>
             <th>Aprašymas</th>
             <th>Būsena</th>
-            <th>Veiksmai</th>
+            <th className="d-flex justify-content-center">Veiksmai</th>
           </tr>
         </thead>
         <tbody>
@@ -148,7 +148,7 @@ function ProgramListPage() {
               <td>{program.name}</td>
               <td>{program.description}</td>
               <td>{program.deleted ? "Ištrintas" : ""}</td>
-              <td>
+              <td className="d-flex justify-content-end">
                 <button className="btn btn-outline-primary me-2 my-1">
                   <Link className="nav-link" to={"/programs/view/" + program.id}>
                     Žiūrėti

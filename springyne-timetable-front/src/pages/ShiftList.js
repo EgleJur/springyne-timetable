@@ -96,7 +96,7 @@ function ShiftListPage() {
       <div className="d-flex justify-content-end">
         <div className="mb-4">
           <form className="d-flex" role="search">
-            <label htmlFor="page-size-select" className="me-2">
+            {/* <label htmlFor="page-size-select" className="me-2">
               Puslapyje:
             </label>
             <Select
@@ -110,7 +110,7 @@ function ShiftListPage() {
               <MenuItem value={25}>25</MenuItem>
               <MenuItem value={50}>50</MenuItem>
               <MenuItem value={100}>100</MenuItem>
-            </Select>
+            </Select> */}
             <TextField
               onChange={(e) => setSearchName(e.target.value)}
               value={searchName}
@@ -128,7 +128,7 @@ function ShiftListPage() {
             </button>
           </form>
         </div>
-        <div>
+        {/* <div>
           <Pagination
             count={Math.floor(shifts.length / pageSize) + 1} 
             defaultPage={1}
@@ -136,7 +136,7 @@ function ShiftListPage() {
             onChange={handlePageChange}
             value={page}
           />
-        </div>
+        </div> */}
       </div>
 
       <table className="table table-hover shadow p-3 mb-5 bg-body rounded align-middle">
@@ -147,7 +147,7 @@ function ShiftListPage() {
             <th>Pabaiga</th>
             <th>Redaguota</th>
             <th>Detalės</th>
-            <th>Veiksmai</th>
+            <th className="d-flex justify-content-center">Veiksmai</th>
           </tr>
         </thead>
         <tbody> 
@@ -162,7 +162,7 @@ function ShiftListPage() {
               <td>{shift.ends}</td>
               <td>{shift.lastUpdated}</td>
               <td>{((shift.visible === 1) ? false : true) ? "Pamaina ištrinta" : ""}</td>
-              <td>
+              <td className="d-flex justify-content-end">
                 <button className="btn btn-outline-primary me-2 my-1" disabled={(shift.visible === 0) ? true : false}>
                   <Link className="nav-link" to={"/shifts/edit/" + shift.id}>
                     Redaguoti
@@ -202,6 +202,36 @@ function ShiftListPage() {
           </tr>
         </tfoot>
       </table>
+      <div className="d-flex justify-content-end">
+        <div className="mb-4">
+          <form className="d-flex" role="search">
+            <label htmlFor="page-size-select" className="me-2">
+              Puslapyje:
+            </label>
+            <Select
+              id="page-size-select"
+              value={pageSize}
+              size="small"
+              className="me-2"
+              onChange={handlePageSizeChange}
+            >
+              <MenuItem value={10}>10</MenuItem>
+              <MenuItem value={25}>25</MenuItem>
+              <MenuItem value={50}>50</MenuItem>
+              <MenuItem value={100}>100</MenuItem>
+            </Select>
+          </form>
+        </div>
+        <div>
+          <Pagination
+            count={Math.floor(shifts.length / pageSize) + 1} 
+            defaultPage={1}
+            siblingCount={0}
+            onChange={handlePageChange}
+            value={page}
+          />
+        </div>
+      </div>
     </div>
   );
 }

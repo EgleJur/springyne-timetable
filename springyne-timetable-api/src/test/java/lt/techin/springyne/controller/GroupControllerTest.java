@@ -2,7 +2,6 @@ package lt.techin.springyne.controller;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import lt.techin.springyne.controller.GroupController;
 import lt.techin.springyne.dto.GroupDto;
 import lt.techin.springyne.model.Group;
 import lt.techin.springyne.model.Program;
@@ -68,6 +67,7 @@ class GroupControllerTest {
 
         Assertions.assertTrue(resultList.containsAll(expectedList));
     }
+
 
 //    @Test
 //    void addGroupThrowsExceptionWithNullOrEmptyValues() throws Exception {

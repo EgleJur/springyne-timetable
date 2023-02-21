@@ -41,7 +41,7 @@ public class ProgramService {
             throw new ScheduleValidationException(
                     "Hours must be a positive integer", "hours", "Hours < 0", String.valueOf(hours));
         }
-        if (program.getName().equals("") || program.getName() == null) {
+        if (program.getName() == null || program.getName().equals("")) {
             throw new ScheduleValidationException("Program name cannot be empty", "name", "Name is empty", program.getName());
         }
         ProgramSubject programSubject = new ProgramSubject(subject, hours);

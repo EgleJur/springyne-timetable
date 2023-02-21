@@ -1,4 +1,4 @@
-package lt.techin.springyne;
+package lt.techin.springyne.controller;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;

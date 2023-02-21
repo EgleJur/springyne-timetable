@@ -21,10 +21,8 @@ function GroupListPage() {
 
   const fetchGroups = () => {
     fetch(
-      `api/v1/groups/search?name=${searchName}
-      &programName=${searchProgName}&year=${searchYear}
-      &page=${pageNumber}&pageSize=${pageSize}`
-    )
+      `/api/v1/groups/search?name=${searchName}&programName=${searchProgName}&groupYear=${searchYear}&page=${pageNumber}&pageSize=${pageSize}`)
+      // `/api/v1/groups/search?name=${searchName}&programName=${searchProgName}&groupYear=${searchYear}&page=${pageNumber}&pageSize=${pageSize}`)
       .then((response) => response.json())
       .then((jsonResponse) => setGroups(jsonResponse));
   };
@@ -167,7 +165,7 @@ function GroupListPage() {
               className={group.deleted ? "text-black-50" : ""}>
               <td>{group.name}</td>
               <td>{group.program?.name}</td>
-              <td>{group.year}</td>
+              <td>{group.groupYear}</td>
               <td>{group.students}</td>
               <td>{group.deleted ? "Ištrintas" : ""}</td>
               <td>

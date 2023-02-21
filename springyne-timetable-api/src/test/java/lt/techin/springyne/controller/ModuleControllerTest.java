@@ -34,9 +34,9 @@ class ModuleControllerTest {
     @Test
     void getAllModulesContainsCorrectDtos() throws Exception {
 
-        ModuleDto testModuleDto1 = new ModuleDto("T1", "Test name1");
-        ModuleDto testModuleDto2 = new ModuleDto("T2", "Test name2");
-        ModuleDto testModuleDto3 = new ModuleDto("T3", "Test name3");
+        ModuleDto testModuleDto1 = new ModuleDto("001", "Informacinių sistemų projektavimas");
+        ModuleDto testModuleDto2 = new ModuleDto("002", "Duomenų bazių projektavimas");
+        ModuleDto testModuleDto3 = new ModuleDto("003", "Programavimo aplinkos valdymas");
 
         List<ModuleDto> expectedList = new ArrayList<>();
         expectedList.add(testModuleDto1);
@@ -54,10 +54,10 @@ class ModuleControllerTest {
 
     @Test
     void addModuleThrowsExceptionWithNullOrEmptyValues() throws Exception {
-        ModuleDto testModuleDto4 = new ModuleDto("", "Test name4");
-        ModuleDto testModuleDto5 = new ModuleDto(null, "Test name5");
-        ModuleDto testModuleDto6 = new ModuleDto("T6", "");
-        ModuleDto testModuleDto7 = new ModuleDto("T7", null);
+        ModuleDto testModuleDto4 = new ModuleDto("", "Testavimo metodikų taikymas");
+        ModuleDto testModuleDto5 = new ModuleDto(null, "Java programų kūrimas");
+        ModuleDto testModuleDto6 = new ModuleDto("006", "");
+        ModuleDto testModuleDto7 = new ModuleDto("007", null);
 
         String message = "Null or empty values should return bad request status";
 
@@ -69,7 +69,7 @@ class ModuleControllerTest {
 
     @Test
     void addModuleThrowsExceptionWithNonUniqueNumberValue() throws Exception {
-        ModuleDto testModuleDto1 = new ModuleDto("T1", "Test");
+        ModuleDto testModuleDto1 = new ModuleDto("001", "Informacinių sistemų projektavimas");
         assertEquals(400,performModulePostBadRequest(testModuleDto1).getResponse().getStatus(),
                 "Non unique Module number should return bad request status");
     }
@@ -92,7 +92,7 @@ class ModuleControllerTest {
 
     @Test
     void editModuleThrowsExceptionWithNonUniqueNumberValue() throws Exception {
-        ModuleDto testModuleDto5 = new ModuleDto("T1", "Test");
+        ModuleDto testModuleDto5 = new ModuleDto("001", "Informacinių sistemų projektavimas");
         MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.patch("/api/v1/modules/update/5").contentType(MediaType.APPLICATION_JSON).
                         content(objectMapper.writeValueAsString(testModuleDto5))).andReturn();
 
@@ -108,7 +108,7 @@ class ModuleControllerTest {
     }
     @Test
     void editModuleAllowsSavingWithUniqueNumber() throws Exception {
-        ModuleDto testModuleDto4 = new ModuleDto(LocalDateTime.now().toString(), "test");
+        ModuleDto testModuleDto4 = new ModuleDto(LocalDateTime.now().toString(), "Įvadinis modulis");
         MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.patch("/api/v1/modules/update/4").contentType(MediaType.APPLICATION_JSON).
                 content(objectMapper.writeValueAsString(testModuleDto4))).andReturn();
 

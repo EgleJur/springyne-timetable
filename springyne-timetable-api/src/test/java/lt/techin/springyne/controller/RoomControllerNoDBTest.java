@@ -28,9 +28,9 @@ public class RoomControllerNoDBTest {
 
     @Test
     void addRoomReturnsSavedRoom() {
-        RoomDto testRoomDto = new RoomDto(LocalDateTime.now().toString(), "Test name1", "Test");
+        RoomDto testRoomDto = new RoomDto(LocalDateTime.now().toString(), "Kalvarijų g. 159, LT-08313 Vilnius", "Techin");
         RoomDto testRoomDto1 = new RoomDto(null, null, null);
-        RoomDto testRoomDto2 = new RoomDto("R2", "Test name2", "Test");
+        RoomDto testRoomDto2 = new RoomDto("100", "Kalvarijų g. 159, LT-08313 Vilnius", "Techin");
         Room testRoom = RoomMapper.toRoom(testRoomDto);
         Room testRoom1 = RoomMapper.toRoom(testRoomDto1);
         Room testRoom2 = RoomMapper.toRoom(testRoomDto2);

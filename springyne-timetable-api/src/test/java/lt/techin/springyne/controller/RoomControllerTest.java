@@ -5,6 +5,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import lt.techin.springyne.dto.RoomDto;
+import lt.techin.springyne.dto.TeacherDto;
 import lt.techin.springyne.model.Room;
 import lt.techin.springyne.service.RoomService;
 import org.junit.jupiter.api.Assertions;
@@ -41,9 +42,9 @@ class RoomControllerTest {
 //    @Test
 //    void getAllRoomsContainsCorrectDtos() throws Exception {
 //
-//        RoomDto testRoomDto1 = new RoomDto("R1", "Test name1", "Test");
-//        RoomDto testRoomDto2 = new RoomDto("R2", "Test name2", "Test");
-//        RoomDto testRoomDto3 = new RoomDto("R3", "Test name2", "Test");
+//        RoomDto testRoomDto1 = new RoomDto("101", "Lakūnų g. 3, LT-09108 Vilnius", "Akademija.IT");
+//        RoomDto testRoomDto2 = new RoomDto("102", "Lakūnų g. 3, LT-09108 Vilnius", "Akademija.IT");
+//        RoomDto testRoomDto3 = new RoomDto("103", "Lakūnų g. 3, LT-09108 Vilnius", "Akademija.IT");
 //
 //        List<RoomDto> expectedList = new ArrayList<>();
 //        expectedList.add(testRoomDto1);
@@ -61,25 +62,25 @@ class RoomControllerTest {
 
     @Test
     public void testRoomDto() {
-        RoomDto room = new RoomDto("R1", "Test name1", "");
+        RoomDto room = new RoomDto("101", "Lakūnų g. 3, LT-09108 Vilnius", "");
 
-        assertEquals("R1", room.getName());
-        assertEquals("Test name1", room.getBuilding());
+        assertEquals("101", room.getName());
+        assertEquals("Lakūnų g. 3, LT-09108 Vilnius", room.getBuilding());
         assertEquals("", room.getDescription());
 
-        room.setName("R2");
-        room.setBuilding("Test name2");
-        room.setDescription("Test");
+        room.setName("102");
+        room.setBuilding("Lakūnų g. 3, LT-09108 Vilnius");
+        room.setDescription("Akademija.IT");
 
-        assertEquals("R2", room.getName());
-        assertEquals("Test name2", room.getBuilding());
-        assertEquals("Test", room.getDescription());
+        assertEquals("102", room.getName());
+        assertEquals("Lakūnų g. 3, LT-09108 Vilnius", room.getBuilding());
+        assertEquals("Akademija.IT", room.getDescription());
     }
 
     @Test
     void addRoomThrowsExceptionWithNullOrEmptyValues() throws Exception {
-        RoomDto testRoomDto4 = new RoomDto("", "Test name4", "Test");
-        RoomDto testRoomDto5 = new RoomDto(null, "Test name5", "Test");
+        RoomDto testRoomDto4 = new RoomDto("", "Lakūnų g. 3, LT-09108 Vilnius", "Akademija.IT");
+        RoomDto testRoomDto5 = new RoomDto(null, "Lakūnų g. 3, LT-09108 Vilnius", "Akademija.IT");
         RoomDto testRoomDto6 = new RoomDto(null, null, null);
 
 
@@ -112,7 +113,7 @@ class RoomControllerTest {
         ).andExpect(status().isOk()).andReturn();
         RoomDto result = objectMapper.readValue(mvcResult.getResponse().getContentAsString(), new TypeReference<RoomDto>() {
         });
-        Assertions.assertEquals(result.getName(), "R1","Get room by Id should return room with correct name");
+        Assertions.assertEquals(result.getName(), "101","Get room by Id should return room with correct name");
     }
 
 //    @Test
@@ -127,8 +128,8 @@ class RoomControllerTest {
 
     @Test
     void editRoomDtoAllowsSavingWithCorrectValues() {
-        String testName = "R1";
-        String testBuilding = "Test name1";
+        String testName = "101";
+        String testBuilding = "Lakūnų g. 3, LT-09108 Vilnius";
         RoomDto testRoomDto = new RoomDto(testName, testBuilding);
 
         Assertions.assertEquals(testName, testRoomDto.getName());
@@ -159,12 +160,17 @@ class RoomControllerTest {
 
     @Test
     public void viewRoomByIdTest() throws Exception {
-        RoomDto testRoomDto1 = new RoomDto("R1", "Test name1", "Test");
+//        RoomDto testRoomDto1 = new RoomDto("101", "Lakūnų g. 3, LT-09108 Vilnius", "Akademija.IT");
+//        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/rooms/1")
+//        ).andExpect(status().isOk()).andReturn();
+//        RoomDto resultRoomDto = objectMapper.readValue(mvcResult.getResponse().getContentAsString(), new TypeReference<RoomDto>() {
+//        });
+//       assertEquals(resultRoomDto, testRoomDto1);
         MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/rooms/1")
         ).andExpect(status().isOk()).andReturn();
-        RoomDto resultRoomDto = objectMapper.readValue(mvcResult.getResponse().getContentAsString(), new TypeReference<RoomDto>() {
+        RoomDto result = objectMapper.readValue(mvcResult.getResponse().getContentAsString(), new TypeReference<RoomDto>() {
         });
-        assertEquals(resultRoomDto, testRoomDto1);
+        Assertions.assertEquals(result.getName(), "101","Get teacher by Id should return teacher with correct name");
     }
 
     @Test

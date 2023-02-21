@@ -52,6 +52,11 @@ function Navigation() {
                       Mokytojai
                     </Link>
                   </div>
+                  <div className="nav-item">
+                    <Link to="/groups" className="nav-link">
+                      Grupės
+                    </Link>
+                  </div>
                 </div>
               </div>
             </div>

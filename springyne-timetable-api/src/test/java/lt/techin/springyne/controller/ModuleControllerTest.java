@@ -14,6 +14,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -46,7 +47,7 @@ class ModuleControllerTest {
         MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/modules")
                 ).andExpect(status().isOk()).andReturn();
 
-        List<ModuleDto> resultList = objectMapper.readValue(mvcResult.getResponse().getContentAsString(), new TypeReference<List<ModuleDto>>() {
+        List<ModuleDto> resultList = objectMapper.readValue(mvcResult.getResponse().getContentAsString(StandardCharsets.UTF_8), new TypeReference<List<ModuleDto>>() {
         });
 
         Assertions.assertTrue(resultList.containsAll(expectedList));

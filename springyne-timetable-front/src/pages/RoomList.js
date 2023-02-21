@@ -18,52 +18,41 @@ function RoomListPage() {
     "Content-Type": "application/json",
   };
 
+  const handleSearch = (event) => {
+    event.preventDefault();
+    fectchRooms();
+  }
+
   const fectchRooms = () => {
-    fetch(
-      `/api/v1/rooms/searchByName?name=${searchName}&page=${pageNumber}&pageSize=${pageSize}`
-    )
+    const searchParams = new URLSearchParams({
+      name: searchName,
+      building: searchBuinding,
+      page: pageNumber,
+      pageSize: pageSize,
+    });
+    fetch(`/api/v1/rooms/search?${searchParams.toString()}`)
       .then((response) => response.json())
       .then((jsonResponse) => setRooms(jsonResponse));
   };
 
   useEffect(fectchRooms, []);
 
-  const fectchRoomsByBuildings = () => {
-    fetch(
-      `/api/v1/rooms/searchByBuilding?building=${searchBuinding}&page=${pageNumber}&pageSize=${pageSize}`
-    )
-      .then((response) => response.json())
-      .then((jsonResponse) => setRooms(jsonResponse));
-  };
-
   const handlePageChange = (e, value) => {
     setPage(value);
     setPageNumber(value - 1);
-    fetch(
-      `/api/v1/rooms/searchByName?name=${searchName}&page=${
-        value - 1
-      }&pageSize=${pageSize}`
-    )
-      .then((response) => response.json())
-      .then((jsonResponse) => setRooms(jsonResponse));
+    fectchRooms();
   };
 
   const handlePageSizeChange = (e) => {
     setPageSize(e.target.value);
     setPage(1);
     setPageNumber(0);
-    fetch(
-      `/api/v1/rooms/searchByName?name=${searchName}&page=${0}&pageSize=${
-        e.target.value
-      }`
-    )
-      .then((response) => response.json())
-      .then((jsonResponse) => setRooms(jsonResponse));
+    fectchRooms();
   };
 
   const deleteRoom = (id) => {
-    fetch("/api/v1/rooms/delete/" + id, {
-      method: "PATCH",
+    fetch(`/api/v1/rooms/${id}`, {
+      method: "DELETE",
       headers: JSON_HEADERS,
     }).then(fectchRooms);
     setDeleted(true);
@@ -71,7 +60,7 @@ function RoomListPage() {
   };
 
   const restoreRoom = (id) => {
-    fetch("/api/v1/rooms/restore/" + id, {
+    fetch(`/api/v1/rooms/${id}/restore`, {
       method: "PATCH",
       headers: JSON_HEADERS,
     }).then(fectchRooms);
@@ -116,7 +105,28 @@ function RoomListPage() {
         </div>
         <div className="mb-4">
           <form className="d-flex" role="search">
-            <TextField
+            {/* <TextField
+              onChange={(e) => setSearchName(e.target.value)}
+              value={searchName}
+              id="search-name-input"
+              label="Ieškoti pagal pavadinimą"
+              className="form-control me-2"
+              size="small"
+            /> */}
+            {/* <button
+              className="btn btn-outline-primary"
+              type="submit"
+              onClick={fectchRooms}
+            >
+              Ieškoti
+            </button> */}
+          </form>
+        </div>
+      </div>
+      <div className="d-flex justify-content-end">
+        <div className="mb-4">
+          <form className="d-flex" role="search">
+          <TextField
               onChange={(e) => setSearchName(e.target.value)}
               value={searchName}
               id="search-name-input"
@@ -124,19 +134,6 @@ function RoomListPage() {
               className="form-control me-2"
               size="small"
             />
-            <button
-              className="btn btn-outline-primary"
-              type="submit"
-              onClick={fectchRooms}
-            >
-              Ieškoti
-            </button>
-          </form>
-        </div>
-      </div>
-      <div className="d-flex justify-content-end">
-        <div className="mb-4">
-          <form className="d-flex" role="search">
             <TextField
               onChange={(b) => setSearchBuilding(b.target.value)}
               value={searchBuinding}
@@ -148,7 +145,7 @@ function RoomListPage() {
             <button
               className="btn btn-outline-primary"
               type="submit"
-              onClick={fectchRoomsByBuildings}
+              onClick={handleSearch}
             >
               Ieškoti
             </button>

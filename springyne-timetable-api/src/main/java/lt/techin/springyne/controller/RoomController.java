@@ -51,6 +51,16 @@ public class RoomController {
                                              @RequestParam int page, @RequestParam int pageSize) {
         return roomService.searchByBuilding(building,page,pageSize);
     }
+    @GetMapping("/search")
+    public Page<Room> filterRoomsPaged(@RequestParam(required = false) String name,
+                                       @RequestParam(required = false) String building,
+                                       @RequestParam int page, @RequestParam int pageSize) {
+
+
+            return roomService.searchByNameAndBuilding(name, building, page, pageSize);
+
+    }
+
 
     @GetMapping("/{id}")
     public Optional<Room> viewRoom(@PathVariable Long id) {

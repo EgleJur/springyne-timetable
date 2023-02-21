@@ -3,7 +3,7 @@ package lt.techin.springyne.controller;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lt.techin.springyne.dto.ShiftDto;
-import lt.techin.springyne.dto.SubjectDto;
+import lt.techin.springyne.dto.GroupDto;
 import lt.techin.springyne.dto.TeacherDto;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -130,7 +130,7 @@ class ShiftControllerTest {
     void getShiftByIdReturnsCorrectDto() throws Exception {
         MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/shifts/1")
         ).andReturn();
-        SubjectDto result = objectMapper.readValue(mvcResult.getResponse().getContentAsString(), new TypeReference<SubjectDto>() {
+        GroupDto result = objectMapper.readValue(mvcResult.getResponse().getContentAsString(), new TypeReference<GroupDto>() {
         });
         Assertions.assertEquals(result.getName(), "Rytinė","Get teacher by Id should return teacher with correct name");
     }

@@ -1,5 +1,6 @@
-package lt.techin.springyne.subject;
+package lt.techin.springyne.repository;
 
+import lt.techin.springyne.model.Subject;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;

@@ -2,12 +2,11 @@ package lt.techin.springyne.controller;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import lt.techin.springyne.subject.SubjectController;
-import lt.techin.springyne.subject.SubjectDto;
+import lt.techin.springyne.dto.SubjectDto;
 import lt.techin.springyne.model.Module;
 import lt.techin.springyne.model.Room;
-import lt.techin.springyne.subject.Subject;
-import lt.techin.springyne.subject.SubjectService;
+import lt.techin.springyne.model.Subject;
+import lt.techin.springyne.service.SubjectService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -91,7 +90,7 @@ class SubjectControllerTest {
     }
 
     @Test
-    void addSubjectThrowsExceptionWithNonUniqueNumberValue() throws Exception {
+    void addSubjectThrowsExceptionWithNonUniqueNameValue() throws Exception {
         SubjectDto testSubjectDto1 = new SubjectDto("S1", "Test name1");
         assertEquals(400, performSubjectPostBadRequest(testSubjectDto1).getResponse().getStatus(),
                 "Non unique Subject name should return bad request status");

@@ -118,7 +118,7 @@ function SubjectListPage() {
         <div className="mb-4">
           <form className="d-flex" role="search">
             <TextField
-              onChange={(e) => setSearchName(e.target.value.replace(/[^\w\s]/gi, ""))}
+              onChange={(e) => setSearchName(e.target.value)}
               value={searchName}
               id="search-name-input"
               label="Ieškoti pagal pavadinimą"
@@ -126,7 +126,7 @@ function SubjectListPage() {
               size="small"
             />
             <TextField
-              onChange={(e) => setSearchModName(e.target.value.replace(/[^\w\s]/gi, ""))}
+              onChange={(e) => setSearchModName(e.target.value)}
               value={searchModName}
               id="search-module-input"
               label="Ieškoti pagal modulį"

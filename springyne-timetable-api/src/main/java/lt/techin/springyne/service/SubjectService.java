@@ -1,10 +1,12 @@
-package lt.techin.springyne.subject;
+package lt.techin.springyne.service;
 
 import lt.techin.springyne.exception.ScheduleValidationException;
 import lt.techin.springyne.model.Module;
 import lt.techin.springyne.model.Room;
+import lt.techin.springyne.model.Subject;
 import lt.techin.springyne.repository.ModuleRepository;
 import lt.techin.springyne.repository.RoomRepository;
+import lt.techin.springyne.repository.SubjectRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;

@@ -22,6 +22,10 @@ import CreateTeacherPage from './pages/CreateTeacher';
 import EditTeacherPage from "./pages/EditTeacher";
 import ViewTeacherPage from "./pages/ViewTeacher";
 import GroupListPage from "./pages/GroupList";
+import ProgramListPage from './pages/ProgramList';
+import CreateProgramPage from './pages/CreateProgram';
+import EditProgramPage from './pages/EditProgram';
+import ViewProgramPage from './pages/ViewProgram';
 
 
 
@@ -43,7 +47,7 @@ function App() {
             <Route path="/groups" element={<GroupListPage />} />
             <Route path="/teachers/create" element={<CreateTeacherPage />} />
             <Route path="/teachers/edit/:id" element={<EditTeacherPage />} />
-            <Route path="/teachers/view/:id" element ={<ViewTeacherPage/>} />
+            <Route path="/teachers/view/:id" element={<ViewTeacherPage />} />
             <Route path="/modules/create" element={<CreateModulePage />} />
             <Route path="/modules/view/:id" element={<ViewModulePage />} />
             <Route path="/modules/edit/:id" element={<EditModulePage />} />
@@ -53,6 +57,10 @@ function App() {
             <Route path="/rooms/create" element={<CreateRoomPage />} />
             <Route path="/rooms/view/:id" element={<ViewRoomPage />} />
             <Route path="/rooms/edit/:id" element={<EditRoomPage />} />
+            <Route path="/programs" element={<ProgramListPage />} />
+            <Route path="/programs/create" element={<CreateProgramPage />} />
+            <Route path="/programs/edit/:id" element={<EditProgramPage />} />
+            <Route path="/programs/view/:id" element={<ViewProgramPage />} />
           </Routes>
         </div>
       </HashRouter>

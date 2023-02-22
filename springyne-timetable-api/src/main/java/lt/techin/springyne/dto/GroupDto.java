@@ -15,4 +15,7 @@ public class GroupDto {
     private int students;
 
 
+    public GroupDto(String name) {
+        this.name = name;
+    }
 }

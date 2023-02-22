@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static lt.techin.springyne.dto.mapper.GroupMapper.toGroup;
+
 import static lt.techin.springyne.dto.mapper.GroupMapper.toGroupDto;
 import static org.springframework.http.ResponseEntity.ok;
 
@@ -68,15 +69,16 @@ public class GroupController {
     }
 
 
-//    @PatchMapping("/edit/{groupId}")
-//    public ResponseEntity<Group> editGroup(@PathVariable Long groupId,
-//                                               @RequestBody GroupDto groupDto,
-//                                             //  @RequestParam(required = false) Long moduleId,
-//                                               @RequestParam(required = false) Long shiftId) {
-//        var updatedGroup = groupService.edit(groupId, toGroup(groupDto), shiftId);
-//
-//        return ok(updatedGroup);
-//    }
+    @PatchMapping("/edit/{groupId}")
+    public ResponseEntity<Group> editGroup(@PathVariable Long groupId,
+                                           @RequestBody GroupDto groupDto,
+                                           @RequestParam(required = false) Long programId,
+                                           @RequestParam(required = false) Long shiftId)
+    {
+        var updatedGroup = groupService.edit(groupId, toGroup(groupDto), shiftId, programId);
+
+        return ok(updatedGroup);
+    }
 
 
     @PatchMapping("/delete/{groupId}")

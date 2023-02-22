@@ -29,6 +29,7 @@ public class Program {
 
     @OneToMany(fetch = FetchType.EAGER,  cascade = CascadeType.ALL)
     @JoinColumn(name = "program_id")
+    @OrderBy
     private Set<ProgramSubject> subjects = new HashSet<>();
 
     private boolean deleted = Boolean.FALSE;

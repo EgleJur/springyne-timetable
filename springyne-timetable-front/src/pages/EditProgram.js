@@ -7,9 +7,8 @@ import {
   Select,
   MenuItem,
   InputLabel,
-  Tooltip,
+  // Tooltip,
 } from "@mui/material";
-
 
 function EditProgramPage() {
   const [program, setProgram] = useState({});
@@ -153,76 +152,63 @@ function EditProgramPage() {
         </Alert>
       </Collapse>
 
-      <div className="container-fluid shadow p-3 mb-4 mb-md-5 bg-body rounded">
-        <form noValidate>
-          <div className="row">
-            <div className="col-md-4 mb-2 mb-md-0 fw-bold">
-              <label htmlFor="edit-module-number-with-error">
-                Pavadinimas *
-              </label>
-            </div>
-            <div className="col-md-8 mb-2 mb-md-0">
-              <TextField
-                error={!!nameError}
-                onChange={(e) => updateProperty("name", e)}
-                value={program.name}
-                id="program-name-with-error"
-                label="Pavadinimas"
-                helperText="Pavadinimas privalomas"
-                className="form-control mb-3"
-                size="small"
-                disabled={program.deleted}
-                InputLabelProps={{ shrink: true }}
-                required
-              />
-            </div>
-          </div>
-          <div className="row">
-            <div className="col-md-4 mb-2 mb-md-0 fw-bold">
-              <label htmlFor="edit-module-name-with-error">Aprašymas</label>
-            </div>
-            <div className="col-md-8 mb-2">
-              <TextField
-                error={!!descriptionError}
-                onChange={(e) => updateProperty("description", e)}
-                value={program.description}
-                multiline
-                id="program-description"
-                label="Aprašymas"
-                className="form-control mb-3"
-                size="small"
-                disabled={program.deleted}
-                InputLabelProps={{ shrink: true }}
-                required
-              />
-            </div>
-          </div>
+      <form noValidate>
+        <table className="table table-hover shadow p-3 mb-5 bg-body rounded align-middle">
+          <tbody>
+            <tr>
+              <th scope="col">
+                <label htmlFor="program-name-with-error">Pavadinimas *</label>
+              </th>
+              <td>
+                <TextField
+                  error={!!nameError}
+                  onChange={(e) => updateProperty("name", e)}
+                  value={program.name}
+                  fullWidth
+                  id="program-name-with-error"
+                  // label="Pavadinimas"
+                  helperText="Pavadinimas privalomas"
+                  size="small"
+                  disabled={program.deleted}
+                  InputLabelProps={{ shrink: true }}
+                  required
+                />
+              </td>
+            </tr>
 
-          <div className="row mb-md-4">
-            <div className="col-md-4 mb-2 mb-md-0 fw-bold">
-              Paskutinį kartą modifikuotas
-            </div>
-            <div className="col-md-8 mb-2 mb-md-0">{program.modifiedDate}</div>
-          </div>
-          <div className="row mb-md-4">
-            <div className="col-md-4 mb-2 mb-md-0 fw-bold">Būsena</div>
-            <div className="col-md-8 mb-2 mb-md-0">
-              {program.deleted ? "Ištrintas" : ""}
-            </div>
-          </div>
+            <tr>
+              <th scope="col">
+                <label htmlFor="program-description">Aprašymas *</label>
+              </th>
+              <td>
+                <TextField
+                  error={!!descriptionError}
+                  onChange={(e) => updateProperty("description", e)}
+                  value={program.description}
+                  multiline
+                  helperText="Aprašymas privalomas"
+                  id="program-description"
+                  // label="Aprašymas"
+                  fullWidth
+                  size="small"
+                  disabled={program.deleted}
+                  InputLabelProps={{ shrink: true }}
+                  required
+                />
+              </td>
+            </tr>
 
-          <div className="row mb-md-4">
-            <div className="col-md-4 mb-2 mb-md-0 fw-bold">
-              {program.subjects?.length === 0 ? (
-                ""
-              ) : (
-                <div className="mb-2">Dalykai:</div>
-              )}
-            </div>
-            <div className="col-md-8 mb-2 mb-md-0">
-              {program.subjects?.map((subject) => (
-                <div>
-                  <Tooltip title="Ištrinti">
+            <tr>
+              <th scope="col">
+                {program.subjects?.length === 0 ? (
+                  ""
+                ) : (
+                  <div className="mb-2">Ištrinti dalyką:</div>
+                )}
+              </th>
+              <td>
+                {program.subjects?.map((subject) => (
+                  <tr>
                     <button
                       type="submit"
                       className="btn btn-light mb-2"
@@ -234,27 +220,28 @@ function EditProgramPage() {
                     >
                       {subject.subject.name} {subject.hours} valandų
                     </button>
-                  </Tooltip>
-                </div>
-              ))}
-            </div>
-          </div>
-          <div className="row">
-            <div className="col-md-4 mb-2 mb-md-0 fw-bold">
-              <label htmlFor="add-select-subject">Pridėti dalyką</label>
-            </div>
-            <div className="col-md-8 mb-2">
-              <FormControl fullWidth size="small">
-                <InputLabel id="select-subject-label" error={!!subjectError}>
+                  </tr>
+                ))}
+              </td>
+            </tr>
+
+            <tr>
+              <th scope="col">
+                <label htmlFor="add-subject-select">Pridėti dalyką</label>
+              </th>
+              <td>
+                {/* <FormControl fullWidth size="small"> */}
+                {/* <InputLabel id="select-subject-label" error={!!subjectError}>
                   Pridėti dalyką
-                </InputLabel>
+                </InputLabel> */}
                 <Select
                   error={!!subjectError}
                   disabled={program.deleted}
-                  labelId="select-subject-label"
-                  InputLabelProps={{ shrink: true }}
-                  id="add-select-subject"
-                  label="Pridėti dalyką"
+                  size="small"
+                  // labelId="select-subject-label"
+                  // InputLabelProps={{ shrink: true }}
+                  id="add-subject-select"
+                  // label="Pridėti dalyką"
                   fullWidth
                   value={selectedSubject}
                   onChange={(e) => setSelectedSubject(e.target.value)}
@@ -269,31 +256,39 @@ function EditProgramPage() {
                     </MenuItem>
                   ))}
                 </Select>
-              </FormControl>
-            </div>
-          </div>
+                {/* </FormControl> */}
+              </td>
+            </tr>
 
-          <div className="row">
-            <div className="col-md-4 mb-2 mb-md-0 fw-bold">
-              <label htmlFor="hours-with-error">Valandų skaičius</label>
-            </div>
-            <div className="col-md-8 mb-2">
-              <TextField
-                error={!!hoursError}
-                onChange={(e) => setHours(e.target.value)}
-                value={hours}
-                id="hours-with-error"
-                label="Valandų skaičius"
-                className="form-control mb-3"
-                size="small"
-                disabled={program.deleted}
-              />
-            </div>
-          </div>
-        </form>
-      </div>
+            <tr>
+              <th scope="col">
+                <label htmlFor="hours-with-error">Valandų skaičius</label>
+              </th>
+              <td>
+                <TextField
+                  error={!!hoursError}
+                  onChange={(e) => setHours(e.target.value)}
+                  value={hours}
+                  id="hours-with-error"
+                  // label="Valandų skaičius"
+                  fullWidth
+                  size="small"
+                  disabled={program.deleted}
+                />
+              </td>
+            </tr>
+            <tr>
+              <th>Būsena</th>
+              <td>{program.deleted ? "Ištrintas" : ""}</td>
+            </tr>
 
-      <div>
+            <tr>
+              <th scope="col">Paskutinį kartą modifikuotas</th>
+              <td>{program.modifiedDate}</td>
+            </tr>
+          </tbody>
+        </table>
+
         <button
           type="submit"
           className="btn btn-primary me-2 mt-2 mb-5"
@@ -317,7 +312,7 @@ function EditProgramPage() {
             Ištrinti
           </button>
         )}
-      </div>
+      </form>
     </div>
   );
 }

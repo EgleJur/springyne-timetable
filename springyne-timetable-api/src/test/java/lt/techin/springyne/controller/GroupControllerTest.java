@@ -79,21 +79,24 @@ class GroupControllerTest {
 
         assertEquals("E-22/1", group.getName());
         assertEquals("2022-2023 m.m.", group.getGroupYear());
+        assertEquals(15, group.getStudents());
 
         group.setName("JP-22/1");
         group.setGroupYear("2022-2023 m.m.");
+        group.setStudents(15);
 
         assertEquals("JP-22/1", group.getName());
         assertEquals("2022-2023 m.m.", group.getGroupYear());
+        assertEquals(15, group.getStudents());
     }
 
     @Test
     public void viewGroupByIdTest() throws Exception {
-        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/groups/1")
+        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/groups/3")
         ).andExpect(status().isOk()).andReturn();
         GroupDto result = objectMapper.readValue(mvcResult.getResponse().getContentAsString(), new TypeReference<GroupDto>() {
         });
-        Assertions.assertEquals(result.getName(), "E-22/1","Get teacher by Id should return teacher with correct name");
+        Assertions.assertEquals(result.getName(), "JP-22/2","Get teacher by Id should return teacher with correct name");
     }
 
 //    @Test
@@ -177,35 +180,34 @@ class GroupControllerTest {
 //        Assertions.assertFalse(resultGroup.isDeleted());
 //    }
 //
-//    @Test
-//    void editGroupThrowsExceptionWithNonUniqueNameValue() throws Exception {
-//        GroupDto testGroupDto5 = new GroupDto("Tinklapiai", "");
-//        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.patch("/api/v1/groups/edit/1?moduleId=4").contentType(MediaType.APPLICATION_JSON).
-//                content(objectMapper.writeValueAsString(testGroupDto5))).andReturn();
-//
-//        assertEquals(400, mvcResult.getResponse().getStatus(),"Non unique Group name should return bad request status");
-//    }
+    @Test
+    void editGroupThrowsExceptionWithNonUniqueNameValue() throws Exception {
+        GroupDto testGroupDto = new GroupDto("E-22/1");
+        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.patch("/api/v1/groups/edit/2").contentType(MediaType.APPLICATION_JSON).
+                content(objectMapper.writeValueAsString(testGroupDto))).andReturn();
 
-//    @Test
-//    void editGroupThrowsExceptionWithEmptyValues() throws Exception {
-//        GroupDto testGroupDto5 = new GroupDto("", "HTML, CSS, Bootstrap");
-//        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.patch("/api/v1/groups/edit/4?moduleId=4").contentType(MediaType.APPLICATION_JSON).
-//                content(objectMapper.writeValueAsString(testGroupDto5))).andReturn();
-//
-//        assertEquals(400, mvcResult.getResponse().getStatus(),"Empty value name should return bad request status");
-//    }
-//
+        assertEquals(400, mvcResult.getResponse().getStatus(),"Non unique Group name should return bad request status");
+    }
 
-//    @Test
-//    void editGroupAllowsSavingWithUniqueName() throws Exception {
-//
-//        GroupDto testGroupDto4 = new GroupDto("Tarnybinės stotys ir operacinės sistemos2","Serveriai, programiniai paketai");
-//        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.patch("/api/v1/groups/edit/4?moduleId=4").contentType(MediaType.APPLICATION_JSON).
-//
-//                content(objectMapper.writeValueAsString(testGroupDto4))).andReturn();
-//
-//        assertEquals(200, mvcResult.getResponse().getStatus(),"Unique value non empty name should return ok status");
-//    }
+    @Test
+    void editGroupThrowsExceptionWithEmptyValues() throws Exception {
+        GroupDto testGroupDto = new GroupDto("");
+        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.patch("/api/v1/groups/edit/1").contentType(MediaType.APPLICATION_JSON).
+                content(objectMapper.writeValueAsString(testGroupDto))).andReturn();
+
+        assertEquals(400, mvcResult.getResponse().getStatus(),"Empty value name should return bad request status");
+    }
+
+    @Test
+    void editGroupAllowsSavingWithUniqueName() throws Exception {
+
+        GroupDto testGroupDto = new GroupDto("PT-22/3");
+        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.patch("/api/v1/groups/edit/5").contentType(MediaType.APPLICATION_JSON).
+
+                content(objectMapper.writeValueAsString(testGroupDto))).andReturn();
+
+        assertEquals(200, mvcResult.getResponse().getStatus(),"Unique value non empty name should return ok status");
+    }
 
 }
 

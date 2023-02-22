@@ -209,7 +209,7 @@ function EditShiftPage() {
         </Select>
         <p>Redaguota: {shift.lastUpdated}</p>
         <p>
-          Detalės:{" "}
+          Būsena:{" "}
           {(shift.visible === 1 ? false : true) ? "Pamaina ištrinta" : ""}
         </p>
         <button

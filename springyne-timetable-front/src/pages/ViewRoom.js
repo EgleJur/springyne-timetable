@@ -62,7 +62,7 @@ function ViewRoomPage() {
         </Alert>
       </Collapse>
       <div className="">
-        <table className="table table-hover shadow p-3 mb-5 bg-body rounded align-middle">
+      <table className="table table-hover shadow p-3 mb-5 bg-body rounded align-middle">
           <tbody>
             <tr>
               <th scope="col">Pavadinimas</th>

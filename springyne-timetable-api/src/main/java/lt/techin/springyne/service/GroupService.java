@@ -77,13 +77,12 @@ public class GroupService {
     public Page<Group> searchByNamePaged(String name, String programName, String groupYear, int page, int pageSize) {
 
         Pageable pageable = PageRequest.of(page, pageSize, Sort.by("deleted").and(Sort.by("name")));
-        if ((programName == null || programName.isEmpty() || programName.isBlank() || programName.equals(""))
-                && (groupYear == null || groupYear.isEmpty() || groupYear.isBlank() || groupYear.equals(""))
-                && (name == null || name.isEmpty() || name.isBlank() || name.equals(""))) {
-            return groupRepository.findAll(pageable);
-        }
+
         if (programName == null || programName.isEmpty() || programName.isBlank()) {
             if (groupYear == null || groupYear.isEmpty() || groupYear.isBlank()) {
+                if(name == null || name.isEmpty() || name.isBlank() || name.equals("")){
+                    return groupRepository.findAll(pageable);
+                }
                 return groupRepository.findAllByNameIgnoreCaseContaining(name, pageable);
             } else if (name == null || name.isEmpty() || name.isBlank()) {
                 return groupRepository.findAllByGroupYearIgnoreCaseContaining(groupYear, pageable);
@@ -112,23 +111,19 @@ public class GroupService {
         return groupRepository.findById(id);
     }
 
-//    public Group createGroup(Long roomId, Group group) {
-//
-//        checkGroupNameEmpty(group.getName());
-//        checkGroupNameUnique(group.getName());
-//        if (moduleId != null) {
-//            group.setModule(getModuleById(moduleId));
-//        }
-    //       //Subject createdSubject = subjectRepository.save(subject);
-//        if (roomId != null) {
-//            Room roomToAdd = getRoomById(roomId);
-//            group.getRooms().add(roomToAdd);
-//            //subjectRepository.insertSubjectAndRoom(createdSubject.getId(), roomId);
-//        }
+    public Group createGroup(Long programId,Long shiftId, Group group) {
 
-//        return groupRepository.save(group);
-//
-//    }
+        checkGroupNameEmpty(group.getName());
+        checkGroupNameUnique(group.getName());
+        if (programId != null) {
+            group.setProgram(getProgramById(programId));
+        }
+        if (shiftId != null) {
+            group.setShift(getShiftById(shiftId));
+        }
+
+        return groupRepository.save(group);
+    }
 //
 //    public void addShiftFromGroup(Long groupId, Long shiftId) {
 //        if (groupId == null) {
@@ -192,29 +187,29 @@ public class GroupService {
 //    }
 //
 //
-//    public Group delete(Long groupId) {
+    public Group delete(Long groupId) {
+
+        Group existingGroup = getGroupById(groupId);
+        if (!existingGroup.isDeleted()) {
+            existingGroup.setDeleted(true);
+            return groupRepository.save(existingGroup);
+        } else {
+            return existingGroup;
+        }
+
+    }
 //
-//        Group existingGroup = getGroupById(groupId);
-//        if (!existingGroup.isDeleted()) {
-//            existingGroup.setDeleted(true);
-//            return groupRepository.save(existingGroup);
-//        } else {
-//            return existingGroup;
-//        }
 //
-//    }
-//
-//
-//    public Group restore(Long id) {
-//        var existingGroup = getGroupById(id);
-//
-//        if (existingGroup.isDeleted()) {
-//            existingGroup.setDeleted(false);
-//            return groupRepository.save(existingGroup);
-//        } else {
-//            return existingGroup;
-//        }
-//    }
+    public Group restore(Long id) {
+        var existingGroup = getGroupById(id);
+
+        if (existingGroup.isDeleted()) {
+            existingGroup.setDeleted(false);
+            return groupRepository.save(existingGroup);
+        } else {
+            return existingGroup;
+        }
+    }
 //
 //
 //    public Group addModuleToGroup(Long subjectId, Long moduleId) {

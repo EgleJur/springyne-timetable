@@ -29,6 +29,7 @@ import ViewProgramPage from './pages/ViewProgram';
 
 // import ViewGroupPage from './pages/ViewGroup';
 import CreateGroupPage from './pages/CreateGroup';
+import HolidayListPage from './pages/HolidayList';
 
 
 
@@ -66,6 +67,7 @@ function App() {
             <Route path="/programs" element={<ProgramListPage />} />
             <Route path="/groups/create" element={<CreateGroupPage />} />
             {/* <Route path="/groups/edit/:id" element={<EditGroupPage />} /> */}
+            <Route path="/holidays" element={<HolidayListPage />} />
             
 
           </Routes>

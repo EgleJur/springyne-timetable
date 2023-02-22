@@ -14,6 +14,7 @@ import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -21,6 +22,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
@@ -38,21 +40,22 @@ class GroupControllerTest {
     Shift shift;
 
     @InjectMocks
-    GroupController GroupController;
+    GroupController groupController;
 
     @Mock
-    GroupService GroupService;
+    GroupService groupService;
 
     @Mock
     Group group;
+
 
     private static final long Id = 1;
     @Test
     void getAllGroupsContainsCorrectDtos() throws Exception {
 
-        GroupDto testGroupDto1 = new GroupDto("E-22/1", "2022-2023 m.m.");
-        GroupDto testGroupDto2 = new GroupDto("JP-22/1", "2022-2023 m.m.");
-        GroupDto testGroupDto3 = new GroupDto("JP-22/2", "2022-2023 m.m.");
+        GroupDto testGroupDto1 = new GroupDto("E-22/1", "2022-2023 m.m.", 15);
+        GroupDto testGroupDto2 = new GroupDto("JP-22/1", "2022-2023 m.m.",15);
+        GroupDto testGroupDto3 = new GroupDto("JP-22/2", "2021-2022 m.m.",15);
 
         List<GroupDto> expectedList = new ArrayList<>();
         expectedList.add(testGroupDto1);
@@ -69,36 +72,36 @@ class GroupControllerTest {
     }
 
 
-//    @Test
-//    void addGroupThrowsExceptionWithNullOrEmptyValues() throws Exception {
-//        GroupDto testGroupDto4 = new GroupDto("", "Serveriai, programiniai paketai");
-//        GroupDto testGroupDto5 = new GroupDto(null, "Scrum procesas");
-//        GroupDto testGroupDto6 = new GroupDto(null, null);
+    @Test
+    void addGroupThrowsExceptionWithNullOrEmptyValues() throws Exception {
+        GroupDto testGroupDto4 = new GroupDto("", "2022-2023m.m.", 15);
+        GroupDto testGroupDto5 = new GroupDto(null, "2021-2022 m.m.", 10);
+        GroupDto testGroupDto6 = new GroupDto(null, "2021-2022", 5);
+
+
+        String message = "Null or empty values should return bad request status";
+
+        assertEquals(400, performGroupPostBadRequest(testGroupDto4).getResponse().getStatus(), message);
+        assertEquals(400, performGroupPostBadRequest(testGroupDto5).getResponse().getStatus(), message);
+        assertEquals(400, performGroupPostBadRequest(testGroupDto6).getResponse().getStatus(), message);
+    }
+//
+    @Test
+    void addGroupThrowsExceptionWithNonUniqueNameValue() throws Exception {
+
+        GroupDto testGroupDto1 = new GroupDto("E-22/1", "2022-2023m.m.",10);
+
+        assertEquals(400, performGroupPostBadRequest(testGroupDto1).getResponse().getStatus(),
+                "Non unique Group name should return bad request status");
+    }
 //
 //
-//        String message = "Null or empty values should return bad request status";
-//
-//        assertEquals(400, performGroupPostBadRequest(testGroupDto4).getResponse().getStatus(), message);
-//        assertEquals(400, performGroupPostBadRequest(testGroupDto5).getResponse().getStatus(), message);
-//        assertEquals(400, performGroupPostBadRequest(testGroupDto6).getResponse().getStatus(), message);
-//    }
-//
-//    @Test
-//    void addGroupThrowsExceptionWithNonUniqueNameValue() throws Exception {
-//
-//        GroupDto testGroupDto1 = new GroupDto("Tinklapiai", "HTML, CSS, Bootstrap");
-//
-//        assertEquals(400, performGroupPostBadRequest(testGroupDto1).getResponse().getStatus(),
-//                "Non unique Group name should return bad request status");
-//    }
-//
-//
-//    public MvcResult performGroupPostBadRequest(GroupDto groupDto) throws Exception {
-//
-//        return mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/groups").contentType(MediaType.APPLICATION_JSON).
-//                        content(objectMapper.writeValueAsString(groupDto)))
-//                .andExpect(status().isBadRequest()).andReturn();
-//    }
+    public MvcResult performGroupPostBadRequest(GroupDto groupDto) throws Exception {
+
+        return mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/groups").contentType(MediaType.APPLICATION_JSON).
+                        content(objectMapper.writeValueAsString(groupDto)))
+                .andExpect(status().isBadRequest()).andReturn();
+    }
 //    @Test
 //    void deleteGroupSetsDeletedPropertyToTrue() throws Exception {
 //        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.patch("/api/v1/groups/delete/1").contentType(MediaType.APPLICATION_JSON))

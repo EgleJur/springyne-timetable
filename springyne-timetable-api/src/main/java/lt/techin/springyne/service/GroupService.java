@@ -112,23 +112,19 @@ public class GroupService {
         return groupRepository.findById(id);
     }
 
-//    public Group createGroup(Long roomId, Group group) {
-//
-//        checkGroupNameEmpty(group.getName());
-//        checkGroupNameUnique(group.getName());
-//        if (moduleId != null) {
-//            group.setModule(getModuleById(moduleId));
-//        }
-    //       //Subject createdSubject = subjectRepository.save(subject);
-//        if (roomId != null) {
-//            Room roomToAdd = getRoomById(roomId);
-//            group.getRooms().add(roomToAdd);
-//            //subjectRepository.insertSubjectAndRoom(createdSubject.getId(), roomId);
-//        }
+    public Group createGroup(Long programId,Long shiftId, Group group) {
 
-//        return groupRepository.save(group);
-//
-//    }
+        checkGroupNameEmpty(group.getName());
+        checkGroupNameUnique(group.getName());
+        if (programId != null) {
+            group.setProgram(getProgramById(programId));
+        }
+        if (shiftId != null) {
+            group.setShift(getShiftById(shiftId));
+        }
+
+        return groupRepository.save(group);
+    }
 //
 //    public void addShiftFromGroup(Long groupId, Long shiftId) {
 //        if (groupId == null) {

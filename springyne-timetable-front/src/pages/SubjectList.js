@@ -185,14 +185,14 @@ function SubjectListPage() {
 
                 {subject.deleted ? (
                   <button
-                    className="btn btn-outline-danger ms-2"
+                    className="btn btn-outline-danger ms-2 my-1"
                     onClick={() => restoreSubject(subject.id)}
                   >
                     Atstatyti
                   </button>
                 ) : (
                   <button
-                    className="btn btn-outline-danger ms-2"
+                    className="btn btn-outline-danger ms-2 my-1"
                     onClick={() => deleteSubject(subject.id)}
                   >
                     Ištrinti

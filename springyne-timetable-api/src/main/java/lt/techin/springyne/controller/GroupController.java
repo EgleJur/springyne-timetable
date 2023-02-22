@@ -1,13 +1,19 @@
 package lt.techin.springyne.controller;
 
+import lt.techin.springyne.dto.GroupDto;
 import lt.techin.springyne.model.Group;
 import lt.techin.springyne.service.GroupService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
+
+import static lt.techin.springyne.dto.mapper.GroupMapper.toGroup;
+import static lt.techin.springyne.dto.mapper.GroupMapper.toGroupDto;
+import static org.springframework.http.ResponseEntity.ok;
 
 @RestController
 @RequestMapping("/api/v1/groups")
@@ -53,13 +59,13 @@ public class GroupController {
 //
 //        return ok(toGroupDto(createdGroup));
 //    }
-//    @PostMapping(value = "/createGroup")
-//    public ResponseEntity<GroupDto> createGroup(@RequestBody GroupDto groupDto,
-//                                                 //   @RequestParam Long moduleId,
-//                                                    @RequestParam(required = false) Long roomId) {
-//        var createdGroup = groupService.createGroup( roomId, toGroup(groupDto));
-//        return ok(toGroupDto(createdGroup));
-//    }
+    @PostMapping(value = "/createGroup")
+    public ResponseEntity<GroupDto> createGroup(@RequestBody GroupDto groupDto,
+                                                   @RequestParam Long programId,
+                                                @RequestParam Long shiftId) {
+        var createdGroup = groupService.createGroup(programId, shiftId, toGroup(groupDto));
+        return ok(toGroupDto(createdGroup));
+    }
 
 
 //    @PatchMapping("/edit/{groupId}")
@@ -73,21 +79,21 @@ public class GroupController {
 //    }
 
 
-//    @PatchMapping("/delete/groupId}")
-//    public ResponseEntity<Group> deleteGroup(@PathVariable Long groupId) {
+    @PatchMapping("/delete/{groupId}")
+    public ResponseEntity<Group> deleteGroup(@PathVariable Long groupId) {
+
+        var updatedGroup = groupService.delete(groupId);
+        return ok(updatedGroup);
+
+    }
 //
-//        var updatedGroup = groupService.delete(groupId);
-//        return ok(updatedGroup);
-//
-//    }
-//
-//    @PatchMapping("/restore/{groupId}")
-//    public ResponseEntity<Group> restoreGroup(@PathVariable Long groupId) {
-//
-//        var restoredGroup = groupService.restore(groupId);
-//        return ok(restoredGroup);
-//
-//    }
+    @PatchMapping("/restore/{groupId}")
+    public ResponseEntity<Group> restoreGroup(@PathVariable Long groupId) {
+
+        var restoredGroup = groupService.restore(groupId);
+        return ok(restoredGroup);
+
+    }
 
 //    @PatchMapping("/{groupId}/addModule/{moduleId}")
 //    public ResponseEntity<Group> addModuleToGroup(@PathVariable Long groupId, @PathVariable Long moduleId) {

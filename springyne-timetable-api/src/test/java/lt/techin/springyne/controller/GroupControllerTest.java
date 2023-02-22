@@ -87,13 +87,13 @@ class GroupControllerTest {
         GroupDto group = new GroupDto("E-22/1", "2022-2023 m.m.");
 
         assertEquals("E-22/1", group.getName());
-        assertEquals("2022-2023 m.m.", group.getYear());
+        assertEquals("2022-2023 m.m.", group.getGroupYear());
 
         group.setName("JP-22/1");
-        group.setYear("2022-2023 m.m.");
+        group.setGroupYear("2022-2023 m.m.");
 
         assertEquals("JP-22/1", group.getName());
-        assertEquals("2022-2023 m.m.", group.getYear());
+        assertEquals("2022-2023 m.m.", group.getGroupYear());
     }
 
     @Test

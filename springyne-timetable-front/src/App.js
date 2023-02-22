@@ -63,10 +63,12 @@ function App() {
             <Route path="/rooms/view/:id" element={<ViewRoomPage />} />
             <Route path="/rooms/edit/:id" element={<EditRoomPage />} />
             <Route path="/programs" element={<ProgramListPage />} />
+            <Route path="/programs/create" element={<CreateProgramPage />} />
+            <Route path="/programs/edit/:id" element={<EditProgramPage />} />
+            <Route path="/programs/view/:id" element={<ViewProgramPage />} />
             <Route path="/groups/create" element={<CreateGroupPage />} />
             <Route path="/groups/edit/:id" element={<EditGroupPage />} />
-            <Route path="/groups/view/:id" element={<ViewGroupPage />} /> 
-
+            <Route path="/groups/view/:id" element={<ViewGroupPage />} />
           </Routes>
         </div>
       </HashRouter>

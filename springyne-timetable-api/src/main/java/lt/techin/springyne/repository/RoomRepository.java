@@ -1,6 +1,8 @@
 package lt.techin.springyne.repository;
 
 import lt.techin.springyne.model.Room;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
@@ -13,4 +15,7 @@ public interface RoomRepository extends JpaRepository<Room, Long> {
 
     boolean existsByBuildingIgnoreCase(String building);
 
+    Page<Room> findAllByBuildingIgnoreCaseContaining(String building, Pageable pageable);
+
+    Page<Room> findAllByNameIgnoreCaseContainingOrBuildingIgnoreCaseContaining(String name, String building, Pageable pageable);
 }

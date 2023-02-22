@@ -2,6 +2,7 @@ package lt.techin.springyne.service;
 
 import lt.techin.springyne.exception.ScheduleValidationException;
 import lt.techin.springyne.model.Room;
+import lt.techin.springyne.model.Subject;
 import lt.techin.springyne.repository.RoomRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.*;
@@ -108,4 +109,24 @@ public class RoomService {
         existingRoom.setDeleted(false);
         return roomRepository.save(existingRoom);
     }
+
+    public Page<Room> searchByRoomAndBuildingPaged(String name, String building, int page, int pageSize) {
+
+            Room room = new Room();
+            if (name != null) {
+                room.setName(name);
+            }
+
+            Pageable pageable = PageRequest.of(page, pageSize, Sort.by("deleted").and(Sort.by("name")));
+            if(building == null || building.isEmpty() || building.isBlank()) {
+                Example<Room> roomExample = Example.of(room, SEARCH_CONTAINS_NAME);
+                return roomRepository.findAll(roomExample, pageable);
+            }
+            if(name == null || name.isEmpty()|| name.isBlank() || name.equals("")) {
+
+                return roomRepository.findAllByBuildingIgnoreCaseContaining(building, pageable);
+            }
+            return  roomRepository.findAllByNameIgnoreCaseContainingOrBuildingIgnoreCaseContaining(name,building, pageable);
+
+        }
 }

@@ -20,7 +20,7 @@ function RoomListPage() {
 
   const fectchRooms = () => {
     fetch(
-      `/api/v1/rooms/searchByName?name=${searchName}&page=${pageNumber}&pageSize=${pageSize}`
+      `/api/v1/rooms/searchByName?name=${searchName}&building=${searchBuinding}&page=${pageNumber}&pageSize=${pageSize}`
     )
       .then((response) => response.json())
       .then((jsonResponse) => setRooms(jsonResponse));
@@ -116,7 +116,28 @@ function RoomListPage() {
         </div>
         <div className="mb-4">
           <form className="d-flex" role="search">
-            <TextField
+            {/* <TextField
+              onChange={(e) => setSearchName(e.target.value)}
+              value={searchName}
+              id="search-name-input"
+              label="Ieškoti pagal pavadinimą"
+              className="form-control me-2"
+              size="small"
+            /> */}
+            {/* <button
+              className="btn btn-outline-primary"
+              type="submit"
+              onClick={fectchRooms}
+            >
+              Ieškoti
+            </button> */}
+          </form>
+        </div>
+      </div>
+      <div className="d-flex justify-content-end">
+        <div className="mb-4">
+          <form className="d-flex" role="search">
+          <TextField
               onChange={(e) => setSearchName(e.target.value)}
               value={searchName}
               id="search-name-input"
@@ -124,19 +145,6 @@ function RoomListPage() {
               className="form-control me-2"
               size="small"
             />
-            <button
-              className="btn btn-outline-primary"
-              type="submit"
-              onClick={fectchRooms}
-            >
-              Ieškoti
-            </button>
-          </form>
-        </div>
-      </div>
-      <div className="d-flex justify-content-end">
-        <div className="mb-4">
-          <form className="d-flex" role="search">
             <TextField
               onChange={(b) => setSearchBuilding(b.target.value)}
               value={searchBuinding}
@@ -148,7 +156,7 @@ function RoomListPage() {
             <button
               className="btn btn-outline-primary"
               type="submit"
-              onClick={fectchRoomsByBuildings}
+              onClick={fectchRooms}
             >
               Ieškoti
             </button>

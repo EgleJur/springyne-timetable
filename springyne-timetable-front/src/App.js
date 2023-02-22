@@ -29,6 +29,7 @@ import ViewProgramPage from './pages/ViewProgram';
 import CreateGroupPage from './pages/CreateGroup';
 import EditGroupPage from './pages/EditGroup';
 import ViewGroupPage from './pages/ViewGroup';
+import HolidayListPage from './pages/HolidayList';
 
 
 

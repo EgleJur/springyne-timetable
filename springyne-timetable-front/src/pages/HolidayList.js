@@ -176,14 +176,11 @@ function HolidayListPage() {
         </tbody>
         <tfoot className="table-light">
           <tr>
-            <td>
+            <td colSpan={5}>
               {holidays.totalElements == "0"
                 ? "Įrašų nerasta"
                 : `Rasta įrašų: ${holidays.totalElements}`}
             </td>
-            <td></td>
-            <td></td>
-            <td></td>
           </tr>
         </tfoot>
       </table>

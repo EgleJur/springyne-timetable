@@ -1,7 +1,9 @@
 package lt.techin.springyne.service;
 
+import lt.techin.springyne.dto.GroupDto;
 import lt.techin.springyne.model.Group;
 import lt.techin.springyne.model.Room;
+import lt.techin.springyne.model.Subject;
 import lt.techin.springyne.repository.GroupRepository;
 import lt.techin.springyne.repository.RoomRepository;
 import org.junit.jupiter.api.Test;
@@ -37,16 +39,16 @@ public class GroupServiceTest {
 //        verify(groupRepository).save(group);
 //    }
 
-//    @Test
-//    public void editGroup() {
-//        Group group = mock(Group.class);
-//        when(group.getName()).thenReturn("101");
-//        when(room.getBuilding()).thenReturn("Lakūnų g. 3, LT-09108 Vilnius");
-//        when(room.getDescription()).thenReturn("Akademija.IT");
-//        when(roomRepository.findById(Id)).thenReturn(Optional.of(room));
-//        roomService.editRoom(Id, room);
-//        verify(roomRepository).save(room);
-//    }
+    @Test
+    public void editGroup() {
+        Group group = mock(Group.class);
+        when(group.getName()).thenReturn("E-22/1");
+        when(group.getGroupYear()).thenReturn("2022-2023 m.m.");
+        when(group.getStudents()).thenReturn(15);
+        when(groupRepository.findById(Id)).thenReturn(Optional.of(group));
+        groupService.edit(Id, group, null, null);
+        verify(groupRepository).save(group);
+    }
 }
 
 

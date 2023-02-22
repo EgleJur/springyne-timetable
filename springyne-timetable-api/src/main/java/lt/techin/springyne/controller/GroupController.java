@@ -1,13 +1,18 @@
 package lt.techin.springyne.controller;
 
+import lt.techin.springyne.dto.GroupDto;
 import lt.techin.springyne.model.Group;
 import lt.techin.springyne.service.GroupService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
+
+import static lt.techin.springyne.dto.mapper.GroupMapper.toGroup;
+import static org.springframework.http.ResponseEntity.ok;
 
 @RestController
 @RequestMapping("/api/v1/groups")
@@ -62,15 +67,16 @@ public class GroupController {
 //    }
 
 
-//    @PatchMapping("/edit/{groupId}")
-//    public ResponseEntity<Group> editGroup(@PathVariable Long groupId,
-//                                               @RequestBody GroupDto groupDto,
-//                                             //  @RequestParam(required = false) Long moduleId,
-//                                               @RequestParam(required = false) Long shiftId) {
-//        var updatedGroup = groupService.edit(groupId, toGroup(groupDto), shiftId);
-//
-//        return ok(updatedGroup);
-//    }
+    @PatchMapping("/edit/{groupId}")
+    public ResponseEntity<Group> editGroup(@PathVariable Long groupId,
+                                           @RequestBody GroupDto groupDto,
+                                           @RequestParam(required = false) Long programId,
+                                           @RequestParam(required = false) Long shiftId)
+    {
+        var updatedGroup = groupService.edit(groupId, toGroup(groupDto), shiftId, programId);
+
+        return ok(updatedGroup);
+    }
 
 
 //    @PatchMapping("/delete/groupId}")

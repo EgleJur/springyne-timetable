@@ -12,6 +12,9 @@ public class GroupDto {
     //    private Long id;
     private String name;
     private String groupYear;
+    private int Students;
 
-
+    public GroupDto(String name) {
+        this.name = name;
+    }
 }

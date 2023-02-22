@@ -11,6 +11,7 @@ public class GroupMapper {
 
         group.setName(groupDto.getName());
         group.setGroupYear(groupDto.getGroupYear());
+        group.setStudents(groupDto.getStudents());
 
         return group;
     }
@@ -22,6 +23,7 @@ public class GroupMapper {
 
         groupDto.setName(group.getName());
         groupDto.setGroupYear(group.getGroupYear());
+        groupDto.setStudents(group.getStudents());
 
         return groupDto;
     }

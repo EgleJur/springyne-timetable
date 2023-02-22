@@ -145,32 +145,32 @@ public class GroupService {
 //        }
 //    }
 
-//    public Group edit(Long groupId, Group group, Long shiftId) {
-//
-//        checkGroupNameEmpty(group.getName());
-//        Group updatedGroup = getGroupById(groupId);
-//        if(!updatedGroup.getName().equals(group.getName())) {
-//            checkGroupNameUnique(group.getName());
-//        }
-//        updatedGroup.setName(group.getName());
-    //   updatedGroup.setDescription(group.getDescription());
+    public Group edit(Long groupId, Group group, Long shiftId, Long programId) {
 
-//        if (moduleId != null) {
-//            Module moduleToAdd = getModuleById(moduleId);
-//            updatedGroup.setModule(moduleToAdd);
-//        }
+        checkGroupNameEmpty(group.getName());
+        Group updatedGroup = getGroupById(groupId);
+        if (!updatedGroup.getName().equals(group.getName())) {
+            checkGroupNameUnique(group.getName());
 
-//        if (roomId != null) {
-//            Room newRoom = getRoomById(roomId);
-//            updatedGroup.getRooms().add(newRoom);
-////            Set<Room> existingRoom = updatedSubject.getRooms();
-////            if(!existingRoom.contains(newRoom)){
-////                subjectRepository.insertSubjectAndRoom(id, roomId);
-////            }
-//        }
-//
-//        return groupRepository.save(updatedGroup);
-//    }
+            updatedGroup.setName(group.getName());
+        }
+
+        updatedGroup.setGroupYear(group.getGroupYear());
+        updatedGroup.setStudents(group.getStudents());
+
+        if (shiftId != null) {
+            Shift shiftToAdd = getShiftById(shiftId);
+            updatedGroup.setShift(shiftToAdd);
+        }
+
+        if (programId != null) {
+            Program newProgram = getProgramById(programId);
+            updatedGroup.setProgram(newProgram);
+        }
+        return groupRepository.save(updatedGroup);
+    }
+
+
 //    @Transactional
 //    public void deleteShiftFromGroup(Long groupId, Long roomId) {
 //
@@ -224,4 +224,4 @@ public class GroupService {
 //        return groupRepository.save(updatedGroup);
 //    }
 
-}
+    }

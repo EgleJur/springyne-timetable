@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lt.techin.springyne.dto.RoomDto;
 import lt.techin.springyne.dto.mapper.RoomMapper;
 import lt.techin.springyne.model.Room;
-import lt.techin.springyne.model.Subject;
 import lt.techin.springyne.service.RoomService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;

@@ -62,6 +62,11 @@ function Navigation() {
                       Grupės
                     </Link>
                   </div>
+                  <div className="nav-item">
+                    <Link to="/holidays" className="nav-link">
+                      Atostogos
+                    </Link>
+                  </div>
                 </div>
               </div>
             </div>

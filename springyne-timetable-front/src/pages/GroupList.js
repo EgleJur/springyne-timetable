@@ -22,8 +22,7 @@ function GroupListPage() {
   const fetchGroups = () => {
     fetch(
       `/api/v1/groups/search?name=${searchName}&programName=${searchProgName}&groupYear=${searchYear}&page=${pageNumber}&pageSize=${pageSize}`)
-      // `/api/v1/groups/search?name=${searchName}&programName=${searchProgName}&groupYear=${searchYear}&page=${pageNumber}&pageSize=${pageSize}`)
-      .then((response) => response.json())
+     .then((response) => response.json())
       .then((jsonResponse) => setGroups(jsonResponse));
   };
 

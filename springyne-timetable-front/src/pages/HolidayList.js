@@ -141,8 +141,8 @@ function HolidayListPage() {
           {holidays.map((holiday) => (
             <tr key={holiday.id} id={holiday.id}>
               <td>{holiday.name}</td>
-              <td>{holiday.yearStarts}-{holiday.monthStarts}-{holiday.dayStarts}</td>
-              <td>{holiday.yearEnds}-{holiday.monthEnds}-{holiday.dayEnds}</td>
+              <td>{holiday.starts}</td>
+              <td>{holiday.ends}</td>
               <td>{holiday.deleted ? "Ištrintas" : ""}</td>
               <td className="d-flex justify-content-end">
                 

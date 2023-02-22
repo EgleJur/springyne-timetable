@@ -25,8 +25,9 @@ public class HolidayService {
     }
 
     public List<Holidays> getAllHolidays(){
-        LocalDate yearStarts = LocalDate.now();
-        return holidaysRepository.findAllByYearStartsOrderByDeletedAscYearStartsAscMonthStartsAscDayStartsAsc(yearStarts.getYear());
+
+        int yearNow = LocalDate.now().getYear();
+        return holidaysRepository.findAllHolidays(yearNow);
     }
 
     public Holidays delete(Long holidayId) {

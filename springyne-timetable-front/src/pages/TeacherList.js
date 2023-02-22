@@ -127,7 +127,7 @@ function TeacherListPage() {
       <div className="d-flex justify-content-end">
         <div className="mb-4">
           <form className="d-flex" role="search">
-            <label htmlFor="page-size-select" className="me-2">
+            {/* <label htmlFor="page-size-select" className="me-2">
               Puslapyje:
             </label>
             <Select
@@ -141,7 +141,7 @@ function TeacherListPage() {
               <MenuItem value={25}>25</MenuItem>
               <MenuItem value={50}>50</MenuItem>
               <MenuItem value={100}>100</MenuItem>
-            </Select>
+            </Select> */}
             <label htmlFor="select-subject" className="me-2">
               Dalykas:
             </label>
@@ -197,7 +197,7 @@ function TeacherListPage() {
             </button>
           </form>
         </div>
-        <div>
+        {/* <div>
           <Pagination
             count={teachers.totalPages}
             defaultPage={1}
@@ -205,7 +205,7 @@ function TeacherListPage() {
             onChange={handlePageChange}
             value={page}
           />
-        </div>
+        </div> */}
       </div>
 
       <table className="table table-hover shadow p-3 mb-5 bg-body rounded align-middle">
@@ -215,7 +215,7 @@ function TeacherListPage() {
             <th>Dalykai</th>
             <th>Pamaina</th>
             <th>Būsena</th>
-            <th>Veiksmai</th>
+            <th className="d-flex justify-content-center">Veiksmai</th>
           </tr>
         </thead>
         <tbody>
@@ -235,7 +235,7 @@ function TeacherListPage() {
               </td>
               <td>{teacher.shift.name}</td>
               <td>{teacher.deleted ? "Mokytojas ištrintas" : ""}</td>
-              <td>
+              <td className="d-flex justify-content-end">
                 <button className="btn btn-outline-primary me-2 my-1">
                   <Link
                     className="nav-link"
@@ -284,6 +284,36 @@ function TeacherListPage() {
           </tr>
         </tfoot>
       </table>
+      <div className="d-flex justify-content-end">
+        <div className="mb-4">
+          <form className="d-flex" role="search">
+            <label htmlFor="page-size-select" className="me-2">
+              Puslapyje:
+            </label>
+            <Select
+              id="page-size-select"
+              value={pageSize}
+              size="small"
+              className="me-2"
+              onChange={handlePageSizeChange}
+            >
+              <MenuItem value={10}>10</MenuItem>
+              <MenuItem value={25}>25</MenuItem>
+              <MenuItem value={50}>50</MenuItem>
+              <MenuItem value={100}>100</MenuItem>
+            </Select>
+          </form>
+        </div>
+        <div>
+          <Pagination
+            count={teachers.totalPages}
+            defaultPage={1}
+            siblingCount={0}
+            onChange={handlePageChange}
+            value={page}
+          />
+        </div>
+      </div>
     </div>
   );
 }

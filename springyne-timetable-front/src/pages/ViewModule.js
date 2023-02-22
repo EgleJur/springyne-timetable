@@ -100,8 +100,8 @@ function ViewModulePage() {
                 key={subject.id}
               >
                 <td>{subject.name}</td>
-                <td>{subject.description}</td>
-                <td>{subject.last_Updated}</td>
+                {/* <td>{subject.description}</td>
+                <td>{subject.last_Updated}</td> */}
                 {subject.deleted ? <td>Dalykas ištrintas</td> : <td></td>}
               </tr>
             ))}

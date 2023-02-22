@@ -20,7 +20,7 @@ function RoomListPage() {
 
   const fectchRooms = () => {
     fetch(
-      `/api/v1/rooms/searchByName?name=${searchName}&page=${pageNumber}&pageSize=${pageSize}`
+      `/api/v1/rooms/searchByName?name=${searchName}&building=${searchBuinding}&page=${pageNumber}&pageSize=${pageSize}`
     )
       .then((response) => response.json())
       .then((jsonResponse) => setRooms(jsonResponse));
@@ -116,11 +116,40 @@ function RoomListPage() {
         </div>
         <div className="mb-4">
           <form className="d-flex" role="search">
-            <TextField
+            {/* <TextField
               onChange={(e) => setSearchName(e.target.value)}
               value={searchName}
               id="search-name-input"
               label="Ieškoti pagal pavadinimą"
+              className="form-control me-2"
+              size="small"
+            /> */}
+            {/* <button
+              className="btn btn-outline-primary"
+              type="submit"
+              onClick={fectchRooms}
+            >
+              Ieškoti
+            </button> */}
+          </form>
+        </div>
+      </div>
+      <div className="d-flex justify-content-end">
+        <div className="mb-4">
+          <form className="d-flex" role="search">
+          <TextField
+              onChange={(e) => setSearchName(e.target.value)}
+              value={searchName}
+              id="search-name-input"
+              label="Ieškoti pagal pavadinimą"
+              className="form-control me-2"
+              size="small"
+            />
+            <TextField
+              onChange={(b) => setSearchBuilding(b.target.value)}
+              value={searchBuinding}
+              id="search-name-input"
+              label="Ieškoti pagal pastatą"
               className="form-control me-2"
               size="small"
             />
@@ -134,28 +163,7 @@ function RoomListPage() {
           </form>
         </div>
       </div>
-      <div className="d-flex justify-content-end">
-        <div className="mb-4">
-          <form className="d-flex" role="search">
-            <TextField
-              onChange={(b) => setSearchBuilding(b.target.value)}
-              value={searchBuinding}
-              id="search-name-input"
-              label="Ieškoti pagal pastatą"
-              className="form-control me-2"
-              size="small"
-            />
-            <button
-              className="btn btn-outline-primary"
-              type="submit"
-              onClick={fectchRoomsByBuildings}
-            >
-              Ieškoti
-            </button>
-          </form>
-        </div>
-      </div>
-      <div className="d-flex justify-content-end">
+      {/* <div className="d-flex justify-content-end">
         <div className="mb-4">
           <form className="d-flex" role="search">
             <label htmlFor="page-size-select" className="me-2">
@@ -184,7 +192,7 @@ function RoomListPage() {
             value={page}
           />
         </div>
-      </div>
+      </div> */}
 
       <table className="table table-hover shadow p-3 mb-5 bg-body rounded align-middle">
         <thead className="table-light">
@@ -192,7 +200,7 @@ function RoomListPage() {
             <th>Pavadinimas</th>
             <th>Pastatas</th>
             <th>Būsena</th>
-            <th>Veiksmai</th>
+            <th className="d-flex justify-content-center">Veiksmai</th>
           </tr>
         </thead>
         <tbody>
@@ -200,8 +208,8 @@ function RoomListPage() {
             <tr key={room.id} id={room.id}>
               <td>{room.name}</td>
               <td>{room.building}</td>
-              <td>{room.deleted ? "Ištrintas" : "Aktyvus"}</td>
-              <td>
+              <td>{room.deleted ? "Ištrintas" : ""}</td>
+              <td className="d-flex justify-content-end">
                 <button className="btn btn-outline-primary">
                   <Link className="nav-link" to={"/rooms/view/" + room.id}>
                     Žiūrėti
@@ -248,6 +256,36 @@ function RoomListPage() {
           </tr>
         </tfoot>
       </table>
+      <div className="d-flex justify-content-end">
+        <div className="mb-4">
+          <form className="d-flex" role="search">
+            <label htmlFor="page-size-select" className="me-2">
+              Puslapyje:
+            </label>
+            <Select
+              id="page-size-select"
+              value={pageSize}
+              size="small"
+              className="me-2"
+              onChange={handlePageSizeChange}
+            >
+              <MenuItem value={10}>10</MenuItem>
+              <MenuItem value={25}>25</MenuItem>
+              <MenuItem value={50}>50</MenuItem>
+              <MenuItem value={100}>100</MenuItem>
+            </Select>
+          </form>
+        </div>
+        <div>
+          <Pagination
+            count={rooms.totalPages}
+            defaultPage={1}
+            siblingCount={0}
+            onChange={handlePageChange}
+            value={page}
+          />
+        </div>
+      </div>
     </div>
   );
 }

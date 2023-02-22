@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lt.techin.springyne.dto.RoomDto;
 import lt.techin.springyne.dto.mapper.RoomMapper;
 import lt.techin.springyne.model.Room;
+import lt.techin.springyne.model.Subject;
 import lt.techin.springyne.service.RoomService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -50,6 +51,14 @@ public class RoomController {
     public Page<Room> filterRoomsByBuildingPaged(@RequestParam(required = false) String building,
                                              @RequestParam int page, @RequestParam int pageSize) {
         return roomService.searchByBuilding(building,page,pageSize);
+    }
+
+    @GetMapping("/search")
+    public Page<Room> searchByRoomAndBuildingPaged(@RequestParam(required = false) String name,
+                                           @RequestParam(required = false) String building,
+                                           @RequestParam int page,
+                                           @RequestParam int pageSize) {
+        return roomService.searchByRoomAndBuildingPaged(name, building, page, pageSize);
     }
 
     @GetMapping("/{id}")

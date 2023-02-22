@@ -3,11 +3,14 @@ package lt.techin.springyne.service;
 import lt.techin.springyne.exception.ScheduleValidationException;
 import lt.techin.springyne.model.Program;
 import lt.techin.springyne.model.ProgramSubject;
-import lt.techin.springyne.repository.ProgramRepository;
 import lt.techin.springyne.model.Subject;
+import lt.techin.springyne.repository.ProgramRepository;
 import lt.techin.springyne.repository.SubjectRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.*;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -56,5 +59,27 @@ public class ProgramService {
     public Page<Program> searchByName(String name, int page, int pageSize) {
         Pageable pageable = PageRequest.of(page,pageSize, Sort.by("deleted").and(Sort.by("id")));
         return programRepository.findAllByNameIgnoreCaseContaining(name,pageable);
+    }
+
+    public Program deleteProgram(Long programId) {
+        Program programToDelete = programRepository.findById(programId).orElseThrow(
+                () -> new ScheduleValidationException("Program does not exist", "id", "Program not found", String.valueOf(programId)));
+        if (!programToDelete.isDeleted()) {
+            programToDelete.setDeleted(true);
+            return programRepository.save(programToDelete);
+        } else {
+            return programToDelete;
+        }
+    }
+
+    public Program restoreProgram(Long programId) {
+        Program programToRestore = programRepository.findById(programId).orElseThrow(
+                () -> new ScheduleValidationException("Program does not exist", "id", "Program not found", String.valueOf(programId)));
+        if (programToRestore.isDeleted()) {
+            programToRestore.setDeleted(false);
+            return programRepository.save(programToRestore);
+        } else {
+            return programToRestore;
+        }
     }
 }

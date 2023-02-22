@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 import static lt.techin.springyne.dto.mapper.GroupMapper.toGroup;
 import static lt.techin.springyne.dto.mapper.GroupMapper.toGroupDto;
@@ -47,10 +48,10 @@ public class GroupController {
 //        return groupService.getByModule(name, page, pageSize);
 //    }
 //
-//    @GetMapping("/{groupId}")
-//    public Optional<Group> getGroup(@PathVariable Long groupId) {
-//        return groupService.getById(groupId);
-//    }
+    @GetMapping("/{groupId}")
+    public Optional<Group> viewGroup(@PathVariable Long groupId) {
+        return groupService.getById(groupId);
+    }
 
 //    @PostMapping
 //    public ResponseEntity<GroupDto> createGroupDto(@RequestBody GroupDto groupDto) {

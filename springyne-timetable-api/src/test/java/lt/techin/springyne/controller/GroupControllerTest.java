@@ -2,6 +2,10 @@ package lt.techin.springyne.controller;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lt.techin.springyne.controller.GroupController;
+import lt.techin.springyne.dto.GroupDto;
+import lt.techin.springyne.model.Group;
+import lt.techin.springyne.model.Program;
 import lt.techin.springyne.dto.GroupDto;
 import lt.techin.springyne.model.Group;
 import lt.techin.springyne.model.Program;
@@ -19,8 +23,16 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.when;
+
+import java.util.ArrayList;
+import java.util.List;
+
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -48,7 +60,6 @@ class GroupControllerTest {
     @Mock
     Group group;
 
-
     private static final long Id = 1;
     @Test
     void getAllGroupsContainsCorrectDtos() throws Exception {
@@ -65,10 +76,42 @@ class GroupControllerTest {
         MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/groups")
         ).andExpect(status().isOk()).andReturn();
 
-        List<GroupDto> resultList = objectMapper.readValue(mvcResult.getResponse().getContentAsString(), new TypeReference<List<GroupDto>>() {
+        List<GroupDto> resultList = objectMapper.readValue(mvcResult.getResponse().getContentAsString(StandardCharsets.UTF_8), new TypeReference<List<GroupDto>>() {
+
         });
 
         Assertions.assertTrue(resultList.containsAll(expectedList));
+    }
+
+    @Test
+    public void testGroupDto() {
+        GroupDto group = new GroupDto("E-22/1", "2022-2023 m.m.");
+
+        assertEquals("E-22/1", group.getName());
+        assertEquals("2022-2023 m.m.", group.getGroupYear());
+
+        group.setName("JP-22/1");
+        group.setGroupYear("2022-2023 m.m.");
+
+        assertEquals("JP-22/1", group.getName());
+        assertEquals("2022-2023 m.m.", group.getGroupYear());
+    }
+
+    @Test
+    public void viewGroupByIdTest() throws Exception {
+        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/groups/1")
+        ).andExpect(status().isOk()).andReturn();
+        GroupDto result = objectMapper.readValue(mvcResult.getResponse().getContentAsString(), new TypeReference<GroupDto>() {
+        });
+        Assertions.assertEquals(result.getName(), "E-22/1","Get teacher by Id should return teacher with correct name");
+    }
+
+    @Test
+    public void getAllGroupsTest(){
+        List<Group> groups = new ArrayList<>();
+        groups.add(group);
+        when(GroupService.getAllGroups()).thenReturn(groups);
+        assertEquals(GroupController.getAllGroups().size(), groups.size());
     }
 
 
@@ -95,6 +138,9 @@ class GroupControllerTest {
                 "Non unique Group name should return bad request status");
     }
 //
+//        assertEquals(400, performGroupPostBadRequest(testGroupDto1).getResponse().getStatus(),
+//                "Non unique Group name should return bad request status");
+//    }
 //
     public MvcResult performGroupPostBadRequest(GroupDto groupDto) throws Exception {
 

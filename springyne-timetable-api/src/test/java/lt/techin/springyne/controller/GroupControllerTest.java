@@ -24,6 +24,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+<<<<<<< HEAD
+import static org.mockito.Mockito.when;
+=======
+>>>>>>> development
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
@@ -99,13 +103,13 @@ class GroupControllerTest {
         Assertions.assertEquals(result.getName(), "JP-22/2","Get teacher by Id should return teacher with correct name");
     }
 
-//    @Test
-//    public void getAllGroupsTest(){
-//        List<Group> groups = new ArrayList<>();
-//        groups.add(group);
-//        when(GroupService.getAllGroups()).thenReturn(groups);
-//        assertEquals(GroupController.getAllGroups().size(), groups.size());
-//    }
+    @Test
+    public void getAllGroupsTest(){
+        List<Group> groups = new ArrayList<>();
+        groups.add(group);
+        when(groupService.getAllGroups()).thenReturn(groups);
+        assertEquals(groupController.getAllGroups().size(), groups.size());
+    }
 
 
 //    @Test

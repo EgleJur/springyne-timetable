@@ -30,16 +30,16 @@ function CreateProgramPage() {
     setSubjectError(false);
     if (
       name === "" ||
-      //  description === "" ||
+       description === "" ||
       hours === "" ||
       selectedSubject === ""
     ) {
       if (name === "") {
         setNameError(true);
       }
-      //  if (description === "") {
-      //    setDescriptionError(true);
-      //  }
+       if (description === "") {
+         setDescriptionError(true);
+       }
       if (hours === "") {
         setHoursError(true);
       }
@@ -117,10 +117,10 @@ function CreateProgramPage() {
           value={description}
           id="create-teacher-description-error"
           label="Aprašymas"
-          // helperText="Aprašymas privalomas"
+          helperText="Aprašymas privalomas"
           className="form-control mb-3"
           size="small"
-          // required
+          required
         />
         <TextField
           error={!!hoursError}

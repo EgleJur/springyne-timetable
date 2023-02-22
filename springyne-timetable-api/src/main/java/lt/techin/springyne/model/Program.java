@@ -27,7 +27,7 @@ public class Program {
 
     private String description;
 
-    @OneToMany(fetch = FetchType.EAGER,  cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.EAGER,  cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "program_id")
     @OrderBy
     private Set<ProgramSubject> subjects = new HashSet<>();

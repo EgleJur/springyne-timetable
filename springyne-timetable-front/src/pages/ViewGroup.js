@@ -3,42 +3,41 @@ import { useParams } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { Collapse, Alert } from "@mui/material";
 
-function ViewProgramPage() {
-  const [program, setProgram] = useState({});
+function ViewGroupPage() {
+  const [group, setGroup] = useState({});
   const [deleted, setDeleted] = useState(false);
   const [restored, setRestored] = useState(false);
   const params = useParams();
 
   useEffect(() => {
-    fetch("/api/v1/programs/" + params.id)
+    fetch("/api/v1/groups/" + params.id)
       .then((response) => response.json())
-      .then((jsonResponse) => setProgram(jsonResponse));
+      .then((jsonResponse) => setGroup(jsonResponse));
   }, [params.id]);
 
   const handleDelete = () => {
-    fetch(`/api/v1/programs/delete/` + params.id, {
+    fetch(`/api/v1/groups/delete/` + params.id, {
       method: "PATCH",
     })
       .then((response) => response.json())
-      .then((jsonResponse) => setProgram(jsonResponse));
+      .then((jsonResponse) => setGroup(jsonResponse));
     setDeleted(true);
     setRestored(false);
   };
 
   const handleRestore = () => {
-    fetch(`/api/v1/programs/restore/` + params.id, {
+    fetch(`/api/v1/groups/restore/` + params.id, {
       method: "PATCH",
     })
       .then((response) => response.json())
-      .then((jsonResponse) => setProgram(jsonResponse));
+      .then((jsonResponse) => setGroup(jsonResponse));
     setRestored(true);
     setDeleted(false);
   };
 
   return (
     <div className="mx-3">
-      <h2 className="my-5">Programa</h2>
-
+      <h2 className="my-5">Grupė</h2>
       <Collapse in={deleted}>
         <Alert
           onClose={() => {
@@ -62,51 +61,49 @@ function ViewProgramPage() {
           Įrašas sėkmingai atstatytas
         </Alert>
       </Collapse>
-
       <div className="">
         <table className="table table-hover shadow p-3 mb-5 bg-body rounded align-middle">
           <tbody>
+
             <tr>
               <th scope="col">Pavadinimas</th>
-              <td colSpan={4}>{program.name}</td>
+              <td>{group.name}</td>
             </tr>
             <tr>
-              <th scope="col">Aprašymas</th>
-              <td colSpan={4}>{program.description}</td>
+              <th scope="col">Metai</th>
+              <td>{group.groupYear}</td>
+            </tr>
+            <tr>
+              <th scope="col">Studentai</th>
+              <td>{group.students}</td>
+            </tr>
+            <tr>
+              <th scope="col">Programa</th>
+              <td>{group.program?.name}</td>
+            </tr>
+            <tr>
+              <th scope="col">Pamaina</th>
+              <td>{group.shift?.name}</td>
             </tr>
             <tr>
               <th scope="col">Būsena</th>
-              <td colSpan={4}>{program.deleted ? "Ištrintas" : ""}</td>
+              <td>{group.deleted ? "Ištrinta" : ""}</td>
             </tr>
             <tr>
-              <th scope="col">Paskutinį kartą modifikuotas:</th>
-              <td colSpan={4}>{program.modifiedDate}</td>
+              <th scope="col">Paskutinį kartą modifikuota:</th>
+              <td>{group.modifiedDate}</td>
             </tr>
-            <tr>
-              <th rowSpan="0">Dalykai</th>
-            </tr>
-            {program.subjects?.map((subject) => (
-              <tr
-                className={subject.subject.deleted ? "text-black-50" : ""}
-                key={subject.subject.id}
-              >
-                <td>{subject.subject.name}</td>
-                <td>{subject.hours} valandų</td>
-                {subject.subject.deleted ? (
-                  <td>Ištrintas</td>
-                ) : (
-                  <td></td>
-                )}
-              </tr>
-            ))}
           </tbody>
         </table>
-        <button className="btn btn-primary me-2" disabled={program.deleted}>
-          <Link to={"/programs/edit/" + params.id} className="nav-link">
-            Redaguoti
-          </Link>
-        </button>
-        {program.deleted ? (
+
+          <button
+            className="btn btn-primary me-2" disabled={group.deleted}>
+            <Link className="nav-link" to={"/groups/edit/" + group.id}>
+              Redaguoti
+            </Link>
+          </button>
+
+        {group.deleted ? (
           <button className="btn btn-secondary me-2" onClick={handleRestore}>
             Atstatyti
           </button>
@@ -120,4 +117,4 @@ function ViewProgramPage() {
   );
 }
 
-export default ViewProgramPage;
+export default ViewGroupPage;

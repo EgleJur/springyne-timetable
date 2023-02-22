@@ -77,13 +77,12 @@ public class GroupService {
     public Page<Group> searchByNamePaged(String name, String programName, String groupYear, int page, int pageSize) {
 
         Pageable pageable = PageRequest.of(page, pageSize, Sort.by("deleted").and(Sort.by("name")));
-        if ((programName == null || programName.isEmpty() || programName.isBlank() || programName.equals(""))
-                && (groupYear == null || groupYear.isEmpty() || groupYear.isBlank() || groupYear.equals(""))
-                && (name == null || name.isEmpty() || name.isBlank() || name.equals(""))) {
-            return groupRepository.findAll(pageable);
-        }
+
         if (programName == null || programName.isEmpty() || programName.isBlank()) {
             if (groupYear == null || groupYear.isEmpty() || groupYear.isBlank()) {
+                if(name == null || name.isEmpty() || name.isBlank() || name.equals("")){
+                    return groupRepository.findAll(pageable);
+                }
                 return groupRepository.findAllByNameIgnoreCaseContaining(name, pageable);
             } else if (name == null || name.isEmpty() || name.isBlank()) {
                 return groupRepository.findAllByGroupYearIgnoreCaseContaining(groupYear, pageable);
@@ -188,29 +187,29 @@ public class GroupService {
 //    }
 //
 //
-//    public Group delete(Long groupId) {
+    public Group delete(Long groupId) {
+
+        Group existingGroup = getGroupById(groupId);
+        if (!existingGroup.isDeleted()) {
+            existingGroup.setDeleted(true);
+            return groupRepository.save(existingGroup);
+        } else {
+            return existingGroup;
+        }
+
+    }
 //
-//        Group existingGroup = getGroupById(groupId);
-//        if (!existingGroup.isDeleted()) {
-//            existingGroup.setDeleted(true);
-//            return groupRepository.save(existingGroup);
-//        } else {
-//            return existingGroup;
-//        }
 //
-//    }
-//
-//
-//    public Group restore(Long id) {
-//        var existingGroup = getGroupById(id);
-//
-//        if (existingGroup.isDeleted()) {
-//            existingGroup.setDeleted(false);
-//            return groupRepository.save(existingGroup);
-//        } else {
-//            return existingGroup;
-//        }
-//    }
+    public Group restore(Long id) {
+        var existingGroup = getGroupById(id);
+
+        if (existingGroup.isDeleted()) {
+            existingGroup.setDeleted(false);
+            return groupRepository.save(existingGroup);
+        } else {
+            return existingGroup;
+        }
+    }
 //
 //
 //    public Group addModuleToGroup(Long subjectId, Long moduleId) {

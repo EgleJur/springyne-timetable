@@ -79,21 +79,21 @@ public class GroupController {
 //    }
 
 
-//    @PatchMapping("/delete/groupId}")
-//    public ResponseEntity<Group> deleteGroup(@PathVariable Long groupId) {
+    @PatchMapping("/delete/{groupId}")
+    public ResponseEntity<Group> deleteGroup(@PathVariable Long groupId) {
+
+        var updatedGroup = groupService.delete(groupId);
+        return ok(updatedGroup);
+
+    }
 //
-//        var updatedGroup = groupService.delete(groupId);
-//        return ok(updatedGroup);
-//
-//    }
-//
-//    @PatchMapping("/restore/{groupId}")
-//    public ResponseEntity<Group> restoreGroup(@PathVariable Long groupId) {
-//
-//        var restoredGroup = groupService.restore(groupId);
-//        return ok(restoredGroup);
-//
-//    }
+    @PatchMapping("/restore/{groupId}")
+    public ResponseEntity<Group> restoreGroup(@PathVariable Long groupId) {
+
+        var restoredGroup = groupService.restore(groupId);
+        return ok(restoredGroup);
+
+    }
 
 //    @PatchMapping("/{groupId}/addModule/{moduleId}")
 //    public ResponseEntity<Group> addModuleToGroup(@PathVariable Long groupId, @PathVariable Long moduleId) {

@@ -192,14 +192,14 @@ function GroupListPage() {
 
                 {group.deleted ? (
                   <button
-                    className="btn btn-outline-danger ms-2"
+                    className="btn btn-outline-danger ms-2 my-1"
                     onClick={() => restoreGroup(group.id)}
                   >
                     Atstatyti
                   </button>
                 ) : (
                   <button
-                    className="btn btn-outline-danger ms-2 "
+                    className="btn btn-outline-danger ms-2 my-1"
                     onClick={() => deleteGroup(group.id)}
                   >
                     Ištrinti

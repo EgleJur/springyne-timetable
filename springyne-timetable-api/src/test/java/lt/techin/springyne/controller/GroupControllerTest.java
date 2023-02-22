@@ -2,6 +2,10 @@ package lt.techin.springyne.controller;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lt.techin.springyne.controller.GroupController;
+import lt.techin.springyne.dto.GroupDto;
+import lt.techin.springyne.model.Group;
+import lt.techin.springyne.model.Program;
 import lt.techin.springyne.dto.GroupDto;
 import lt.techin.springyne.model.Group;
 import lt.techin.springyne.model.Program;
@@ -24,6 +28,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.when;
+
+import java.util.ArrayList;
+import java.util.List;
+
+
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
@@ -50,6 +60,7 @@ class GroupControllerTest {
     Group group;
 
     private static final long Id = 1;
+
     @Test
     void getAllGroupsContainsCorrectDtos() throws Exception {
 
@@ -78,15 +89,12 @@ class GroupControllerTest {
 
         assertEquals("E-22/1", group.getName());
         assertEquals("2022-2023 m.m.", group.getGroupYear());
-        assertEquals(15, group.getStudents());
 
         group.setName("JP-22/1");
         group.setGroupYear("2022-2023 m.m.");
-        group.setStudents(15);
 
         assertEquals("JP-22/1", group.getName());
         assertEquals("2022-2023 m.m.", group.getGroupYear());
-        assertEquals(15,group.getStudents());
     }
 
     @Test
@@ -98,6 +106,29 @@ class GroupControllerTest {
         Assertions.assertEquals(result.getName(), "E-22/1","Get teacher by Id should return teacher with correct name");
     }
 
+    @Test
+    public void getAllGroupsTest(){
+        List<Group> groups = new ArrayList<>();
+        groups.add(group);
+        when(GroupService.getAllGroups()).thenReturn(groups);
+        assertEquals(GroupController.getAllGroups().size(), groups.size());
+    }
+
+
+//    @Test
+//    void addGroupThrowsExceptionWithNullOrEmptyValues() throws Exception {
+//        GroupDto testGroupDto4 = new GroupDto("", "Serveriai, programiniai paketai");
+//        GroupDto testGroupDto5 = new GroupDto(null, "Scrum procesas");
+//        GroupDto testGroupDto6 = new GroupDto(null, null);
+//
+//
+//        String message = "Null or empty values should return bad request status";
+//
+//        assertEquals(400, performGroupPostBadRequest(testGroupDto4).getResponse().getStatus(), message);
+//        assertEquals(400, performGroupPostBadRequest(testGroupDto5).getResponse().getStatus(), message);
+//        assertEquals(400, performGroupPostBadRequest(testGroupDto6).getResponse().getStatus(), message);
+//    }
+//
 //    @Test
 //    public void getAllGroupsTest(){
 //        List<Group> groups = new ArrayList<>();
@@ -164,6 +195,7 @@ class GroupControllerTest {
 //
 //        assertEquals(400, mvcResult.getResponse().getStatus(),"Non unique Group name should return bad request status");
 //    }
+
 //    @Test
 //    void editGroupThrowsExceptionWithEmptyValues() throws Exception {
 //        GroupDto testGroupDto5 = new GroupDto("", "HTML, CSS, Bootstrap");
@@ -173,7 +205,7 @@ class GroupControllerTest {
 //        assertEquals(400, mvcResult.getResponse().getStatus(),"Empty value name should return bad request status");
 //    }
 //
-//
+
 //    @Test
 //    void editGroupAllowsSavingWithUniqueName() throws Exception {
 //

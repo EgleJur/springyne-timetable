@@ -1,3 +1,7 @@
 .red-icon {
     color: rgb(161, 3, 3);
   }
+  .veiksmai-column {
+    text-align: right;
+    margin-left: -10px;
+  }

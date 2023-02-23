@@ -25,7 +25,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 //<<<<<<< HEAD
-//import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.when;
 //=======
 //>>>>>>> development
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -107,7 +107,7 @@ class GroupControllerTest {
     public void getAllGroupsTest(){
         List<Group> groups = new ArrayList<>();
         groups.add(group);
-//        when(groupService.getAllGroups()).thenReturn(groups);
+        when(groupService.getAllGroups()).thenReturn(groups);
         assertEquals(groupController.getAllGroups().size(), groups.size());
     }
 

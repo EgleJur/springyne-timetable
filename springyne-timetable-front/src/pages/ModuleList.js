@@ -153,7 +153,7 @@ function ModuleListPage() {
             <th>Numeris</th>
             <th>Pavadinimas</th>
             <th>Būsena</th>
-            <th className="d-flex justify-content-center">Veiksmai</th>
+            <th className="d-flex justify-content-end">Veiksmai</th>
           </tr>
         </thead>
         <tbody>
@@ -166,7 +166,7 @@ function ModuleListPage() {
               <td>{module.number}</td>
               <td>{module.name}</td>
               <td>{module.deleted ? "Ištrintas" : ""}</td>
-              <td className="d-flex justify-content-center">
+              <td className="d-flex justify-content-end">
                 <button className="btn btn-outline-primary me-2 my-1 btn-link" title="Žiūrėti">
                   <Link className="nav-link" to={"/modules/view/" + module.id}>
                     

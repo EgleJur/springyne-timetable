@@ -3,6 +3,11 @@ import { Link } from "react-router-dom";
 import { TextField } from "@mui/material";
 import { Select, MenuItem, Pagination } from "@mui/material";
 import { Collapse, Alert } from "@mui/material";
+import EditTwoToneIcon from '@mui/icons-material/EditTwoTone';
+import DeleteTwoToneIcon from '@mui/icons-material/DeleteTwoTone';
+import RestoreTwoToneIcon from '@mui/icons-material/RestoreTwoTone';
+import VisibilityTwoToneIcon from '@mui/icons-material/VisibilityTwoTone';
+
 
 function RoomListPage() {
   const [rooms, setRooms] = useState({});
@@ -113,28 +118,9 @@ function RoomListPage() {
               Pridėti naują kabinetą
             </Link>
           </button>
-        </div>
-        <div className="mb-4">
-          <form className="d-flex" role="search">
-            {/* <TextField
-              onChange={(e) => setSearchName(e.target.value)}
-              value={searchName}
-              id="search-name-input"
-              label="Ieškoti pagal pavadinimą"
-              className="form-control me-2"
-              size="small"
-            /> */}
-            {/* <button
-              className="btn btn-outline-primary"
-              type="submit"
-              onClick={fectchRooms}
-            >
-              Ieškoti
-            </button> */}
-          </form>
-        </div>
+        
       </div>
-      <div className="d-flex justify-content-end">
+      
         <div className="mb-4">
           <form className="d-flex" role="search">
           <TextField
@@ -200,7 +186,7 @@ function RoomListPage() {
             <th>Pavadinimas</th>
             <th>Pastatas</th>
             <th>Būsena</th>
-            <th className="d-flex justify-content-center">Veiksmai</th>
+            <th></th>
           </tr>
         </thead>
         <tbody>
@@ -210,33 +196,33 @@ function RoomListPage() {
               <td>{room.building}</td>
               <td>{room.deleted ? "Ištrintas" : ""}</td>
               <td className="d-flex justify-content-end">
-                <button className="btn btn-outline-primary">
+                <button className="btn btn-outline-primary me-1 my-1 btn-link" title="Žiūrėti">
                   <Link className="nav-link" to={"/rooms/view/" + room.id}>
-                    Žiūrėti
+                  <VisibilityTwoToneIcon/>
                   </Link>
                 </button>
                 <button
-                  className="btn btn-outline-primary ms-2"
+                  className="btn btn-outline-primary me-1 my-1 btn-link" title="Redaguoti"
                   disabled={room.deleted}
                 >
                   <Link className="nav-link" to={"/rooms/edit/" + room.id}>
-                    Redaguoti
+                  <EditTwoToneIcon/>
                   </Link>
                 </button>
 
                 {room.deleted ? (
                   <button
-                    className="btn btn-outline-danger ms-2"
+                  className="btn btn-outline-secondary me-1 my-1 btn-link" title="Atstatyti"
                     onClick={() => restoreRoom(room.id)}
                   >
-                    Atstatyti
+                    <RestoreTwoToneIcon/>
                   </button>
                 ) : (
                   <button
-                    className="btn btn-outline-danger ms-2"
+                  className="btn btn-danger me-2 my-1 btn-link" title="Ištrinti"
                     onClick={() => deleteRoom(room.id)}
                   >
-                    Ištrinti
+                    <DeleteTwoToneIcon className="red-icon" />
                   </button>
                 )}
               </td>

@@ -3,6 +3,11 @@ import { Link } from "react-router-dom";
 import { TextField } from "@mui/material";
 import { Select, MenuItem, Pagination } from "@mui/material";
 import { Collapse, Alert } from "@mui/material";
+import EditTwoToneIcon from '@mui/icons-material/EditTwoTone';
+import DeleteTwoToneIcon from '@mui/icons-material/DeleteTwoTone';
+import RestoreTwoToneIcon from '@mui/icons-material/RestoreTwoTone';
+import VisibilityTwoToneIcon from '@mui/icons-material/VisibilityTwoTone';
+
 
 function SubjectListPage() {
   const [subjects, setSubjects] = useState({});
@@ -150,7 +155,7 @@ function SubjectListPage() {
             <th>Pavadinimas</th>
             <th>Modulis</th>
             <th>Būsena</th>
-            <th className="d-flex justify-content-center">Veiksmai</th>
+            <th></th>
           </tr>
         </thead>
         <tbody>
@@ -162,40 +167,40 @@ function SubjectListPage() {
               <td>{subject.module?.name}</td>
               <td>{subject.deleted ? "Ištrintas" : ""}</td>
               <td className="d-flex justify-content-end">
-                <button className="btn btn-outline-primary me-2 my-1">
+                <button className="btn btn-outline-primary me-1 my-1 btn-link" title="Žiūrėti">
                   <Link
                     className="nav-link"
                     to={"/subjects/view/" + subject.id}
                   >
-                    Žiūrėti
+                    <VisibilityTwoToneIcon/>
                   </Link>
                 </button>
 
                 <button
-                  className="btn btn-outline-primary me-2 my-1"
+                  className="btn btn-outline-primary me-1 my-1 btn-link" title="Redaguoti"
                   disabled={subject.deleted}
                 >
                   <Link
                     className="nav-link"
                     to={"/subjects/edit/" + subject.id}
                   >
-                    Redaguoti
+                    <EditTwoToneIcon/>
                   </Link>
                 </button>
 
                 {subject.deleted ? (
                   <button
-                    className="btn btn-outline-danger ms-2 my-1"
+                  className="btn btn-outline-secondary me-1 my-1 btn-link" title="Atstatyti"
                     onClick={() => restoreSubject(subject.id)}
                   >
-                    Atstatyti
+                    <RestoreTwoToneIcon/>
                   </button>
                 ) : (
                   <button
-                    className="btn btn-outline-danger ms-2 my-1"
+                  className="btn btn-danger me-2 my-1 btn-link" title="Ištrinti"
                     onClick={() => deleteSubject(subject.id)}
                   >
-                    Ištrinti
+                    <DeleteTwoToneIcon className="red-icon" />
                   </button>
                 )}
               </td>

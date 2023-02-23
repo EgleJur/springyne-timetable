@@ -87,7 +87,7 @@ function ViewGroupPage() {
             </tr>
             <tr>
               <th scope="col">Būsena</th>
-              <td>{group.deleted ? "Ištrinta" : ""}</td>
+              <td>{group.deleted ? "Ištrinta" : "Aktyvus"}</td>
             </tr>
             <tr>
               <th scope="col">Paskutinį kartą modifikuota:</th>

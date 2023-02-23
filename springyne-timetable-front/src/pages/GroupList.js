@@ -3,6 +3,10 @@ import { Link } from "react-router-dom";
 import { TextField } from "@mui/material";
 import { Select, MenuItem, Pagination } from "@mui/material";
 import { Collapse, Alert } from "@mui/material";
+import EditTwoToneIcon from '@mui/icons-material/EditTwoTone';
+import DeleteTwoToneIcon from '@mui/icons-material/DeleteTwoTone';
+import RestoreTwoToneIcon from '@mui/icons-material/RestoreTwoTone';
+import VisibilityTwoToneIcon from '@mui/icons-material/VisibilityTwoTone';
 
 function GroupListPage() {
   const [groups, setGroups] = useState({});
@@ -154,7 +158,7 @@ function GroupListPage() {
             <th>Metai</th>
             <th>Studentai</th>
             <th>Būsena</th>
-            <th className="d-flex justify-content-center">Veiksmai</th>
+            <th></th>
           </tr>
         </thead>
         <tbody>
@@ -168,40 +172,40 @@ function GroupListPage() {
               <td>{group.students}</td>
               <td>{group.deleted ? "Ištrintas" : ""}</td>
               <td className="d-flex justify-content-end">
-                <button className="btn btn-outline-primary me-2 my-1 ">
+                <button className="btn btn-outline-primary me-1 my-1 btn-link" title="Žiūrėti">
                   <Link
                     className="nav-link"
                     to={"/groups/view/" + group.id}
                   >
-                    Žiūrėti
+                    <VisibilityTwoToneIcon/>
                   </Link>
                 </button>
 
                 <button
-                  className="btn btn-outline-primary me-2 my-1"
+                  className="btn btn-outline-primary me-1 my-1 btn-link" title="Redaguoti"
                   disabled={group.deleted}
                 >
                   <Link
                     className="nav-link"
                     to={"/groups/edit/" + group.id}
                   >
-                    Redaguoti
+                    <EditTwoToneIcon/>
                   </Link>
                 </button>
 
                 {group.deleted ? (
                   <button
-                    className="btn btn-outline-danger ms-2 my-1"
+                  className="btn btn-outline-secondary me-1 my-1 btn-link" title="Atstatyti"
                     onClick={() => restoreGroup(group.id)}
                   >
-                    Atstatyti
+                    <RestoreTwoToneIcon/>
                   </button>
                 ) : (
                   <button
-                    className="btn btn-outline-danger ms-2 my-1"
+                    className="btn btn-danger me-2 my-1 btn-link" title="Ištrinti"
                     onClick={() => deleteGroup(group.id)}
                   >
-                    Ištrinti
+                    <DeleteTwoToneIcon className="red-icon" />
                   </button>
                 )}
               </td>

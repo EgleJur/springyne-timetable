@@ -9,6 +9,7 @@ import {
   InputLabel,
   OutlinedInput,
 } from "@mui/material";
+import ClearIcon from "@mui/icons-material/Clear";
 
 function EditTeacherPage() {
   const [teacher, setTeacher] = useState({});
@@ -247,7 +248,6 @@ function EditTeacherPage() {
     {teacher.subjects?.length === 0 ? "" : <div>Pašalinti Dalyką:</div>}
   </div>
   <div className="col-md-8 mb-2">
-    {/* <div className="d-grid gap-6 d-md-block"> */}
       {teacher.subjects?.map((subject) => (
         <button
           type="submit"
@@ -258,10 +258,10 @@ function EditTeacherPage() {
           id={subject.id}
           disabled={teacher.deleted}
         >
-          {subject.name}
+          {subject.name}{" "}
+          <ClearIcon color="disabled" sx={{ fontSize: 12}} />
         </button>
       ))}
-      {/* </div> */}
   </div>
 </div>
 

@@ -165,11 +165,12 @@ function EditShiftPage() {
           <div className="row">
             <div className="col-md-4 mb-2 mb-md-0 fw-bold">
         <label htmlFor="starts-select" className="me-2">
-          Pradžia:
+          Pradžia - Pabaiga:
         </label>
         </div>
             <div className="col-md-8 mb-2">
         <Select
+          title="Pradžia"
           id="starts-select"
           error={!!numberError}
           value={shift.starts}
@@ -193,9 +194,37 @@ function EditShiftPage() {
           <MenuItem value="13">13</MenuItem>
           <MenuItem value="14">14</MenuItem>
         </Select>
+        
+        
+        <Select
+          title="Pabaiga"
+          id="ends-select"
+          error={!!numberError}
+          value={shift.ends}
+          size="small"
+          className="me-2"
+          disabled={shift.visible === 0}
+          onChange={(e) => updateProperty("ends", e)}
+        >
+          <MenuItem value="1">1</MenuItem>
+          <MenuItem value="2">2</MenuItem>
+          <MenuItem value="3">3</MenuItem>
+          <MenuItem value="4">4</MenuItem>
+          <MenuItem value="5">5</MenuItem>
+          <MenuItem value="6">6</MenuItem>
+          <MenuItem value="7">7</MenuItem>
+          <MenuItem value="8">8</MenuItem>
+          <MenuItem value="9">9</MenuItem>
+          <MenuItem value="10">10</MenuItem>
+          <MenuItem value="11">11</MenuItem>
+          <MenuItem value="12">12</MenuItem>
+          <MenuItem value="13">13</MenuItem>
+          <MenuItem value="14">14</MenuItem>
+        </Select>
+        
         </div>
           </div>
-          <div className="row">
+          {/* <div className="row">
             <div className="col-md-4 mb-2 mb-md-0 fw-bold">
         <label htmlFor="starts-select" className="me-2">
           Pabaiga:
@@ -227,7 +256,7 @@ function EditShiftPage() {
           <MenuItem value="14">14</MenuItem>
         </Select>
         </div>
-          </div>
+          </div> */}
         
         
           <div className="row">

@@ -3,6 +3,10 @@ import { Link } from "react-router-dom";
 import { TextField } from "@mui/material";
 import { Select, MenuItem, Pagination } from "@mui/material";
 import { Collapse, Alert } from "@mui/material";
+import EditTwoToneIcon from '@mui/icons-material/EditTwoTone';
+import DeleteTwoToneIcon from '@mui/icons-material/DeleteTwoTone';
+import RestoreTwoToneIcon from '@mui/icons-material/RestoreTwoTone';
+
 
 function ShiftListPage() {
   const [shifts, setShifts] = useState([]);
@@ -86,31 +90,16 @@ function ShiftListPage() {
         </Alert>
       </Collapse>
 
-      <div className="d-flex">
+    <div className="d-flex justify-content-end">
+      <div className="me-auto d-flex">
         <button className="btn btn-primary mb-5">
           <Link to="/shifts/create" className="nav-link">
             Pridėti naują pamainą
           </Link>
         </button>
       </div>
-      <div className="d-flex justify-content-end">
         <div className="mb-4">
           <form className="d-flex" role="search">
-            {/* <label htmlFor="page-size-select" className="me-2">
-              Puslapyje:
-            </label>
-            <Select
-              id="page-size-select"
-              value={pageSize}
-              size="small"
-              className="me-2"
-              onChange={handlePageSizeChange}
-            >
-              <MenuItem value={10}>10</MenuItem>
-              <MenuItem value={25}>25</MenuItem>
-              <MenuItem value={50}>50</MenuItem>
-              <MenuItem value={100}>100</MenuItem>
-            </Select> */}
             <TextField
               onChange={(e) => setSearchName(e.target.value)}
               value={searchName}
@@ -128,15 +117,6 @@ function ShiftListPage() {
             </button>
           </form>
         </div>
-        {/* <div>
-          <Pagination
-            count={Math.floor(shifts.length / pageSize) + 1} 
-            defaultPage={1}
-            siblingCount={0}
-            onChange={handlePageChange}
-            value={page}
-          />
-        </div> */}
       </div>
 
       <table className="table table-hover shadow p-3 mb-5 bg-body rounded align-middle">
@@ -147,7 +127,7 @@ function ShiftListPage() {
             <th>Pabaiga</th>
             <th>Redaguota</th>
             <th>Būsena</th>
-            <th className="d-flex justify-content-center">Veiksmai</th>
+            <th></th>
           </tr>
         </thead>
         <tbody> 
@@ -163,24 +143,25 @@ function ShiftListPage() {
               <td>{shift.lastUpdated}</td>
               <td>{((shift.visible === 1) ? false : true) ? "Ištrintas" : ""}</td>
               <td className="d-flex justify-content-end">
-                <button className="btn btn-outline-primary me-2 my-1" disabled={(shift.visible === 0) ? true : false}>
+                <button className="btn btn-outline-primary me-1 my-1 btn-link" title="Redaguoti" 
+                disabled={(shift.visible === 0) ? true : false}>
                   <Link className="nav-link" to={"/shifts/edit/" + shift.id}>
-                    Redaguoti
+                  <EditTwoToneIcon/>
                   </Link>
                 </button>
                 {((shift.visible === 1) ? false : true) ? (
                   <button
-                    className="btn btn-outline-secondary me-2 my-1"
+                  className="btn btn-outline-secondary me-1 my-1 btn-link" title="Atstatyti"
                     onClick={() => restoreShift(shift)}
                   >
-                    Atstatyti
+                    <RestoreTwoToneIcon/>
                   </button>
                 ) : (
                   <button
-                    className="btn btn-outline-danger me-2 my-1"
+                  className="btn btn-danger me-2 my-1 btn-link" title="Ištrinti"
                     onClick={() =>{ deleteShift(shift)}}
                   >
-                    Ištrinti
+                    <DeleteTwoToneIcon className="red-icon" />
                   </button>
                 )}
               </td>

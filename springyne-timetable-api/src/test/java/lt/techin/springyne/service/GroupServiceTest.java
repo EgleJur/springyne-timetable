@@ -25,19 +25,12 @@ public class GroupServiceTest {
     GroupRepository groupRepository;
 
     private static final long Id = 1;
+    
     @Test
     public void viewGroupByIdTest(){
         groupService.getById(Id);
         verify(groupRepository).findById(Id);
     }
-
-
-//    @Test
-//    public void saveGroup(){
-//        Group group = mock(Group.class);
-//        groupService.addGroup(group);
-//        verify(groupRepository).save(group);
-//    }
 
     @Test
     public void editGroup() {

@@ -2,7 +2,6 @@ package lt.techin.springyne.controller;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import lombok.extern.slf4j.Slf4j;
 import lt.techin.springyne.dto.ProgramDto;
 import lt.techin.springyne.model.Program;
 import org.junit.jupiter.api.Assertions;
@@ -26,7 +25,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
-@Slf4j
 class ProgramControllerTest {
 
     @Autowired
@@ -51,8 +49,6 @@ class ProgramControllerTest {
         ).andExpect(status().isOk()).andReturn();
 
         List<ProgramDto> resultList = objectMapper.readValue(mvcResult.getResponse().getContentAsString(StandardCharsets.UTF_8), new TypeReference<List<ProgramDto>>() {});
-
-        log.info(resultList.toString());
 
         Assertions.assertTrue(resultList.containsAll(expectedList));
     }
@@ -120,6 +116,63 @@ class ProgramControllerTest {
         Optional<Program> result = objectMapper.readValue(mvcResult.getResponse().getContentAsString(StandardCharsets.UTF_8), new TypeReference<Optional<Program>>() {
         });
         Assertions.assertTrue(result.isEmpty(),"Get program by invalid Id should return empty");
+    }
+
+    @Test
+    void deleteProgramSetsDeletedPropertyToTrue() throws Exception {
+        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.patch("/api/v1/programs/delete/4").contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk()).andReturn();
+        Program resultProgram = objectMapper.readValue(mvcResult.getResponse().getContentAsString(), new TypeReference<Program>() {});
+        Assertions.assertTrue(resultProgram.isDeleted());
+    }
+
+    @Test
+    void restoreProgramSetsDeletedPropertyToFalse() throws Exception {
+        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.patch("/api/v1/programs/restore/4").contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk()).andReturn();
+        Program resultProgram = objectMapper.readValue(mvcResult.getResponse().getContentAsString(), new TypeReference<Program>() {});
+        Assertions.assertFalse(resultProgram.isDeleted());
+    }
+
+    @Test
+    void editProgramThrowsExceptionWithEmptyValues() throws Exception {
+        ProgramDto testProgramDto1 = new ProgramDto("","", false);
+        MvcResult mvcResult1 = mockMvc.perform(MockMvcRequestBuilders.patch("/api/v1/programs/update/4").contentType(MediaType.APPLICATION_JSON).
+                content(objectMapper.writeValueAsString(testProgramDto1))).andReturn();
+        assertEquals(400, mvcResult1.getResponse().getStatus(),"Empty value name should return bad request status");
+    }
+    @Test
+    void editTeacherAllowsSavingWithCorrectValues() throws Exception {
+        ProgramDto testProgramDto1 = new ProgramDto(".NET programuotojas (-a)" + LocalDateTime.now(),
+                ".NET programuotojo modulinė profesinio mokymo programa", false);
+        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.patch("/api/v1/programs/update/4?subjectId=1&hours=40").contentType(MediaType.APPLICATION_JSON).
+                content(objectMapper.writeValueAsString(testProgramDto1))).andReturn();
+
+        Program resultProgram = objectMapper.readValue(mvcResult.getResponse().getContentAsString(StandardCharsets.UTF_8), new TypeReference<Program>() {});
+
+        assertEquals(200, mvcResult.getResponse().getStatus(),"Unique non empty name should return ok status");
+        assertEquals(".NET programuotojo modulinė profesinio mokymo programa", resultProgram.getDescription(),
+                "Should allow editing description");
+    }
+
+    @Test
+    void editTeacherThrowsExceptionWithInvalidSubjectValue() throws Exception {
+        ProgramDto testProgramDto1 = new ProgramDto(".NET programuotojas (-a)",
+                ".NET programuotojo modulinė profesinio mokymo programa", false);
+        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.patch("/api/v1/programs/update/4?subjectId=0&hours=100").
+                contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(testProgramDto1))).andReturn();
+        assertEquals(400,mvcResult.getResponse().getStatus(),
+                "Non existing subject id should return bad request status");
+    }
+
+    @Test
+    void editTeacherThrowsExceptionWithInvalidHoursValue() throws Exception {
+        ProgramDto testProgramDto1 = new ProgramDto(".NET programuotojas (-a)",
+                ".NET programuotojo modulinė profesinio mokymo programa", false);
+        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.patch("/api/v1/programs/update/4?subjectId=1&hours=-1").
+                contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(testProgramDto1))).andReturn();
+        assertEquals(400,mvcResult.getResponse().getStatus(),
+                "Negative hours value should return bad request status");
     }
 
 }

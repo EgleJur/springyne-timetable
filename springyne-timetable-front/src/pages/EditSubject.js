@@ -12,6 +12,7 @@ function EditSubjectPage() {
   const [room, setRoom] = useState("");
   const [success, setSuccess] = useState(false);
   const [failure, setFailure] = useState(false);
+  const [changed, setChanged] = useState(false);
   const params = useParams();
   const [rooms, setRooms] = useState([]);
   const [selectedRoom, setSelectedRoom] = useState("");
@@ -67,11 +68,13 @@ function EditSubjectPage() {
         if (result.ok) {
           setSuccess(true);
           setFailure(false);
+          setChanged(false);
+          fetchSubject();
         } else {
           setFailure(true);
           setSuccess(false);
         }
-      }).then(fetchSubject);
+      });
     }
   };
   const updateProperty = (property, event) => {
@@ -79,6 +82,7 @@ function EditSubjectPage() {
       ...subject,
       [property]: event.target.value,
     });
+    setChanged(true);
   };
 
   const handleDelete = () => {
@@ -90,6 +94,7 @@ function EditSubjectPage() {
     setSuccess(true);
     setFailure(false);
     setNameError(false);
+    setChanged(false);
   };
   const handleRestore = () => {
     fetch(`/api/v1/subjects/restore/` + params.id, {
@@ -100,6 +105,7 @@ function EditSubjectPage() {
     setSuccess(true);
     setFailure(false);
     setNameError(false);
+    setChanged(false);
   };
   return (
     <div className="mx-3">
@@ -208,22 +214,24 @@ function EditSubjectPage() {
         </div>
         <div>
         <button type="submit" 
-        className="btn btn-primary me-2 mt-2 mb-5" 
+        className="btn btn-primary me-2" 
         onClick={editsubject}
-        disabled={subject.deleted}>
+        disabled={!changed}
+        >
           Redaguoti
         </button>
         {subject.deleted ? (
             <button
-              className="btn btn-secondary me-2 mt-2 mb-5"
+              className="btn btn-secondary me-2"
               onClick={handleRestore}
             >
               Atstatyti
             </button>
           ) : (
             <button
-              className="btn btn-danger me-2 mt-2 mb-5"
+              className="btn btn-danger me-2"
               onClick={handleDelete}
+              
             >
               Ištrinti
             </button>

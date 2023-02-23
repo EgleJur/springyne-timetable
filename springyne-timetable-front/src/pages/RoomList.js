@@ -20,7 +20,7 @@ function RoomListPage() {
 
   const fectchRooms = () => {
     fetch(
-      `/api/v1/rooms/searchByName?name=${searchName}&building=${searchBuinding}&page=${pageNumber}&pageSize=${pageSize}`
+      `/api/v1/rooms/search?name=${searchName}&building=${searchBuinding}&page=${pageNumber}&pageSize=${pageSize}`
     )
       .then((response) => response.json())
       .then((jsonResponse) => setRooms(jsonResponse));

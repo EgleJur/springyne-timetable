@@ -9,6 +9,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
 
@@ -55,6 +56,17 @@ public class ProgramController {
     @PatchMapping("/restore/{programId}")
     public ResponseEntity<Program> restoreProgram(@PathVariable Long programId) {
         return ResponseEntity.ok(programService.restoreProgram(programId));
+    }
+
+    @PatchMapping("/update/{programId}")
+    public ResponseEntity<Program> updateProgram(@PathVariable Long programId, @Valid @RequestBody ProgramDto programDto,
+                                                 @RequestParam(required = false) Long subjectId,
+                                                 @RequestParam(required = false) Integer hours) {
+        return ResponseEntity.ok(programService.updateProgram(programId, ProgramMapper.toProgram(programDto), subjectId, hours));
+    }
+    @PatchMapping("/{programId}/removeSubject/{subjectId}")
+    public ResponseEntity<Program> removeSubjectFromProgram(@PathVariable Long programId, @PathVariable Long subjectId) {
+        return ResponseEntity.ok(programService.removeSubjectFromProgram(programId,subjectId));
     }
 
 }

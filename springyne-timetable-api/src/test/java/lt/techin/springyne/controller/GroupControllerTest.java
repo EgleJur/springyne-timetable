@@ -2,10 +2,6 @@ package lt.techin.springyne.controller;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import lt.techin.springyne.controller.GroupController;
-import lt.techin.springyne.dto.GroupDto;
-import lt.techin.springyne.model.Group;
-import lt.techin.springyne.model.Program;
 import lt.techin.springyne.dto.GroupDto;
 import lt.techin.springyne.model.Group;
 import lt.techin.springyne.model.Program;
@@ -28,12 +24,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+<<<<<<< HEAD
 import static org.mockito.Mockito.when;
-
-import java.util.ArrayList;
-import java.util.List;
-
-
+=======
+>>>>>>> development
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
@@ -113,8 +107,8 @@ class GroupControllerTest {
     public void getAllGroupsTest(){
         List<Group> groups = new ArrayList<>();
         groups.add(group);
-        when(GroupService.getAllGroups()).thenReturn(groups);
-        assertEquals(GroupController.getAllGroups().size(), groups.size());
+        when(groupService.getAllGroups()).thenReturn(groups);
+        assertEquals(groupController.getAllGroups().size(), groups.size());
     }
 
 

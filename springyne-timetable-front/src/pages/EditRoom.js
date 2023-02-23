@@ -141,6 +141,7 @@ function EditRoomPage() {
                   className="form-control"
                   size="small"
                   InputLabelProps={{ shrink: true }}
+                  disabled={room.deleted}
                   required
                 />
               </td>
@@ -160,6 +161,7 @@ function EditRoomPage() {
                   className="form-control"
                   size="small"
                   InputLabelProps={{ shrink: true }}
+                  disabled={room.deleted}
                   required
                 />
               </td>
@@ -179,6 +181,7 @@ function EditRoomPage() {
                   className="form-control"
                   size="small"
                   InputLabelProps={{ shrink: true }}
+                  disabled={room.deleted}
                   // required
                 />
               </td>

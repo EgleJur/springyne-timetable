@@ -3,6 +3,7 @@ package lt.techin.springyne.controller;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lt.techin.springyne.dto.GroupDto;
+import lt.techin.springyne.dto.TeacherDto;
 import lt.techin.springyne.model.Group;
 import lt.techin.springyne.model.Program;
 import lt.techin.springyne.model.Shift;
@@ -111,79 +112,48 @@ class GroupControllerTest {
         assertEquals(groupController.getAllGroups().size(), groups.size());
     }
 
-
-//    @Test
-//    void addGroupThrowsExceptionWithNullOrEmptyValues() throws Exception {
-//        GroupDto testGroupDto4 = new GroupDto("", "Serveriai, programiniai paketai");
-//        GroupDto testGroupDto5 = new GroupDto(null, "Scrum procesas");
-//        GroupDto testGroupDto6 = new GroupDto(null, null);
-//
-//
-//        String message = "Null or empty values should return bad request status";
-//
-//        assertEquals(400, performGroupPostBadRequest(testGroupDto4).getResponse().getStatus(), message);
-//        assertEquals(400, performGroupPostBadRequest(testGroupDto5).getResponse().getStatus(), message);
-//        assertEquals(400, performGroupPostBadRequest(testGroupDto6).getResponse().getStatus(), message);
-//    }
-//
-//    @Test
-//    public void getAllGroupsTest(){
-//        List<Group> groups = new ArrayList<>();
-//        groups.add(group);
-//        when(GroupService.getAllGroups()).thenReturn(groups);
-//        assertEquals(GroupController.getAllGroups().size(), groups.size());
-//    }
-
-
     @Test
     void addGroupThrowsExceptionWithNullOrEmptyValues() throws Exception {
-        GroupDto testGroupDto4 = new GroupDto("", "2022-2023m.m.", 15);
-        GroupDto testGroupDto5 = new GroupDto(null, "2021-2022 m.m.", 10);
-        GroupDto testGroupDto6 = new GroupDto(null, "2021-2022", 5);
-
+        GroupDto testGroupDto1 = new GroupDto("", "", 15);
+        GroupDto testGroupDto2 = new GroupDto(null, null, 15);
 
         String message = "Null or empty values should return bad request status";
 
-        assertEquals(400, performGroupPostBadRequest(testGroupDto4).getResponse().getStatus(), message);
-        assertEquals(400, performGroupPostBadRequest(testGroupDto5).getResponse().getStatus(), message);
-        assertEquals(400, performGroupPostBadRequest(testGroupDto6).getResponse().getStatus(), message);
+        assertEquals(400, performGroupPostBadRequest(testGroupDto1).getResponse().getStatus(), message);
+        assertEquals(400, performGroupPostBadRequest(testGroupDto2).getResponse().getStatus(), message);
     }
-//
+
     @Test
     void addGroupThrowsExceptionWithNonUniqueNameValue() throws Exception {
 
-        GroupDto testGroupDto1 = new GroupDto("E-22/1", "2022-2023m.m.",10);
+        GroupDto testGroupDto5 = new GroupDto("PT-22/2", "2022-2023m.m.",7);
 
-        assertEquals(400, performGroupPostBadRequest(testGroupDto1).getResponse().getStatus(),
+        assertEquals(400, performGroupPostBadRequest(testGroupDto5).getResponse().getStatus(),
                 "Non unique Group name should return bad request status");
     }
-//
-//        assertEquals(400, performGroupPostBadRequest(testGroupDto1).getResponse().getStatus(),
-//                "Non unique Group name should return bad request status");
-//    }
-//
+
     public MvcResult performGroupPostBadRequest(GroupDto groupDto) throws Exception {
 
         return mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/groups").contentType(MediaType.APPLICATION_JSON).
                         content(objectMapper.writeValueAsString(groupDto)))
                 .andExpect(status().isBadRequest()).andReturn();
     }
-//    @Test
-//    void deleteGroupSetsDeletedPropertyToTrue() throws Exception {
-//        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.patch("/api/v1/groups/delete/1").contentType(MediaType.APPLICATION_JSON))
-//                .andExpect(status().isOk()).andReturn();
-//        Group resultGroup = objectMapper.readValue(mvcResult.getResponse().getContentAsString(), new TypeReference<Group>() {});
-//        Assertions.assertTrue(resultGroup.isDeleted());
-//    }
-//
-//    @Test
-//    void restoreGroupSetsDeletedPropertyToFalse() throws Exception {
-//        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.patch("/api/v1/groups/restore/1").contentType(MediaType.APPLICATION_JSON))
-//                .andExpect(status().isOk()).andReturn();
-//        Group resultGroup = objectMapper.readValue(mvcResult.getResponse().getContentAsString(), new TypeReference<Group>() {});
-//        Assertions.assertFalse(resultGroup.isDeleted());
-//    }
-//
+    @Test
+    void deleteGroupSetsDeletedPropertyToTrue() throws Exception {
+        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.patch("/api/v1/groups/delete/4").contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk()).andReturn();
+        Group resultGroup = objectMapper.readValue(mvcResult.getResponse().getContentAsString(), new TypeReference<Group>() {});
+        Assertions.assertTrue(resultGroup.isDeleted());
+    }
+
+    @Test
+    void restoreGroupSetsDeletedPropertyToFalse() throws Exception {
+        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.patch("/api/v1/groups/restore/4").contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk()).andReturn();
+        Group resultGroup = objectMapper.readValue(mvcResult.getResponse().getContentAsString(), new TypeReference<Group>() {});
+        Assertions.assertFalse(resultGroup.isDeleted());
+    }
+
     @Test
     void editGroupThrowsExceptionWithNonUniqueNameValue() throws Exception {
         GroupDto testGroupDto = new GroupDto("E-22/1");

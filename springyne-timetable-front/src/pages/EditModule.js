@@ -192,7 +192,7 @@ function EditModulePage() {
             type="submit"
             className="btn btn-primary me-2"
             onClick={editModule}
-            disabled={!changed}
+            // disabled={!changed}
           >
             Redaguoti
           </button>

@@ -10,7 +10,7 @@ import {
   OutlinedInput,
 } from "@mui/material";
 import ClearIcon from "@mui/icons-material/Clear";
-import { Margin } from "@mui/icons-material";
+// import { Margin } from "@mui/icons-material";
 
 
 
@@ -91,7 +91,7 @@ function EditSubjectPage() {
       ...subject,
       [property]: event.target.value,
     });
-    setChanged(true);
+    // setChanged(true);
   };
 
   const handleDelete = () => {
@@ -217,10 +217,12 @@ function EditSubjectPage() {
           type="submit"
           className="btn btn-light me-2 mb-2"
           value={room.id}
+          // onChange={(e) => updateProperty(e.target.value)}
+          disabled={subject.deleted}
           onClick={(e) => deleteRoom(e.target.value)}
           key={room.id}
           id={room.id}
-          disabled={room.deleted}
+          
         >
           {room.name}{" "}
           <ClearIcon color="disabled" sx={{ fontSize: 12}} />
@@ -245,6 +247,7 @@ function EditSubjectPage() {
             label="Pridėti dalyką"
             fullWidth
             value={selectedRoom}
+            
             onChange={(e) => setSelectedRoom(e.target.value)}
           >
             {rooms?.map((room) => (
@@ -322,7 +325,7 @@ function EditSubjectPage() {
         <button type="submit" 
         className="btn btn-primary me-2" 
         onClick={editsubject}
-        disabled={!changed}
+        // disabled={!changed}
         >
           
           Redaguoti

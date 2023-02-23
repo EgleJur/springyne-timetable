@@ -202,7 +202,7 @@ function EditRoomPage() {
           type="submit"
           className="btn btn-primary me-2"
           onClick={editRoom}
-          disabled={!changed}
+          // disabled={!changed}
         >
           Redaguoti
         </button>

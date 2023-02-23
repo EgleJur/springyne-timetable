@@ -42,24 +42,11 @@ public class GroupController {
         return groupService.searchByNamePaged(name,programName, groupYear, page, pageSize);
     }
 
-//    @GetMapping("/byModule/search")
-//
-//    public Page<Group> getByModule(@RequestParam String name, @RequestParam int page,
-//                                     @RequestParam int pageSize) {
-//        return groupService.getByModule(name, page, pageSize);
-//    }
-//
     @GetMapping("/{groupId}")
     public Optional<Group> viewGroup(@PathVariable Long groupId) {
         return groupService.getById(groupId);
     }
 
-//    @PostMapping
-//    public ResponseEntity<GroupDto> createGroupDto(@RequestBody GroupDto groupDto) {
-//        var createdGroup = groupService.createGroupDto(toGroup(groupDto));
-//
-//        return ok(toGroupDto(createdGroup));
-//    }
     @PostMapping(value = "/createGroup")
     public ResponseEntity<GroupDto> createGroup(@RequestBody GroupDto groupDto,
                                                    @RequestParam Long programId,
@@ -67,7 +54,6 @@ public class GroupController {
         var createdGroup = groupService.createGroup(programId, shiftId, toGroup(groupDto));
         return ok(toGroupDto(createdGroup));
     }
-
 
     @PatchMapping("/edit/{groupId}")
     public ResponseEntity<Group> editGroup(@PathVariable Long groupId,
@@ -80,15 +66,13 @@ public class GroupController {
         return ok(updatedGroup);
     }
 
-
     @PatchMapping("/delete/{groupId}")
     public ResponseEntity<Group> deleteGroup(@PathVariable Long groupId) {
 
         var updatedGroup = groupService.delete(groupId);
         return ok(updatedGroup);
-
     }
-//
+
     @PatchMapping("/restore/{groupId}")
     public ResponseEntity<Group> restoreGroup(@PathVariable Long groupId) {
 
@@ -96,20 +80,5 @@ public class GroupController {
         return ok(restoredGroup);
 
     }
-
-//    @PatchMapping("/{groupId}/addModule/{moduleId}")
-//    public ResponseEntity<Group> addModuleToGroup(@PathVariable Long groupId, @PathVariable Long moduleId) {
-//        return ResponseEntity.ok(groupService.addModuleToGroup(groupId, moduleId));
-//    }
-
-//    @PatchMapping("/{subjectId}/deleteShift/{shiftId}")
-//    public void deleteShiftFromGroup(@PathVariable Long groupId, @PathVariable Long shiftId) {
-//        groupService.deleteShiftFromGroup(groupId, shiftId);
-//    }
-//    @PatchMapping("/{subjectId}/addShift/{shiftId}")
-//    public void addShiftFromGroup(@PathVariable Long groupId, @PathVariable Long shiftId) {
-//        groupService.addShiftFromGroup(groupId, shiftId);
-//    }
-
 
 }

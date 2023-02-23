@@ -101,12 +101,6 @@ public class GroupService {
         return groupRepository.findAllByNameIgnoreCaseContainingOrProgramNameIgnoreCaseContainingOrGroupYearIgnoreCaseContaining(name, programName, groupYear, pageable);
     }
 
-//    public Page<Group> getByModule(String name, int page, int pageSize) {
-//
-//        Pageable pageable = PageRequest.of(page, pageSize);
-//        return groupRepository.findAllByModuleNameIgnoreCaseContaining(name, pageable);
-//    }
-
     public Optional<Group> getById(Long id) {
         return groupRepository.findById(id);
     }
@@ -124,21 +118,6 @@ public class GroupService {
 
         return groupRepository.save(group);
     }
-//
-//    public void addShiftFromGroup(Long groupId, Long shiftId) {
-//        if (groupId == null) {
-//            throw new ScheduleValidationException("Group id cannot be empty", "id",
-//                    "Id is empty", String.valueOf(groupId));
-//        }
-//        Group updatedGroup = getGroupById(groupId);
-//        if (shiftId != null) {
-//            Shift newRoom = getShiftById(shiftId);
-//            Set<Shift> existingShift = updatedGroup.getShifts();
-//            if (!existingShift.contains(newRoom)) {
-//                groupRepository.insertGroupAndShift(groupId, shiftId);
-//            }
-//        }
-//    }
 
     public Group edit(Long groupId, Group group, Long shiftId, Long programId) {
 
@@ -165,28 +144,6 @@ public class GroupService {
         return groupRepository.save(updatedGroup);
     }
 
-
-//    @Transactional
-//    public void deleteShiftFromGroup(Long groupId, Long roomId) {
-//
-//        Shift shiftToRemove = getShiftById(roomId);
-//
-//        Group getGroup = getGroupById(groupId);
-//        //getGroup.getShift().remove(roomToRemove);
-//  //      subjectRepository.deleteRoomFromSubject(subjectId, roomId);
-//
-//    }
-//
-
-//
-//    public Group createGroupDto(Group group) {
-//
-//        checkGroupNameEmpty(group.getName());
-//        checkGroupNameUnique(group.getName());
-//        return groupRepository.save(group);
-//    }
-//
-//
     public Group delete(Long groupId) {
 
         Group existingGroup = getGroupById(groupId);
@@ -196,10 +153,8 @@ public class GroupService {
         } else {
             return existingGroup;
         }
-
     }
-//
-//
+
     public Group restore(Long id) {
         var existingGroup = getGroupById(id);
 
@@ -210,13 +165,4 @@ public class GroupService {
             return existingGroup;
         }
     }
-//
-//
-//    public Group addModuleToGroup(Long subjectId, Long moduleId) {
-//      //  Module moduleToAdd = getModuleById(moduleId);
-//        Group updatedGroup = getGroupById(subjectId);
-//       // updatedGroup.setModule(moduleToAdd);
-//        return groupRepository.save(updatedGroup);
-//    }
-
-    }
+}

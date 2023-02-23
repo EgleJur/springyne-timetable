@@ -151,7 +151,7 @@ function CreateTeacherPage() {
           onChange={(e) => setEmail(e.target.value)}
           value={email}
           id="create-teacher-email-with-error"
-          label="Kontaktinis elektroninio pašto adresas"
+          label="Kontaktinis el. paštas"
           className="form-control mb-3"
           size="small"
         />
@@ -168,8 +168,8 @@ function CreateTeacherPage() {
           onChange={(e) => setHours(e.target.value)}
           value={hours}
           id="create-teacher-hours-with-error"
-          label="Valandų skaičius"
-          helperText="Valandų skaičius negali būti tuščias laukas"
+          label="Valandų skaičius per savaitę"
+          helperText="Valandų skaičius per savaitę negali būti tuščias laukas"
           className="form-control mb-3"
           size="small"
           required

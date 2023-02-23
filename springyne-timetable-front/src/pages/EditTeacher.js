@@ -189,7 +189,7 @@ function EditTeacherPage() {
           </div>
           <div className="row">
             <div className="col-md-4 mb-2 mb-md-0 fw-bold">
-              <label htmlFor="edit-module-number-with-error">Kontaktinis elektroninio pašto adresas</label>
+              <label htmlFor="edit-module-number-with-error">Kontaktinis el. paštas</label>
             </div>
             <div className="col-md-8 mb-2 mb-md-0">
         <TextField
@@ -223,7 +223,7 @@ function EditTeacherPage() {
           </div>
           <div className="row">
             <div className="col-md-4 mb-2 mb-md-0 fw-bold">
-              <label htmlFor="edit-module-number-with-error">Valandų skaičius *</label>
+              <label htmlFor="edit-module-number-with-error">Valandų skaičius per savaitę*</label>
             </div>
             <div className="col-md-8 mb-2 mb-md-0">
         <TextField
@@ -232,7 +232,7 @@ function EditTeacherPage() {
           value={teacher.hours}
           id="create-teacher-hours"
           label=""
-          helperText="Valandų skaičius negali būti tuščias laukas"
+          helperText="Valandų skaičius per savaitę negali būti tuščias laukas"
           className="form-control mb-2"
           size="small"
           disabled={teacher.deleted}

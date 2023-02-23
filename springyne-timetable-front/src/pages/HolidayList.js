@@ -3,37 +3,37 @@ import { Link } from "react-router-dom";
 import { TextField } from "@mui/material";
 import { Select, MenuItem, Pagination } from "@mui/material";
 import { Collapse, Alert } from "@mui/material";
+import DeleteTwoToneIcon from '@mui/icons-material/DeleteTwoTone';
 
 function HolidayListPage() {
   const [holidays, setHolidays] = useState([]);
   const [searchName, setSearchName] = useState("");
-  const [searchBuinding, setSearchDate] = useState("");
+  const [searchStartDate, setSearchStartDate] = useState("");
+  const [searchEndDate, setSearchEndDate] = useState("");
   const [deleted, setDeleted] = useState(false);
+  const [dateError, setDateError] = useState("");
   
   const JSON_HEADERS = {
     "Content-Type": "application/json",
   };
 
-  const fetchHolidays = () => {
+  const fetchHolidays = (e) => {
+    if (e && e.preventDefault) { e.preventDefault(); }
+    setDateError(false);
+    if(searchStartDate !="" && searchEndDate ===""||searchStartDate !=""&&searchEndDate==="" ){
+      setDateError(true);
+    } else{
     fetch(
-      `/api/v1/holidays`
+      `/api/v1/holidays/search?name=${searchName}&from=${searchStartDate}&to=${searchEndDate}`
     )
       .then((response) => response.json())
-      .then((jsonResponse) => setHolidays(jsonResponse));
-  };
+      .then((jsonResponse) => setHolidays(jsonResponse))
+  
+    }  };
 
   useEffect(fetchHolidays, []);
 
-  const fetchHolidaysByBuildings = () => {
-    fetch(
-      `/api/v1/holidays/`
-    )
-      .then((response) => response.json())
-      .then((jsonResponse) => setHolidays(jsonResponse));
-  };
-
-
-  const deleteHoliday = (id) => {
+   const deleteHoliday = (id) => {
     fetch("/api/v1/holidays/delete/" + id, {
       method: "PATCH",
       headers: JSON_HEADERS,
@@ -82,13 +82,27 @@ function HolidayListPage() {
               size="small"
             />
             <TextField
-              onChange={(b) => setSearchDate(b.target.value)}
-              value={searchBuinding}
-              id="search-date-input"
-              label="Ieškoti pagal datą"
+            error={!!dateError}
+              onChange={(b) => setSearchStartDate(b.target.value)}
+              value={searchStartDate}
+              id="search-date-from-input"
+              label="Data nuo (MMMM-MM-DD)"
               className="form-control me-2"
               size="small"
+              required={searchEndDate}
             />
+            
+            <TextField
+            error={!!dateError}
+              onChange={(b) => setSearchEndDate(b.target.value)}
+              value={searchEndDate}
+              id="search-date-to-input"
+              label="Data iki (MMMM-MM-DD)"
+              className="form-control me-2"
+              size="small"
+              required={searchStartDate}
+              />
+
             <button
               className="btn btn-outline-primary"
               type="submit"
@@ -106,7 +120,7 @@ function HolidayListPage() {
             <th>Pavadinimas</th>
             <th>Data nuo</th>
             <th>Data iki</th>
-            <th className="d-flex justify-content-center">Veiksmai</th>
+            <th></th>
           </tr>
         </thead>
         <tbody>
@@ -119,10 +133,10 @@ function HolidayListPage() {
               <td className="d-flex justify-content-end">
 
                 <button
-                  className="btn btn-outline-danger ms-2"
+                  className="btn btn-danger me-2 my-1 btn-link" title="Ištrinti"
                   onClick={() => deleteHoliday(holiday.id)}
                 >
-                  Ištrinti
+                  <DeleteTwoToneIcon className="red-icon" />
                 </button>
 
               </td>
@@ -132,9 +146,9 @@ function HolidayListPage() {
         <tfoot className="table-light">
           <tr>
             <td colSpan={4}>
-              {holidays.totalElements == "0"
+              {/* {holidays.totalElements == "0"
                 ? "Įrašų nerasta"
-                : `Rasta įrašų: ${holidays.totalElements}`}
+                : `Rasta įrašų: ${holidays.totalElements}`} */}
             </td>
           </tr>
         </tfoot>

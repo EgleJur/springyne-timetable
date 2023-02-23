@@ -23,55 +23,55 @@ function ProgramListPage() {
 
   useEffect(fetchPrograms, []);
 
-   const handlePageChange = (e, value) => {
-     setPage(value);
-     setPageNumber(value - 1);
-     fetch(
-       `/api/v1/programs/search?name=${searchName}&page=${
-         value - 1
-       }&pageSize=${pageSize}`
-     )
-       .then((response) => response.json())
-       .then((jsonResponse) => setPrograms(jsonResponse));
-   };
+  const handlePageChange = (e, value) => {
+    setPage(value);
+    setPageNumber(value - 1);
+    fetch(
+      `/api/v1/programs/search?name=${searchName}&page=${
+        value - 1
+      }&pageSize=${pageSize}`
+    )
+      .then((response) => response.json())
+      .then((jsonResponse) => setPrograms(jsonResponse));
+  };
 
-   const handlePageSizeChange = (e) => {
-     setPageSize(e.target.value);
-     setPage(1);
-     setPageNumber(0);
-     fetch(
-       `/api/v1/programs/search?name=${searchName}&page=${0}&pageSize=${
-         e.target.value
-       }`
-     )
-       .then((response) => response.json())
-       .then((jsonResponse) => setPrograms(jsonResponse));
-   };
+  const handlePageSizeChange = (e) => {
+    setPageSize(e.target.value);
+    setPage(1);
+    setPageNumber(0);
+    fetch(
+      `/api/v1/programs/search?name=${searchName}&page=${0}&pageSize=${
+        e.target.value
+      }`
+    )
+      .then((response) => response.json())
+      .then((jsonResponse) => setPrograms(jsonResponse));
+  };
 
-   const handleSearch = () => {
-     setPage(1);
-     setPageNumber(0);
-     fetch(
-       `/api/v1/programs/search?name=${searchName}&page=${0}&pageSize=${pageSize}`
-     )
-       .then((response) => response.json())
-       .then((jsonResponse) => setPrograms(jsonResponse));
-   };
+  const handleSearch = () => {
+    setPage(1);
+    setPageNumber(0);
+    fetch(
+      `/api/v1/programs/search?name=${searchName}&page=${0}&pageSize=${pageSize}`
+    )
+      .then((response) => response.json())
+      .then((jsonResponse) => setPrograms(jsonResponse));
+  };
 
-   const deleteProgram = (id) => {
-     fetch(`/api/v1/programs/delete/` + id, {
-       method: "PATCH",
-     }).then(fetchPrograms);
-     setDeleted(true);
-     setRestored(false);
-   };
-   const restoreProgram = (id) => {
-     fetch(`/api/v1/programs/restore/` + id, {
-       method: "PATCH",
-     }).then(fetchPrograms);
-     setDeleted(false);
-     setRestored(true);
-   };
+  const deleteProgram = (id) => {
+    fetch(`/api/v1/programs/delete/` + id, {
+      method: "PATCH",
+    }).then(fetchPrograms);
+    setDeleted(true);
+    setRestored(false);
+  };
+  const restoreProgram = (id) => {
+    fetch(`/api/v1/programs/restore/` + id, {
+      method: "PATCH",
+    }).then(fetchPrograms);
+    setDeleted(false);
+    setRestored(true);
+  };
 
   return (
     <div className="mx-3">
@@ -101,13 +101,13 @@ function ProgramListPage() {
       </Collapse>
 
       <div className="d-flex">
-        <button className="btn btn-primary mb-5">
-          <Link to="/programs/create" className="nav-link">
-            Pridėti naują programą
-          </Link>
-        </button>
-      </div>
-      <div className="d-flex justify-content-end">
+        <div className="me-auto d-flex">
+          <button className="btn btn-primary mb-4 me-2">
+            <Link to="/programs/create" className="nav-link">
+              Pridėti naują programą
+            </Link>
+          </button>
+        </div>
         <div className="mb-4">
           <form className="d-flex" role="search">
             <TextField
@@ -135,7 +135,9 @@ function ProgramListPage() {
             <th>Pavadinimas</th>
             <th>Aprašymas</th>
             <th>Būsena</th>
-            <th className="d-flex justify-content-center">Veiksmai</th>
+            <th className="d-flex text-start">
+              <div className="ms-0 ms-sm-2 ms-md-3 ms-lg-4">Veiksmai</div>
+            </th>
           </tr>
         </thead>
         <tbody>
@@ -148,9 +150,12 @@ function ProgramListPage() {
               <td>{program.name}</td>
               <td>{program.description}</td>
               <td>{program.deleted ? "Ištrintas" : ""}</td>
-              <td className="d-flex justify-content-end">
+              <td className="justify-content-end text-end">
                 <button className="btn btn-outline-primary me-2 my-1">
-                  <Link className="nav-link" to={"/programs/view/" + program.id}>
+                  <Link
+                    className="nav-link"
+                    to={"/programs/view/" + program.id}
+                  >
                     Žiūrėti
                   </Link>
                 </button>
@@ -158,20 +163,23 @@ function ProgramListPage() {
                   className="btn btn-outline-primary me-2 my-1"
                   disabled={program.deleted}
                 >
-                  <Link className="nav-link" to={"/programs/edit/" + program.id}>
+                  <Link
+                    className="nav-link"
+                    to={"/programs/edit/" + program.id}
+                  >
                     Redaguoti
                   </Link>
                 </button>
                 {program.deleted ? (
                   <button
-                    className="btn btn-outline-secondary me-2 my-1"
+                    className="btn btn-outline-secondary my-1 me-2 me-xl-0"
                     onClick={() => restoreProgram(program.id)}
                   >
                     Atstatyti
                   </button>
                 ) : (
                   <button
-                    className="btn btn-outline-danger me-2 my-1"
+                    className="btn btn-outline-danger me-2 me-xl-3 my-1"
                     onClick={() => deleteProgram(program.id)}
                   >
                     Ištrinti
@@ -195,36 +203,35 @@ function ProgramListPage() {
         </tfoot>
       </table>
 
-      <div className="d-flex justify-content-end mb-5">
-        {/* <label htmlFor="page-size-select" className="me-2">
-          Puslapyje:
-        </label> */}
-        <FormControl style={{ minWidth: 90 }}>
-          <InputLabel id="select-page-count-label" shrink>
-            Puslapyje
-          </InputLabel>
-          <Select
-            id="page-size-select"
-            labelId="select-page-count-label"
-            label="Puslapyje"
-            value={pageSize}
-            size="small"
-            className="me-2"
-            onChange={handlePageSizeChange}
-          >
-            <MenuItem value={10}>10</MenuItem>
-            <MenuItem value={25}>25</MenuItem>
-            <MenuItem value={50}>50</MenuItem>
-            <MenuItem value={100}>100</MenuItem>
-          </Select>
-        </FormControl>
-        <Pagination
-          count={programs.totalPages}
-          defaultPage={1}
-          siblingCount={0}
-          onChange={handlePageChange}
-          value={page}
-        />
+      <div className="d-flex justify-content-end">
+        <div className="mb-4">
+          <form className="d-flex" role="search">
+            <label htmlFor="page-size-select" className="me-2">
+              Puslapyje:
+            </label>
+            <Select
+              id="page-size-select"
+              value={pageSize}
+              size="small"
+              className="me-2"
+              onChange={handlePageSizeChange}
+            >
+              <MenuItem value={10}>10</MenuItem>
+              <MenuItem value={25}>25</MenuItem>
+              <MenuItem value={50}>50</MenuItem>
+              <MenuItem value={100}>100</MenuItem>
+            </Select>
+          </form>
+        </div>
+        <div>
+          <Pagination
+            count={programs.totalPages}
+            defaultPage={1}
+            siblingCount={0}
+            onChange={handlePageChange}
+            value={page}
+          />
+        </div>
       </div>
     </div>
   );

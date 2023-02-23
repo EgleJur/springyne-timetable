@@ -28,10 +28,10 @@ public class TeacherControllerMockDbTest {
 
     @Test
     void addTeacherReturnsSavedTeacher() {
-        TeacherDto testTeacherDto = new TeacherDto(LocalDateTime.now().toString());
+        TeacherDto testTeacherDto = new TeacherDto(LocalDateTime.now().toString(), "test teams email", "test email", "test phone", 40, false);
         Teacher testTeacher = TeacherMapper.toTeacher(testTeacherDto);
         Mockito.when(teacherRepository.save(testTeacher)).thenReturn(testTeacher);
-        assertEquals(testTeacher, teacherService.addTeacher(1L,null,testTeacher), "Should be able to add new Teacher with unique number");
+        assertEquals(testTeacher, teacherService.addTeacher(1L,1L,testTeacher), "Should be able to add new Teacher with unique number");
 
     }
 

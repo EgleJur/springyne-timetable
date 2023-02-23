@@ -17,7 +17,4 @@ public class TeacherDto {
 
     private boolean deleted;
 
-    public TeacherDto(String name) {
-        this.name = name;
-    }
 }

@@ -1,17 +1,14 @@
 package lt.techin.springyne.model;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import java.sql.Date;
+import java.util.Date;
+
 
 @Data
 @Entity
@@ -25,15 +22,20 @@ public class Holidays {
     @NotNull
     private String name;
 
+    //    @NotNull
+//    @JsonFormat(pattern = "yyyy-MM-dd")
+//    private LocalDate starts;
     @NotNull
-    @JsonFormat(pattern = "yyyy-MM-dd")
+    @Temporal(TemporalType.DATE)
     private Date starts;
-
     @NotNull
-    @JsonFormat(pattern = "yyyy-MM-dd")
+    @Temporal(TemporalType.DATE)
     private Date ends;
 
-    private boolean deleted = Boolean.FALSE;
+//    @NotNull
+//    @JsonFormat(pattern = "yyyy-MM-dd")
+//    private LocalDate ends;
+
     private boolean repeats = Boolean.FALSE;
 
 }

@@ -6,15 +6,10 @@ import { Collapse, Alert } from "@mui/material";
 
 function HolidayListPage() {
   const [holidays, setHolidays] = useState([]);
-  const [pageNumber, setPageNumber] = useState(0);
-  const [pageSize, setPageSize] = useState(25);
   const [searchName, setSearchName] = useState("");
   const [searchBuinding, setSearchDate] = useState("");
-  const [page, setPage] = useState(1);
   const [deleted, setDeleted] = useState(false);
-  const [restored, setRestored] = useState(false);
-
-
+  
   const JSON_HEADERS = {
     "Content-Type": "application/json",
   };
@@ -37,26 +32,16 @@ function HolidayListPage() {
       .then((jsonResponse) => setHolidays(jsonResponse));
   };
 
-  
+
   const deleteHoliday = (id) => {
     fetch("/api/v1/holidays/delete/" + id, {
       method: "PATCH",
       headers: JSON_HEADERS,
     }).then(fetchHolidays);
     setDeleted(true);
-    setRestored(false);
   };
 
-  const restoreHoliday = (id) => {
-    fetch("/api/v1/holidays/restore/" + id, {
-      method: "PATCH",
-      headers: JSON_HEADERS,
-    }).then(fetchHolidays);
-    setDeleted(false);
-    setRestored(true);
-  };
-
-  return (
+   return (
     <div className="mx-3">
       <h2 className="my-5">Atostogos</h2>
       <Collapse in={deleted}>
@@ -71,18 +56,6 @@ function HolidayListPage() {
         </Alert>
       </Collapse>
 
-      <Collapse in={restored}>
-        <Alert
-          onClose={() => {
-            setRestored(false);
-          }}
-          severity="success"
-          className="mb-3"
-        >
-          Įrašas sėkmingai atstatytas
-        </Alert>
-      </Collapse>
-
       <div className="d-flex justify-content-end">
         <div className="me-auto d-flex">
           <button className="btn btn-primary mb-4">
@@ -93,14 +66,14 @@ function HolidayListPage() {
         </div>
         <div className="mb-4">
           <form className="d-flex" role="search">
-            
+
           </form>
         </div>
       </div>
       <div className="d-flex justify-content-end">
         <div className="mb-4">
           <form className="d-flex" role="search">
-          <TextField
+            <TextField
               onChange={(e) => setSearchName(e.target.value)}
               value={searchName}
               id="search-name-input"
@@ -126,14 +99,13 @@ function HolidayListPage() {
           </form>
         </div>
       </div>
-      
+
       <table className="table table-hover shadow p-3 mb-5 bg-body rounded align-middle">
         <thead className="table-light">
           <tr>
             <th>Pavadinimas</th>
             <th>Data nuo</th>
             <th>Data iki</th>
-            <th>Būsena</th>
             <th className="d-flex justify-content-center">Veiksmai</th>
           </tr>
         </thead>
@@ -143,40 +115,23 @@ function HolidayListPage() {
               <td>{holiday.name}</td>
               <td>{holiday.starts}</td>
               <td>{holiday.ends}</td>
-              <td>{holiday.deleted ? "Ištrintas" : ""}</td>
+
               <td className="d-flex justify-content-end">
-                
+
                 <button
-                  className="btn btn-outline-primary ms-2"
-                  disabled={holiday.deleted}
+                  className="btn btn-outline-danger ms-2"
+                  onClick={() => deleteHoliday(holiday.id)}
                 >
-                  <Link className="nav-link" to={"/holidays/edit/" + holiday.id}>
-                    Redaguoti
-                  </Link>
+                  Ištrinti
                 </button>
 
-                {holiday.deleted ? (
-                  <button
-                    className="btn btn-outline-danger ms-2"
-                    onClick={() => restoreHoliday(holiday.id)}
-                  >
-                    Atstatyti
-                  </button>
-                ) : (
-                  <button
-                    className="btn btn-outline-danger ms-2"
-                    onClick={() => deleteHoliday(holiday.id)}
-                  >
-                    Ištrinti
-                  </button>
-                )}
               </td>
             </tr>
           ))}
         </tbody>
         <tfoot className="table-light">
           <tr>
-            <td colSpan={5}>
+            <td colSpan={4}>
               {holidays.totalElements == "0"
                 ? "Įrašų nerasta"
                 : `Rasta įrašų: ${holidays.totalElements}`}
@@ -184,7 +139,7 @@ function HolidayListPage() {
           </tr>
         </tfoot>
       </table>
-      
+
     </div>
   );
 }

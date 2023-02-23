@@ -3,60 +3,45 @@ import { Link } from "react-router-dom";
 import { TextField } from "@mui/material";
 import { Select, MenuItem, Pagination } from "@mui/material";
 import { Collapse, Alert } from "@mui/material";
+import DeleteTwoToneIcon from '@mui/icons-material/DeleteTwoTone';
 
 function HolidayListPage() {
   const [holidays, setHolidays] = useState([]);
-  const [pageNumber, setPageNumber] = useState(0);
-  const [pageSize, setPageSize] = useState(25);
   const [searchName, setSearchName] = useState("");
-  const [searchBuinding, setSearchDate] = useState("");
-  const [page, setPage] = useState(1);
+  const [searchStartDate, setSearchStartDate] = useState("");
+  const [searchEndDate, setSearchEndDate] = useState("");
   const [deleted, setDeleted] = useState(false);
-  const [restored, setRestored] = useState(false);
-
-
+  const [dateError, setDateError] = useState("");
+  
   const JSON_HEADERS = {
     "Content-Type": "application/json",
   };
 
-  const fetchHolidays = () => {
+  const fetchHolidays = (e) => {
+    if (e && e.preventDefault) { e.preventDefault(); }
+    setDateError(false);
+    if(searchStartDate !="" && searchEndDate ===""||searchStartDate !=""&&searchEndDate==="" ){
+      setDateError(true);
+    } else{
     fetch(
-      `/api/v1/holidays`
+      `/api/v1/holidays/search?name=${searchName}&from=${searchStartDate}&to=${searchEndDate}`
     )
       .then((response) => response.json())
-      .then((jsonResponse) => setHolidays(jsonResponse));
-  };
+      .then((jsonResponse) => setHolidays(jsonResponse))
+  
+    }  };
 
   useEffect(fetchHolidays, []);
 
-  const fetchHolidaysByBuildings = () => {
-    fetch(
-      `/api/v1/holidays/`
-    )
-      .then((response) => response.json())
-      .then((jsonResponse) => setHolidays(jsonResponse));
-  };
-
-  
-  const deleteHoliday = (id) => {
+   const deleteHoliday = (id) => {
     fetch("/api/v1/holidays/delete/" + id, {
       method: "PATCH",
       headers: JSON_HEADERS,
     }).then(fetchHolidays);
     setDeleted(true);
-    setRestored(false);
   };
 
-  const restoreHoliday = (id) => {
-    fetch("/api/v1/holidays/restore/" + id, {
-      method: "PATCH",
-      headers: JSON_HEADERS,
-    }).then(fetchHolidays);
-    setDeleted(false);
-    setRestored(true);
-  };
-
-  return (
+   return (
     <div className="mx-3">
       <h2 className="my-5">Atostogos</h2>
       <Collapse in={deleted}>
@@ -71,18 +56,6 @@ function HolidayListPage() {
         </Alert>
       </Collapse>
 
-      <Collapse in={restored}>
-        <Alert
-          onClose={() => {
-            setRestored(false);
-          }}
-          severity="success"
-          className="mb-3"
-        >
-          Įrašas sėkmingai atstatytas
-        </Alert>
-      </Collapse>
-
       <div className="d-flex justify-content-end">
         <div className="me-auto d-flex">
           <button className="btn btn-primary mb-4">
@@ -93,14 +66,12 @@ function HolidayListPage() {
         </div>
         <div className="mb-4">
           <form className="d-flex" role="search">
-            
+
           </form>
         </div>
-      </div>
-      <div className="d-flex justify-content-end">
         <div className="mb-4">
           <form className="d-flex" role="search">
-          <TextField
+            <TextField
               onChange={(e) => setSearchName(e.target.value)}
               value={searchName}
               id="search-name-input"
@@ -109,13 +80,27 @@ function HolidayListPage() {
               size="small"
             />
             <TextField
-              onChange={(b) => setSearchDate(b.target.value)}
-              value={searchBuinding}
-              id="search-date-input"
-              label="Ieškoti pagal datą"
+            error={!!dateError}
+              onChange={(b) => setSearchStartDate(b.target.value)}
+              value={searchStartDate}
+              id="search-date-from-input"
+              label="Data nuo (MMMM-MM-DD)"
               className="form-control me-2"
               size="small"
+              required={searchEndDate}
             />
+            
+            <TextField
+            error={!!dateError}
+              onChange={(b) => setSearchEndDate(b.target.value)}
+              value={searchEndDate}
+              id="search-date-to-input"
+              label="Data iki (MMMM-MM-DD)"
+              className="form-control me-2"
+              size="small"
+              required={searchStartDate}
+              />
+
             <button
               className="btn btn-outline-primary"
               type="submit"
@@ -126,15 +111,14 @@ function HolidayListPage() {
           </form>
         </div>
       </div>
-      
+
       <table className="table table-hover shadow p-3 mb-5 bg-body rounded align-middle">
         <thead className="table-light">
           <tr>
             <th>Pavadinimas</th>
             <th>Data nuo</th>
             <th>Data iki</th>
-            <th>Būsena</th>
-            <th className="d-flex justify-content-center">Veiksmai</th>
+            <th></th>
           </tr>
         </thead>
         <tbody>
@@ -143,48 +127,31 @@ function HolidayListPage() {
               <td>{holiday.name}</td>
               <td>{holiday.starts}</td>
               <td>{holiday.ends}</td>
-              <td>{holiday.deleted ? "Ištrintas" : ""}</td>
+
               <td className="d-flex justify-content-end">
-                
+
                 <button
-                  className="btn btn-outline-primary ms-2"
-                  disabled={holiday.deleted}
+                  className="btn btn-danger me-2 my-1 btn-link" title="Ištrinti"
+                  onClick={() => deleteHoliday(holiday.id)}
                 >
-                  <Link className="nav-link" to={"/holidays/edit/" + holiday.id}>
-                    Redaguoti
-                  </Link>
+                  <DeleteTwoToneIcon className="red-icon" />
                 </button>
 
-                {holiday.deleted ? (
-                  <button
-                    className="btn btn-outline-danger ms-2"
-                    onClick={() => restoreHoliday(holiday.id)}
-                  >
-                    Atstatyti
-                  </button>
-                ) : (
-                  <button
-                    className="btn btn-outline-danger ms-2"
-                    onClick={() => deleteHoliday(holiday.id)}
-                  >
-                    Ištrinti
-                  </button>
-                )}
               </td>
             </tr>
           ))}
         </tbody>
         <tfoot className="table-light">
           <tr>
-            <td colSpan={5}>
-              {holidays.totalElements == "0"
+            <td colSpan={4}>
+              {/* {holidays.totalElements == "0"
                 ? "Įrašų nerasta"
-                : `Rasta įrašų: ${holidays.totalElements}`}
+                : `Rasta įrašų: ${holidays.totalElements}`} */}
             </td>
           </tr>
         </tfoot>
       </table>
-      
+
     </div>
   );
 }

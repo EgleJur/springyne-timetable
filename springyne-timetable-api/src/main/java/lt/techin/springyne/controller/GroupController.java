@@ -49,7 +49,7 @@ public class GroupController {
 
     @PostMapping(value = "/createGroup")
     public ResponseEntity<GroupDto> createGroup(@RequestBody GroupDto groupDto,
-                                                   @RequestParam Long programId,
+                                                @RequestParam Long programId,
                                                 @RequestParam Long shiftId) {
         var createdGroup = groupService.createGroup(programId, shiftId, toGroup(groupDto));
         return ok(toGroupDto(createdGroup));

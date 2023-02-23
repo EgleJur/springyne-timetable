@@ -39,10 +39,13 @@ function CreateGroupPage() {
   const createNewSubject = (e) => {
     e.preventDefault();
     setNameError(false);
+    setStudentsError(false);
+    setYearError(false);
      
-      if (name === "") {
-        setNameError(true);
-      
+      if (name === "" || students===""||groupYear==="") {
+        if (name === ""){setNameError(true);}
+        if (students===""){setStudentsError(true);}
+        if(groupYear===""){setYearError(true);}
  
     } else {
       fetch(
@@ -115,21 +118,27 @@ function CreateGroupPage() {
         />
 
         <TextField
+         error={!!yearError}
           onChange={(e) => setYear(e.target.value)}
           value={groupYear}
-          // id="create-group-year-with-error"
+           id="create-group-year-with-error"
           label="Mokslo metai"
+          helperText="Mokslo metai negali būti tušti"
           className="form-control mb-3"
           size="small"
+          required
         />
 
         <TextField
+         error={!!studentsError}
           onChange={(e) => setStudents(e.target.value)}
           value={students}
-          // id="create-group-students-with-error"
+           id="create-group-students-with-error"
           label="Studentų skaičius"
+          helperText="Studentų skaičius negali būti tuščias"
           className="form-control mb-3"
           size="small"
+          required
         />
 
         <label htmlFor="page-size-select" className="mb-3">

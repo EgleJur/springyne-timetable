@@ -80,8 +80,8 @@ function ViewModulePage() {
               <td colSpan={4}>{module.name}</td>
             </tr>
             <tr>
-              <th scope="col">Detalės</th>
-              <td colSpan={4}>{module.deleted ? "Modulis ištrintas" : ""}</td>
+              <th scope="col">Būsena</th>
+              <td colSpan={4}>{module.deleted ? "Modulis ištrintas" : "Aktyvus"}</td>
             </tr>
             <tr>
               <th scope="col">Paskutinį kartą modifikuotas:</th>
@@ -104,6 +104,7 @@ function ViewModulePage() {
                 <td>{subject.last_Updated}</td> */}
                 {subject.deleted ? <td>Dalykas ištrintas</td> : <td></td>}
               </tr>
+              
             ))}
           </tbody>
         </table>

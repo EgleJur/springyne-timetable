@@ -234,42 +234,48 @@ function TeacherListPage() {
                 ))}
               </td>
               <td>{teacher.shift.name}</td>
-              <td>{teacher.deleted ? "Mokytojas ištrintas" : ""}</td>
-              <td className="d-flex justify-content-end">
-                <button className="btn btn-outline-primary me-2 my-1">
-                  <Link
-                    className="nav-link"
-                    to={"/teachers/view/" + teacher.id}
-                  >
-                    Žiūrėti
-                  </Link>
-                </button>
-                <button
-                  className="btn btn-outline-primary me-2 my-1"
-                  disabled={teacher.deleted}
-                >
-                  <Link
-                    className="nav-link"
-                    to={"/teachers/edit/" + teacher.id}
-                  >
-                    Redaguoti
-                  </Link>
-                </button>
-                {teacher.deleted ? (
-                  <button
-                    className="btn btn-outline-secondary me-2 my-1"
-                    onClick={() => restoreTeacher(teacher.id)}
-                  >
-                    Atstatyti
-                  </button>
-                ) : (
-                  <button
-                    className="btn btn-outline-danger me-2 my-1"
-                    onClick={() => deleteTeacher(teacher.id)}
-                  >
-                    Ištrinti
-                  </button>
-                )}
+              <td>{teacher.deleted ? "Ištrintas" : ""}</td>
+              <td className="d-flex justify-content-start">
+  <div className="ms-5">
+    <button className="btn btn-outline-primary me-2 my-1">
+      <Link
+        className="nav-link"
+        to={"/teachers/view/" + teacher.id}
+      >
+        Žiūrėti
+      </Link>
+    </button>
+    <button
+      className="btn btn-outline-primary me-2 my-1"
+      disabled={teacher.deleted}
+    >
+      <Link
+        className="nav-link"
+        to={"/teachers/edit/" + teacher.id}
+      >
+        Redaguoti
+      </Link>
+    </button>
+    {teacher.deleted ? (
+      <button
+        className="btn btn-outline-secondary me-2 my-1"
+        onClick={() => restoreTeacher(teacher.id)}
+      >
+        Atstatyti
+      </button>
+    ) : (
+      <button
+        className="btn btn-outline-danger me-2 my-1"
+        onClick={() => deleteTeacher(teacher.id)}
+      >
+        Ištrinti
+      </button>
+    )}
+  </div>
+
+
+
+
               </td>
             </tr>
           ))}

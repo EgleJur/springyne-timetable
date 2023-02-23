@@ -118,19 +118,15 @@ function EditRoomPage() {
           Įrašo nepavyko atnaujinti
         </Alert>
       </Collapse>
+      <div className="container-fluid shadow p-3 mb-4 mb-md-5 bg-body rounded">
       <form noValidate>
-        <table
-          className="table table-hover shadow p-3 mb-5 bg-body rounded
-        align-middle"
-        >
-          <tbody>
-            <tr>
-              <th scope="col">
+          <div className="row">
+            <div className="col-md-4 mb-2 mb-md-0 fw-bold">
                 <label htmlFor="edit-room-name-with-error">
                   Pavadinimas *
                 </label>
-              </th>
-              <td>
+              </div>
+              <div className="col-md-8 mb-2 mb-md-0">
                 <TextField
                   error={!!nameError}
                   onChange={(e) => updateProperty("name", e)}
@@ -144,13 +140,13 @@ function EditRoomPage() {
                   disabled={room.deleted}
                   required
                 />
-              </td>
-            </tr>
-            <tr>
-              <th scope="col">
+              </div>
+            </div>
+            <div className="row">
+            <div className="col-md-4 mb-2 mb-md-0 fw-bold">
                 <label htmlFor="edit-room-building-with-error">Pastatas *</label>
-              </th>
-              <td>
+              </div>
+              <div className="col-md-8 mb-2">
                 <TextField
                   error={!!buildingError}
                   onChange={(e) => updateProperty("building", e)}
@@ -164,13 +160,13 @@ function EditRoomPage() {
                   disabled={room.deleted}
                   required
                 />
-              </td>
-            </tr>
-            <tr>
-            <th scope="col">
+              </div>
+          </div>
+          <div className="row">
+            <div className="col-md-4 mb-2 mb-md-0 fw-bold">
                 <label htmlFor="edit-room-description">Aprašymas</label>
-              </th>
-              <td>
+                </div>
+            <div className="col-md-8 mb-2">
                 <TextField
                   // error={!!buildingError}
                   onChange={(e) => updateProperty("description", e)}
@@ -184,18 +180,24 @@ function EditRoomPage() {
                   disabled={room.deleted}
                   // required
                 />
-              </td>
-            </tr>
-            <tr>
-              <th scope="col">Būsena</th>
-              <td>{room.deleted ? "Kabinetas ištrintas" : "Aktyvus"}</td>
-            </tr>
-            <tr>
-              <th scope="col">Paskutinį kartą modifikuotas:</th>
-              <td>{room.lastModifiedDate}</td>
-            </tr>
-          </tbody>
-        </table>
+              </div>
+            </div>
+            </form>
+            <div className="row mb-md-4">
+              <div className="col-md-4 mb-2 mb-md-0 fw-bold">Būsena</div>
+              <div className="col-md-8 mb-2 mb-md-0">
+                {room.deleted ? "Kabinetas ištrintas" : "Aktyvus"}
+                </div>
+            </div>
+            <div className="row mb-md-4">
+              <div className="col-md-4 mb-2 mb-md-0 fw-bold">
+                Paskutinį kartą modifikuotas:
+                </div>
+              <div className="col-md-8 mb-2 mb-md-0">
+                {room.lastModifiedDate}
+                </div>
+            </div>
+            </div>
         <button
           type="submit"
           className="btn btn-primary me-2"
@@ -213,8 +215,8 @@ function EditRoomPage() {
           <button className="btn btn-danger me-2" onClick={handleDelete}>
             Ištrinti
           </button>
+          
         )}
-      </form>
     </div>
   );
 }

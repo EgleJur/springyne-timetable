@@ -69,8 +69,6 @@ function HolidayListPage() {
 
           </form>
         </div>
-      </div>
-      <div className="d-flex justify-content-end">
         <div className="mb-4">
           <form className="d-flex" role="search">
             <TextField

@@ -146,7 +146,7 @@ function ShiftListPage() {
             <th>Pradžia</th>
             <th>Pabaiga</th>
             <th>Redaguota</th>
-            <th>Detalės</th>
+            <th>Būsena</th>
             <th className="d-flex justify-content-center">Veiksmai</th>
           </tr>
         </thead>
@@ -161,7 +161,7 @@ function ShiftListPage() {
               <td>{shift.starts}</td>
               <td>{shift.ends}</td>
               <td>{shift.lastUpdated}</td>
-              <td>{((shift.visible === 1) ? false : true) ? "Pamaina ištrinta" : ""}</td>
+              <td>{((shift.visible === 1) ? false : true) ? "Ištrintas" : ""}</td>
               <td className="d-flex justify-content-end">
                 <button className="btn btn-outline-primary me-2 my-1" disabled={(shift.visible === 0) ? true : false}>
                   <Link className="nav-link" to={"/shifts/edit/" + shift.id}>

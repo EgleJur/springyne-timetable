@@ -105,7 +105,7 @@ function GroupListPage() {
         <div className="me-auto d-flex">
           <button className="btn btn-primary mb-5">
             <Link to="/groups/create" className="nav-link">
-              Pridėti naują Grupę
+              Pridėti naują grupę
             </Link>
           </button>
         </div>

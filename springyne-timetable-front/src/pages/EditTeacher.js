@@ -121,9 +121,8 @@ function EditTeacherPage() {
 
   return (
     <div className="mx-3">
-      <h2 className="mt-5">Redaguoti mokytoją</h2>
-      {teacher.deleted ? <p className="mb-2">Mokytojas ištrintas</p> : ""}
-      <p className="mb-5">Paskutinį kartą redaguotas: {teacher.modifiedDate}</p>
+      <h2 className="my-5">Redaguoti mokytoją</h2>
+      
       <Collapse in={success}>
         <Alert
           onClose={() => {
@@ -146,13 +145,19 @@ function EditTeacherPage() {
           Įrašo nepavyko atnaujinti
         </Alert>
       </Collapse>
+      <div className="container-fluid shadow p-3 mb-4 mb-md-5 bg-body rounded">
       <form noValidate>
+      <div className="row">
+            <div className="col-md-4 mb-2 mb-md-0 fw-bold">
+              <label htmlFor="edit-module-number-with-error">Vardas ir Pavardė *</label>
+            </div>
+            <div className="col-md-8 mb-2 mb-md-0">
         <TextField
           error={!!nameError}
           onChange={(e) => updateProperty("name", e)}
           value={teacher.name}
           id="teacher-name-with-error"
-          label="Vardas ir Pavardė"
+          label=""
           helperText="Vardas ir Pavardė negali būti tuščias laukas"
           className="form-control mb-3"
           size="small"
@@ -160,12 +165,19 @@ function EditTeacherPage() {
           InputLabelProps={{ shrink: true }}
           required
         />
+        </div>
+          </div>
+          <div className="row">
+            <div className="col-md-4 mb-2 mb-md-0 fw-bold">
+              <label htmlFor="edit-module-number-with-error">Teams vartotojo vardas *</label>
+            </div>
+            <div className="col-md-8 mb-2 mb-md-0">
         <TextField
           error={!!teamsError}
           onChange={(e) => updateProperty("teamsEmail", e)}
           value={teacher.teamsEmail}
-          id="create-teacher-teams_mail"
-          label="Teams vartotojo vardas"
+          id=""
+          label=""
           helperText="Teams vardas negali būti tuščias laukas"
           className="form-control mb-3"
           size="small"
@@ -173,32 +185,53 @@ function EditTeacherPage() {
           InputLabelProps={{ shrink: true }}
           required
         />
+        </div>
+          </div>
+          <div className="row">
+            <div className="col-md-4 mb-2 mb-md-0 fw-bold">
+              <label htmlFor="edit-module-number-with-error">Kontaktinis elektroninio pašto adresas</label>
+            </div>
+            <div className="col-md-8 mb-2 mb-md-0">
         <TextField
           onChange={(e) => updateProperty("email", e)}
           value={teacher.email}
           id="create-teacher-email"
-          label="Kontaktinis elektroninio pašto adresas"
+          label=""
           className="form-control mb-3"
           size="small"
           disabled={teacher.deleted}
           InputLabelProps={{ shrink: true }}
         />
+        </div>
+          </div>
+          <div className="row">
+            <div className="col-md-4 mb-2 mb-md-0 fw-bold">
+              <label htmlFor="edit-module-number-with-error">Kontaktinis telefonas</label>
+            </div>
+            <div className="col-md-8 mb-2 mb-md-0">
         <TextField
           onChange={(e) => updateProperty("phone", e)}
           value={teacher.phone}
           id="create-teacher-phone"
-          label="Kontaktinis telefonas"
+          label=""
           className="form-control mb-3"
           size="small"
           disabled={teacher.deleted}
           InputLabelProps={{ shrink: true }}
         />
+        </div>
+          </div>
+          <div className="row">
+            <div className="col-md-4 mb-2 mb-md-0 fw-bold">
+              <label htmlFor="edit-module-number-with-error">Valandų skaičius *</label>
+            </div>
+            <div className="col-md-8 mb-2 mb-md-0">
         <TextField
           error={!!hoursError}
           onChange={(e) => updateProperty("hours", e)}
           value={teacher.hours}
           id="create-teacher-hours"
-          label="Valandų skaičius"
+          label=""
           helperText="Valandų skaičius negali būti tuščias laukas"
           className="form-control mb-2"
           size="small"
@@ -206,28 +239,38 @@ function EditTeacherPage() {
           InputLabelProps={{ shrink: true }}
           required
         />
-        {teacher.subjects?.length === 0 ? (
-          ""
-        ) : (
-          <div className="mb-2">Pašalinti Dalyką:</div>
-        )}
-
-        <div className="d-grid gap-6 d-md-block">
-          {teacher.subjects?.map((subject) => (
-            <button
-              type="submit"
-              className="btn btn-light me-2 mb-2"
-              value={subject.id}
-              onClick={(e) => deleteSubject(e.target.value)}
-              key={subject.id}
-              id={subject.id}
-              disabled={teacher.deleted}
-            >
-              {subject.name}
-            </button>
-          ))}
         </div>
+          </div>
+          </form>
+          <div className="row">
+  <div className="col-md-4 mb-2 mb-md-0 fw-bold">
+    {teacher.subjects?.length === 0 ? "" : <div>Pašalinti Dalyką:</div>}
+  </div>
+  <div className="col-md-8 mb-2">
+    {/* <div className="d-grid gap-6 d-md-block"> */}
+      {teacher.subjects?.map((subject) => (
+        <button
+          type="submit"
+          className="btn btn-light me-2 mb-2"
+          value={subject.id}
+          onClick={(e) => deleteSubject(e.target.value)}
+          key={subject.id}
+          id={subject.id}
+          disabled={teacher.deleted}
+        >
+          {subject.name}
+        </button>
+      ))}
+      {/* </div> */}
+  </div>
+</div>
 
+
+        <div className="row">
+            <div className="col-md-4 mb-2 mb-md-0 fw-bold">
+              <label htmlFor="edit-module-number-with-error">Dalykai *</label>
+            </div>
+            <div className="col-md-8 mb-2 mb-md-0">
         <FormControl fullWidth size="small" className="my-3">
           <InputLabel id="select-subject-label">Pridėti dalyką</InputLabel>
           <Select
@@ -251,17 +294,22 @@ function EditTeacherPage() {
             ))}
           </Select>
         </FormControl>
-
+        </div>
+          </div>
+        
+          <div className="row">
+            <div className="col-md-4 mb-2 mb-md-0 fw-bold">
+              <label htmlFor="edit-module-number-with-error">Pamaina *</label>
+            </div>
+            <div className="col-md-8 mb-2 mb-md-0">
         <FormControl fullWidth size="small" className="mb-3">
-          <InputLabel id="select-shift-label" shrink>
-            Pamaina
-          </InputLabel>
+          
           <Select
             disabled={teacher.deleted}
             labelId="select-shift-label"
             id="select-shift"
             displayEmpty
-            input={<OutlinedInput notched label="Pamaina" />}
+            input={<OutlinedInput notched label="" />}
             fullWidth
             value={selectedShift}
             onChange={(e) => setSelectedShift(e.target.value)}
@@ -274,8 +322,25 @@ function EditTeacherPage() {
             ))}
           </Select>
         </FormControl>
-
+        </div>
+          </div>
+          <div className="row mb-md-4">
+          <div className="col-md-4 mb-2 mb-md-0 fw-bold">Būsena</div>
+          <div className="col-md-8 mb-2 mb-md-0">
+            {teacher.deleted ? "Ištrintas" : "Aktyvus"}
+          </div>
+        </div>
+        <div className="row mb-md-4">
+          <div className="col-md-4 mb-2 mb-md-0 fw-bold">
+            Paskutinį kartą modifikuotas
+          </div>
+          <div className="col-md-8 mb-2 mb-md-0">{teacher.modifiedDate}</div>
+        </div>
+      
+          
+          </div>
         <div>
+          
           <button
             type="submit"
             className="btn btn-primary me-2 mt-2 mb-5"
@@ -300,7 +365,6 @@ function EditTeacherPage() {
             </button>
           )}
         </div>
-      </form>
     </div>
   );
 }

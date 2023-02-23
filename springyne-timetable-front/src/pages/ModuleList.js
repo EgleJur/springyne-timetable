@@ -3,6 +3,10 @@ import { Link } from "react-router-dom";
 import { TextField } from "@mui/material";
 import { Select, MenuItem, Pagination } from "@mui/material";
 import { Collapse, Alert } from "@mui/material";
+import SearchTwoToneIcon from '@mui/icons-material/SearchTwoTone';
+import EditTwoToneIcon from '@mui/icons-material/EditTwoTone';
+import DeleteTwoToneIcon from '@mui/icons-material/DeleteTwoTone';
+import RestoreTwoToneIcon from '@mui/icons-material/RestoreTwoTone';
 
 function ModuleListPage() {
   const [modules, setModules] = useState({});
@@ -148,8 +152,8 @@ function ModuleListPage() {
           <tr>
             <th>Numeris</th>
             <th>Pavadinimas</th>
-            <th>Detalės</th>
-            <th className="d-flex justify-content-center">Veiksmai</th>
+            <th>Būsena</th>
+            <th className="d-flex justify-content-end">Veiksmai</th>
           </tr>
         </thead>
         <tbody>
@@ -161,34 +165,35 @@ function ModuleListPage() {
             >
               <td>{module.number}</td>
               <td>{module.name}</td>
-              <td>{module.deleted ? "Modulis ištrintas" : ""}</td>
+              <td>{module.deleted ? "Ištrintas" : ""}</td>
               <td className="d-flex justify-content-end">
-                <button className="btn btn-outline-primary me-2 my-1">
+                <button className="btn btn-outline-primary me-2 my-1 btn-link" title="Žiūrėti">
                   <Link className="nav-link" to={"/modules/view/" + module.id}>
-                    Žiūrėti
+                    
+                  <SearchTwoToneIcon/>
                   </Link>
                 </button>
                 <button
-                  className="btn btn-outline-primary me-2 my-1"
+                  className="btn btn-outline-primary me-2 my-1 btn-link" title="Redaguoti"
                   disabled={module.deleted}
                 >
                   <Link className="nav-link" to={"/modules/edit/" + module.id}>
-                    Redaguoti
+                    <EditTwoToneIcon/>
                   </Link>
                 </button>
                 {module.deleted ? (
                   <button
-                    className="btn btn-outline-secondary me-2 my-1"
+                    className="btn btn-outline-secondary me-2 my-1 btn-link" title="Atstatyti"
                     onClick={() => restoreModule(module.id)}
                   >
-                    Atstatyti
+                    <RestoreTwoToneIcon/>
                   </button>
                 ) : (
                   <button
-                    className="btn btn-outline-danger me-2 my-1"
+                    className="btn btn-danger me-2 my-1 btn-link" title="Ištrinti"
                     onClick={() => deleteModule(module.id)}
                   >
-                    Ištrinti
+                    <DeleteTwoToneIcon className="red-icon" />
                   </button>
                 )}
               </td>

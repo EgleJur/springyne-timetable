@@ -154,20 +154,23 @@ function EditModulePage() {
             </div>
           </div>
         </form>
+        
+        
+        <EditModuleSubjects disabled={module.deleted} />
+        <div className="row mb-md-4">
+          <div className="col-md-4 mb-2 mb-md-0 fw-bold">Būsena</div>
+          <div className="col-md-8 mb-2 mb-md-0">
+            {module.deleted ? "Modulis ištrintas" : "Aktyvus"}
+          </div>
+        </div>
         <div className="row mb-md-4">
           <div className="col-md-4 mb-2 mb-md-0 fw-bold">
             Paskutinį kartą modifikuotas
           </div>
           <div className="col-md-8 mb-2 mb-md-0">{module.modifiedDate}</div>
         </div>
-        <div className="row mb-md-4">
-          <div className="col-md-4 mb-2 mb-md-0 fw-bold">Būsena</div>
-          <div className="col-md-8 mb-2 mb-md-0">
-            {module.deleted ? "Modulis ištrintas" : ""}
-          </div>
-        </div>
-        <EditModuleSubjects disabled={module.deleted} />
       </div>
+      
 
       {module.deleted ? (
         <div>

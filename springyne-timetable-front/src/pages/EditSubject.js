@@ -110,8 +110,7 @@ function EditSubjectPage() {
   return (
     <div className="mx-3">
       <h2 className="my-5">Redaguoti dalyką</h2>
-      {subject.deleted ? <p className="mb-2">Dalykas ištrintas</p> : ""}
-      <p className="mb-5">Paskutinį kartą redaguotas: {subject.last_Updated}</p>
+      
       
       <Collapse in={success}>
         <Alert
@@ -135,13 +134,19 @@ function EditSubjectPage() {
           Įrašo nepavyko atnaujinti
         </Alert>
       </Collapse>
+      <div className="container-fluid shadow p-3 mb-4 mb-md-5 bg-body rounded">
       <form noValidate>
+      <div className="row">
+            <div className="col-md-4 mb-2 mb-md-0 fw-bold">
+              <label htmlFor="edit-module-number-with-error">Pavadinimas *</label>
+            </div>
+            <div className="col-md-8 mb-2 mb-md-0">
         <TextField
           error={!!nameError}
           onChange={(e) => updateProperty("name", e)}
           value={subject.name}
           id="create-subject-number-with-error"
-          label="Pavadinimas"
+          label=""
           helperText="Pavadinimas negali būti tuščias"
           className="form-control mb-3"
           size="small"
@@ -149,20 +154,32 @@ function EditSubjectPage() {
           InputLabelProps={{ shrink: true }}
           required
         />
+        </div>
+          </div>
+          <div className="row">
+            <div className="col-md-4 mb-2 mb-md-0 fw-bold">
+              <label htmlFor="edit-module-name-with-error">Aprašymas</label>
+            </div>
+            <div className="col-md-8 mb-2">
         <TextField
           onChange={(e) => updateProperty("description", e)}
           value={subject.description}
           id="create-subject-number-with-error"
-          label="Aprašymas"
+          label=""
+          helperText="Neprivalomas"
           className="form-control mb-3"
           size="small"
           disabled={subject.deleted}
           InputLabelProps={{ shrink: true }}
 
         />
-        <label htmlFor="page-size-select" className="mb-3">
-        Modulis:
-      </label>
+        </div>
+          </div>
+          <div className="row">
+            <div className="col-md-4 mb-2 mb-md-0 fw-bold">
+              <label htmlFor="edit-module-name-with-error">Modulis</label>
+            </div>
+            <div className="col-md-8 mb-2">
       <select
             value={selectedModule}
             onChange={(e) => setSelectedModule(e.target.value)}
@@ -178,20 +195,24 @@ function EditSubjectPage() {
                 )
             }
         </select>
+        </div>
+          </div>
 
       
-        <label htmlFor="page-size-select" className="mb-3">
-          Kabinetai:
-        </label>
+          <div className="row">
+            <div className="col-md-4 mb-2 mb-md-0 fw-bold">
+              <label htmlFor="edit-module-name-with-error">Kabinetai</label>
+            </div>
+            <div className="col-md-8 mb-2">
         <div className="d-grid gap-6 d-md-block">
           {subject.rooms?.map((room) => (
           <button
             type="submit"
             className="btn btn-light"
             disabled={subject.deleted}
-            value={room.id}
+            value={room.name}
             onClick={(e) => deleteRoom(e.target.value)}
-            key={room.id} id={room.id}
+            key={room.name} id={room.name}
             >{room.name}</button>
         ))}</div>
 <div>
@@ -212,12 +233,31 @@ function EditSubjectPage() {
           }
         </select>
         </div>
+        </div>
+          </div>
+          <div className="row mb-md-4">
+          <div className="col-md-4 mb-2 mb-md-0 fw-bold">Būsena</div>
+          <div className="col-md-8 mb-2 mb-md-0">
+            {subject.deleted ? "Dalykas ištrintas" : "Aktyvus"}
+          </div>
+        </div>
+        <div className="row mb-md-4">
+          <div className="col-md-4 mb-2 mb-md-0 fw-bold">
+      Paskutinį kartą modifikuotas
+      </div>
+      <div className="col-md-8 mb-2 mb-md-0">{subject.last_Updated}</div>
+      </div>
+      
+        </form>
+        </div>
         <div>
+          
         <button type="submit" 
         className="btn btn-primary me-2" 
         onClick={editsubject}
         disabled={!changed}
         >
+          
           Redaguoti
         </button>
         {subject.deleted ? (
@@ -237,7 +277,7 @@ function EditSubjectPage() {
             </button>
           )}
           </div>
-      </form>
+      
     </div>
   );
 }

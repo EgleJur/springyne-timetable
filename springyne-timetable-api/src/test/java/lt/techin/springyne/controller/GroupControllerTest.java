@@ -24,10 +24,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-<<<<<<< HEAD
+//<<<<<<< HEAD
 import static org.mockito.Mockito.when;
-=======
->>>>>>> development
+//=======
+//>>>>>>> development
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest

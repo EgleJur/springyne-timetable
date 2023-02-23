@@ -139,13 +139,20 @@ function EditShiftPage() {
           Įrašo nepavyko atnaujinti
         </Alert>
       </Collapse>
+      <div className="container-fluid shadow p-3 mb-4 mb-md-5 bg-body rounded">
       <form noValidate>
+      <div className="row">
+      <div className="col-md-4 mb-2 mb-md-0 fw-bold">
+      <label htmlFor="edit-module-number-with-error">Pavadinimas *</label>
+        </div>
+        <div className="col-md-8 mb-2 mb-md-0">
+
         <TextField
           error={!!nameError}
           onChange={(e) => updateProperty("name", e)}
           value={shift.name}
           id="create-module-number-with-error"
-          label="Pavadinimas"
+          label=""
           helperText="Pavadinimas turi būti unikalus ir negali būti tuščias"
           className="form-control mb-3"
           size="small"
@@ -153,9 +160,15 @@ function EditShiftPage() {
           InputLabelProps={{ shrink: true }}
           required
         />
+        </div>
+          </div>
+          <div className="row">
+            <div className="col-md-4 mb-2 mb-md-0 fw-bold">
         <label htmlFor="starts-select" className="me-2">
           Pradžia:
         </label>
+        </div>
+            <div className="col-md-8 mb-2">
         <Select
           id="starts-select"
           error={!!numberError}
@@ -180,9 +193,15 @@ function EditShiftPage() {
           <MenuItem value="13">13</MenuItem>
           <MenuItem value="14">14</MenuItem>
         </Select>
+        </div>
+          </div>
+          <div className="row">
+            <div className="col-md-4 mb-2 mb-md-0 fw-bold">
         <label htmlFor="starts-select" className="me-2">
           Pabaiga:
         </label>
+        </div>
+            <div className="col-md-8 mb-2">
         <Select
           id="ends-select"
           error={!!numberError}
@@ -207,11 +226,28 @@ function EditShiftPage() {
           <MenuItem value="13">13</MenuItem>
           <MenuItem value="14">14</MenuItem>
         </Select>
-        <p>Redaguota: {shift.lastUpdated}</p>
-        <p>
-          Būsena:{" "}
-          {(shift.visible === 1 ? false : true) ? "Pamaina ištrinta" : ""}
-        </p>
+        </div>
+          </div>
+        
+        
+          <div className="row">
+            <div className="col-md-4 mb-2 mb-md-0 fw-bold">
+          Būsena:
+          </div>
+          <div className="col-md-8 mb-2">
+          {(shift.visible === 1 ? false : true) ? "Pamaina ištrinta" : "Aktyvus"}
+          </div>
+          </div>
+          <div className="row mb-md-4">
+          <div className="col-md-4 mb-2 mb-md-0 fw-bold">
+        Paskutinį kartą modifikuotas
+        </div>
+        <div className="col-md-8 mb-2 mb-md-0">{shift.lastUpdated}</div>
+        </div>
+      
+        </form>
+        </div>
+        
         <button
           type="submit"
           className="btn btn-primary"
@@ -236,9 +272,10 @@ function EditShiftPage() {
             Ištrinti
           </button>
         )}
-      </form>
+      
     </div>
   );
+  
 }
 
 export default EditShiftPage;

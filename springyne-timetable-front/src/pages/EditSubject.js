@@ -1,7 +1,16 @@
 import { Collapse, Alert } from "@mui/material";
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import { TextField } from "@mui/material";
+import {
+  TextField,
+  FormControl,
+  Select,
+  MenuItem,
+  InputLabel,
+  OutlinedInput,
+} from "@mui/material";
+import ClearIcon from "@mui/icons-material/Clear";
+// import { Margin } from "@mui/icons-material";
 
 
 
@@ -82,7 +91,7 @@ function EditSubjectPage() {
       ...subject,
       [property]: event.target.value,
     });
-    setChanged(true);
+    // setChanged(true);
   };
 
   const handleDelete = () => {
@@ -197,11 +206,72 @@ function EditSubjectPage() {
         </select>
         </div>
           </div>
-
-      
+          {/* ///////////// */}
           <div className="row">
+  <div className="col-md-4 mb-2 mb-md-0 fw-bold">
+    {subject.rooms?.length === 0 ? "" : <div>Pašalinti kabinetą:</div>}
+  </div>
+  <div className="col-md-8 mb-2">
+      {subject.rooms?.map((room) => (
+        <button
+          type="submit"
+          className="btn btn-light me-2 mb-2"
+          value={room.id}
+          // onChange={(e) => updateProperty(e.target.value)}
+          disabled={subject.deleted}
+          onClick={(e) => deleteRoom(e.target.value)}
+          key={room.id}
+          id={room.id}
+          
+        >
+          {room.name}{" "}
+          <ClearIcon color="disabled" sx={{ fontSize: 12}} />
+        </button>
+      ))}
+  </div>
+</div>
+
+
+        <div className="row">
             <div className="col-md-4 mb-2 mb-md-0 fw-bold">
-              <label htmlFor="edit-module-name-with-error">Kabinetai</label>
+              <label htmlFor="edit-room-number-with-error">Kabinetai</label>
+            </div>
+            <div className="col-md-8 mb-2 mb-md-0">
+        <FormControl fullWidth size="small" className="my-3">
+          <InputLabel id="select-room-label">Pridėti kabinetą</InputLabel>
+          <Select
+            disabled={subject.deleted}
+            labelId="select-room-label"
+            InputLabelProps={{ shrink: true }}
+            id="add-select-room"
+            label="Pridėti dalyką"
+            fullWidth
+            value={selectedRoom}
+            
+            onChange={(e) => setSelectedRoom(e.target.value)}
+          >
+            {rooms?.map((room) => (
+              <MenuItem
+                value={room.id}
+                key={room.id}
+                disabled={room.deleted}
+              >
+                {room.name}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+        </div>
+          </div>
+
+          
+
+
+
+      {/* ///// */}
+          {/* <div className="row">
+            <div className="col-md-4 mb-2 mb-md-0 fw-bold">
+              <label htmlFor="edit-module-name-with-error">Pridėti kabinetą</label>
             </div>
             <div className="col-md-8 mb-2">
         <div className="d-grid gap-6 d-md-block">
@@ -210,9 +280,9 @@ function EditSubjectPage() {
             type="submit"
             className="btn btn-light"
             disabled={subject.deleted}
-            value={room.name}
+            value={room.id}
             onClick={(e) => deleteRoom(e.target.value)}
-            key={room.name} id={room.name}
+            key={room.id} id={room.id}
             >{room.name}</button>
         ))}</div>
 <div>
@@ -234,7 +304,7 @@ function EditSubjectPage() {
         </select>
         </div>
         </div>
-          </div>
+          </div> */}
           <div className="row mb-md-4">
           <div className="col-md-4 mb-2 mb-md-0 fw-bold">Būsena</div>
           <div className="col-md-8 mb-2 mb-md-0">
@@ -255,7 +325,7 @@ function EditSubjectPage() {
         <button type="submit" 
         className="btn btn-primary me-2" 
         onClick={editsubject}
-        disabled={!changed}
+        // disabled={!changed}
         >
           
           Redaguoti

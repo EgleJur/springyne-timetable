@@ -9,6 +9,7 @@ import {
   InputLabel,
   OutlinedInput,
 } from "@mui/material";
+import ClearIcon from "@mui/icons-material/Clear";
 
 function EditTeacherPage() {
   const [teacher, setTeacher] = useState({});
@@ -189,7 +190,7 @@ function EditTeacherPage() {
           </div>
           <div className="row">
             <div className="col-md-4 mb-2 mb-md-0 fw-bold">
-              <label htmlFor="edit-module-number-with-error">Kontaktinis elektroninio pašto adresas</label>
+              <label htmlFor="edit-module-number-with-error">Kontaktinis el. paštas</label>
             </div>
             <div className="col-md-8 mb-2 mb-md-0">
         <TextField
@@ -223,7 +224,7 @@ function EditTeacherPage() {
           </div>
           <div className="row">
             <div className="col-md-4 mb-2 mb-md-0 fw-bold">
-              <label htmlFor="edit-module-number-with-error">Valandų skaičius *</label>
+              <label htmlFor="edit-module-number-with-error">Valandų skaičius per savaitę*</label>
             </div>
             <div className="col-md-8 mb-2 mb-md-0">
         <TextField
@@ -232,7 +233,7 @@ function EditTeacherPage() {
           value={teacher.hours}
           id="create-teacher-hours"
           label=""
-          helperText="Valandų skaičius negali būti tuščias laukas"
+          helperText="Valandų skaičius per savaitę negali būti tuščias laukas"
           className="form-control mb-2"
           size="small"
           disabled={teacher.deleted}
@@ -247,7 +248,6 @@ function EditTeacherPage() {
     {teacher.subjects?.length === 0 ? "" : <div>Pašalinti Dalyką:</div>}
   </div>
   <div className="col-md-8 mb-2">
-    {/* <div className="d-grid gap-6 d-md-block"> */}
       {teacher.subjects?.map((subject) => (
         <button
           type="submit"
@@ -258,10 +258,10 @@ function EditTeacherPage() {
           id={subject.id}
           disabled={teacher.deleted}
         >
-          {subject.name}
+          {subject.name}{" "}
+          <ClearIcon color="disabled" sx={{ fontSize: 12}} />
         </button>
       ))}
-      {/* </div> */}
   </div>
 </div>
 

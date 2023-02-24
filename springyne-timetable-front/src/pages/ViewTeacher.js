@@ -69,11 +69,11 @@ function ViewTeacherPage() {
               <td>{teacher.name}</td>
             </tr>
             <tr>
-              <th scope="col">Teams vardas(email)</th>
+              <th scope="col">Teams vartotojo vardas</th>
               <td>{teacher.teamsEmail}</td>
             </tr>
             <tr>
-              <th scope="col">Kontaktinis email</th>
+              <th scope="col">Kontaktinis el. paštas</th>
               <td>{teacher.email}</td>
             </tr>
             <tr>
@@ -81,7 +81,7 @@ function ViewTeacherPage() {
               <td>{teacher.phone}</td>
             </tr>
             <tr>
-              <th scope="col">Valandų skaičius</th>
+              <th scope="col">Valandų skaičius per savaitę</th>
               <td>{teacher.hours}</td>
             </tr>
             <tr>

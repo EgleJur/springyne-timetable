@@ -3,6 +3,10 @@ import { Link } from "react-router-dom";
 import { FormControl, TextField } from "@mui/material";
 import { Select, MenuItem, Pagination, InputLabel } from "@mui/material";
 import { Collapse, Alert } from "@mui/material";
+import EditTwoToneIcon from '@mui/icons-material/EditTwoTone';
+import DeleteTwoToneIcon from '@mui/icons-material/DeleteTwoTone';
+import RestoreTwoToneIcon from '@mui/icons-material/RestoreTwoTone';
+import VisibilityTwoToneIcon from '@mui/icons-material/VisibilityTwoTone';
 
 function ProgramListPage() {
   const [programs, setPrograms] = useState({});
@@ -135,8 +139,8 @@ function ProgramListPage() {
             <th>Pavadinimas</th>
             <th>Aprašymas</th>
             <th>Būsena</th>
-            <th className="d-flex text-start">
-              <div className="ms-0 ms-sm-2 ms-md-3 ms-lg-4">Veiksmai</div>
+            <th>
+              <div></div>
             </th>
           </tr>
         </thead>
@@ -151,38 +155,38 @@ function ProgramListPage() {
               <td>{program.description}</td>
               <td>{program.deleted ? "Ištrintas" : ""}</td>
               <td className="justify-content-end text-end">
-                <button className="btn btn-outline-primary me-2 my-1">
+                <button className="btn btn-outline-primary me-1 my-1 btn-link" title="Žiūrėti">
                   <Link
                     className="nav-link"
                     to={"/programs/view/" + program.id}
                   >
-                    Žiūrėti
+                    <VisibilityTwoToneIcon/>
                   </Link>
                 </button>
                 <button
-                  className="btn btn-outline-primary me-2 my-1"
+                  className="btn btn-outline-primary me-1 my-1 btn-link" title="Redaguoti"
                   disabled={program.deleted}
                 >
                   <Link
                     className="nav-link"
                     to={"/programs/edit/" + program.id}
                   >
-                    Redaguoti
+                    <EditTwoToneIcon/>
                   </Link>
                 </button>
                 {program.deleted ? (
                   <button
-                    className="btn btn-outline-secondary my-1 me-2 me-xl-0"
+                  className="btn btn-outline-secondary me-1 my-1 btn-link" title="Atstatyti"
                     onClick={() => restoreProgram(program.id)}
                   >
-                    Atstatyti
+                    <RestoreTwoToneIcon/>
                   </button>
                 ) : (
                   <button
-                    className="btn btn-outline-danger me-2 me-xl-3 my-1"
+                  className="btn btn-danger me-2 my-1 btn-link" title="Ištrinti"
                     onClick={() => deleteProgram(program.id)}
                   >
-                    Ištrinti
+                    <DeleteTwoToneIcon className="red-icon" />
                   </button>
                 )}
               </td>

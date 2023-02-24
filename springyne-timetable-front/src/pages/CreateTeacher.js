@@ -1,73 +1,92 @@
 import { useState, useEffect } from "react";
-import { Alert,Collapse } from "@mui/material";
+import { Alert, Collapse } from "@mui/material";
 import { TextField } from "@mui/material";
+import { Select, MenuItem, FormControl, OutlinedInput, InputLabel } from "@mui/material";
 
 function CreateTeacherPage() {
   const [name, setName] = useState("");
-  const [teams_mail, setTeams_mail] = useState("");
+  const [teamsEmail, setTeamsEmail] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
   const [hours, setHours] = useState("");
-  const [nameError, setNameError] = useState("");
-  const [teams_mailError, setTeams_mailError] = useState("");
-  // const [emailError, setEmailError] = useState("");
-  // const [phoneError, setPhoneError] = useState("");
-  const [hoursError, setHoursError] = useState("");
+  const [nameError, setNameError] = useState(false);
+  const [teamsEmailError, setTeamsEmailError] = useState(false);
+  const [subjectError, setSubjectError] = useState(false);
+  const [shiftError, setShiftError] = useState(false);
+  const [hoursError, setHoursError] = useState(false);
   const [success, setSuccess] = useState(false);
   const [failure, setFailure] = useState(false);
   const [shifts, setShifts] = useState([]);
-    const [selectedShifts, setSelectedShifts] = useState('');
+  const [selectedShift, setSelectedShift] = useState("");
+  const [subjects, setSubjects] = useState([]);
+  const [selectedSubject, setSelectedSubject] = useState("");
 
-    const [subjects, setSubjects] = useState([]);
-    const [selectedSubject, setSelectedSubject] = useState('');
-
-
-    useEffect(() => {
-      fetch('api/v1/shifts/')
-          .then(response => response.json())
-          .then(setShifts)
-          
+  useEffect(() => {
+    fetch("api/v1/shifts/")
+      .then((response) => response.json())
+      .then(setShifts);
   }, []);
 
   useEffect(() => {
-    fetch('api/v1/subjects/')
-        .then(response => response.json())
-        .then(setSubjects)
-        
-}, []);
+    fetch("api/v1/subjects/")
+      .then((response) => response.json())
+      .then(setSubjects);
+  }, []);
 
   const createNewTeacher = (e) => {
     e.preventDefault();
-    setNameError(false); 
-    setTeams_mailError(false);
-    // setEmailError(false);
-    // setPhoneError(false);
-    setEmail();
-    setPhone();
+    setNameError(false);
+    setTeamsEmailError(false);
     setHoursError(false);
-    if (name === "") {
+    setShiftError(false);
+    setSubjectError(false);
+    if (
+      name === "" ||
+      teamsEmail === "" ||
+      hours === "" ||
+      selectedSubject === "" ||
+      selectedShift === ""
+    ) {
+      if (name === "") {
         setNameError(true);
-      
+      }
+      if (teamsEmail === "") {
+        setTeamsEmailError(true);
+      }
+      if (hours === "") {
+        setHoursError(true);
+      }
+      if (selectedSubject === "") {
+        setSubjectError(true)
+      }
+      if (selectedShift === "") {
+        setShiftError(true);
+      }
     } else {
-      fetch(`/api/v1/teachers?shiftId=${selectedShifts}&subjectId=${selectedSubject}`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          name,
-          teams_mail,
-          email,
-          phone,
-          hours,
-        }),
-      }).then((result) => {
+      fetch(
+        `/api/v1/teachers?shiftId=${selectedShift}&subjectId=${selectedSubject}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            name,
+            teamsEmail,
+            email,
+            phone,
+            hours,
+          }),
+        }
+      ).then((result) => {
         if (result.ok) {
           setName("");
-          setTeams_mail("");
+          setTeamsEmail("");
           setEmail("");
           setPhone("");
           setHours("");
+          setSelectedShift("");
+          setSelectedSubject("");
           setSuccess(true);
           setFailure(false);
         } else {
@@ -80,7 +99,7 @@ function CreateTeacherPage() {
 
   return (
     <div className="mx-3">
-      <h2 className="my-5">Pridėti naują mokytoja</h2>
+      <h2 className="my-5">Pridėti naują mokytoją</h2>
       <Collapse in={success}>
         <Alert
           onClose={() => {
@@ -111,38 +130,36 @@ function CreateTeacherPage() {
           value={name}
           id="create-teacher-name-with-error"
           label="Vardas ir Pavardė"
-          helperText="Vardas ir Pavardė negali būti tuščias"
+          helperText="Vardas ir Pavardė negali būti tuščias laukas"
           className="form-control mb-3"
           size="small"
           required
         />
         <TextField
-          error={!!teams_mailError}
-          onChange={(e) => setTeams_mail(e.target.value)}
-          value={teams_mail}
+          error={!!teamsEmailError}
+          onChange={(e) => setTeamsEmail(e.target.value)}
+          value={teamsEmail}
           id="create-teacher-teams_mail-with-error"
-          label="Teams Vardas(email)"
-          helperText="Neprivaloma"
+          label="Teams vartotojo vardas"
+          helperText="Teams vardas negali būti tuščias laukas"
           className="form-control mb-3"
           size="small"
+          required
         />
         <TextField
           // error={!!emailError}
           onChange={(e) => setEmail(e.target.value)}
           value={email}
           id="create-teacher-email-with-error"
-          label="Kontaktinis email"
-          helperText="Neprivaloma"
+          label="Kontaktinis el. paštas"
           className="form-control mb-3"
           size="small"
         />
         <TextField
-          // error={!!phoneError}
           onChange={(e) => setPhone(e.target.value)}
           value={phone}
           id="create-teacher-phone-with-error"
           label="Kontaktinis telefonas"
-          helperText="Neprivaloma"
           className="form-control mb-3"
           size="small"
         />
@@ -151,63 +168,64 @@ function CreateTeacherPage() {
           onChange={(e) => setHours(e.target.value)}
           value={hours}
           id="create-teacher-hours-with-error"
-          label="Valandų skaičius"
-          helperText="Neprivaloma"
+          label="Valandų skaičius per savaitę"
+          helperText="Valandų skaičius per savaitę negali būti tuščias laukas"
           className="form-control mb-3"
           size="small"
+          required
         />
-        <label htmlFor="page-size-select" className="mb-3">
-          Dalykas:
-        </label>
-        
-        <select
+
+        <FormControl fullWidth size="small" className="mb-3">
+          <InputLabel id="select-subject-label" error={subjectError} required>
+            Pasirinkite dalyką
+          </InputLabel>
+          <Select
+            error={subjectError}
+            labelId="select-subject-label"
+            id="add-select-subject"
+            label="Pasirinkite dalyką"
+            fullWidth
             value={selectedSubject}
             onChange={(e) => setSelectedSubject(e.target.value)}
-            className="form-control mb-3">
-              <option value =''>---</option>
-            {
-                subjects.map(
-                    (sub) =>
-                    (<option key={sub.id} 
-                        value={sub.id} 
-                        disabled={sub.deleted}>{sub.name}</option>)
-                )
-            }
-        </select>
+            required
+          >
+            {subjects?.map((subject) => (
+              <MenuItem
+                value={subject.id}
+                key={subject.id}
+                disabled={subject.deleted}
+              >
+                {subject.name}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
 
-        <label htmlFor="page-size-select" className="mb-3">
-  Pamaina:
-</label>
-<select
-  value={selectedShifts}
-  onChange={(e) => setSelectedShifts(e.target.value)}
-  className={`form-control mb-3 ${selectedShifts ? "" : "border-danger"}`}
-  required
->
-  <option value="">Pasirinkite pamainą</option>
-  {
-    shifts.map((shift) => (
-      <option
-        key={shift.id}
-        value={shift.id}
-        disabled={shift.deleted}
-      >
-        {shift.name}
-      </option>
-    ))
-  }
-</select>
-{!selectedShifts && (
-  <div className="form-text text-danger">
-    Prašome pasirinkti pamainą iš sąrašo.
-  </div>
-)}
-
-
+        <FormControl fullWidth size="small" className="mb-3">
+          <InputLabel id="select-shift-label" error={subjectError} required>
+            Pasirinkite pamainą
+          </InputLabel>
+          <Select
+            error={subjectError}
+            labelId="select-shift-label"
+            id="select-shift"
+            label="Pasirinkite pamainą"
+            fullWidth
+            value={selectedShift}
+            onChange={(e) => setSelectedShift(e.target.value)}
+            required
+          >
+            {shifts?.map((subject) => (
+              <MenuItem value={subject.id} key={subject.id}>
+                {subject.name}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
 
         <button
           type="submit"
-          className="btn btn-primary"
+          className="btn btn-primary mb-5"
           onClick={createNewTeacher}
         >
           Pridėti

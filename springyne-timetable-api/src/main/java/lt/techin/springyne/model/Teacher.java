@@ -3,10 +3,12 @@ package lt.techin.springyne.model;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import org.hibernate.validator.constraints.Range;
 import org.springframework.data.annotation.LastModifiedDate;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
@@ -24,12 +26,15 @@ public class Teacher {
     @NotBlank
     private String name;
 
+    @NotBlank
     private String teamsEmail;
 
     private String email;
 
     private String phone;
 
+    @NotNull
+    @Range(min = 0)
     private Integer hours;
 
     @ManyToMany(fetch = FetchType.EAGER)

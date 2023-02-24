@@ -43,12 +43,27 @@ public class TeacherService {
         if (teacher.getName() == null || teacher.getName().equals("")) {
             throw new ScheduleValidationException("Teacher name cannot be empty", "name", "Name is empty", teacher.getName());
         }
-        if (shiftId != null) {
-            Shift shiftToAdd = shiftRepository.findById(shiftId).orElseThrow(() -> new ScheduleValidationException("Shift does not exist", "id",
-                    "Shift not found", String.valueOf(shiftId)));
-            teacher.setShift(shiftToAdd);
+        if (teacher.getTeamsEmail() == null || teacher.getTeamsEmail().equals("")) {
+            throw new ScheduleValidationException("Teacher teams email cannot be empty", "teamsEmail", "TeamsEmail is empty", teacher.getTeamsEmail());
         }
-        if(subjectId != null) {
+        if (teacher.getHours() == null) {
+            throw new ScheduleValidationException("Teacher hours cannot be empty", "hours", "Hours is empty", teacher.getHours().toString());
+        }
+        if (teacher.getHours() < 0) {
+            throw new ScheduleValidationException("Teacher hours cannot be negative number", "hours", "Hours < 0", teacher.getHours().toString());
+        }
+
+        if (shiftId == null) {
+            throw new ScheduleValidationException("Teacher shift cannot be empty", "shiftId", "Shift is empty", shiftId.toString());
+        } else {
+                Shift shiftToAdd = shiftRepository.findById(shiftId).orElseThrow(() -> new ScheduleValidationException("Shift does not exist", "id",
+                        "Shift not found", String.valueOf(shiftId)));
+                teacher.setShift(shiftToAdd);
+        }
+
+        if (subjectId == null) {
+            throw new ScheduleValidationException("Teacher subject cannot be empty", "subjectId", "Subject is empty", subjectId.toString());
+        } else {
             Subject subjectToAdd = subjectRepository.findById(subjectId).orElseThrow(() -> new ScheduleValidationException("Subject does not exist", "id",
                     "Subject not found", String.valueOf(subjectId)));
             teacher.getSubjects().add(subjectToAdd);
@@ -114,20 +129,24 @@ public class TeacherService {
 //                updatedTeacher.setEmail(teacher.getEmail());
 //            }
 //        }
-        if (!teacher.getTeamsEmail().equals(updatedTeacher.getTeamsEmail())) {
-            if (!(teacher.getTeamsEmail().equals("") || teacher.getTeamsEmail() == null)) {
+
+            if (teacher.getTeamsEmail().equals("") || teacher.getTeamsEmail() == null) {
+                throw new ScheduleValidationException("Teacher teams email cannot be empty", "teamsEmail", "TeamsEmail is empty", teacher.getTeamsEmail());
+            } else {
                 updatedTeacher.setTeamsEmail(teacher.getTeamsEmail());
             }
-        }
+
 //        if (!teacher.getPhone().equals(updatedTeacher.getPhone())) {
 //            if (!(teacher.getPhone().equals("") || teacher.getPhone() == null)) {
 //                updatedTeacher.setPhone(teacher.getPhone());
 //            }
 //        }
-        if (!teacher.getHours().equals(updatedTeacher.getHours())) {
-            if (!(teacher.getHours() == null)) {
-                updatedTeacher.setHours(teacher.getHours());
-            }
+        if (teacher.getHours() == null) {
+            throw new ScheduleValidationException("Teacher hours cannot be empty", "hours", "Hours is empty", teacher.getHours().toString());
+        } else if (teacher.getHours() < 0) {
+            throw new ScheduleValidationException("Teacher hours cannot be negative number", "hours", "Hours < 0", teacher.getHours().toString());
+        } else {
+            updatedTeacher.setHours(teacher.getHours());
         }
 
         updatedTeacher.setEmail(teacher.getEmail());

@@ -3,6 +3,11 @@ import { Link } from "react-router-dom";
 import { TextField } from "@mui/material";
 import { Select, MenuItem, Pagination } from "@mui/material";
 import { Collapse, Alert } from "@mui/material";
+import EditTwoToneIcon from '@mui/icons-material/EditTwoTone';
+import DeleteTwoToneIcon from '@mui/icons-material/DeleteTwoTone';
+import RestoreTwoToneIcon from '@mui/icons-material/RestoreTwoTone';
+import VisibilityTwoToneIcon from '@mui/icons-material/VisibilityTwoTone';
+
 
 function TeacherListPage() {
   const [teachers, setTeachers] = useState([]);
@@ -115,8 +120,8 @@ function TeacherListPage() {
           Įrašas sėkmingai atstatytas
         </Alert>
       </Collapse>
-
-      <div className="d-flex">
+      <div className="d-flex justify-content-end">
+      <div className="me-auto d-flex">
         <button className="btn btn-primary mb-5">
           <Link to="/teachers/create" className="nav-link">
             Pridėti naują mokytoją
@@ -124,24 +129,9 @@ function TeacherListPage() {
         </button>
       </div>
 
-      <div className="d-flex justify-content-end">
+      
         <div className="mb-4">
           <form className="d-flex" role="search">
-            {/* <label htmlFor="page-size-select" className="me-2">
-              Puslapyje:
-            </label>
-            <Select
-              id="page-size-select"
-              value={pageSize}
-              size="small"
-              className="me-2"
-              onChange={handlePageSizeChange}
-            >
-              <MenuItem value={10}>10</MenuItem>
-              <MenuItem value={25}>25</MenuItem>
-              <MenuItem value={50}>50</MenuItem>
-              <MenuItem value={100}>100</MenuItem>
-            </Select> */}
             <label htmlFor="select-subject" className="me-2">
               Dalykas:
             </label>
@@ -215,7 +205,7 @@ function TeacherListPage() {
             <th>Dalykai</th>
             <th>Pamaina</th>
             <th>Būsena</th>
-            <th className="d-flex justify-content-center">Veiksmai</th>
+            <th ></th>
           </tr>
         </thead>
         <tbody>
@@ -235,40 +225,40 @@ function TeacherListPage() {
               </td>
               <td>{teacher.shift.name}</td>
               <td>{teacher.deleted ? "Ištrintas" : ""}</td>
-              <td className="d-flex justify-content-start">
+              <td className="d-flex justify-content-end">
   <div className="ms-5">
-    <button className="btn btn-outline-primary me-2 my-1">
+    <button className="btn btn-outline-primary me-1 my-1 btn-link" title="Žiūrėti">
       <Link
         className="nav-link"
         to={"/teachers/view/" + teacher.id}
       >
-        Žiūrėti
+        <VisibilityTwoToneIcon/>
       </Link>
     </button>
     <button
-      className="btn btn-outline-primary me-2 my-1"
+      className="btn btn-outline-primary me-1 my-1 btn-link" title="Redaguoti"
       disabled={teacher.deleted}
     >
       <Link
         className="nav-link"
         to={"/teachers/edit/" + teacher.id}
       >
-        Redaguoti
+        <EditTwoToneIcon/>
       </Link>
     </button>
     {teacher.deleted ? (
       <button
-        className="btn btn-outline-secondary me-2 my-1"
+      className="btn btn-outline-secondary me-1 my-1 btn-link" title="Atstatyti"
         onClick={() => restoreTeacher(teacher.id)}
       >
-        Atstatyti
+        <RestoreTwoToneIcon/>
       </button>
     ) : (
       <button
-        className="btn btn-outline-danger me-2 my-1"
+      className="btn btn-danger me-2 my-1 btn-link" title="Ištrinti"
         onClick={() => deleteTeacher(teacher.id)}
       >
-        Ištrinti
+        <DeleteTwoToneIcon className="red-icon" />
       </button>
     )}
   </div>

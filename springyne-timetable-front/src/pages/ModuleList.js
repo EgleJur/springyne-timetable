@@ -7,6 +7,7 @@ import SearchTwoToneIcon from '@mui/icons-material/SearchTwoTone';
 import EditTwoToneIcon from '@mui/icons-material/EditTwoTone';
 import DeleteTwoToneIcon from '@mui/icons-material/DeleteTwoTone';
 import RestoreTwoToneIcon from '@mui/icons-material/RestoreTwoTone';
+import VisibilityTwoToneIcon from '@mui/icons-material/VisibilityTwoTone';
 
 function ModuleListPage() {
   const [modules, setModules] = useState({});
@@ -93,15 +94,15 @@ function ModuleListPage() {
           Įrašas sėkmingai atstatytas
         </Alert>
       </Collapse>
-
-      <div className="d-flex">
+      <div className="d-flex justify-content-end">
+      <div className="me-auto d-flex">
         <button className="btn btn-primary mb-5">
           <Link to="/modules/create" className="nav-link">
             Pridėti naują modulį
           </Link>
         </button>
       </div>
-      <div className="d-flex justify-content-end">
+      
         <div className="mb-4">
           <form className="d-flex" role="search">
             {/* <label htmlFor="page-size-select" className="me-2">
@@ -136,6 +137,7 @@ function ModuleListPage() {
             </button>
           </form>
         </div>
+        
         {/* <div>
           <Pagination
             count={modules.totalPages}
@@ -153,7 +155,7 @@ function ModuleListPage() {
             <th>Numeris</th>
             <th>Pavadinimas</th>
             <th>Būsena</th>
-            <th className="d-flex justify-content-end">Veiksmai</th>
+            <th></th>
           </tr>
         </thead>
         <tbody>
@@ -167,14 +169,14 @@ function ModuleListPage() {
               <td>{module.name}</td>
               <td>{module.deleted ? "Ištrintas" : ""}</td>
               <td className="d-flex justify-content-end">
-                <button className="btn btn-outline-primary me-2 my-1 btn-link" title="Žiūrėti">
+                <button className="btn btn-outline-primary me-1 my-1 btn-link" title="Žiūrėti">
                   <Link className="nav-link" to={"/modules/view/" + module.id}>
                     
-                  <SearchTwoToneIcon/>
+                  <VisibilityTwoToneIcon/>
                   </Link>
                 </button>
                 <button
-                  className="btn btn-outline-primary me-2 my-1 btn-link" title="Redaguoti"
+                  className="btn btn-outline-primary me-1 my-1 btn-link" title="Redaguoti"
                   disabled={module.deleted}
                 >
                   <Link className="nav-link" to={"/modules/edit/" + module.id}>
@@ -183,7 +185,7 @@ function ModuleListPage() {
                 </button>
                 {module.deleted ? (
                   <button
-                    className="btn btn-outline-secondary me-2 my-1 btn-link" title="Atstatyti"
+                    className="btn btn-outline-secondary me-1 my-1 btn-link" title="Atstatyti"
                     onClick={() => restoreModule(module.id)}
                   >
                     <RestoreTwoToneIcon/>

@@ -58,13 +58,13 @@ public class HolidayService {
             }
             Date startDate = new SimpleDateFormat("yyyy-MM-dd").parse(from);
             Date endDate = new SimpleDateFormat("yyyy-MM-dd").parse(to);
-            return holidaysRepository.findAllByStartsLessThanEqualAndEndsGreaterThanEqual(endDate, startDate);
+            return holidaysRepository.findAllByStartsLessThanEqualAndEndsGreaterThanEqualOrderByStartsAsc(endDate, startDate);
         } else if (from == null || from.equals("") && to == null || to.equals("")) {
-            return holidaysRepository.findAllByNameIgnoreCaseContaining(name);
+            return holidaysRepository.findAllByNameIgnoreCaseContainingOrderByStartsAsc(name);
         }
         Date startDate = new SimpleDateFormat("yyyy-MM-dd").parse(from);
         Date endDate = new SimpleDateFormat("yyyy-MM-dd").parse(to);
-        return holidaysRepository.findAllByNameIgnoreCaseContainingOrStartsLessThanEqualAndEndsGreaterThanEqual(name, endDate, startDate);
+        return holidaysRepository.findAllByNameIgnoreCaseContainingOrStartsLessThanEqualAndEndsGreaterThanEqualOrderByStartsAsc(name, endDate, startDate);
     }
 
     public Holiday createHoliday(Holiday holiday) {
@@ -81,14 +81,7 @@ public class HolidayService {
             throw new ScheduleValidationException("End date cannot be empty", "date",
                     "Date is empty", "End date");
         }
-           if(holiday.isRepeats()){
-               throw new ScheduleValidationException("True", "true",
-                       "Date is empty", "End date");
-           }
-           if(!holiday.isRepeats()){
-               throw new ScheduleValidationException("false", "false",
-                       "Date is empty", "End date");
-           }
+
 //           newHoliday.setName(holiday.getName());
 //           newHoliday.setStarts(holiday.getStarts());
 //           newHoliday.setEnds(holiday.getEnds());

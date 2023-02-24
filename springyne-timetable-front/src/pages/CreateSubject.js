@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { Alert, Collapse } from "@mui/material";
+import { FormControl, MenuItem, Select, InputLabel } from "@mui/material";
 import { TextField } from "@mui/material";
 import { useParams } from "react-router-dom";
 
@@ -8,14 +9,15 @@ function CreateSubjectPage() {
   const [description, setDescription] = useState("");
   const [name, setName] = useState("");
   const [room, setRoom] = useState("");
-  const [nameError, setNameError] = useState("");
-  const [moduleError, setModuleError] = useState("");
+  const [nameError, setNameError] = useState(false);
+  const [moduleError, setModuleError] = useState(false);
+  const [roomError, setRoomError] = useState(false);
   const [success, setSuccess] = useState(false);
   const [failure, setFailure] = useState(false);
   const params = useParams();
   const [modules, setModules] = useState([]);
   const [selectedModule, setSelectedModule] = useState("");
-
+  const [descriptionError, setDescriptionError] = useState(false);
   const [rooms, setRooms] = useState([]);
   const [selectedRoom, setSelectedRoom] = useState('');
 
@@ -38,9 +40,14 @@ function CreateSubjectPage() {
     e.preventDefault();
     setNameError(false);
     setModuleError(false);
-    if (name === "") {
-      setNameError(true);
-      setModuleError(true);
+    setRoomError(false);
+    setDescriptionError(false);
+    if (name === "" || selectedRoom === ""
+      || selectedModule === "" || description === "") {
+      if (name === "") { setNameError(true); }
+      if (selectedRoom === "") { setRoomError(true); }
+      if (selectedModule === "") { setModuleError(true); }
+      if (description === "") { setDescriptionError(true);}
     } else {
       fetch(`/api/v1/subjects/createSubject?moduleId=${selectedModule}&roomId=${selectedRoom}`, {
         method: "POST",
@@ -69,7 +76,8 @@ function CreateSubjectPage() {
 
   return (
     <div className="mx-3">
-      <h2 className="my-5">Pridėti naują dalyką</h2>
+      <h2 className="my-5">
+        Pridėti naują dalyką</h2>
       <Collapse in={success}>
         <Alert
           onClose={() => {
@@ -99,7 +107,7 @@ function CreateSubjectPage() {
           error={!!nameError}
           onChange={(e) => setName(e.target.value)}
           value={name}
-          id="create-subject-number-with-error"
+          id="create-subject-name-with-error"
           label="Pavadinimas"
           helperText="Pavadinimas negali būti tuščias"
           className="form-control mb-3"
@@ -108,55 +116,69 @@ function CreateSubjectPage() {
         />
 
         <TextField
+        error={!!descriptionError}
           onChange={(e) => setDescription(e.target.value)}
           value={description}
-          id="create-subject-number-with-error"
-          label="Aprašas"
+          id="create-subject-description-with-error"
+          label="Aprašymas"
+          helperText="Aprašymas privalomas"
           className="form-control mb-3"
+          size="small"
+          required
         />
-        <label htmlFor="page-size-select" className="mb-3">
-          Modulis:
-        </label>
 
-        <select
-          value={selectedModule}
-          // defaultValue={"default"}
-          onChange={(e) => setSelectedModule(e.target.value)}
-          className={`form-control mb-3 ${selectedModule ? "" : "border-danger"}`}
-          required>
-          <option value="" disabled>Pasirinkite modulį</option>
-          {
-            modules.map(
-              (mod) =>
-              (<option key={mod.id}
-                value={mod.id}
-                disabled={mod.deleted}>{mod.name}</option>)
-            )
-          }
-        </select>
-        {!selectedModule && (
-          <div className="form-text text-danger">
-            Prašome pasirinkti modulį iš sąrašo.
-          </div>
-        )}
+        <FormControl fullWidth size="small" className="mb-3">
+          <InputLabel id="select-module-label" error={moduleError} required>
+            Pasirinkite modulį
+          </InputLabel>
+          <Select
+            error={moduleError}
+            labelId="select-module-label"
+            //nputLabelProps={{ shrink: true }}
+            id="add-select-module"
+            label="Pasirinkite modulį"
+            fullWidth
+            value={selectedModule}
+            // defaultValue={"default"}
+            onChange={(e) => setSelectedModule(e.target.value)}
+            required>
+            {
+              modules?.map((mod) => (
+                <MenuItem
+                  key={mod.id}
+                  value={mod.id}
+                  disabled={mod.deleted}
+                >
+                  {mod.name}
+                </MenuItem>
+              ))}
+          </Select>
+        </FormControl>
 
-        <label htmlFor="page-size-select" className="mb-3">
-          Kabinetas:
-        </label>
-        <select
-          value={selectedRoom}
-          onChange={(e) => setSelectedRoom(e.target.value)}
-          className="form-control mb-3">
-          <option value=''>---</option>
-          {
-            rooms.map(
-              (room) =>
-              (<option key={room.id}
-                value={room.id}
-                disabled={room.deleted}>{room.name}</option>)
-            )
-          }
-        </select>
+        <FormControl fullWidth size="small" className="mb-5">
+          <InputLabel id="select-room-label" error={roomError} required>
+            Pasirinkite kabinetą
+          </InputLabel>
+          <Select
+            error={roomError}
+            labelId="select-room-label"
+            InputLabelProps={{ shrink: true }}
+            id="add-select-room"
+            label="Pasirinkite kabinetą"
+            fullWidth
+            value={selectedRoom}
+            onChange={(e) => setSelectedRoom(e.target.value)}
+            required>
+            {
+              rooms?.map((room) => (
+                <MenuItem
+                  key={room.id}
+                  value={room.id}
+                  disabled={room.deleted}>{room.name}
+                </MenuItem>
+              ))}
+          </Select>
+        </FormControl>
 
         <button
           type="submit"

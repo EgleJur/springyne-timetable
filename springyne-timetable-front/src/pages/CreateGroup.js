@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Alert, Collapse } from "@mui/material";
-import { TextField } from "@mui/material";
+import { TextField, FormControl, MenuItem, Select, InputLabel } from "@mui/material";
 import { useParams } from "react-router-dom";
 
 
@@ -8,16 +8,16 @@ function CreateGroupPage() {
   const [groupYear, setYear] = useState("");
   const [name, setName] = useState("");
   const [students, setStudents] = useState("");
-  const [nameError, setNameError] = useState("");
-  const [yearError, setYearError] = useState("");
-  const [studentsError, setStudentsError] = useState("");
-  const [programError, setProgramError] = useState("");
+  const [nameError, setNameError] = useState(false);
+  const [yearError, setYearError] = useState(false);
+  const [studentsError, setStudentsError] = useState(false);
+  const [programError, setProgramError] = useState(false);
+  const [shiftError, setShiftError] = useState(false);
   const [success, setSuccess] = useState(false);
   const [failure, setFailure] = useState(false);
   const params = useParams();
   const [programs, setPrograms] = useState([]);
   const [selectedProgram, setSelectedProgram] = useState("");
-
   const [shifts, setShifts] = useState([]);
   const [selectedShift, setSelectedShift] = useState("");
 
@@ -41,12 +41,18 @@ function CreateGroupPage() {
     setNameError(false);
     setStudentsError(false);
     setYearError(false);
-     
-      if (name === "" || students===""||groupYear==="") {
-        if (name === ""){setNameError(true);}
-        if (students===""){setStudentsError(true);}
-        if(groupYear===""){setYearError(true);}
- 
+    setProgramError(false);
+    setShiftError(false);
+
+    if (name === "" || students === "" 
+    || groupYear === "" || selectedProgram==="" 
+    || selectedShift === "") {
+      if (name === "") { setNameError(true); }
+      if (students === "") { setStudentsError(true); }
+      if (groupYear === "") { setYearError(true); }
+      if (selectedProgram === "") { setProgramError(true); }
+      if (selectedShift === "") { setShiftError(true); }
+
     } else {
       fetch(
         `/api/v1/groups/createGroup?programId=${selectedProgram}&shiftId=${selectedShift}`, {
@@ -118,10 +124,10 @@ function CreateGroupPage() {
         />
 
         <TextField
-         error={!!yearError}
+          error={!!yearError}
           onChange={(e) => setYear(e.target.value)}
           value={groupYear}
-           id="create-group-year-with-error"
+          id="create-group-year-with-error"
           label="Mokslo metai"
           helperText="Mokslo metai negali būti tušti"
           className="form-control mb-3"
@@ -130,10 +136,10 @@ function CreateGroupPage() {
         />
 
         <TextField
-         error={!!studentsError}
+          error={!!studentsError}
           onChange={(e) => setStudents(e.target.value)}
           value={students}
-           id="create-group-students-with-error"
+          id="create-group-students-with-error"
           label="Studentų skaičius"
           helperText="Studentų skaičius negali būti tuščias"
           className="form-control mb-3"
@@ -141,55 +147,59 @@ function CreateGroupPage() {
           required
         />
 
-        <label htmlFor="page-size-select" className="mb-3">
-          Programa:
-        </label>
-
-        <select
-          value={selectedProgram}
-          // defaultValue={"default"}
-          onChange={(e) => setSelectedProgram(e.target.value)}
-          className={`form-control mb-3 ${selectedProgram ? "" : "border-danger"}`}
-          required>
-          <option value="" disabled>Pasirinkite programą</option>
-          {
-            programs.map(
-              (prog) =>
-              (<option key={prog.id}
+        <FormControl fullWidth size="small" className="mb-3">
+          <InputLabel id="select-program-label" error={programError} required>
+            Pasirinkite programą
+          </InputLabel>
+          <Select
+            error={programError}
+            labelId="select-program-label"
+          //  InputLabelProps={{ shrink: true }}
+            id="add-select-program"
+            label="Pasirinkite programą"
+            fullWidth
+            value={selectedProgram}
+            // defaultValue={"default"}
+            onChange={(e) => setSelectedProgram(e.target.value)}
+            required>
+            {
+              programs?.map(
+                (prog) =>(
+                <MenuItem
+                key={prog.id}
                 value={prog.id}
-                disabled={prog.deleted}>{prog.name}</option>)
-            )
-          }
-        </select>
-        {!selectedProgram && (
-          <div className="form-text text-danger">
-            Prašome pasirinkti programą iš sąrašo.
-          </div>
-        )}
+                disabled={prog.deleted}>
+                  {prog.name}
+                </MenuItem>
+              ))}
+          </Select>
+        </FormControl>
 
-        <label htmlFor="page-size-select" className="mb-3">
-          Pamaina:
-        </label>
-
-        <select
-          value={selectedShift}
-          onChange={(e) => setSelectedShift(e.target.value)}
-          className={`form-control mb-3 ${selectedShift ? "" : "border-danger"}`}
-          required>
-          <option value="" disabled>Pasirinkite pamainą</option>
-          {
-            shifts.map(
-              (shift) =>
-              (<option key={shift.id}
-                value={shift.id}>{shift.name}</option>)
-            )
-          }
-        </select>
-        {!selectedShift && (
-          <div className="form-text text-danger">
-            Prašome pasirinkti pamainą iš sąrašo.
-          </div>
-        )}
+        <FormControl fullWidth size="small" className="mb-3">
+          <InputLabel id="select-shift-label" error={shiftError} required>
+            Pasirinkite pamainą
+          </InputLabel>
+          <Select
+            error={shiftError}
+            labelId="select-shift-label"
+            //InputLabelProps={{ shrink: true }}
+            id="add-select-shift"
+            label="Pasirinkite pamainą"
+            fullWidth
+            value={selectedShift}
+            // defaultValue={"default"}
+            onChange={(e) => setSelectedShift(e.target.value)}
+            required>
+            {
+              shifts.map(
+                (shift) =>(
+                <MenuItem
+                key={shift.id}
+                value={shift.id}>{shift.name}
+                </MenuItem>
+              ))}
+          </Select>
+        </FormControl>
 
         <button
           type="submit"

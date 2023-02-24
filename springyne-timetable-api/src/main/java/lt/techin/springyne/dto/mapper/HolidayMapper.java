@@ -27,7 +27,7 @@ public class HolidayMapper {
             throw new ScheduleValidationException("End date cannot be converted to date", "date",
                     "Wrong format of date", holidayDto.getEnds());
         }
-        holiday.setRepeats(holiday.isRepeats());
+        holiday.setRepeats(holidayDto.isRepeats());
 
         return holiday;
 

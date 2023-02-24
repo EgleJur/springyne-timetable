@@ -303,19 +303,18 @@ function EditTeacherPage() {
             </div>
             <div className="col-md-8 mb-2 mb-md-0">
         <FormControl fullWidth size="small" className="mb-3">
-          
+        <InputLabel id="select-module-label">
+                  {teacher.shift?.name}  </InputLabel>
           <Select
             disabled={teacher.deleted}
             labelId="select-shift-label"
             id="select-shift"
             label="Pamaina *"
-            displayEmpty
             input={<OutlinedInput notched label="" />}
             fullWidth
             value={selectedShift}
             onChange={(e) => setSelectedShift(e.target.value)}
           >
-            <MenuItem value={""}>{teacher.shift?.name}</MenuItem>
             {shifts?.map((subject) => (
               <MenuItem value={subject.id} key={subject.id}>
                 {subject.name}

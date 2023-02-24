@@ -17,6 +17,7 @@ import ClearIcon from "@mui/icons-material/Clear";
 function EditSubjectPage() {
   const [subject, setSubject] = useState({});
   const [nameError, setNameError] = useState("");
+  const [descriptionError, setDescriptionError] = useState(false);
   const [module, setModule] = useState({});
   const [room, setRoom] = useState("");
   const [success, setSuccess] = useState(false);
@@ -27,13 +28,14 @@ function EditSubjectPage() {
   const [selectedRoom, setSelectedRoom] = useState("");
   const [selectedModule, setSelectedModule] = useState('');
   const [modules, setModules] = useState([]);
+  const [moduleError, setModuleError] = useState(false);
 
-  const fetchSubject =()=>{
+  const fetchSubject = () => {
     fetch("/api/v1/subjects/" + params.id)
-  .then((response) => response.json())
-  .then((jsonResponse) => setSubject(jsonResponse));
-};
-  
+      .then((response) => response.json())
+      .then((jsonResponse) => setSubject(jsonResponse));
+  };
+
   useEffect(() => fetchSubject, [params.id]);
 
   useEffect(() => {
@@ -42,20 +44,20 @@ function EditSubjectPage() {
       .then(setRooms)
 
   }, []);
-  
+
   useEffect(() => {
     fetch('api/v1/modules/')
       .then(response => response.json())
       .then(setModules)
 
   }, []);
-  
-  const deleteRoom  = (e) => {
+
+  const deleteRoom = (e) => {
     fetch(`/api/v1/subjects/${params.id}/deleteRoom/${e}`, {
       method: "PATCH",
     }).then(fetchSubject)
   };
-  const addRoom  = (e) => {
+  const addRoom = (e) => {
     fetch(`/api/v1/subjects/${params.id}/addRoom/${e}`, {
       method: "PATCH",
     }).then(fetchSubject)
@@ -64,8 +66,9 @@ function EditSubjectPage() {
   const editsubject = (e) => {
     e.preventDefault();
     setNameError(false);
-    if (subject.name === "") {
-      setNameError(true);
+    if (subject.name === "" || subject.description === "") {
+      if (subject.name === "") { setNameError(true); }
+      if (subject.description === "") { setDescriptionError(true) }
     } else {
       fetch(`api/v1/subjects/edit/${params.id}?moduleId=${selectedModule}&roomId=${selectedRoom}`, {
         method: "PATCH",
@@ -119,8 +122,8 @@ function EditSubjectPage() {
   return (
     <div className="mx-3">
       <h2 className="my-5">Redaguoti dalyką</h2>
-      
-      
+
+
       <Collapse in={success}>
         <Alert
           onClose={() => {
@@ -144,210 +147,184 @@ function EditSubjectPage() {
         </Alert>
       </Collapse>
       <div className="container-fluid shadow p-3 mb-4 mb-md-5 bg-body rounded">
-      <form noValidate>
-      <div className="row">
+        <form noValidate>
+          <div className="row">
             <div className="col-md-4 mb-2 mb-md-0 fw-bold">
               <label htmlFor="edit-module-number-with-error">Pavadinimas *</label>
             </div>
             <div className="col-md-8 mb-2 mb-md-0">
-        <TextField
-          error={!!nameError}
-          onChange={(e) => updateProperty("name", e)}
-          value={subject.name}
-          id="create-subject-number-with-error"
-          label=""
-          helperText="Pavadinimas negali būti tuščias"
-          className="form-control mb-3"
-          size="small"
-          disabled={subject.deleted}
-          InputLabelProps={{ shrink: true }}
-          required
-        />
-        </div>
+              <TextField
+                error={!!nameError}
+                onChange={(e) => updateProperty("name", e)}
+                value={subject.name}
+                id="create-subject-number-with-error"
+                label=""
+                helperText="Pavadinimas negali būti tuščias"
+                className="form-control mb-3"
+                size="small"
+                disabled={subject.deleted}
+                InputLabelProps={{ shrink: true }}
+                required
+              />
+            </div>
           </div>
           <div className="row">
-            <div className="col-md-4 mb-2 mb-md-0 fw-bold">
-              <label htmlFor="edit-module-name-with-error">Aprašymas</label>
+            <div className="col-md-4 mb-2 mb-md-0 fw-bold" >
+              <label htmlFor="edit-module-description-with-error">Aprašymas *</label>
             </div>
             <div className="col-md-8 mb-2">
-        <TextField
-          onChange={(e) => updateProperty("description", e)}
-          value={subject.description}
-          id="create-subject-number-with-error"
-          label=""
-          helperText="Neprivalomas"
-          className="form-control mb-3"
-          size="small"
-          disabled={subject.deleted}
-          InputLabelProps={{ shrink: true }}
+              <TextField
+                error={!!descriptionError}
+                onChange={(e) => updateProperty("description", e)}
+                value={subject.description}
+                multiline
+                id="subject-description"
+                label=""
+                helperText="Aprašymas privalomas"
+                className="form-control mb-3"
+                size="small"
+                disabled={subject.deleted}
+                InputLabelProps={{ shrink: true }}
+                required
 
-        />
-        </div>
-          </div>
+              />
+            </div>
+            </div>
           <div className="row">
-            <div className="col-md-4 mb-2 mb-md-0 fw-bold">
-              <label htmlFor="edit-module-name-with-error">Modulis</label>
+            <div className="col-md-4 mb-2 mb-md-0 fw-bold" >
+              <label htmlFor="add-module">Modulis</label>
             </div>
             <div className="col-md-8 mb-2">
-      <select
-            value={selectedModule}
-            onChange={(e) => setSelectedModule(e.target.value)}
-            disabled={subject.deleted}
-            className="form-control mb-3">
-              <option value=''>{subject.module?.name}</option>
-            {
-                modules.map(
-                    (mod) =>
-                    (<option key={mod.id} 
+              <FormControl fullWidth size="small" className="mb-3">
+                <InputLabel id="select-module-label">
+                  {subject.module?.name}
+                </InputLabel>
+                <Select
+                  labelId="select-module-label"
+                  id="add-select-module"
+                  fullWidth
+                  value={selectedModule}
+                  disabled={subject.deleted}
+                  // defaultValue={"default"}
+                  onChange={(e) => setSelectedModule(e.target.value)}
+                  >
+                  {/* <MenuItem value='' disabled>{subject.module?.name}</MenuItem> */}
+                  {
+                    modules?.map((mod) => (
+                      <MenuItem
+                        key={mod.id}
                         value={mod.id}
-                        disabled={mod.deleted}>{mod.name}</option>)
-                )
-            }
-        </select>
-        </div>
+                        disabled={mod.deleted}
+                      >
+                        {mod.name}
+                      </MenuItem>
+                    ))}
+                </Select>
+              </FormControl>
+            </div>
           </div>
+          
+          
           {/* ///////////// */}
           <div className="row">
-  <div className="col-md-4 mb-2 mb-md-0 fw-bold">
-    {subject.rooms?.length === 0 ? "" : <div>Pašalinti kabinetą</div>}
-  </div>
-  <div className="col-md-8 mb-2">
-      {subject.rooms?.map((room) => (
-        <button
-          type="submit"
-          className="btn btn-light me-2 mb-2"
-          value={room.id}
-          // onChange={(e) => updateProperty(e.target.value)}
-          disabled={subject.deleted}
-          onClick={(e) => deleteRoom(e.target.value)}
-          key={room.id}
-          id={room.id}
-          
-        >
-          {room.name}{" "}
-          <ClearIcon color="disabled" sx={{ fontSize: 12}} />
-        </button>
-      ))}
-  </div>
-</div>
-
-
-        <div className="row">
             <div className="col-md-4 mb-2 mb-md-0 fw-bold">
-              <label htmlFor="edit-room-number-with-error">Pridėti kabinetą</label>
-            </div>
-            <div className="col-md-8 mb-2 mb-md-0">
-        <FormControl fullWidth size="small" className="my-3">
-          <InputLabel id="select-room-label">Pridėti kabinetą</InputLabel>
-          <Select
-            disabled={subject.deleted}
-            labelId="select-room-label"
-            InputLabelProps={{ shrink: true }}
-            id="add-select-room"
-            label="Pridėti kabinetą"
-            fullWidth
-            value={selectedRoom}
-            
-            onChange={(e) => setSelectedRoom(e.target.value)}
-          >
-            {rooms?.map((room) => (
-              <MenuItem
-                value={room.id}
-                key={room.id}
-                disabled={room.deleted}
-              >
-                {room.name}
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
-        </div>
-          </div>
-
-          
-
-
-
-      {/* ///// */}
-          {/* <div className="row">
-            <div className="col-md-4 mb-2 mb-md-0 fw-bold">
-              <label htmlFor="edit-module-name-with-error">Pridėti kabinetą</label>
+              {subject.rooms?.length === 0 ? "" : <div>Pašalinti kabinetą</div>}
             </div>
             <div className="col-md-8 mb-2">
-        <div className="d-grid gap-6 d-md-block">
-          {subject.rooms?.map((room) => (
-          <button
-            type="submit"
-            className="btn btn-light"
-            disabled={subject.deleted}
-            value={room.id}
-            onClick={(e) => deleteRoom(e.target.value)}
-            key={room.id} id={room.id}
-            >{room.name}</button>
-        ))}</div>
-<div>
-        
-        <select
-          value={selectedRoom}
-          onChange={(e) => setSelectedRoom(e.target.value)}
-          className="form-control mb-3"
-          disabled={subject.deleted}>
-          <option value=''>---</option>
-          {
-            rooms.map(
-              (room) =>
-              (<option key={room.id} 
-                  value={room.id} 
-                  disabled={room.deleted}>{room.id}</option>)
-          )
-          }
-        </select>
-        </div>
-        </div>
-          </div> */}
-          <div className="row mb-md-4">
-          <div className="col-md-4 mb-2 mb-md-0 fw-bold">Būsena</div>
-          <div className="col-md-8 mb-2 mb-md-0">
-            {subject.deleted ? "Dalykas ištrintas" : "Aktyvus"}
+              {subject.rooms?.map((room) => (
+                <button
+                  type="submit"
+                  className="btn btn-light me-2 mb-2"
+                  value={room.id}
+                  // onChange={(e) => updateProperty(e.target.value)}
+                  disabled={subject.deleted}
+                  onClick={(e) => deleteRoom(e.target.value)}
+                  key={room.id}
+                  id={room.id}
+
+                >
+                  {room.name}{" "}
+                  <ClearIcon color="disabled" sx={{ fontSize: 12 }} />
+                </button>
+              ))}
+            </div>
           </div>
-        </div>
-        <div className="row mb-md-4">
-          <div className="col-md-4 mb-2 mb-md-0 fw-bold">
-      Paskutinį kartą modifikuotas
-      </div>
-      <div className="col-md-8 mb-2 mb-md-0">{subject.last_Updated}</div>
-      </div>
-      
+
+          <div className="row">
+            <div className="col-md-4 mb-2 mb-md-0 fw-bold">
+              <label htmlFor="edit-room">Kabinetai</label>
+            </div>
+            <div className="col-md-8 mb-2">
+              <FormControl fullWidth size="small" className="mb-3">
+                <InputLabel id="select-room-label">Pridėti kabinetą</InputLabel>
+                <Select
+                  disabled={subject.deleted}
+                  labelId="select-room-label"
+                  InputLabelProps={{ shrink: true }}
+                  id="add-select-room"
+                  label="Pridėti dalyką"
+                  fullWidth
+                  value={selectedRoom}
+
+                  onChange={(e) => setSelectedRoom(e.target.value)}
+                >
+                  {rooms?.map((room) => (
+                    <MenuItem
+                      value={room.id}
+                      key={room.id}
+                      disabled={room.deleted}
+                    >
+                      {room.name}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+            </div>
+          </div>
+
+          <div className="row mb-md-4">
+            <div className="col-md-4 mb-2 mb-md-0 fw-bold">Būsena</div>
+            <div className="col-md-8 mb-2 mb-md-0">
+              {subject.deleted ? "Dalykas ištrintas" : "Aktyvus"}
+            </div>
+          </div>
+          <div className="row mb-md-4">
+            <div className="col-md-4 mb-2 mb-md-0 fw-bold">
+              Paskutinį kartą modifikuotas
+            </div>
+            <div className="col-md-8 mb-2 mb-md-0">{subject.last_Updated}</div>
+          </div>
+
         </form>
-        </div>
-        <div>
-          
-        <button type="submit" 
-        className="btn btn-primary me-2" 
-        onClick={editsubject}
+      </div>
+      <div>
+
+        <button type="submit"
+          className="btn btn-primary me-2"
+          onClick={editsubject}
         // disabled={!changed}
         >
-          
+
           Redaguoti
         </button>
         {subject.deleted ? (
-            <button
-              className="btn btn-secondary me-2"
-              onClick={handleRestore}
-            >
-              Atstatyti
-            </button>
-          ) : (
-            <button
-              className="btn btn-danger me-2"
-              onClick={handleDelete}
-              
-            >
-              Ištrinti
-            </button>
-          )}
-          </div>
-      
+          <button
+            className="btn btn-secondary me-2"
+            onClick={handleRestore}
+          >
+            Atstatyti
+          </button>
+        ) : (
+          <button
+            className="btn btn-danger me-2"
+            onClick={handleDelete}
+
+          >
+            Ištrinti
+          </button>
+        )}
+      </div>
+
     </div>
   );
 }

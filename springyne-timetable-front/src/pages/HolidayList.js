@@ -122,7 +122,7 @@ function HolidayListPage() {
           </tr>
         </thead>
         <tbody>
-          {holidays.map((holiday) => (
+          {holidays?.map((holiday) => (
             <tr key={holiday.id} id={holiday.id}>
               <td>{holiday.name}</td>
               <td>{holiday.starts}</td>

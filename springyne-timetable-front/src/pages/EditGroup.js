@@ -196,28 +196,31 @@ function EditGroupPage() {
       />
       </div>
         </div>
-        </form>
+        
   
         <div className="row">
             <div className="col-md-4 mb-2 mb-md-0 fw-bold">
-              <label htmlFor="edit-module-number-with-error">Programa *</label>
+              <label htmlFor="add-program">Programa *</label>
             </div>
-            <div className="col-md-8 mb-2 mb-md-0">
+            <div className="col-md-8 mb-2">
         <FormControl fullWidth size="small" className="mb-3">
-          
+        <InputLabel id="select-module-label">
+                  {group.program?.name}
+                </InputLabel>
           <Select
-          disabled={group.deleted}
           labelId="select-program-label"
           id="select-program"
-          displayEmpty
-          input={<OutlinedInput notched label="" />}
           fullWidth
           value={selectedProgram}
+          disabled={group.deleted}
           onChange={(e) => setSelectedProgram(e.target.value)}
         >
-          <MenuItem value={""} disabled>{group.program?.name}</MenuItem>
+          {/* <MenuItem value={""} disabled>{group.program?.name}</MenuItem> */}
           {programs?.map((program) => (
-            <MenuItem value={program.id} key={program.id}>
+            <MenuItem 
+            value={program.id} 
+            key={program.id}
+            disabled={program.deleted}>
               {program.name}
             </MenuItem>
           ))}
@@ -226,25 +229,26 @@ function EditGroupPage() {
       </div>
       </div>
 
-      <div className="row">
+    
+        <div className="row">
             <div className="col-md-4 mb-2 mb-md-0 fw-bold">
-              <label htmlFor="edit-module-number-with-error">Pamaina *</label>
+              <label htmlFor="edit-shift">Pamaina *</label>
             </div>
-            <div className="col-md-8 mb-2 mb-md-0">
+            <div className="col-md-8 mb-2">
         <FormControl fullWidth size="small" className="mb-3">
-          
+        <InputLabel id="select-module-label">
+                  {group.shift?.name}
+                </InputLabel>
           <Select
           disabled={group.deleted}
           labelId="select-shift-label"
           id="select-shift"
-          displayEmpty
           input={<OutlinedInput notched label="" />}
           fullWidth
           value={selectedShift}
           onChange={(e) => setSelectedShift(e.target.value)}
         >
-          <MenuItem value={""} disabled>{group.shift?.name}</MenuItem>
-          {shifts?.map((shift) => (
+         {shifts?.map((shift) => (
             <MenuItem value={shift.id} key={shift.id}>
               {shift.name}
             </MenuItem>
@@ -254,7 +258,7 @@ function EditGroupPage() {
 
       </div>
         </div>
-
+        
         <div className="row mb-md-4">
         <div className="col-md-4 mb-2 mb-md-0 fw-bold">Būsena</div>
         <div className="col-md-8 mb-2 mb-md-0">
@@ -267,6 +271,7 @@ function EditGroupPage() {
         </div>
         <div className="col-md-8 mb-2 mb-md-0">{group.modifiedDate}</div>
       </div>
+      </form>
       </div>
 
       <div>

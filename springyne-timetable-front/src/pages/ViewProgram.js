@@ -79,7 +79,7 @@ function ViewProgramPage() {
               <td colSpan={4}>{program.deleted ? "Ištrintas" : "Aktyvus"}</td>
             </tr>
             <tr>
-              <th scope="col">Paskutinį kartą modifikuotas:</th>
+              <th scope="col">Paskutinį kartą modifikuotas</th>
               <td colSpan={4}>{program.modifiedDate}</td>
             </tr>
             <tr>

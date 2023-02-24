@@ -191,7 +191,7 @@ function EditRoomPage() {
             </div>
             <div className="row mb-md-4">
               <div className="col-md-4 mb-2 mb-md-0 fw-bold">
-                Paskutinį kartą modifikuotas:
+                Paskutinį kartą modifikuotas
                 </div>
               <div className="col-md-8 mb-2 mb-md-0">
                 {room.lastModifiedDate}

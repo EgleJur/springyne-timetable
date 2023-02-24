@@ -209,7 +209,7 @@ function EditSubjectPage() {
           {/* ///////////// */}
           <div className="row">
   <div className="col-md-4 mb-2 mb-md-0 fw-bold">
-    {subject.rooms?.length === 0 ? "" : <div>Pašalinti kabinetą:</div>}
+    {subject.rooms?.length === 0 ? "" : <div>Pašalinti kabinetą</div>}
   </div>
   <div className="col-md-8 mb-2">
       {subject.rooms?.map((room) => (
@@ -234,7 +234,7 @@ function EditSubjectPage() {
 
         <div className="row">
             <div className="col-md-4 mb-2 mb-md-0 fw-bold">
-              <label htmlFor="edit-room-number-with-error">Kabinetai</label>
+              <label htmlFor="edit-room-number-with-error">Pridėti kabinetą</label>
             </div>
             <div className="col-md-8 mb-2 mb-md-0">
         <FormControl fullWidth size="small" className="my-3">
@@ -244,7 +244,7 @@ function EditSubjectPage() {
             labelId="select-room-label"
             InputLabelProps={{ shrink: true }}
             id="add-select-room"
-            label="Pridėti dalyką"
+            label="Pridėti kabinetą"
             fullWidth
             value={selectedRoom}
             

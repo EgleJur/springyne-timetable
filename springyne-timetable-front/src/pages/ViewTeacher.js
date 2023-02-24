@@ -104,7 +104,7 @@ function ViewTeacherPage() {
               <td>{teacher.deleted ? "Ištrintas" : "Aktyvus"}</td>
             </tr>
             <tr>
-              <th scope="col">Paskutinį kartą modifikuotas:</th>
+              <th scope="col">Paskutinį kartą modifikuotas</th>
               <td>{teacher.modifiedDate}</td>
             </tr>
           </tbody>

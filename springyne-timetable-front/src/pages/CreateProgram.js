@@ -135,7 +135,7 @@ function CreateProgramPage() {
         />
 
         <FormControl fullWidth size="small" className="mb-5">
-          <InputLabel id="select-subject-label" error={!!subjectError}>
+          <InputLabel id="select-subject-label" error={!!subjectError} required>
             Pasirinkite dalyką
           </InputLabel>
           <Select

@@ -81,7 +81,7 @@ function ViewRoomPage() {
               <td>{room.deleted ? "Kabinetas ištrintas" : "Aktyvus"}</td>
             </tr>
             <tr>
-              <th scope="col">Paskutinį kartą modifikuotas:</th>
+              <th scope="col">Paskutinį kartą modifikuotas</th>
               <td>{room.lastModifiedDate}</td>
             </tr>
           </tbody>

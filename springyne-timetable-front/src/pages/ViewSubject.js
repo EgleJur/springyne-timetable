@@ -88,7 +88,7 @@ function ViewSubjectPage() {
               <td>{subject.deleted ? "Ištrintas" : "Aktyvus"}</td>
             </tr>
             <tr>
-              <th scope="col">Paskutinį kartą modifikuotas:</th>
+              <th scope="col">Paskutinį kartą modifikuotas</th>
               <td>{subject.last_Updated}</td>
             </tr>
           </tbody>

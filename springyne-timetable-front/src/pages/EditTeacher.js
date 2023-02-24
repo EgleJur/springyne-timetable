@@ -245,7 +245,7 @@ function EditTeacherPage() {
           </form>
           <div className="row">
   <div className="col-md-4 mb-2 mb-md-0 fw-bold">
-    {teacher.subjects?.length === 0 ? "" : <div>Pašalinti Dalyką:</div>}
+    {teacher.subjects?.length === 0 ? "" : <div>Pašalinti dalyką</div>}
   </div>
   <div className="col-md-8 mb-2">
       {teacher.subjects?.map((subject) => (
@@ -268,7 +268,7 @@ function EditTeacherPage() {
 
         <div className="row">
             <div className="col-md-4 mb-2 mb-md-0 fw-bold">
-              <label htmlFor="edit-module-number-with-error">Dalykai *</label>
+              <label htmlFor="edit-module-number-with-error">Pridėti dalyką *</label>
             </div>
             <div className="col-md-8 mb-2 mb-md-0">
         <FormControl fullWidth size="small" className="my-3">
@@ -308,6 +308,7 @@ function EditTeacherPage() {
             disabled={teacher.deleted}
             labelId="select-shift-label"
             id="select-shift"
+            label="Pamaina *"
             displayEmpty
             input={<OutlinedInput notched label="" />}
             fullWidth

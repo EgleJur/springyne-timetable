@@ -165,7 +165,7 @@ function EditShiftPage() {
           <div className="row">
             <div className="col-md-4 mb-2 mb-md-0 fw-bold">
         <label htmlFor="starts-select" className="me-2">
-          Pradžia - Pabaiga:
+          Pradžia - Pabaiga
         </label>
         </div>
             <div className="col-md-8 mb-2">
@@ -261,7 +261,7 @@ function EditShiftPage() {
         
           <div className="row">
             <div className="col-md-4 mb-2 mb-md-0 fw-bold">
-          Būsena:
+          Būsena
           </div>
           <div className="col-md-8 mb-2">
           {(shift.visible === 1 ? false : true) ? "Pamaina ištrinta" : "Aktyvus"}

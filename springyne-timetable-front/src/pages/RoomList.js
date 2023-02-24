@@ -113,7 +113,7 @@ function RoomListPage() {
 
       <div className="d-flex justify-content-end">
         <div className="me-auto d-flex">
-          <button className="btn btn-primary mb-4">
+          <button className="btn btn-primary mb-5">
             <Link to="/rooms/create" className="nav-link">
               Pridėti naują kabinetą
             </Link>

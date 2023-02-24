@@ -106,7 +106,7 @@ function ProgramListPage() {
 
       <div className="d-flex">
         <div className="me-auto d-flex">
-          <button className="btn btn-primary mb-4 me-2">
+          <button className="btn btn-primary mb-5 me-2">
             <Link to="/programs/create" className="nav-link">
               Pridėti naują programą
             </Link>

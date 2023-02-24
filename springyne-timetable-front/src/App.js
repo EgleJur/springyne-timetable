@@ -30,9 +30,7 @@ import CreateGroupPage from './pages/CreateGroup';
 import EditGroupPage from './pages/EditGroup';
 import ViewGroupPage from './pages/ViewGroup';
 import HolidayListPage from './pages/HolidayList';
-
-
-
+import CreateHolidayPage from './pages/CreateHoliday';
 
 function App() {
   return (
@@ -71,6 +69,8 @@ function App() {
             <Route path="/groups/edit/:id" element={<EditGroupPage />} />
             <Route path="/groups/view/:id" element={<ViewGroupPage />} />
             <Route path="/holidays" element={<HolidayListPage />} />
+            <Route path="/holidays/create" element={<CreateHolidayPage />} />
+            
 
 
           </Routes>

@@ -108,13 +108,27 @@ public class GroupService {
     public Group createGroup(Long programId,Long shiftId, Group group) {
 
         checkGroupNameEmpty(group.getName());
+        String groupYear = group.getGroupYear();
+        int number = group.getStudents();
+        if (groupYear==null|| groupYear.isEmpty() || groupYear.equals("")) {
+            throw new ScheduleValidationException("Group year cannot be empty", "year",
+                    "Year is empty", groupYear);
+        }
+        if (String.valueOf(number).isEmpty()) {
+            throw new ScheduleValidationException("Student number cannot be empty", "number",
+                    "Number is empty", String.valueOf(programId));
+        }
         checkGroupNameUnique(group.getName());
-        if (programId != null) {
-            group.setProgram(getProgramById(programId));
+        if (programId == null || programId.equals("")) {
+            throw new ScheduleValidationException("Program id cannot be empty", "id",
+                    "Id is empty", String.valueOf(programId));
         }
-        if (shiftId != null) {
+        if (shiftId == null || shiftId.equals("")) {
+            throw new ScheduleValidationException("Shift id cannot be empty", "id",
+                    "Id is empty", String.valueOf(shiftId));
+        }
+        group.setProgram(getProgramById(programId));
             group.setShift(getShiftById(shiftId));
-        }
 
         return groupRepository.save(group);
     }

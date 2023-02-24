@@ -47,7 +47,7 @@ public class GroupController {
         return groupService.getById(groupId);
     }
 
-    @PostMapping(value = "/createGroup")
+    @PostMapping("/createGroup")
     public ResponseEntity<GroupDto> createGroup(@RequestBody GroupDto groupDto,
                                                 @RequestParam Long programId,
                                                 @RequestParam Long shiftId) {

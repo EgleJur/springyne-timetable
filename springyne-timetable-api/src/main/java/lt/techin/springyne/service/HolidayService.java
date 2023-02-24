@@ -1,7 +1,7 @@
 package lt.techin.springyne.service;
 
 import lt.techin.springyne.exception.ScheduleValidationException;
-import lt.techin.springyne.model.Holidays;
+import lt.techin.springyne.model.Holiday;
 import lt.techin.springyne.repository.HolidaysRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -18,24 +18,26 @@ public class HolidayService {
     @Autowired
     HolidaysRepository holidaysRepository;
 
-    private Holidays getHolidayById(Long id) {
+    private Holiday getHolidayById(Long id) {
         return holidaysRepository.findById(id)
                 .orElseThrow(() -> new ScheduleValidationException("Holiday does not exist", "id",
                         "Holiday not found", String.valueOf(id)));
+    }
+
+    private void checkHolidayNameEmpty(String name) {
+        if (name == null || name.equals("")) {
+            throw new ScheduleValidationException("Holiday name cannot be empty", "name",
+                    "Name is empty", name);
+        }
     }
 
     public HolidayService(HolidaysRepository holidaysRepository) {
         this.holidaysRepository = holidaysRepository;
     }
 
-    public List<Holidays> getAll(){
+    public List<Holiday> getAll() {
 
         return holidaysRepository.findAll();
-    }
-    public List<Holidays> getAllHolidays(){
-
-        int yearNow = LocalDate.now().getYear();
-        return holidaysRepository.findAllHolidays(yearNow);
     }
 
     public boolean delete(Long id) {
@@ -48,20 +50,52 @@ public class HolidayService {
         }
     }
 
-public List<Holidays> searchByNameAndDate(String name, String from, String to) throws ParseException {
-        if(name == null|| name.equals("")){
-            if(from == null|| from.equals("") && to == null|| to.equals("")){
-                    int yearNow = LocalDate.now().getYear();
-                    return holidaysRepository.findAllHolidays(yearNow);
+    public List<Holiday> searchByNameAndDate(String name, String from, String to) throws ParseException {
+        if (name == null || name.equals("")) {
+            if (from == null || from.equals("") && to == null || to.equals("")) {
+                int yearNow = LocalDate.now().getYear();
+                return holidaysRepository.findAllHolidays(yearNow);
             }
             Date startDate = new SimpleDateFormat("yyyy-MM-dd").parse(from);
             Date endDate = new SimpleDateFormat("yyyy-MM-dd").parse(to);
-            return  holidaysRepository.findAllByStartsLessThanEqualAndEndsGreaterThanEqual(endDate, startDate);
-        } else if (from == null|| from.equals("") && to == null|| to.equals("")){
-            return  holidaysRepository.findAllByNameIgnoreCaseContaining(name);
+            return holidaysRepository.findAllByStartsLessThanEqualAndEndsGreaterThanEqual(endDate, startDate);
+        } else if (from == null || from.equals("") && to == null || to.equals("")) {
+            return holidaysRepository.findAllByNameIgnoreCaseContaining(name);
         }
-    Date startDate = new SimpleDateFormat("yyyy-MM-dd").parse(from);
-    Date endDate = new SimpleDateFormat("yyyy-MM-dd").parse(to);
-        return  holidaysRepository.findAllByNameIgnoreCaseContainingOrStartsLessThanEqualAndEndsGreaterThanEqual(name, endDate, startDate);
-}
+        Date startDate = new SimpleDateFormat("yyyy-MM-dd").parse(from);
+        Date endDate = new SimpleDateFormat("yyyy-MM-dd").parse(to);
+        return holidaysRepository.findAllByNameIgnoreCaseContainingOrStartsLessThanEqualAndEndsGreaterThanEqual(name, endDate, startDate);
+    }
+
+    public Holiday createHoliday(Holiday holiday) {
+        Holiday newHoliday = new Holiday();
+        if (holiday.getName() == null ||holiday.getName().isEmpty()){
+            throw new ScheduleValidationException("Name cannot be empty", "name",
+                    "Name is empty", holiday.getName());
+        }
+           if ( holiday.getStarts() == null){
+               throw new ScheduleValidationException("Start date cannot be empty", "date",
+                       "Date is empty", "Start date");
+           }
+           if( holiday.getEnds() == null) {
+            throw new ScheduleValidationException("End date cannot be empty", "date",
+                    "Date is empty", "End date");
+        }
+           if(holiday.isRepeats()){
+               throw new ScheduleValidationException("True", "true",
+                       "Date is empty", "End date");
+           }
+           if(!holiday.isRepeats()){
+               throw new ScheduleValidationException("false", "false",
+                       "Date is empty", "End date");
+           }
+//           newHoliday.setName(holiday.getName());
+//           newHoliday.setStarts(holiday.getStarts());
+//           newHoliday.setEnds(holiday.getEnds());
+//           newHoliday.setRepeats(holiday.isRepeats());
+
+        return holidaysRepository.save(holiday);
+    }
+
+
 }

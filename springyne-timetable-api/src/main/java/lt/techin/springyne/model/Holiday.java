@@ -14,7 +14,7 @@ import java.util.Date;
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
-public class Holidays {
+public class Holiday {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -22,9 +22,7 @@ public class Holidays {
     @NotNull
     private String name;
 
-    //    @NotNull
-//    @JsonFormat(pattern = "yyyy-MM-dd")
-//    private LocalDate starts;
+
     @NotNull
     @Temporal(TemporalType.DATE)
     private Date starts;
@@ -32,10 +30,6 @@ public class Holidays {
     @Temporal(TemporalType.DATE)
     private Date ends;
 
-//    @NotNull
-//    @JsonFormat(pattern = "yyyy-MM-dd")
-//    private LocalDate ends;
-
-    private boolean repeats = Boolean.FALSE;
+    private boolean repeats;
 
 }

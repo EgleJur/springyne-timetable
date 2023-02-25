@@ -137,7 +137,7 @@ function CreateShiftPage() {
           className="btn btn-primary my-3"
           onClick={createNewShift}
         >
-          Sukurti pamainą
+          Pridėti
         </button>
       </form>
     </div>

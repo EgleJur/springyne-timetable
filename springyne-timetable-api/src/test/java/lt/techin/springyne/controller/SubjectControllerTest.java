@@ -20,6 +20,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -57,10 +58,9 @@ class SubjectControllerTest {
     @Test
     void getAllSubjectsContainsCorrectDtos() throws Exception {
 
-
-        SubjectDto testSubjectDto1 = new SubjectDto("S1", "Test name1");
-        SubjectDto testSubjectDto2 = new SubjectDto("S2", "Test name2");
-        SubjectDto testSubjectDto3 = new SubjectDto("S3", "Test name3");
+        SubjectDto testSubjectDto1 = new SubjectDto("Tinklapiai", "HTML, CSS, Bootstrap");
+        SubjectDto testSubjectDto2 = new SubjectDto("Java programavimas", "Java pagrindai");
+        SubjectDto testSubjectDto3 = new SubjectDto("Duomenų bazės", "DBVS ir SQL kalba");
 
         List<SubjectDto> expectedList = new ArrayList<>();
         expectedList.add(testSubjectDto1);
@@ -70,7 +70,7 @@ class SubjectControllerTest {
         MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/subjects")
         ).andExpect(status().isOk()).andReturn();
 
-        List<SubjectDto> resultList = objectMapper.readValue(mvcResult.getResponse().getContentAsString(), new TypeReference<List<SubjectDto>>() {
+        List<SubjectDto> resultList = objectMapper.readValue(mvcResult.getResponse().getContentAsString(StandardCharsets.UTF_8), new TypeReference<List<SubjectDto>>() {
         });
 
         Assertions.assertTrue(resultList.containsAll(expectedList));

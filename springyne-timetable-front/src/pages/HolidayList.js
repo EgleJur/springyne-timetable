@@ -12,7 +12,8 @@ function HolidayListPage() {
   const [searchEndDate, setSearchEndDate] = useState("");
   const [deleted, setDeleted] = useState(false);
   const [dateError, setDateError] = useState("");
-  
+
+
   const JSON_HEADERS = {
     "Content-Type": "application/json",
   };
@@ -20,20 +21,25 @@ function HolidayListPage() {
   const fetchHolidays = (e) => {
     if (e && e.preventDefault) { e.preventDefault(); }
     setDateError(false);
-    if(searchStartDate !="" && searchEndDate ===""||searchStartDate !=""&&searchEndDate==="" ){
+    if (searchStartDate != "" && searchEndDate === ""
+      || searchStartDate === "" && searchEndDate != ""
+      || searchStartDate > searchEndDate 
+      || searchStartDate != "" && isNaN(new Date(searchStartDate)) 
+      || searchEndDate != "" && isNaN(new Date(searchEndDate))) {
       setDateError(true);
-    } else{
-    fetch(
-      `/api/v1/holidays/search?name=${searchName}&from=${searchStartDate}&to=${searchEndDate}`
-    )
-      .then((response) => response.json())
-      .then((jsonResponse) => setHolidays(jsonResponse))
-  
-    }  };
+    } else {
+      fetch(
+        `/api/v1/holidays/search?name=${searchName}&from=${searchStartDate}&to=${searchEndDate}`
+      )
+        .then((response) => response.json())
+        .then((jsonResponse) => setHolidays(jsonResponse))
+
+    }
+  };
 
   useEffect(fetchHolidays, []);
 
-   const deleteHoliday = (id) => {
+  const deleteHoliday = (id) => {
     fetch("/api/v1/holidays/delete/" + id, {
       method: "PATCH",
       headers: JSON_HEADERS,
@@ -41,7 +47,7 @@ function HolidayListPage() {
     setDeleted(true);
   };
 
-   return (
+  return (
     <div className="mx-3">
       <h2 className="my-5">Atostogos</h2>
       <Collapse in={deleted}>
@@ -80,7 +86,7 @@ function HolidayListPage() {
               size="small"
             />
             <TextField
-            error={!!dateError}
+              error={!!dateError}
               onChange={(b) => setSearchStartDate(b.target.value)}
               value={searchStartDate}
               id="search-date-from-input"
@@ -89,9 +95,9 @@ function HolidayListPage() {
               size="small"
               required={searchEndDate}
             />
-            
+
             <TextField
-            error={!!dateError}
+              error={!!dateError}
               onChange={(b) => setSearchEndDate(b.target.value)}
               value={searchEndDate}
               id="search-date-to-input"
@@ -99,7 +105,7 @@ function HolidayListPage() {
               className="form-control me-2"
               size="small"
               required={searchStartDate}
-              />
+            />
 
             <button
               className="btn btn-outline-primary"
@@ -123,6 +129,7 @@ function HolidayListPage() {
         </thead>
         <tbody>
           {holidays?.map((holiday) => (
+
             <tr key={holiday.id} id={holiday.id}>
               <td>{holiday.name}</td>
               <td>{holiday.starts}</td>
@@ -144,9 +151,10 @@ function HolidayListPage() {
         <tfoot className="table-light">
           <tr>
             <td colSpan={4}>
-              {/* {holidays.totalElements == "0"
+              {/* {count} */}
+              {holidays.length == "0"
                 ? "Įrašų nerasta"
-                : `Rasta įrašų: ${holidays.totalElements}`} */}
+                : `Rasta įrašų: ${holidays.length}`}
             </td>
           </tr>
         </tfoot>

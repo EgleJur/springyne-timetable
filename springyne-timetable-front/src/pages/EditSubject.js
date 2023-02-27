@@ -159,7 +159,7 @@ function EditSubjectPage() {
                 value={subject.name}
                 id="create-subject-number-with-error"
                 label=""
-                helperText="Pavadinimas negali būti tuščias"
+                helperText="Pavadinimas privalomas"
                 className="form-control mb-3"
                 size="small"
                 disabled={subject.deleted}

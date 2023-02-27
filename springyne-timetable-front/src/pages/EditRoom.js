@@ -133,7 +133,7 @@ function EditRoomPage() {
                   value={room.name}
                   id="edit-room-name-with-error"
                   // label="Pavadinimas"
-                  helperText="Pavadinimas negali būti tuščias"
+                  helperText="Pavadinimas privalomas"
                   className="form-control"
                   size="small"
                   InputLabelProps={{ shrink: true }}
@@ -153,7 +153,7 @@ function EditRoomPage() {
                   value={room.building}
                   id="create-room-building-with-error"
                   // label="Pastatas"
-                  helperText="Pastatas negali būti tuščias"
+                  helperText="Pastatas privalomas"
                   className="form-control"
                   size="small"
                   InputLabelProps={{ shrink: true }}
@@ -173,7 +173,7 @@ function EditRoomPage() {
                   value={room.description}
                   id="create-room-description"
                   // label="Aprašymas"
-                  helperText="Neprivaloma"
+                  helperText=""
                   className="form-control"
                   size="small"
                   InputLabelProps={{ shrink: true }}

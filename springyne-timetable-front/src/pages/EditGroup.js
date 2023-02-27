@@ -147,7 +147,7 @@ function EditGroupPage() {
         value={group.name}
         id="group-name-with-error"
         label=""
-        helperText="Pavadinimas negali būti tuščias laukas"
+        helperText="Pavadinimas privalomas"
         className="form-control mb-3"
         size="small"
         disabled={group.deleted}
@@ -167,7 +167,7 @@ function EditGroupPage() {
         value={group.groupYear}
         id="create-group-group-year"
         label=""
-        helperText="Metai negali būti tuščias laukas"
+        helperText="Mokslo metai privalomi"
         className="form-control mb-3"
         size="small"
         disabled={group.deleted}
@@ -187,7 +187,7 @@ function EditGroupPage() {
         value={group.students}
         id="create-group-students"
         label=""
-        helperText="Studentai negali būti tuščias laukas"
+        helperText="Studentai privalomi"
         className="form-control mb-2"
         size="small"
         disabled={group.deleted}

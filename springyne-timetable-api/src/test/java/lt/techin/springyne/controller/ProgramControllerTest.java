@@ -2,8 +2,8 @@ package lt.techin.springyne.controller;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import lt.techin.springyne.dto.ProgramDto;
-import lt.techin.springyne.model.Program;
+import lt.techin.springyne.program.Program;
+import lt.techin.springyne.program.ProgramDto;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

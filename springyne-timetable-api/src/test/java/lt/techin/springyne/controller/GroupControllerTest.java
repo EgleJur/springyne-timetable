@@ -2,12 +2,12 @@ package lt.techin.springyne.controller;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import lt.techin.springyne.dto.GroupDto;
-import lt.techin.springyne.dto.TeacherDto;
-import lt.techin.springyne.model.Group;
-import lt.techin.springyne.model.Program;
-import lt.techin.springyne.model.Shift;
-import lt.techin.springyne.service.GroupService;
+import lt.techin.springyne.group.Group;
+import lt.techin.springyne.group.GroupController;
+import lt.techin.springyne.group.GroupDto;
+import lt.techin.springyne.group.GroupService;
+import lt.techin.springyne.program.Program;
+import lt.techin.springyne.shift.Shift;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -25,10 +25,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-//<<<<<<< HEAD
 import static org.mockito.Mockito.when;
-//=======
-//>>>>>>> development
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest

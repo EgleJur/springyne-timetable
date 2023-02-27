@@ -1,13 +1,11 @@
 package lt.techin.springyne.controller;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-
-import lt.techin.springyne.dto.RoomDto;
-import lt.techin.springyne.dto.TeacherDto;
-import lt.techin.springyne.model.Room;
-import lt.techin.springyne.service.RoomService;
+import lt.techin.springyne.room.Room;
+import lt.techin.springyne.room.RoomController;
+import lt.techin.springyne.room.RoomDto;
+import lt.techin.springyne.room.RoomService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -20,12 +18,11 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
-
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 

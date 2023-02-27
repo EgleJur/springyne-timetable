@@ -1,7 +1,8 @@
 package lt.techin.springyne.service;
 
-import lt.techin.springyne.model.Subject;
-import lt.techin.springyne.repository.SubjectRepository;
+import lt.techin.springyne.subject.Subject;
+import lt.techin.springyne.subject.SubjectRepository;
+import lt.techin.springyne.subject.SubjectService;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;

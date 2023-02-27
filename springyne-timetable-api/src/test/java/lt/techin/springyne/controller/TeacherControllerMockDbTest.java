@@ -1,10 +1,6 @@
 package lt.techin.springyne.controller;
 
-import lt.techin.springyne.dto.TeacherDto;
-import lt.techin.springyne.dto.mapper.TeacherMapper;
-import lt.techin.springyne.model.Teacher;
-import lt.techin.springyne.repository.TeacherRepository;
-import lt.techin.springyne.service.TeacherService;
+import lt.techin.springyne.teacher.*;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;

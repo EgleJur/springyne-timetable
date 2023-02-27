@@ -1,7 +1,8 @@
 package lt.techin.springyne.service;
 
-import lt.techin.springyne.model.Room;
-import lt.techin.springyne.repository.RoomRepository;
+import lt.techin.springyne.room.Room;
+import lt.techin.springyne.room.RoomRepository;
+import lt.techin.springyne.room.RoomService;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;

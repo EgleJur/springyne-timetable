@@ -1,11 +1,8 @@
 package lt.techin.springyne.service;
 
-import lt.techin.springyne.dto.GroupDto;
-import lt.techin.springyne.model.Group;
-import lt.techin.springyne.model.Room;
-import lt.techin.springyne.model.Subject;
-import lt.techin.springyne.repository.GroupRepository;
-import lt.techin.springyne.repository.RoomRepository;
+import lt.techin.springyne.group.Group;
+import lt.techin.springyne.group.GroupRepository;
+import lt.techin.springyne.group.GroupService;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;

@@ -142,6 +142,7 @@ function TeacherListPage() {
               fullWidth
               value={searchSubject}
               onChange={(e) => setSearchSubject(e.target.value)}
+              style={{ maxWidth: '150px' }}
             >
               <MenuItem value={""}>-</MenuItem>
               {subjects?.map((subject) => (
@@ -161,6 +162,7 @@ function TeacherListPage() {
               fullWidth
               value={searchShift}
               onChange={(e) => setSearchShift(e.target.value)}
+              style={{ maxWidth: '150px' }}
             >
               <MenuItem value={""}>-</MenuItem>
               {shifts?.map((shift) => (
@@ -169,14 +171,15 @@ function TeacherListPage() {
                 </MenuItem>
               ))}
             </Select>
-
+                
             <TextField
               onChange={(e) => setSearchName(e.target.value)}
               value={searchName}
               id="search-name-input"
-              label="Ieškoti vardo"
-              className="form-control me-2"
+              label="Ieškoti pagal Vardą"
+              className="form-control me-2 search-name-input"
               size="small"
+              style={{ width: '400px' }}
             />
             <button
               className="btn btn-outline-primary"

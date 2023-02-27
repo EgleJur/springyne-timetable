@@ -130,7 +130,7 @@ function CreateTeacherPage() {
           value={name}
           id="create-teacher-name-with-error"
           label="Vardas ir Pavardė"
-          helperText="Vardas ir Pavardė negali būti tuščias laukas"
+          helperText="Vardas ir Pavardė privalomas"
           className="form-control mb-3"
           size="small"
           required
@@ -141,7 +141,7 @@ function CreateTeacherPage() {
           value={teamsEmail}
           id="create-teacher-teams_mail-with-error"
           label="Teams vartotojo vardas"
-          helperText="Teams vardas negali būti tuščias laukas"
+          helperText="Teams vardas privalomas"
           className="form-control mb-3"
           size="small"
           required
@@ -169,7 +169,7 @@ function CreateTeacherPage() {
           value={hours}
           id="create-teacher-hours-with-error"
           label="Valandų skaičius per savaitę"
-          helperText="Valandų skaičius per savaitę negali būti tuščias laukas"
+          helperText="Valandų skaičius privalomas"
           className="form-control mb-3"
           size="small"
           required

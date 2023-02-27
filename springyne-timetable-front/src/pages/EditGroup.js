@@ -158,7 +158,7 @@ function EditGroupPage() {
         </div>
         <div className="row">
           <div className="col-md-4 mb-2 mb-md-0 fw-bold">
-            <label htmlFor="edit-module-number-with-error">Metai *</label>
+            <label htmlFor="edit-module-number-with-error">Mokslo metai *</label>
           </div>
           <div className="col-md-8 mb-2 mb-md-0">
           <TextField

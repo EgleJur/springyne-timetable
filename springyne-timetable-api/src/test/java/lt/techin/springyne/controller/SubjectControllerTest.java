@@ -7,6 +7,7 @@ import lt.techin.springyne.subject.Subject;
 import lt.techin.springyne.subject.SubjectController;
 import lt.techin.springyne.subject.SubjectDto;
 import lt.techin.springyne.subject.SubjectService;
+import lt.techin.springyne.module.Module;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -36,7 +37,7 @@ class SubjectControllerTest {
     @Autowired
     ObjectMapper objectMapper;
     @Mock
-    Module module;
+     Module module;
 
     @Mock
     Room room;

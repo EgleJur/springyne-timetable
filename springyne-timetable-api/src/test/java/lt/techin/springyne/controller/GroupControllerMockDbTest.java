@@ -22,7 +22,7 @@ public class GroupControllerMockDbTest {
 
     @Test
     void addGroupReturnsSavedGroup() {
-        GroupDto testGroupDto = new GroupDto("E-22/1");
+        GroupDto testGroupDto = new GroupDto("E-22/1", "2023-05-05", 0);
         Group testGroup = GroupMapper.toGroup(testGroupDto);
         Mockito.when(groupRepository.save(testGroup)).thenReturn(testGroup);
         assertEquals(testGroup, groupService.addGroup(1L,1L,testGroup),

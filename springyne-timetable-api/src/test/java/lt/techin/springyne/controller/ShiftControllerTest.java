@@ -2,7 +2,7 @@ package lt.techin.springyne.controller;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import lt.techin.springyne.dto.ShiftDto;
+import lt.techin.springyne.shift.ShiftDto;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

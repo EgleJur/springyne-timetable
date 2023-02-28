@@ -1,10 +1,6 @@
 package lt.techin.springyne.controller;
 
-import lt.techin.springyne.dto.ShiftDto;
-import lt.techin.springyne.dto.mapper.ShiftMapper;
-import lt.techin.springyne.model.Shift;
-import lt.techin.springyne.repository.ShiftRepository;
-import lt.techin.springyne.service.ShiftService;
+import lt.techin.springyne.shift.*;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;

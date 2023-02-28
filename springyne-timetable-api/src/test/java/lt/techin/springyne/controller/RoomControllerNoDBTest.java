@@ -1,10 +1,6 @@
 package lt.techin.springyne.controller;
 
-import lt.techin.springyne.dto.RoomDto;
-import lt.techin.springyne.dto.mapper.RoomMapper;
-import lt.techin.springyne.model.Room;
-import lt.techin.springyne.repository.RoomRepository;
-import lt.techin.springyne.service.RoomService;
+import lt.techin.springyne.room.*;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;

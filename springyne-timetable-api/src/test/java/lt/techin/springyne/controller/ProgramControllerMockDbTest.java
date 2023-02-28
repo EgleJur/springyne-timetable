@@ -1,10 +1,6 @@
 package lt.techin.springyne.controller;
 
-import lt.techin.springyne.dto.ProgramDto;
-import lt.techin.springyne.dto.mapper.ProgramMapper;
-import lt.techin.springyne.model.Program;
-import lt.techin.springyne.repository.ProgramRepository;
-import lt.techin.springyne.service.ProgramService;
+import lt.techin.springyne.program.*;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;

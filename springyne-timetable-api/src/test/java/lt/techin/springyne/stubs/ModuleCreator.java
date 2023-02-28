@@ -1,7 +1,7 @@
 package lt.techin.springyne.stubs;
 
 
-import lt.techin.springyne.model.Module;
+import lt.techin.springyne.module.Module;
 
 public class ModuleCreator {
     public static  Module createModule(Long id) {

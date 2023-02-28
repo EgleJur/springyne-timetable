@@ -2,11 +2,12 @@ package lt.techin.springyne.controller;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import lt.techin.springyne.dto.SubjectDto;
-import lt.techin.springyne.model.Module;
-import lt.techin.springyne.model.Room;
-import lt.techin.springyne.model.Subject;
-import lt.techin.springyne.service.SubjectService;
+import lt.techin.springyne.room.Room;
+import lt.techin.springyne.subject.Subject;
+import lt.techin.springyne.subject.SubjectController;
+import lt.techin.springyne.subject.SubjectDto;
+import lt.techin.springyne.subject.SubjectService;
+import lt.techin.springyne.module.Module;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -19,6 +20,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -36,7 +38,7 @@ class SubjectControllerTest {
     @Autowired
     ObjectMapper objectMapper;
     @Mock
-    Module module;
+     Module module;
 
     @Mock
     Room room;
@@ -56,10 +58,9 @@ class SubjectControllerTest {
     @Test
     void getAllSubjectsContainsCorrectDtos() throws Exception {
 
-
-        SubjectDto testSubjectDto1 = new SubjectDto("S1", "Test name1");
-        SubjectDto testSubjectDto2 = new SubjectDto("S2", "Test name2");
-        SubjectDto testSubjectDto3 = new SubjectDto("S3", "Test name3");
+        SubjectDto testSubjectDto1 = new SubjectDto("Tinklapiai", "HTML, CSS, Bootstrap");
+        SubjectDto testSubjectDto2 = new SubjectDto("Java programavimas", "Java pagrindai");
+        SubjectDto testSubjectDto3 = new SubjectDto("Duomenų bazės", "DBVS ir SQL kalba");
 
         List<SubjectDto> expectedList = new ArrayList<>();
         expectedList.add(testSubjectDto1);
@@ -69,7 +70,7 @@ class SubjectControllerTest {
         MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/subjects")
         ).andExpect(status().isOk()).andReturn();
 
-        List<SubjectDto> resultList = objectMapper.readValue(mvcResult.getResponse().getContentAsString(), new TypeReference<List<SubjectDto>>() {
+        List<SubjectDto> resultList = objectMapper.readValue(mvcResult.getResponse().getContentAsString(StandardCharsets.UTF_8), new TypeReference<List<SubjectDto>>() {
         });
 
         Assertions.assertTrue(resultList.containsAll(expectedList));

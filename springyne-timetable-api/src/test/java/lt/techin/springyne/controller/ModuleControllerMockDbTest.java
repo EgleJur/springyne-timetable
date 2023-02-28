@@ -1,10 +1,10 @@
 package lt.techin.springyne.controller;
 
-import lt.techin.springyne.dto.ModuleDto;
-import lt.techin.springyne.dto.mapper.ModuleMapper;
-import lt.techin.springyne.model.Module;
-import lt.techin.springyne.repository.ModuleRepository;
-import lt.techin.springyne.service.ModuleService;
+import lt.techin.springyne.module.ModuleDto;
+import lt.techin.springyne.module.Module;
+import lt.techin.springyne.module.ModuleMapper;
+import lt.techin.springyne.module.ModuleRepository;
+import lt.techin.springyne.module.ModuleService;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -22,12 +22,14 @@ public interface HolidaysRepository extends JpaRepository<Holiday, Long> {
     @Query(value = "SELECT * FROM HOLIDAY WHERE YEAR(STARTS)=:YEAR_NOW ORDER BY STARTS ASC",
             nativeQuery = true)
     List<Holiday> findAllHolidays(@Param("YEAR_NOW") int y);
-//    List<Holidays> findAllOrderByDeletedAscStartsAsc(); SELECT * FROM HOLIDAYS WHERE year(starts)='2023'
-
-    @Query(value = "SELECT id,name, CASE WHEN repeats = false " +
-            "THEN starts, ends, repeats FROM HOLIDAY where starts>= :YEAR_START and ends<=:YEAR_END " +
-            "ELSE starts + (select year(:YEAR_START)-year(starts)) year, ends, repeats " +
-            "FROM HOLIDAY where TO_CHAR(starts, 'MM-DD')>=TO_CHAR(:YEAR_START, 'MM-DD') " +
-            "and TO_CHAR(ends, 'MM-DD')<=TO_CHAR(:YEAR_END, 'MM-DD') END", nativeQuery = true)
+//    List<Holidays> findAllOrderByDeletedAscStartsAsc(); SELECT * FROM HOLIDAYS WHERE year(starts)='2023
+    @Query(value = "SELECT * FROM HOLIDAY where TO_CHAR(starts, 'MM-DD')>=TO_CHAR(:YEAR_START, 'MM-DD') " +
+            "and TO_CHAR(ends, 'MM-DD')<=TO_CHAR(:YEAR_END, 'MM-DD') " +
+            "order by starts asc", nativeQuery = true)
     List<Holiday> findAllHolidaysByDate(@Param("YEAR_START") LocalDate starts, @Param("YEAR_END") LocalDate ends );
+
+    @Query(value = "SELECT * FROM HOLIDAY where TO_CHAR(starts, 'MM-DD')>=TO_CHAR(:YEAR_START, 'MM-DD') " +
+            "and TO_CHAR(ends, 'MM-DD')<=TO_CHAR(:YEAR_END, 'MM-DD') or name like %:NAME% " +
+            "order by starts asc", nativeQuery = true)
+    List<Holiday> findAllHolidaysByDateAndName(@Param("NAME") String name, @Param("YEAR_START") LocalDate starts, @Param("YEAR_END") LocalDate ends );
 }

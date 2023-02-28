@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import java.text.ParseException;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -60,10 +61,20 @@ public class HolidayService {
             LocalDate startDate = LocalDate.parse(from);
             LocalDate endDate = LocalDate.parse(to);
             List<Holiday> filteredHoliday = holidaysRepository.findAllHolidaysByDate(startDate, endDate);
-//                    allHolidays.stream()
-//                    .filter(dateS -> dateS.getStarts().isAfter(startDate) && dateS.getStarts().isBefore(endDate))
-//                    .collect(Collectors.toList());
-            return filteredHoliday;
+            List<Holiday> newHolidayList = new ArrayList<>();
+            for (Holiday holiday:filteredHoliday) {
+                if(holiday.isRepeats()){
+
+                    holiday.setStarts(holiday.getStarts().plusYears(startDate.getYear()-holiday.getStarts().getYear()));
+                    holiday.setEnds(holiday.getEnds().plusYears(startDate.getYear()-holiday.getStarts().getYear()));
+                }
+                newHolidayList.add(holiday);
+            }
+            return   newHolidayList.stream()
+                    .filter(dateS -> dateS.getStarts().isAfter(startDate)
+                            && dateS.getEnds().isBefore(endDate))
+                    .collect(Collectors.toList());
+//            return newHolidayList;
 //            return holidaysRepository.findAllHolidaysByDate(startDate, endDate);
 
 //            return holidaysRepository.findAllByStartsLessThanEqualAndEndsGreaterThanEqualOrderByStartsAsc(endDate, startDate);
@@ -72,7 +83,8 @@ public class HolidayService {
         }
         LocalDate startDate = LocalDate.parse(from);
         LocalDate endDate = LocalDate.parse(to);
-        return holidaysRepository.findAllByNameIgnoreCaseContainingOrStartsLessThanEqualAndEndsGreaterThanEqualOrderByStartsAsc(name, endDate, startDate);
+        return holidaysRepository.findAllHolidaysByDateAndName(name, endDate, startDate);
+//        return holidaysRepository.findAllByNameIgnoreCaseContainingOrStartsLessThanEqualAndEndsGreaterThanEqualOrderByStartsAsc(name, endDate, startDate);
     }
 
     public Holiday createHoliday(Holiday holiday) {

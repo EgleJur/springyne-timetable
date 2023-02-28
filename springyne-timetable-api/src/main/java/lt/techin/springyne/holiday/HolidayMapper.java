@@ -12,13 +12,13 @@ public class HolidayMapper {
 
         holiday.setName(holidayDto.getName());
         //try {
-            holiday.setStarts(LocalDate.parse(holidayDto.getStarts().toString()));
+            holiday.setStarts(LocalDate.parse(holidayDto.getStarts()));
 //        } catch (ParseException e) {
 //            throw new ScheduleValidationException("Start date cannot be converted to date", "date",
 //                    "Wrong format of date", holidayDto.getStarts());
 //        }
        // try {
-            holiday.setEnds(LocalDate.parse(holidayDto.getEnds().toString()));
+            holiday.setEnds(LocalDate.parse(holidayDto.getEnds()));
 //        } catch (ParseException e) {
 //            throw new ScheduleValidationException("End date cannot be converted to date", "date",
 //                    "Wrong format of date", holidayDto.getEnds());

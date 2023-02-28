@@ -20,7 +20,7 @@ function CreateShiftPage() {
     setEndError(false);
     if (name === "" || starts > ends) {
       if (name === "") {
-        setNameError("Pavadinimas negali būti tuščias.");
+        setNameError("Pavadinimas negali būti tuščias");
       }
       if (starts > ends) {
         setStartError(true);
@@ -50,7 +50,7 @@ function CreateShiftPage() {
         } else {
           setFailure(true);
           setSuccess(false);
-          setNameError("Įrašo nepavyko sukurti.");
+          setNameError("Įrašo nepavyko sukurti");
         }
       });
     }

@@ -103,7 +103,7 @@ function CreateHolidayPage() {
           value={name}
           id="create-holoday-name-with-error"
           label="Pavadinimas"
-          helperText="Pavadinimas negali būti tuščias"
+          helperText="Pavadinimas privalomas"
           className="form-control mb-3"
           size="small"
           required
@@ -114,7 +114,7 @@ function CreateHolidayPage() {
           value={starts}
           id="create-holiday-start-date-with-error"
           label="Atostogų pradžia (MMMM-MM-DD)"
-          helperText="Pradžios data negali būti tuščia"
+          helperText="Pradžios data privaloma"
           className="form-control mb-3"
           size="small"
           required
@@ -125,7 +125,7 @@ function CreateHolidayPage() {
           value={ends}
           id="create-holiday-end-date-with-error"
           label="Atostogų pabaiga (MMMM-MM-DD)"
-          helperText="Pabaigos data negali būti tuščia"
+          helperText="Pabaigos data privaloma"
           className="form-control mb-3"
           size="small"
           required

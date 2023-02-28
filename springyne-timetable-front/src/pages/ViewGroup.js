@@ -70,7 +70,7 @@ function ViewGroupPage() {
               <td>{group.name}</td>
             </tr>
             <tr>
-              <th scope="col">Metai</th>
+              <th scope="col">Mokslo metai</th>
               <td>{group.groupYear}</td>
             </tr>
             <tr>

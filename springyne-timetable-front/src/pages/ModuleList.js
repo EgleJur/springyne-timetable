@@ -124,7 +124,7 @@ function ModuleListPage() {
               onChange={(e) => setSearchName(e.target.value)}
               value={searchName}
               id="search-name-input"
-              label="Ieškoti pavadinimo"
+              label="Ieškoti pagal pavadinimą"
               className="form-control me-2"
               size="small"
             />

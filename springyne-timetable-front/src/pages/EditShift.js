@@ -153,7 +153,7 @@ function EditShiftPage() {
           value={shift.name}
           id="create-module-number-with-error"
           label=""
-          helperText="Pavadinimas turi būti unikalus ir negali būti tuščias"
+          helperText="Pavadinimas turi būti unikalus ir yra privalomas"
           className="form-control mb-3"
           size="small"
           disabled={shift.visible === 0}

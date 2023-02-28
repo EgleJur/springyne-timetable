@@ -159,7 +159,7 @@ function EditTeacherPage() {
           value={teacher.name}
           id="teacher-name-with-error"
           label=""
-          helperText="Vardas ir Pavardė negali būti tuščias laukas"
+          helperText="Vardas ir Pavardė privalomas"
           className="form-control mb-3"
           size="small"
           disabled={teacher.deleted}
@@ -179,7 +179,7 @@ function EditTeacherPage() {
           value={teacher.teamsEmail}
           id=""
           label=""
-          helperText="Teams vardas negali būti tuščias laukas"
+          helperText="Teams vardas privalomas"
           className="form-control mb-3"
           size="small"
           disabled={teacher.deleted}
@@ -233,7 +233,7 @@ function EditTeacherPage() {
           value={teacher.hours}
           id="create-teacher-hours"
           label=""
-          helperText="Valandų skaičius per savaitę negali būti tuščias laukas"
+          helperText="Valandų skaičius privalomas"
           className="form-control mb-2"
           size="small"
           disabled={teacher.deleted}

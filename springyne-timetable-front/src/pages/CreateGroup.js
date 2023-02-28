@@ -117,7 +117,7 @@ function CreateGroupPage() {
           value={name}
           id="create-group-name-with-error"
           label="Pavadinimas"
-          helperText="Pavadinimas negali būti tuščias"
+          helperText="Pavadinimas privalomas"
           className="form-control mb-3"
           size="small"
           required
@@ -129,7 +129,7 @@ function CreateGroupPage() {
           value={groupYear}
           id="create-group-year-with-error"
           label="Mokslo metai"
-          helperText="Mokslo metai negali būti tušti"
+          helperText="Mokslo metai privalomi"
           className="form-control mb-3"
           size="small"
           required
@@ -141,7 +141,7 @@ function CreateGroupPage() {
           value={students}
           id="create-group-students-with-error"
           label="Studentų skaičius"
-          helperText="Studentų skaičius negali būti tuščias"
+          helperText="Studentų skaičius privalomas"
           className="form-control mb-3"
           size="small"
           required

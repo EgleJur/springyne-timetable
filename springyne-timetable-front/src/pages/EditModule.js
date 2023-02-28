@@ -125,7 +125,7 @@ function EditModulePage() {
                 onChange={(e) => updateProperty("number", e)}
                 value={module.number}
                 id="edit-module-number-with-error"
-                helperText="Numeris turi būti unikalus ir negali būti tuščias"
+                helperText="Numeris turi būti unikalus ir yra privalomas"
                 className="form-control"
                 size="small"
                 InputLabelProps={{ shrink: true }}
@@ -144,7 +144,7 @@ function EditModulePage() {
                 onChange={(e) => updateProperty("name", e)}
                 value={module.name}
                 id="edit-module-name-with-error"
-                helperText="Pavadinimas negali būti tuščias"
+                helperText="Pavadinimas privalomas"
                 className="form-control"
                 size="small"
                 InputLabelProps={{ shrink: true }}

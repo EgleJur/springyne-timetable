@@ -89,7 +89,7 @@ function CreateShiftPage() {
           value={name}
           id="create-shift-name"
           label="Pavadinimas"
-          helperText="Pavadinimas turi būti unikalus ir negali būti tuščias"
+          helperText="Pavadinimas turi būti unikalus ir yra privalomas"
           className="form-control mb-3"
           size="small"
           required

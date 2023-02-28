@@ -79,7 +79,7 @@ function CreateModulePage() {
           value={number}
           id="create-module-number-with-error"
           label="Numeris"
-          helperText="Numeris turi būti unikalus ir negali būti tuščias"
+          helperText="Numeris turi būti unikalus ir yra privalomas"
           className="form-control mb-3"
           size="small"
           required
@@ -90,7 +90,7 @@ function CreateModulePage() {
           value={name}
           id="create-module-number-with-error"
           label="Pavadinimas"
-          helperText="Pavadinimas negali būti tuščias"
+          helperText="Pavadinimas privalomas"
           className="form-control mb-3"
           size="small"
           required

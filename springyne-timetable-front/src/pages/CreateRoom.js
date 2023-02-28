@@ -84,7 +84,7 @@ function CreateRoomPage() {
           value={name}
           id="create-room-number-with-error"
           label="Pavadinimas"
-          helperText="Pavadinimas negali būti tuščias"
+          helperText="Pavadinimas privalomas"
           className="form-control mb-3"
           size="small"
           required
@@ -95,7 +95,7 @@ function CreateRoomPage() {
           value={building}
           id="create-room-number-with-error"
           label="Pastatas"
-          helperText="Pastatas negali būti tuščias"
+          helperText="Pastatas privalomas"
           className="form-control mb-3"
           size="small"
           required
@@ -106,7 +106,7 @@ function CreateRoomPage() {
           value={description}
           id="create-room-number-with-error"
           label="Aprašymas"
-          helperText="Neprivaloma"
+          helperText=""
           className="form-control mb-3"
           size="small"
           // required

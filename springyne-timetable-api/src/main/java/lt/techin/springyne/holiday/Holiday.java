@@ -3,11 +3,15 @@ package lt.techin.springyne.holiday;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import java.util.Date;
+import java.time.LocalDate;
 
 
 @Data
@@ -24,11 +28,21 @@ public class Holiday {
 
 
     @NotNull
-    @Temporal(TemporalType.DATE)
-    private Date starts;
+    @DateTimeFormat(pattern = "MM-dd")
+  //  @Temporal(TemporalType.DATE)
+    private LocalDate starts;
+
+//    @DateTimeFormat(pattern = "yyyy")
+//    //  @Temporal(TemporalType.DATE)
+//    private LocalDate yearStarts;
     @NotNull
-    @Temporal(TemporalType.DATE)
-    private Date ends;
+    @DateTimeFormat(pattern = "MM-dd")
+  //  @Temporal(TemporalType.DATE)
+    private LocalDate ends;
+
+//    @DateTimeFormat(pattern = "yyyy")
+//    //  @Temporal(TemporalType.DATE)
+//    private LocalDate yearEnds;
 
     private boolean repeats;
 

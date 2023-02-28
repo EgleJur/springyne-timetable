@@ -18,6 +18,7 @@ function HolidayListPage() {
     "Content-Type": "application/json",
   };
 
+
   const fetchHolidays = (e) => {
     if (e && e.preventDefault) { e.preventDefault(); }
     setDateError(false);
@@ -27,6 +28,9 @@ function HolidayListPage() {
       || searchStartDate != "" && isNaN(new Date(searchStartDate)) 
       || searchEndDate != "" && isNaN(new Date(searchEndDate))) {
       setDateError(true);
+      setTimeout(() => {
+        setDeleted(false);
+               }, 4000);
     } else {
       fetch(
         `/api/v1/holidays/search?name=${searchName}&from=${searchStartDate}&to=${searchEndDate}`
@@ -45,6 +49,9 @@ function HolidayListPage() {
       headers: JSON_HEADERS,
     }).then(fetchHolidays);
     setDeleted(true);
+    setTimeout(() => {
+      setDeleted(false);
+             }, 4000);
   };
 
   return (

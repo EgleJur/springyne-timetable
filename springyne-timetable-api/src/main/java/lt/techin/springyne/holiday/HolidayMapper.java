@@ -1,30 +1,28 @@
 package lt.techin.springyne.holiday;
 
-import lt.techin.springyne.exception.ScheduleValidationException;
-
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 public class HolidayMapper {
 
-    private static SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd");
+    private static DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
     public static Holiday toHoliday(HolidayDto holidayDto) {
 
         Holiday holiday = new Holiday();
 
         holiday.setName(holidayDto.getName());
-        try {
-            holiday.setStarts(dateFormatter.parse(holidayDto.getStarts()));
-        } catch (ParseException e) {
-            throw new ScheduleValidationException("Start date cannot be converted to date", "date",
-                    "Wrong format of date", holidayDto.getStarts());
-        }
-        try {
-            holiday.setEnds(dateFormatter.parse(holidayDto.getEnds()));
-        } catch (ParseException e) {
-            throw new ScheduleValidationException("End date cannot be converted to date", "date",
-                    "Wrong format of date", holidayDto.getEnds());
-        }
+        //try {
+            holiday.setStarts(LocalDate.parse(holidayDto.getStarts().toString()));
+//        } catch (ParseException e) {
+//            throw new ScheduleValidationException("Start date cannot be converted to date", "date",
+//                    "Wrong format of date", holidayDto.getStarts());
+//        }
+       // try {
+            holiday.setEnds(LocalDate.parse(holidayDto.getEnds().toString()));
+//        } catch (ParseException e) {
+//            throw new ScheduleValidationException("End date cannot be converted to date", "date",
+//                    "Wrong format of date", holidayDto.getEnds());
+//        }
         holiday.setRepeats(holidayDto.isRepeats());
 
         return holiday;

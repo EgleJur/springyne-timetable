@@ -6,10 +6,9 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class HolidayService {
@@ -49,24 +48,31 @@ public class HolidayService {
     }
 
     public List<Holiday> searchByNameAndDate(String name, String from, String to) throws ParseException {
+        List<Holiday> allHolidays = holidaysRepository.findAllOrderByStartsAsc();
         if (name == null || name.equals("")) {
             if (from == null || from.equals("") && to == null || to.equals("")) {
                 int yearNow = LocalDate.now().getYear();
-                return holidaysRepository.findAllHolidays(yearNow);
+                return allHolidays.stream()
+                        .filter(startDate -> startDate.getStarts().getYear() == yearNow)
+                        .collect(Collectors.toList());
+                //return holidaysRepository.findAllHolidays(yearNow);
             }
-            Date startDate = new SimpleDateFormat("yyyy-MM-dd").parse(from);
-            Date endDate = new SimpleDateFormat("yyyy-MM-dd").parse(to);
-            return holidaysRepository.findAllByStartsLessThanEqualAndEndsGreaterThanEqualOrderByStartsAsc(endDate, startDate);
+            LocalDate startDate = LocalDate.parse(from);
+            LocalDate endDate = LocalDate.parse(to);
+            return allHolidays.stream()
+                    .filter(dateS -> dateS.getStarts().isAfter(startDate) && dateS.getStarts().isBefore(endDate))
+                    .collect(Collectors.toList());
+//            return holidaysRepository.findAllByStartsLessThanEqualAndEndsGreaterThanEqualOrderByStartsAsc(endDate, startDate);
         } else if (from == null || from.equals("") && to == null || to.equals("")) {
             return holidaysRepository.findAllByNameIgnoreCaseContainingOrderByStartsAsc(name);
         }
-        Date startDate = new SimpleDateFormat("yyyy-MM-dd").parse(from);
-        Date endDate = new SimpleDateFormat("yyyy-MM-dd").parse(to);
+        LocalDate startDate = LocalDate.parse(from);
+        LocalDate endDate = LocalDate.parse(to);
         return holidaysRepository.findAllByNameIgnoreCaseContainingOrStartsLessThanEqualAndEndsGreaterThanEqualOrderByStartsAsc(name, endDate, startDate);
     }
 
     public Holiday createHoliday(Holiday holiday) {
-        Holiday newHoliday = new Holiday();
+
         if (holiday.getName() == null ||holiday.getName().isEmpty()){
             throw new ScheduleValidationException("Name cannot be empty", "name",
                     "Name is empty", holiday.getName());
@@ -79,6 +85,18 @@ public class HolidayService {
             throw new ScheduleValidationException("End date cannot be empty", "date",
                     "Date is empty", "End date");
         }
+           if(holiday.isRepeats()){
+
+               for(long i = 1; i<5; i++){
+                   Holiday newHoliday = new Holiday();
+                   newHoliday.setName(holiday.getName());
+                   newHoliday.setStarts(holiday.getStarts().plusYears(i));
+                   newHoliday.setEnds(holiday.getEnds().plusYears(i));
+                   newHoliday.setRepeats(holiday.isRepeats());
+                   holidaysRepository.save(newHoliday);
+
+               }
+           }
 
 //           newHoliday.setName(holiday.getName());
 //           newHoliday.setStarts(holiday.getStarts());

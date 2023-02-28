@@ -26,24 +26,17 @@ public class Holiday {
     @NotNull
     private String name;
 
-
     @NotNull
-    @DateTimeFormat(pattern = "MM-dd")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
   //  @Temporal(TemporalType.DATE)
     private LocalDate starts;
 
-    @DateTimeFormat(pattern = "yyyy")
-    //  @Temporal(TemporalType.DATE)
-    private LocalDate yearStarts;
 
     @NotNull
-    @DateTimeFormat(pattern = "MM-dd")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
   //  @Temporal(TemporalType.DATE)
     private LocalDate ends;
 
-    @DateTimeFormat(pattern = "yyyy")
-    //  @Temporal(TemporalType.DATE)
-    private LocalDate yearEnds;
 
     private boolean repeats;
 

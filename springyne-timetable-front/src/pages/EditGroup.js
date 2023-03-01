@@ -167,7 +167,7 @@ function EditGroupPage() {
         value={group.groupYear}
         id="create-group-group-year"
         label=""
-        helperText="Mokslo metai privalomas"
+        helperText="Mokslo metai privalomi"
         className="form-control mb-3"
         size="small"
         disabled={group.deleted}
@@ -187,7 +187,7 @@ function EditGroupPage() {
         value={group.students}
         id="create-group-students"
         label=""
-        helperText="Studentai privalomas"
+        helperText="Studentų skaičius privalomas"
         className="form-control mb-2"
         size="small"
         disabled={group.deleted}

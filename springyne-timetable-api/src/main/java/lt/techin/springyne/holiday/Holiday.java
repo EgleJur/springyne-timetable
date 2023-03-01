@@ -28,13 +28,11 @@ public class Holiday {
 
     @NotNull
     @DateTimeFormat(pattern = "yyyy-MM-dd")
-  //  @Temporal(TemporalType.DATE)
     private LocalDate starts;
 
 
     @NotNull
     @DateTimeFormat(pattern = "yyyy-MM-dd")
-  //  @Temporal(TemporalType.DATE)
     private LocalDate ends;
 
 

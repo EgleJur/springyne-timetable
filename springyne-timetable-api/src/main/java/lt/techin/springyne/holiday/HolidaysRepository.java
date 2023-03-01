@@ -29,7 +29,7 @@ public interface HolidaysRepository extends JpaRepository<Holiday, Long> {
     List<Holiday> findAllHolidaysByDate(@Param("YEAR_START") LocalDate starts, @Param("YEAR_END") LocalDate ends );
 
     @Query(value = "SELECT * FROM HOLIDAY where TO_CHAR(starts, 'MM-DD')>=TO_CHAR(:YEAR_START, 'MM-DD') " +
-            "and TO_CHAR(ends, 'MM-DD')<=TO_CHAR(:YEAR_END, 'MM-DD') or name like %:NAME% " +
+            "and ends<=:YEAR_END or lower(name) like %:NAME% " +
             "order by starts asc", nativeQuery = true)
     List<Holiday> findAllHolidaysByDateAndName(@Param("NAME") String name, @Param("YEAR_START") LocalDate starts, @Param("YEAR_END") LocalDate ends );
 }

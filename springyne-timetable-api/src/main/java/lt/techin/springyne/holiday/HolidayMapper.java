@@ -6,23 +6,15 @@ import java.time.format.DateTimeFormatter;
 public class HolidayMapper {
 
     private static DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
     public static Holiday toHoliday(HolidayDto holidayDto) {
 
         Holiday holiday = new Holiday();
 
         holiday.setName(holidayDto.getName());
-        //try {
-            holiday.setStarts(LocalDate.parse(holidayDto.getStarts()));
-//        } catch (ParseException e) {
-//            throw new ScheduleValidationException("Start date cannot be converted to date", "date",
-//                    "Wrong format of date", holidayDto.getStarts());
-//        }
-       // try {
-            holiday.setEnds(LocalDate.parse(holidayDto.getEnds()));
-//        } catch (ParseException e) {
-//            throw new ScheduleValidationException("End date cannot be converted to date", "date",
-//                    "Wrong format of date", holidayDto.getEnds());
-//        }
+
+        holiday.setStarts(LocalDate.parse(holidayDto.getStarts()));
+        holiday.setEnds(LocalDate.parse(holidayDto.getEnds()));
         holiday.setRepeats(holidayDto.isRepeats());
 
         return holiday;

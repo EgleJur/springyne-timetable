@@ -5,7 +5,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
-import java.text.ParseException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -48,76 +47,70 @@ public class HolidayService {
         }
     }
 
-    public List<Holiday> searchByNameAndDate(String name, String from, String to) throws ParseException {
+    public List<Holiday> searchByNameAndDate(String name, String from, String to) {
         List<Holiday> allHolidays = holidaysRepository.findAllOrderByStartsAsc();
+        List<Holiday> newHolidayList = new ArrayList<>();
         if (name == null || name.equals("")) {
             if (from == null || from.equals("") && to == null || to.equals("")) {
                 int yearNow = LocalDate.now().getYear();
                 return allHolidays.stream()
                         .filter(startDate -> startDate.getStarts().getYear() == yearNow)
                         .collect(Collectors.toList());
-//                return holidaysRepository.findAllHolidays(yearNow);
             }
             LocalDate startDate = LocalDate.parse(from);
             LocalDate endDate = LocalDate.parse(to);
             List<Holiday> filteredHoliday = holidaysRepository.findAllHolidaysByDate(startDate, endDate);
-            List<Holiday> newHolidayList = new ArrayList<>();
-            for (Holiday holiday:filteredHoliday) {
-                if(holiday.isRepeats()){
+           // List<Holiday> newHolidayList = new ArrayList<>();
+            for (Holiday holiday : filteredHoliday) {
+                if (holiday.isRepeats()) {
 
-                    holiday.setStarts(holiday.getStarts().plusYears(startDate.getYear()-holiday.getStarts().getYear()));
-                    holiday.setEnds(holiday.getEnds().plusYears(startDate.getYear()-holiday.getStarts().getYear()));
+                    holiday.setStarts(holiday.getStarts().plusYears(startDate.getYear() - holiday.getStarts().getYear()));
+                    holiday.setEnds(holiday.getEnds().plusYears(endDate.getYear() - holiday.getEnds().getYear()));
                 }
                 newHolidayList.add(holiday);
             }
-            return   newHolidayList.stream()
+            return newHolidayList.stream()
                     .filter(dateS -> dateS.getStarts().isAfter(startDate)
                             && dateS.getEnds().isBefore(endDate))
                     .collect(Collectors.toList());
-//            return newHolidayList;
-//            return holidaysRepository.findAllHolidaysByDate(startDate, endDate);
 
-//            return holidaysRepository.findAllByStartsLessThanEqualAndEndsGreaterThanEqualOrderByStartsAsc(endDate, startDate);
         } else if (from == null || from.equals("") && to == null || to.equals("")) {
             return holidaysRepository.findAllByNameIgnoreCaseContainingOrderByStartsAsc(name);
         }
         LocalDate startDate = LocalDate.parse(from);
         LocalDate endDate = LocalDate.parse(to);
-        return holidaysRepository.findAllHolidaysByDateAndName(name, endDate, startDate);
-//        return holidaysRepository.findAllByNameIgnoreCaseContainingOrStartsLessThanEqualAndEndsGreaterThanEqualOrderByStartsAsc(name, endDate, startDate);
+        List<Holiday> filteredHoliday =holidaysRepository.findAllHolidaysByDateAndName(name, endDate, startDate);
+
+        for (Holiday holiday : filteredHoliday) {
+
+            if (holiday.isRepeats()) {
+                long i = startDate.getYear() - holiday.getStarts().getYear();
+                holiday.setStarts(holiday.getStarts().plusYears(i));
+                holiday.setEnds(holiday.getEnds().plusYears(i));
+            }
+            newHolidayList.add(holiday);
+        }
+        return newHolidayList.stream()
+                .filter(dateS -> dateS.getStarts().isAfter(startDate)
+                        && dateS.getEnds().isBefore(endDate))
+                .collect(Collectors.toList());
+       // return holidaysRepository.findAllHolidaysByDateAndName(name, endDate, startDate);
     }
 
     public Holiday createHoliday(Holiday holiday) {
 
-        if (holiday.getName() == null ||holiday.getName().isEmpty()){
+        if (holiday.getName() == null || holiday.getName().isEmpty()) {
             throw new ScheduleValidationException("Name cannot be empty", "name",
                     "Name is empty", holiday.getName());
         }
-           if ( holiday.getStarts() == null){
-               throw new ScheduleValidationException("Start date cannot be empty", "date",
-                       "Date is empty", "Start date");
-           }
-           if( holiday.getEnds() == null) {
+        if (holiday.getStarts() == null) {
+            throw new ScheduleValidationException("Start date cannot be empty", "date",
+                    "Date is empty", "Start date");
+        }
+        if (holiday.getEnds() == null) {
             throw new ScheduleValidationException("End date cannot be empty", "date",
                     "Date is empty", "End date");
         }
-//           if(holiday.isRepeats()){
-//
-//               for(long i = 1; i<5; i++){
-//                   Holiday newHoliday = new Holiday();
-//                   newHoliday.setName(holiday.getName());
-//                   newHoliday.setStarts(holiday.getStarts().plusYears(i));
-//                   newHoliday.setEnds(holiday.getEnds().plusYears(i));
-//                   newHoliday.setRepeats(holiday.isRepeats());
-//                   holidaysRepository.save(newHoliday);
-//
-//               }
-//           }
-
-//           newHoliday.setName(holiday.getName());
-//           newHoliday.setStarts(holiday.getStarts());
-//           newHoliday.setEnds(holiday.getEnds());
-//           newHoliday.setRepeats(holiday.isRepeats());
 
         return holidaysRepository.save(holiday);
     }

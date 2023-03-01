@@ -10,7 +10,6 @@ import {
   OutlinedInput,
 } from "@mui/material";
 import ClearIcon from "@mui/icons-material/Clear";
-// import { Margin } from "@mui/icons-material";
 
 
 
@@ -29,6 +28,7 @@ function EditSubjectPage() {
   const [selectedModule, setSelectedModule] = useState('');
   const [modules, setModules] = useState([]);
   const [moduleError, setModuleError] = useState(false);
+  const [showModuleMenuItem, setShowModuleMenuItem] = useState(true);
 
   const fetchSubject = () => {
     fetch("/api/v1/subjects/" + params.id)
@@ -123,7 +123,6 @@ function EditSubjectPage() {
     <div className="mx-3">
       <h2 className="my-5">Redaguoti dalyką</h2>
 
-
       <Collapse in={success}>
         <Alert
           onClose={() => {
@@ -150,14 +149,16 @@ function EditSubjectPage() {
         <form noValidate>
           <div className="row">
             <div className="col-md-4 mb-2 mb-md-0 fw-bold">
-              <label htmlFor="edit-module-number-with-error">Pavadinimas *</label>
+              <label htmlFor="subject-name">
+                Pavadinimas *
+              </label>
             </div>
             <div className="col-md-8 mb-2 mb-md-0">
               <TextField
                 error={!!nameError}
                 onChange={(e) => updateProperty("name", e)}
                 value={subject.name}
-                id="create-subject-number-with-error"
+                id="subject-name"
                 label=""
                 helperText="Pavadinimas privalomas"
                 className="form-control mb-3"
@@ -169,8 +170,10 @@ function EditSubjectPage() {
             </div>
           </div>
           <div className="row">
-            <div className="col-md-4 mb-2 mb-md-0 fw-bold" >
-              <label htmlFor="edit-module-description-with-error">Aprašymas *</label>
+            <div className="col-md-4 mb-2 mb-md-0 fw-bold">
+              <label htmlFor="subject-description">
+                Aprašymas *
+              </label>
             </div>
             <div className="col-md-8 mb-2">
               <TextField
@@ -186,45 +189,50 @@ function EditSubjectPage() {
                 disabled={subject.deleted}
                 InputLabelProps={{ shrink: true }}
                 required
-
               />
             </div>
-            </div>
+          </div>
           <div className="row">
-            <div className="col-md-4 mb-2 mb-md-0 fw-bold" >
+            <div className="col-md-4 mb-2 mb-md-0 fw-bold">
               <label htmlFor="add-module">Modulis</label>
             </div>
             <div className="col-md-8 mb-2">
               <FormControl fullWidth size="small" className="mb-3">
-                <InputLabel id="select-module-label">
-                  {subject.module?.name}
-                </InputLabel>
                 <Select
-                  labelId="select-module-label"
+                  labelId="add-module"
                   id="add-select-module"
                   fullWidth
                   value={selectedModule}
                   disabled={subject.deleted}
-                  // defaultValue={"default"}
+                  displayEmpty
                   onChange={(e) => setSelectedModule(e.target.value)}
+                  onOpen={() => {
+                    setShowModuleMenuItem(false);
+                  }}
+                  onClose={() => {
+                    setShowModuleMenuItem(true);
+                  }}
+                >
+                  <MenuItem
+                    value=""
+                    style={{ display: showModuleMenuItem ? "block" : "none" }}
                   >
-                  {/* <MenuItem value='' disabled>{subject.module?.name}</MenuItem> */}
-                  {
-                    modules?.map((mod) => (
-                      <MenuItem
-                        key={mod.id}
-                        value={mod.id}
-                        disabled={mod.deleted}
-                      >
-                        {mod.name}
-                      </MenuItem>
-                    ))}
+                    {subject.module?.name}
+                  </MenuItem>
+                  {modules?.map((mod) => (
+                    <MenuItem
+                      key={mod.id}
+                      value={mod.id}
+                      disabled={mod.deleted}
+                    >
+                      {mod.name}
+                    </MenuItem>
+                  ))}
                 </Select>
               </FormControl>
             </div>
           </div>
-          
-          
+
           {/* ///////////// */}
           <div className="row">
             <div className="col-md-4 mb-2 mb-md-0 fw-bold">
@@ -241,7 +249,6 @@ function EditSubjectPage() {
                   onClick={(e) => deleteRoom(e.target.value)}
                   key={room.id}
                   id={room.id}
-
                 >
                   {room.name}{" "}
                   <ClearIcon color="disabled" sx={{ fontSize: 12 }} />
@@ -252,20 +259,19 @@ function EditSubjectPage() {
 
           <div className="row">
             <div className="col-md-4 mb-2 mb-md-0 fw-bold">
-              <label htmlFor="edit-room">Kabinetai</label>
+              <label htmlFor="add-select-room">Pridėti kabinetą</label>
             </div>
             <div className="col-md-8 mb-2">
               <FormControl fullWidth size="small" className="mb-3">
-                <InputLabel id="select-room-label">Pridėti kabinetą</InputLabel>
+                {/* <InputLabel id="select-room-label">Pridėti kabinetą</InputLabel> */}
                 <Select
                   disabled={subject.deleted}
                   labelId="select-room-label"
                   InputLabelProps={{ shrink: true }}
                   id="add-select-room"
-                  label="Pridėti dalyką"
+                  // label="Pridėti dalyką"
                   fullWidth
                   value={selectedRoom}
-
                   onChange={(e) => setSelectedRoom(e.target.value)}
                 >
                   {rooms?.map((room) => (
@@ -294,37 +300,27 @@ function EditSubjectPage() {
             </div>
             <div className="col-md-8 mb-2 mb-md-0">{subject.last_Updated}</div>
           </div>
-
         </form>
       </div>
       <div>
-
-        <button type="submit"
+        <button
+          type="submit"
           className="btn btn-primary me-2"
           onClick={editsubject}
-        // disabled={!changed}
+          // disabled={!changed}
         >
-
           Redaguoti
         </button>
         {subject.deleted ? (
-          <button
-            className="btn btn-secondary me-2"
-            onClick={handleRestore}
-          >
+          <button className="btn btn-secondary me-2" onClick={handleRestore}>
             Atstatyti
           </button>
         ) : (
-          <button
-            className="btn btn-danger me-2"
-            onClick={handleDelete}
-
-          >
+          <button className="btn btn-danger me-2" onClick={handleDelete}>
             Ištrinti
           </button>
         )}
       </div>
-
     </div>
   );
 }

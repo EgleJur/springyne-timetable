@@ -119,104 +119,99 @@ function EditRoomPage() {
         </Alert>
       </Collapse>
       <div className="container-fluid shadow p-3 mb-4 mb-md-5 bg-body rounded">
-      <form noValidate>
+        <form noValidate>
           <div className="row">
             <div className="col-md-4 mb-2 mb-md-0 fw-bold">
-                <label htmlFor="edit-room-name-with-error">
-                  Pavadinimas *
-                </label>
-              </div>
-              <div className="col-md-8 mb-2 mb-md-0">
-                <TextField
-                  error={!!nameError}
-                  onChange={(e) => updateProperty("name", e)}
-                  value={room.name}
-                  id="edit-room-name-with-error"
-                  // label="Pavadinimas"
-                  helperText="Pavadinimas privalomas"
-                  className="form-control"
-                  size="small"
-                  InputLabelProps={{ shrink: true }}
-                  disabled={room.deleted}
-                  required
-                />
-              </div>
+              <label htmlFor="edit-room-name-with-error">Pavadinimas *</label>
             </div>
-            <div className="row">
-            <div className="col-md-4 mb-2 mb-md-0 fw-bold">
-                <label htmlFor="edit-room-building-with-error">Pastatas *</label>
-              </div>
-              <div className="col-md-8 mb-2">
-                <TextField
-                  error={!!buildingError}
-                  onChange={(e) => updateProperty("building", e)}
-                  value={room.building}
-                  id="create-room-building-with-error"
-                  // label="Pastatas"
-                  helperText="Pastatas privalomas"
-                  className="form-control"
-                  size="small"
-                  InputLabelProps={{ shrink: true }}
-                  disabled={room.deleted}
-                  required
-                />
-              </div>
+            <div className="col-md-8 mb-2 mb-md-0">
+              <TextField
+                error={!!nameError}
+                onChange={(e) => updateProperty("name", e)}
+                value={room.name}
+                id="edit-room-name-with-error"
+                // label="Pavadinimas"
+                helperText="Pavadinimas privalomas"
+                className="form-control"
+                size="small"
+                InputLabelProps={{ shrink: true }}
+                disabled={room.deleted}
+                required
+              />
+            </div>
           </div>
           <div className="row">
             <div className="col-md-4 mb-2 mb-md-0 fw-bold">
-                <label htmlFor="edit-room-description">Aprašymas</label>
-                </div>
+              <label htmlFor="edit-room-building-with-error">Pastatas *</label>
+            </div>
             <div className="col-md-8 mb-2">
-                <TextField
-                  // error={!!buildingError}
-                  onChange={(e) => updateProperty("description", e)}
-                  value={room.description}
-                  id="create-room-description"
-                  // label="Aprašymas"
-                  helperText=""
-                  className="form-control"
-                  size="small"
-                  InputLabelProps={{ shrink: true }}
-                  disabled={room.deleted}
-                  // required
-                />
-              </div>
+              <TextField
+                error={!!buildingError}
+                onChange={(e) => updateProperty("building", e)}
+                value={room.building}
+                id="edit-room-building-with-error"
+                // label="Pastatas"
+                helperText="Pastatas privalomas"
+                className="form-control"
+                size="small"
+                InputLabelProps={{ shrink: true }}
+                disabled={room.deleted}
+                required
+              />
             </div>
-            </form>
-            <div className="row mb-md-4">
-              <div className="col-md-4 mb-2 mb-md-0 fw-bold">Būsena</div>
-              <div className="col-md-8 mb-2 mb-md-0">
-                {room.deleted ? "Kabinetas ištrintas" : "Aktyvus"}
-                </div>
+          </div>
+          <div className="row">
+            <div className="col-md-4 mb-2 mb-md-0 fw-bold">
+              <label htmlFor="edit-room-description">Aprašymas</label>
             </div>
-            <div className="row mb-md-4">
-              <div className="col-md-4 mb-2 mb-md-0 fw-bold">
-                Paskutinį kartą modifikuotas
-                </div>
-              <div className="col-md-8 mb-2 mb-md-0">
-                {room.lastModifiedDate}
-                </div>
+            <div className="col-md-8 mb-2">
+              <TextField
+                // error={!!buildingError}
+                onChange={(e) => updateProperty("description", e)}
+                value={room.description}
+                id="edit-room-description"
+                // label="Aprašymas"
+                helperText=""
+                className="form-control"
+                size="small"
+                InputLabelProps={{ shrink: true }}
+                disabled={room.deleted}
+                // required
+              />
             </div>
-            </div>
-        <button
-          type="submit"
-          className="btn btn-primary me-2"
-          onClick={editRoom}
-          // disabled={!changed}
-        >
-          Redaguoti
-        </button>
+          </div>
+        </form>
+        <div className="row mb-md-4">
+          <div className="col-md-4 mb-2 mb-md-0 fw-bold">Būsena</div>
+          <div className="col-md-8 mb-2 mb-md-0">
+            {room.deleted ? "Kabinetas ištrintas" : "Aktyvus"}
+          </div>
+        </div>
+        <div className="row mb-md-4">
+          <div className="col-md-4 mb-2 mb-md-0 fw-bold">
+            Paskutinį kartą modifikuotas
+          </div>
+          <div className="col-md-8 mb-2 mb-md-0">{room.lastModifiedDate}</div>
+        </div>
+      </div>
+      <button
+        type="submit"
+        className="btn btn-primary me-2"
+        onClick={editRoom}
+        // disabled={!changed}
+      >
+        Redaguoti
+      </button>
 
-        {room.deleted ? (
-          <button className="btn btn-secondary me-2" onClick={handleRestore}>
-            Atstatyti
-          </button>
-        ) : (
-          <button className="btn btn-danger me-2" onClick={handleDelete}>
-            Ištrinti
-          </button>
-          
-        )}
+      {room.deleted ? (
+        <button className="btn btn-secondary me-2" onClick={handleRestore}>
+          Atstatyti
+        </button>
+      ) : (
+        <button className="btn btn-danger me-2" onClick={handleDelete}>
+          Ištrinti
+        </button>
+      )}
     </div>
   );
 }

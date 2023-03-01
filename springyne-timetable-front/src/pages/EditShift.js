@@ -105,7 +105,6 @@ function EditShiftPage() {
           Įrašas sėkmingai ištrintas
         </Alert>
       </Collapse>
-
       <Collapse in={restored}>
         <Alert
           onClose={() => {
@@ -140,89 +139,88 @@ function EditShiftPage() {
         </Alert>
       </Collapse>
       <div className="container-fluid shadow p-3 mb-4 mb-md-5 bg-body rounded">
-      <form noValidate>
-      <div className="row">
-      <div className="col-md-4 mb-2 mb-md-0 fw-bold">
-      <label htmlFor="edit-module-number-with-error">Pavadinimas *</label>
-        </div>
-        <div className="col-md-8 mb-2 mb-md-0">
-
-        <TextField
-          error={!!nameError}
-          onChange={(e) => updateProperty("name", e)}
-          value={shift.name}
-          id="create-module-number-with-error"
-          label=""
-          helperText="Pavadinimas turi būti unikalus ir yra privalomas"
-          className="form-control mb-3"
-          size="small"
-          disabled={shift.visible === 0}
-          InputLabelProps={{ shrink: true }}
-          required
-        />
-        </div>
+        <form noValidate>
+          <div className="row">
+            <div className="col-md-4 mb-2 mb-md-0 fw-bold">
+              <label htmlFor="edit-module-number-with-error">
+                Pavadinimas *
+              </label>
+            </div>
+            <div className="col-md-8 mb-2 mb-md-0">
+              <TextField
+                error={!!nameError}
+                onChange={(e) => updateProperty("name", e)}
+                value={shift.name}
+                id="edit-module-number-with-error"
+                label=""
+                helperText="Pavadinimas turi būti unikalus ir yra privalomas"
+                className="form-control mb-3"
+                size="small"
+                disabled={shift.visible === 0}
+                InputLabelProps={{ shrink: true }}
+                required
+              />
+            </div>
           </div>
           <div className="row">
             <div className="col-md-4 mb-2 mb-md-0 fw-bold">
-        <label htmlFor="starts-select" className="me-2">
-          Pradžia - Pabaiga
-        </label>
-        </div>
+              <label htmlFor="starts-select" className="me-2">
+                Pradžia - Pabaiga
+              </label>
+            </div>
             <div className="col-md-8 mb-2">
-        <Select
-          title="Pradžia"
-          id="starts-select"
-          error={!!numberError}
-          value={shift.starts}
-          size="small"
-          className="me-2"
-          disabled={shift.visible === 0}
-          onChange={(e) => updateProperty("starts", e)}
-        >
-          <MenuItem value="1">1</MenuItem>
-          <MenuItem value="2">2</MenuItem>
-          <MenuItem value="3">3</MenuItem>
-          <MenuItem value="4">4</MenuItem>
-          <MenuItem value="5">5</MenuItem>
-          <MenuItem value="6">6</MenuItem>
-          <MenuItem value="7">7</MenuItem>
-          <MenuItem value="8">8</MenuItem>
-          <MenuItem value="9">9</MenuItem>
-          <MenuItem value="10">10</MenuItem>
-          <MenuItem value="11">11</MenuItem>
-          <MenuItem value="12">12</MenuItem>
-          <MenuItem value="13">13</MenuItem>
-          <MenuItem value="14">14</MenuItem>
-        </Select>
-        
-        
-        <Select
-          title="Pabaiga"
-          id="ends-select"
-          error={!!numberError}
-          value={shift.ends}
-          size="small"
-          className="me-2"
-          disabled={shift.visible === 0}
-          onChange={(e) => updateProperty("ends", e)}
-        >
-          <MenuItem value="1">1</MenuItem>
-          <MenuItem value="2">2</MenuItem>
-          <MenuItem value="3">3</MenuItem>
-          <MenuItem value="4">4</MenuItem>
-          <MenuItem value="5">5</MenuItem>
-          <MenuItem value="6">6</MenuItem>
-          <MenuItem value="7">7</MenuItem>
-          <MenuItem value="8">8</MenuItem>
-          <MenuItem value="9">9</MenuItem>
-          <MenuItem value="10">10</MenuItem>
-          <MenuItem value="11">11</MenuItem>
-          <MenuItem value="12">12</MenuItem>
-          <MenuItem value="13">13</MenuItem>
-          <MenuItem value="14">14</MenuItem>
-        </Select>
-        
-        </div>
+              <Select
+                title="Pradžia"
+                id="starts-select"
+                error={!!numberError}
+                value={shift.starts}
+                size="small"
+                className="me-2"
+                disabled={shift.visible === 0}
+                onChange={(e) => updateProperty("starts", e)}
+              >
+                <MenuItem value="1">1</MenuItem>
+                <MenuItem value="2">2</MenuItem>
+                <MenuItem value="3">3</MenuItem>
+                <MenuItem value="4">4</MenuItem>
+                <MenuItem value="5">5</MenuItem>
+                <MenuItem value="6">6</MenuItem>
+                <MenuItem value="7">7</MenuItem>
+                <MenuItem value="8">8</MenuItem>
+                <MenuItem value="9">9</MenuItem>
+                <MenuItem value="10">10</MenuItem>
+                <MenuItem value="11">11</MenuItem>
+                <MenuItem value="12">12</MenuItem>
+                <MenuItem value="13">13</MenuItem>
+                <MenuItem value="14">14</MenuItem>
+              </Select>
+
+              <Select
+                title="Pabaiga"
+                id="ends-select"
+                error={!!numberError}
+                value={shift.ends}
+                size="small"
+                className="me-2"
+                disabled={shift.visible === 0}
+                onChange={(e) => updateProperty("ends", e)}
+              >
+                <MenuItem value="1">1</MenuItem>
+                <MenuItem value="2">2</MenuItem>
+                <MenuItem value="3">3</MenuItem>
+                <MenuItem value="4">4</MenuItem>
+                <MenuItem value="5">5</MenuItem>
+                <MenuItem value="6">6</MenuItem>
+                <MenuItem value="7">7</MenuItem>
+                <MenuItem value="8">8</MenuItem>
+                <MenuItem value="9">9</MenuItem>
+                <MenuItem value="10">10</MenuItem>
+                <MenuItem value="11">11</MenuItem>
+                <MenuItem value="12">12</MenuItem>
+                <MenuItem value="13">13</MenuItem>
+                <MenuItem value="14">14</MenuItem>
+              </Select>
+            </div>
           </div>
           {/* <div className="row">
             <div className="col-md-4 mb-2 mb-md-0 fw-bold">
@@ -257,51 +255,47 @@ function EditShiftPage() {
         </Select>
         </div>
           </div> */}
-        
-        
-          <div className="row">
-            <div className="col-md-4 mb-2 mb-md-0 fw-bold">
-          Būsena
-          </div>
-          <div className="col-md-8 mb-2">
-          {(shift.visible === 1 ? false : true) ? "Pamaina ištrinta" : "Aktyvus"}
-          </div>
+
+          <div className="row mb-md-4">
+            <div className="col-md-4 mb-2 mb-md-0 fw-bold">Būsena</div>
+            <div className="col-md-8 mb-2">
+              {(shift.visible === 1 ? false : true)
+                ? "Pamaina ištrinta"
+                : "Aktyvus"}
+            </div>
           </div>
           <div className="row mb-md-4">
-          <div className="col-md-4 mb-2 mb-md-0 fw-bold">
-        Paskutinį kartą modifikuotas
-        </div>
-        <div className="col-md-8 mb-2 mb-md-0">{shift.lastUpdated}</div>
-        </div>
-      
+            <div className="col-md-4 mb-2 mb-md-0 fw-bold">
+              Paskutinį kartą modifikuotas
+            </div>
+            <div className="col-md-8 mb-2 mb-md-0">{shift.lastUpdated}</div>
+          </div>
         </form>
-        </div>
-        
+      </div>
+      <button
+        type="submit"
+        className="btn btn-primary"
+        onClick={editShift}
+        disabled={shift.visible === 0}
+      >
+        Redaguoti
+      </button>{" "}
+      &nbsp;
+      {(shift.visible === 1 ? false : true) ? (
         <button
-          type="submit"
-          className="btn btn-primary"
-          onClick={editShift}
-          disabled={shift.visible === 0}
+          className="btn btn-outline-secondary me-2"
+          onClick={() => restoreShift(shift)}
         >
-          Redaguoti
-        </button>{" "}
-        &nbsp;
-        {(shift.visible === 1 ? false : true) ? (
-          <button
-            className="btn btn-outline-secondary me-2 my-1"
-            onClick={() => restoreShift(shift)}
-          >
-            Atstatyti
-          </button>
-        ) : (
-          <button
-            className="btn btn-outline-danger me-2 my-1"
-            onClick={() => deleteShift(shift)}
-          >
-            Ištrinti
-          </button>
-        )}
-      
+          Atstatyti
+        </button>
+      ) : (
+        <button
+          className="btn btn-outline-danger me-2"
+          onClick={() => deleteShift(shift)}
+        >
+          Ištrinti
+        </button>
+      )}
     </div>
   );
   

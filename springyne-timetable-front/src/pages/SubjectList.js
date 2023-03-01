@@ -114,7 +114,7 @@ function SubjectListPage() {
 
       <div className="d-flex justify-content-end">
         <div className="me-auto d-flex">
-          <button className="btn btn-primary mb-5">
+          <button className="btn btn-primary mb-5 me-2">
             <Link to="/subjects/create" className="nav-link">
               Pridėti naują dalyką
             </Link>
@@ -166,7 +166,7 @@ function SubjectListPage() {
               <td>{subject.name}</td>
               <td>{subject.module?.name}</td>
               <td>{subject.deleted ? "Ištrintas" : ""}</td>
-              <td className="d-flex justify-content-end">
+              <td className="text-end">
                 <button className="btn btn-outline-primary me-1 my-1 btn-link" title="Žiūrėti">
                   <Link
                     className="nav-link"

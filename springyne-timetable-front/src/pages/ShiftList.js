@@ -92,13 +92,13 @@ function ShiftListPage() {
 
     <div className="d-flex justify-content-end">
       <div className="me-auto d-flex">
-        <button className="btn btn-primary mb-5">
+        <button className="btn btn-primary mb-5 me-2">
           <Link to="/shifts/create" className="nav-link">
             Pridėti naują pamainą
           </Link>
         </button>
       </div>
-        <div className="mb-4">
+        <div className="mb-5">
           <form className="d-flex" role="search">
             <TextField
               onChange={(e) => setSearchName(e.target.value)}
@@ -142,7 +142,7 @@ function ShiftListPage() {
               <td>{shift.ends}</td>
               <td>{shift.lastUpdated}</td>
               <td>{((shift.visible === 1) ? false : true) ? "Ištrintas" : ""}</td>
-              <td className="d-flex justify-content-end">
+              <td className="text-end">
                 <button className="btn btn-outline-primary me-1 my-1 btn-link" title="Redaguoti" 
                 disabled={(shift.visible === 0) ? true : false}>
                   <Link className="nav-link" to={"/shifts/edit/" + shift.id}>

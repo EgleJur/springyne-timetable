@@ -156,20 +156,20 @@ function EditTeacherPage() {
               </label>
             </div>
             <div className="col-md-8 mb-2 mb-md-0">
-              <TextField
-                error={!!nameError}
-                onChange={(e) => updateProperty("name", e)}
-                value={teacher.name}
-                id="teacher-name-with-error"
-                label=""
-                helperText="Vardas ir Pavardė privalomas"
-                className="form-control mb-3"
-                size="small"
-                disabled={teacher.deleted}
-                InputLabelProps={{ shrink: true }}
-                required
-              />
-            </div>
+        <TextField
+          error={!!nameError}
+          onChange={(e) => updateProperty("name", e)}
+          value={teacher.name}
+          id="teacher-name-with-error"
+          label=""
+          helperText="Vardas ir Pavardė privalomi"
+          className="form-control mb-3"
+          size="small"
+          disabled={teacher.deleted}
+          InputLabelProps={{ shrink: true }}
+          required
+        />
+        </div>
           </div>
           <div className="row">
             <div className="col-md-4 mb-2 mb-md-0 fw-bold">
@@ -232,7 +232,7 @@ function EditTeacherPage() {
           <div className="row">
             <div className="col-md-4 mb-2 mb-md-0 fw-bold">
               <label htmlFor="teacher-hours">
-                Valandų skaičius per savaitę*
+                Valandų skaičius per savaitę *
               </label>
             </div>
             <div className="col-md-8 mb-2 mb-md-0">
@@ -277,7 +277,7 @@ function EditTeacherPage() {
         <div className="row">
           <div className="col-md-4 mb-2 mb-md-0 fw-bold">
             <label htmlFor="edit-module-number-with-error">
-              Pridėti dalyką *
+              Pridėti dalyką
             </label>
           </div>
           <div className="col-md-8 mb-2 mb-md-0">
@@ -309,7 +309,7 @@ function EditTeacherPage() {
 
         <div className="row">
           <div className="col-md-4 mb-2 mb-md-0 fw-bold">
-            <label htmlFor="edit-module-number-with-error">Pamaina *</label>
+            <label htmlFor="edit-module-number-with-error">Pamaina</label>
           </div>
           <div className="col-md-8 mb-2 mb-md-0">
             <FormControl fullWidth size="small" className="mb-3">

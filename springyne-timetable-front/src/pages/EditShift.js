@@ -283,14 +283,14 @@ function EditShiftPage() {
       &nbsp;
       {(shift.visible === 1 ? false : true) ? (
         <button
-          className="btn btn-outline-secondary me-2"
+          className="btn btn-secondary me-2"
           onClick={() => restoreShift(shift)}
         >
           Atstatyti
         </button>
       ) : (
         <button
-          className="btn btn-outline-danger me-2"
+          className="btn btn-danger me-2"
           onClick={() => deleteShift(shift)}
         >
           Ištrinti

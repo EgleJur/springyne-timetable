@@ -176,7 +176,7 @@ function TeacherListPage() {
               onChange={(e) => setSearchName(e.target.value)}
               value={searchName}
               id="search-name-input"
-              label="Ieškoti pagal Vardą"
+              label="Ieškoti pagal vardą"
               className="form-control me-2 search-name-input"
               size="small"
               style={{ width: '400px' }}

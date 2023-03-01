@@ -159,7 +159,7 @@ function EditTeacherPage() {
           value={teacher.name}
           id="teacher-name-with-error"
           label=""
-          helperText="Vardas ir Pavardė privalomas"
+          helperText="Vardas ir Pavardė privalomi"
           className="form-control mb-3"
           size="small"
           disabled={teacher.deleted}

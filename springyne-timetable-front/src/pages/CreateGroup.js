@@ -129,7 +129,7 @@ function CreateGroupPage() {
           value={groupYear}
           id="create-group-year-with-error"
           label="Mokslo metai"
-          helperText="Mokslo metai privalomas"
+          helperText="Mokslo metai privalomi"
           className="form-control mb-3"
           size="small"
           required

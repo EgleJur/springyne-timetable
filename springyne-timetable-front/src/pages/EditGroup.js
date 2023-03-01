@@ -167,7 +167,7 @@ function EditGroupPage() {
         value={group.groupYear}
         id="create-group-group-year"
         label=""
-        helperText="Mokslo metai privalomas"
+        helperText="Mokslo metai privalomi"
         className="form-control mb-3"
         size="small"
         disabled={group.deleted}
@@ -178,7 +178,7 @@ function EditGroupPage() {
         </div>
         <div className="row">
           <div className="col-md-4 mb-2 mb-md-0 fw-bold">
-            <label htmlFor="edit-module-number-with-error">Studentai *</label>
+            <label htmlFor="edit-module-number-with-error">Studentų skaičius *</label>
           </div>
           <div className="col-md-8 mb-2 mb-md-0">
           <TextField
@@ -187,7 +187,7 @@ function EditGroupPage() {
         value={group.students}
         id="create-group-students"
         label=""
-        helperText="Studentai privalomas"
+        helperText="Studentų skaičius privalomas"
         className="form-control mb-2"
         size="small"
         disabled={group.deleted}

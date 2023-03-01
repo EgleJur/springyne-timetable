@@ -52,10 +52,16 @@ function EditShiftPage() {
           setFailure(false);
           setNumberError(false);
           setNameError(false);
+          setTimeout(() => {
+            setSuccess(false);
+                   }, 5000);
         } else {
           setNameError(true);
           setFailure(true);
           setSuccess(false);
+          setTimeout(() => {
+            setFailure(false);
+                   }, 5000);
         }
       }).then(fetchShift);
     }
@@ -75,9 +81,11 @@ function EditShiftPage() {
       },
       body: JSON.stringify(shift)
   }).then(fetchShift);
-  
-    setDeleted(true);
-    setRestored(false);
+  setSuccess(true);
+    setFailure(false);
+    setTimeout(() => {
+      setSuccess(false);
+             }, 5000);
   };
   const restoreShift = (shift) => {
     shift.visible = 1;
@@ -88,8 +96,11 @@ function EditShiftPage() {
       },
       body: JSON.stringify(shift)
     }).then(fetchShift);
-    setDeleted(false);
-    setRestored(true);
+    setSuccess(true);
+    setFailure(false);
+    setTimeout(() => {
+      setSuccess(false);
+             }, 5000);
   };
   return (
     <div className="mx-3">

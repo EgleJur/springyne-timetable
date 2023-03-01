@@ -68,6 +68,9 @@ function ProgramListPage() {
     }).then(fetchPrograms);
     setDeleted(true);
     setRestored(false);
+    setTimeout(() => {
+      setDeleted(false);
+             }, 5000);
   };
   const restoreProgram = (id) => {
     fetch(`/api/v1/programs/restore/` + id, {
@@ -75,6 +78,9 @@ function ProgramListPage() {
     }).then(fetchPrograms);
     setDeleted(false);
     setRestored(true);
+    setTimeout(() => {
+      setRestored(false);
+             }, 5000);
   };
 
   return (

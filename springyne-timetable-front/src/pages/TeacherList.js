@@ -85,6 +85,9 @@ function TeacherListPage() {
     }).then(fetchTeachers);
     setDeleted(true);
     setRestored(false);
+    setTimeout(() => {
+      setDeleted(false);
+             }, 5000);
   };
   const restoreTeacher = (id) => {
     fetch(`/api/v1/teachers/restore/` + id, {
@@ -92,6 +95,9 @@ function TeacherListPage() {
     }).then(fetchTeachers);
     setDeleted(false);
     setRestored(true);
+    setTimeout(() => {
+      setRestored(false);
+             }, 5000);
   };
 
   return (

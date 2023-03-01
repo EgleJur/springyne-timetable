@@ -37,10 +37,16 @@ function CreateModulePage() {
           setName("");
           setSuccess(true);
           setFailure(false);
+          setTimeout(() => {
+            setSuccess(false);
+                   }, 5000);
         } else {
           setFailure(true);
           setSuccess(false);
           setNumberError(true);
+          setTimeout(() => {
+            setFailure(false);
+                   }, 5000);
         }
       });
     }

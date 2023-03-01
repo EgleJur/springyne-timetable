@@ -79,9 +79,15 @@ function EditProgramPage() {
           fetchProgram();
           setSelectedSubject("");
           setHours("");
+          setTimeout(() => {
+            setSuccess(false);
+                   }, 5000);
         } else {
           setFailure(true);
           setSuccess(false);
+          setTimeout(() => {
+            setFailure(false);
+                   }, 5000);
         }
       });
     }
@@ -105,6 +111,9 @@ function EditProgramPage() {
     setNameError(false);
     setSubjectError(false);
     setHoursError(false);
+    setTimeout(() => {
+      setSuccess(false);
+             }, 5000);
   };
   const handleRestore = () => {
     fetch(`/api/v1/programs/restore/` + params.id, {
@@ -117,6 +126,9 @@ function EditProgramPage() {
     setNameError(false);
     setSubjectError(false);
     setHoursError(false);
+    setTimeout(() => {
+      setSuccess(false);
+             }, 5000);
   };
 
   return (

@@ -49,6 +49,9 @@ function ShiftListPage() {
   }).then(fetchShifts);
     setDeleted(true);
     setRestored(false);
+    setTimeout(() => {
+      setDeleted(false);
+             }, 5000);
   };
   const restoreShift = (shift) => {
     shift.visible = 1;
@@ -61,6 +64,9 @@ function ShiftListPage() {
     }).then(fetchShifts);
     setDeleted(false);
     setRestored(true);
+    setTimeout(() => {
+      setRestored(false);
+             }, 5000);
   };
 
   return (

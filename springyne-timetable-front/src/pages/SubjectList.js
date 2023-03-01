@@ -75,6 +75,9 @@ function SubjectListPage() {
     }).then(fetchSubjects);
     setDeleted(true);
     setRestored(false);
+    setTimeout(() => {
+      setDeleted(false);
+             }, 5000);
   };
 
   const restoreSubject = (id) => {
@@ -84,6 +87,9 @@ function SubjectListPage() {
     }).then(fetchSubjects);
     setDeleted(false);
     setRestored(true);
+    setTimeout(() => {
+      setRestored(false);
+             }, 5000);
   };
 
   return (

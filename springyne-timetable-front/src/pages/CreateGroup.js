@@ -74,9 +74,15 @@ function CreateGroupPage() {
           setStudents("");
           setSuccess(true);
           setFailure(false);
+          setTimeout(() => {
+            setSuccess(false);
+                   }, 5000);
         } else {
           setFailure(true);
           setSuccess(false);
+          setTimeout(() => {
+            setFailure(false);
+                   }, 5000);
         }
       });
     }

@@ -73,6 +73,9 @@ function RoomListPage() {
     }).then(fectchRooms);
     setDeleted(true);
     setRestored(false);
+    setTimeout(() => {
+      setDeleted(false);
+             }, 5000);
   };
 
   const restoreRoom = (id) => {
@@ -82,6 +85,9 @@ function RoomListPage() {
     }).then(fectchRooms);
     setDeleted(false);
     setRestored(true);
+    setTimeout(() => {
+      setDeleted(setRestored);
+             }, 5000);
   };
 
   return (

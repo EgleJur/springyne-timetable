@@ -85,9 +85,15 @@ function EditTeacherPage() {
           setSuccess(true);
           setFailure(false);
           fetchTeacher();
+          setTimeout(() => {
+            setSuccess(false);
+                   }, 5000);
         } else {
           setFailure(true);
           setSuccess(false);
+          setTimeout(() => {
+            setFailure(false);
+                   }, 5000);
         }
       });
     }
@@ -108,6 +114,9 @@ function EditTeacherPage() {
     setSuccess(true);
     setFailure(false);
     setNameError(false);
+    setTimeout(() => {
+      setSuccess(false);
+             }, 5000);
   };
   const handleRestore = () => {
     fetch(`/api/v1/teachers/restore/` + params.id, {
@@ -118,6 +127,9 @@ function EditTeacherPage() {
     setSuccess(true);
     setFailure(false);
     setNameError(false);
+    setTimeout(() => {
+      setSuccess(false);
+             }, 5000);
   };
 
   return (

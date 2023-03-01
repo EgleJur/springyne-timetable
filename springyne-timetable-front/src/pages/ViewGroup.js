@@ -74,7 +74,7 @@ function ViewGroupPage() {
               <td>{group.groupYear}</td>
             </tr>
             <tr>
-              <th scope="col">Studentai</th>
+              <th scope="col">Studentų skaičius</th>
               <td>{group.students}</td>
             </tr>
             <tr>

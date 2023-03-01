@@ -45,11 +45,17 @@ function EditModulePage() {
           setFailure(false);
           setChanged(false);
           fetchModule();
+          setTimeout(() => {
+            setSuccess(false);
+                   }, 5000);
         } else {
           setFailure(true);
           setSuccess(false);
           setNumberError(true);
           setNameError(false);
+          setTimeout(() => {
+            setFailure(false);
+                   }, 5000);
         }
       });
     }
@@ -73,6 +79,9 @@ function EditModulePage() {
     setNumberError(false);
     setNameError(false);
     setChanged(false);
+    setTimeout(() => {
+      setSuccess(false);
+             }, 5000);
   };
 
   const handleRestore = () => {
@@ -86,6 +95,9 @@ function EditModulePage() {
     setNumberError(false);
     setNameError(false);
     setChanged(false);
+    setTimeout(() => {
+      setSuccess(false);
+             }, 5000);
   };
 
   return (

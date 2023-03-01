@@ -30,6 +30,9 @@ function ViewModulePage() {
       .then((jsonResponse) => setModule(jsonResponse));
     setDeleted(true);
     setRestored(false);
+    setTimeout(() => {
+      setDeleted(false);
+             }, 5000);
   };
 
   const handleRestore = () => {
@@ -40,6 +43,9 @@ function ViewModulePage() {
       .then((jsonResponse) => setModule(jsonResponse));
     setRestored(true);
     setDeleted(false);
+    setTimeout(() => {
+      setRestored(false);
+             }, 5000);
   };
 
   return (

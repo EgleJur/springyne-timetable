@@ -59,6 +59,9 @@ function ModuleListPage() {
     }).then(fetchModules);
     setDeleted(true);
     setRestored(false);
+    setTimeout(() => {
+      setDeleted(false);
+             }, 5000);
   };
   const restoreModule = (id) => {
     fetch(`/api/v1/modules/restore/` + id, {
@@ -66,6 +69,9 @@ function ModuleListPage() {
     }).then(fetchModules);
     setDeleted(false);
     setRestored(true);
+    setTimeout(() => {
+      setRestored(false);
+             }, 5000);
   };
 
   return (

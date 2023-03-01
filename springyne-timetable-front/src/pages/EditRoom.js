@@ -50,11 +50,17 @@ function EditRoomPage() {
           setFailure(false);
           setChanged(false);
           fetchRoom();
+          setTimeout(() => {
+            setSuccess(false);
+                   }, 5000);
         } else {
           setFailure(true);
           setSuccess(false);
           setNameError(true);
           setBuildingError(false);
+          setTimeout(() => {
+            setFailure(false);
+                   }, 5000);
         }
       });
     }
@@ -78,6 +84,9 @@ function EditRoomPage() {
     setNameError(false);
     setBuildingError(false);
     setChanged(false);
+    setTimeout(() => {
+      setSuccess(false);
+             }, 5000);
   };
 
   const handleRestore = () => {
@@ -91,6 +100,9 @@ function EditRoomPage() {
     setNameError(false);
     setBuildingError(false);
     setChanged(false);
+    setTimeout(() => {
+      setSuccess(false);
+             }, 5000);
   };
 
   return (

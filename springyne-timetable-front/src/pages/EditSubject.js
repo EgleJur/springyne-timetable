@@ -82,9 +82,15 @@ function EditSubjectPage() {
           setFailure(false);
           setChanged(false);
           fetchSubject();
+          setTimeout(() => {
+            setSuccess(false);
+                   }, 5000);
         } else {
           setFailure(true);
           setSuccess(false);
+          setTimeout(() => {
+            setFailure(false);
+                   }, 5000);
         }
       });
     }
@@ -107,6 +113,9 @@ function EditSubjectPage() {
     setFailure(false);
     setNameError(false);
     setChanged(false);
+    setTimeout(() => {
+      setSuccess(false);
+             }, 5000);
   };
   const handleRestore = () => {
     fetch(`/api/v1/subjects/restore/` + params.id, {
@@ -118,6 +127,9 @@ function EditSubjectPage() {
     setFailure(false);
     setNameError(false);
     setChanged(false);
+    setTimeout(() => {
+      setSuccess(false);
+             }, 5000);
   };
   return (
     <div className="mx-3">

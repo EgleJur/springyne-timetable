@@ -68,6 +68,9 @@ function GroupListPage() {
     }).then(fetchGroups);
     setDeleted(true);
     setRestored(false);
+    setTimeout(() => {
+      setDeleted(false);
+             }, 5000);
   };
 
   const restoreGroup = (id) => {
@@ -77,6 +80,9 @@ function GroupListPage() {
     }).then(fetchGroups);
     setDeleted(false);
     setRestored(true);
+    setTimeout(() => {
+      setRestored(false);
+             }, 5000);
   };
 
   return (

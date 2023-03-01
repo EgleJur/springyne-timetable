@@ -65,7 +65,7 @@ public class HolidayService {
                 if (holiday.isRepeats()) {
 
                     holiday.setStarts(holiday.getStarts().plusYears(startDate.getYear() - holiday.getStarts().getYear()));
-                    holiday.setEnds(holiday.getEnds().plusYears(endDate.getYear() - holiday.getEnds().getYear()));
+                    holiday.setEnds(holiday.getEnds().plusYears(startDate.getYear() - holiday.getEnds().getYear()));
                 }
                 newHolidayList.add(holiday);
             }

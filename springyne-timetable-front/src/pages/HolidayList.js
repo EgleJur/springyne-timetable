@@ -13,6 +13,8 @@ function HolidayListPage() {
   const [deleted, setDeleted] = useState(false);
   const [dateError, setDateError] = useState("");
 
+  var moment = require('moment'); // require
+moment().format(); 
 
   const JSON_HEADERS = {
     "Content-Type": "application/json",
@@ -25,19 +27,17 @@ function HolidayListPage() {
     if (searchStartDate != "" && searchEndDate === ""
       || searchStartDate === "" && searchEndDate != ""
       || searchStartDate > searchEndDate 
-      || searchStartDate != "" && isNaN(new Date(searchStartDate)) 
-      || searchEndDate != "" && isNaN(new Date(searchEndDate))) {
+      || searchStartDate != "" && isNaN(moment(searchStartDate, "YYYY-MM-DD").isValid()) 
+      || moment(searchStartDate, "YYYY.MM.DD").isValid() || moment(searchStartDate, "YYYY/MM/DD").isValid()
+      || searchEndDate != "" && isNaN(moment(searchStartDate, "YYYY-MM-DD").isValid()) 
+      || moment(searchStartDate, "YYYY.MM.DD").isValid() || moment(searchStartDate, "YYYY/MM/DD").isValid()) {
       setDateError(true);
-      setTimeout(() => {
-        setDeleted(false);
-               }, 4000);
     } else {
       fetch(
         `/api/v1/holidays/search?name=${searchName}&from=${searchStartDate}&to=${searchEndDate}`
       )
         .then((response) => response.json())
-        .then((jsonResponse) => setHolidays(jsonResponse))
-
+        .then((jsonResponse) => setHolidays(jsonResponse));
     }
   };
 
@@ -51,7 +51,7 @@ function HolidayListPage() {
     setDeleted(true);
     setTimeout(() => {
       setDeleted(false);
-             }, 4000);
+             }, 5000);
   };
 
   return (

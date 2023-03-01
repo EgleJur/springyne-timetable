@@ -107,7 +107,7 @@ function GroupListPage() {
 
       <div className="d-flex justify-content-end">
         <div className="me-auto d-flex">
-          <button className="btn btn-primary mb-5">
+          <button className="btn btn-primary mb-5 me-2">
             <Link to="/groups/create" className="nav-link">
               Pridėti naują grupę
             </Link>
@@ -171,7 +171,7 @@ function GroupListPage() {
               <td>{group.groupYear}</td>
               <td>{group.students}</td>
               <td>{group.deleted ? "Ištrintas" : ""}</td>
-              <td className="d-flex justify-content-end">
+              <td className="text-end">
                 <button className="btn btn-outline-primary me-1 my-1 btn-link" title="Žiūrėti">
                   <Link
                     className="nav-link"

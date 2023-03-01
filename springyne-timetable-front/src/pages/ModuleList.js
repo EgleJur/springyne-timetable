@@ -96,7 +96,7 @@ function ModuleListPage() {
       </Collapse>
       <div className="d-flex justify-content-end">
       <div className="me-auto d-flex">
-        <button className="btn btn-primary mb-5">
+        <button className="btn btn-primary mb-5 me-2">
           <Link to="/modules/create" className="nav-link">
             Pridėti naują modulį
           </Link>
@@ -168,7 +168,7 @@ function ModuleListPage() {
               <td>{module.number}</td>
               <td>{module.name}</td>
               <td>{module.deleted ? "Ištrintas" : ""}</td>
-              <td className="d-flex justify-content-end">
+              <td className="justify-content-end text-end">
                 <button className="btn btn-outline-primary me-1 my-1 btn-link" title="Žiūrėti">
                   <Link className="nav-link" to={"/modules/view/" + module.id}>
                     

@@ -154,7 +154,7 @@ function ProgramListPage() {
               <td>{program.name}</td>
               <td>{program.description}</td>
               <td>{program.deleted ? "Ištrintas" : ""}</td>
-              <td className="justify-content-end text-end">
+              <td className="text-end">
                 <button className="btn btn-outline-primary me-1 my-1 btn-link" title="Žiūrėti">
                   <Link
                     className="nav-link"

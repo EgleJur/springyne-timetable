@@ -156,7 +156,7 @@ function GroupListPage() {
             <th>Pavadinimas</th>
             <th>Programa</th>
             <th>Mokslo metai</th>
-            <th>Studentai</th>
+            <th>Studentų skaičius</th>
             <th>Būsena</th>
             <th></th>
           </tr>

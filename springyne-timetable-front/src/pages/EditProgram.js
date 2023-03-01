@@ -207,7 +207,7 @@ function EditProgramPage() {
               {program.subjects?.length === 0 ? (
                 ""
               ) : (
-                <div className="mb-2">Pašalinti dalyką:</div>
+                <div className="mb-2">Pašalinti dalyką</div>
               )}
             </div>
             <div className="col-md-8 mb-2 mb-md-0">

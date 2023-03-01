@@ -119,7 +119,7 @@ function RoomListPage() {
 
       <div className="d-flex justify-content-end">
         <div className="me-auto d-flex">
-          <button className="btn btn-primary mb-5">
+          <button className="btn btn-primary mb-5 me-2">
             <Link to="/rooms/create" className="nav-link">
               Pridėti naują kabinetą
             </Link>
@@ -201,7 +201,7 @@ function RoomListPage() {
               <td>{room.name}</td>
               <td>{room.building}</td>
               <td>{room.deleted ? "Ištrintas" : ""}</td>
-              <td className="d-flex justify-content-end">
+              <td className="text-end">
                 <button className="btn btn-outline-primary me-1 my-1 btn-link" title="Žiūrėti">
                   <Link className="nav-link" to={"/rooms/view/" + room.id}>
                   <VisibilityTwoToneIcon/>

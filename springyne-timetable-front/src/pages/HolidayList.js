@@ -67,7 +67,7 @@ function HolidayListPage() {
 
       <div className="d-flex justify-content-end">
         <div className="me-auto d-flex">
-          <button className="btn btn-primary mb-5">
+          <button className="btn btn-primary mb-5 me-2">
             <Link to="/holidays/create" className="nav-link">
               Pridėti naujas atostogas
             </Link>
@@ -138,7 +138,7 @@ function HolidayListPage() {
               <td>{holiday.starts}</td>
               <td>{holiday.ends}</td>
 
-              <td className="d-flex justify-content-end">
+              <td className="text-end">
 
                 <button
                   className="btn btn-danger me-2 my-1 btn-link" title="Ištrinti"

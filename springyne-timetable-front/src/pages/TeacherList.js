@@ -128,7 +128,7 @@ function TeacherListPage() {
       </Collapse>
       <div className="d-flex justify-content-end">
       <div className="me-auto d-flex">
-        <button className="btn btn-primary mb-5">
+        <button className="btn btn-primary mb-5 me-2">
           <Link to="/teachers/create" className="nav-link">
             Pridėti naują mokytoją
           </Link>
@@ -182,7 +182,7 @@ function TeacherListPage() {
               onChange={(e) => setSearchName(e.target.value)}
               value={searchName}
               id="search-name-input"
-              label="Ieškoti pagal Vardą"
+              label="Ieškoti pagal vardą"
               className="form-control me-2 search-name-input"
               size="small"
               style={{ width: '400px' }}
@@ -234,7 +234,7 @@ function TeacherListPage() {
               </td>
               <td>{teacher.shift.name}</td>
               <td>{teacher.deleted ? "Ištrintas" : ""}</td>
-              <td className="d-flex justify-content-end">
+              <td className="text-end">
   <div className="ms-5">
     <button className="btn btn-outline-primary me-1 my-1 btn-link" title="Žiūrėti">
       <Link

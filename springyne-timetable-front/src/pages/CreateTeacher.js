@@ -136,7 +136,7 @@ function CreateTeacherPage() {
           value={name}
           id="create-teacher-name-with-error"
           label="Vardas ir Pavardė"
-          helperText="Vardas ir Pavardė privalomas"
+          helperText="Vardas ir Pavardė privalomi"
           className="form-control mb-3"
           size="small"
           required

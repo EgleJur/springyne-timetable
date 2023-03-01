@@ -37,6 +37,13 @@ function CreateHolidayPage() {
       if (starts > ends) {
         setStartDateError(true);
         setEndDateError(true);
+        if (starts === "") {
+          setEndDateError(false);
+        }
+        if (ends === "") {
+          setStartDateError(false);
+        }
+        
       }
     } else {
       fetch("/api/v1/holidays/createHoliday/", {
@@ -58,9 +65,15 @@ function CreateHolidayPage() {
           setRepeats(false);
           setSuccess(true);
           setFailure(false);
+          setTimeout(() => {
+            setSuccess(false);
+                   }, 5000);
         } else {
           setFailure(true);
           setSuccess(false);
+          setTimeout(() => {
+            setFailure(false);
+                   }, 5000);
         }
       });
     }

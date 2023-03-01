@@ -28,16 +28,12 @@ function HolidayListPage() {
       || searchStartDate != "" && isNaN(new Date(searchStartDate)) 
       || searchEndDate != "" && isNaN(new Date(searchEndDate))) {
       setDateError(true);
-      setTimeout(() => {
-        setDeleted(false);
-               }, 4000);
     } else {
       fetch(
         `/api/v1/holidays/search?name=${searchName}&from=${searchStartDate}&to=${searchEndDate}`
       )
         .then((response) => response.json())
-        .then((jsonResponse) => setHolidays(jsonResponse))
-
+        .then((jsonResponse) => setHolidays(jsonResponse));
     }
   };
 
@@ -51,7 +47,7 @@ function HolidayListPage() {
     setDeleted(true);
     setTimeout(() => {
       setDeleted(false);
-             }, 4000);
+             }, 5000);
   };
 
   return (

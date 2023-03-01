@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 
 function Navigation() {
+
     return (
       <header className="bg-light">
         <div className="container-xxl">
@@ -23,7 +24,7 @@ function Navigation() {
               >
                 <div className="navbar-nav me-auto mb-2 mb-lg-0">
                   <div className="nav-item">
-                    <Link to="/" className="nav-link">
+                    <Link to="/" className="nav-link" >
                       Pagrindinis
                     </Link>
                   </div>

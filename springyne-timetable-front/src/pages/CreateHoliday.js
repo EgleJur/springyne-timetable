@@ -17,6 +17,10 @@ function CreateHolidayPage() {
   const [endDateError, setEndDateError] = useState("");
   const [success, setSuccess] = useState(false);
   const [failure, setFailure] = useState(false);
+  const [shrink1, setShrink1] = useState(false);
+
+  var moment = require('moment'); // require
+  moment().format();
 
   const createNewRoom = (e) => {
     e.preventDefault();
@@ -43,7 +47,7 @@ function CreateHolidayPage() {
         if (ends === "") {
           setStartDateError(false);
         }
-        
+
       }
     } else {
       fetch("/api/v1/holidays/createHoliday/", {
@@ -65,15 +69,22 @@ function CreateHolidayPage() {
           setRepeats(false);
           setSuccess(true);
           setFailure(false);
+          setShrink1(false);
           setTimeout(() => {
             setSuccess(false);
-                   }, 5000);
+          }, 5000);
         } else {
           setFailure(true);
           setSuccess(false);
+          if (moment(starts, "YYYY-MM-DD").isValid()) {
+            setStartDateError(true);
+          }
+          if (moment(ends, "YYYY-MM-DD").isValid()) {
+            setEndDateError(true);
+          }
           setTimeout(() => {
             setFailure(false);
-                   }, 5000);
+          }, 5000);
         }
       });
     }
@@ -142,6 +153,8 @@ function CreateHolidayPage() {
           className="form-control mb-3"
           size="small"
           required
+          onSelect={() => setShrink1(true)}
+          InputLabelProps={{ shrink: shrink1 }}
         />
 
         <div className="mb-3">

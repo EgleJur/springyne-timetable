@@ -13,6 +13,8 @@ function HolidayListPage() {
   const [deleted, setDeleted] = useState(false);
   const [dateError, setDateError] = useState("");
 
+  var moment = require('moment'); // require
+moment().format(); 
 
   const JSON_HEADERS = {
     "Content-Type": "application/json",
@@ -25,8 +27,10 @@ function HolidayListPage() {
     if (searchStartDate != "" && searchEndDate === ""
       || searchStartDate === "" && searchEndDate != ""
       || searchStartDate > searchEndDate 
-      || searchStartDate != "" && isNaN(new Date(searchStartDate)) 
-      || searchEndDate != "" && isNaN(new Date(searchEndDate))) {
+      || searchStartDate != "" && isNaN(moment(searchStartDate, "YYYY-MM-DD").isValid()) 
+      || moment(searchStartDate, "YYYY.MM.DD").isValid() || moment(searchStartDate, "YYYY/MM/DD").isValid()
+      || searchEndDate != "" && isNaN(moment(searchStartDate, "YYYY-MM-DD").isValid()) 
+      || moment(searchStartDate, "YYYY.MM.DD").isValid() || moment(searchStartDate, "YYYY/MM/DD").isValid()) {
       setDateError(true);
     } else {
       fetch(

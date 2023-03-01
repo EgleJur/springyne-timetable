@@ -23,6 +23,9 @@ function ViewProgramPage() {
       .then((jsonResponse) => setProgram(jsonResponse));
     setDeleted(true);
     setRestored(false);
+    setTimeout(() => {
+      setDeleted(false);
+             }, 5000);
   };
 
   const handleRestore = () => {
@@ -33,6 +36,9 @@ function ViewProgramPage() {
       .then((jsonResponse) => setProgram(jsonResponse));
     setRestored(true);
     setDeleted(false);
+    setTimeout(() => {
+      setRestored(false);
+             }, 5000);
   };
 
   return (

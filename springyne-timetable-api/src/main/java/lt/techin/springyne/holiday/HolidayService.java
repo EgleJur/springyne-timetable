@@ -60,7 +60,7 @@ public class HolidayService {
             LocalDate startDate = LocalDate.parse(from);
             LocalDate endDate = LocalDate.parse(to);
             List<Holiday> filteredHoliday = holidaysRepository.findAllHolidaysByDate(startDate, endDate);
-           // List<Holiday> newHolidayList = new ArrayList<>();
+            // List<Holiday> newHolidayList = new ArrayList<>();
             for (Holiday holiday : filteredHoliday) {
                 if (holiday.isRepeats()) {
 
@@ -71,7 +71,9 @@ public class HolidayService {
             }
             return newHolidayList.stream()
                     .filter(dateS -> dateS.getStarts().isAfter(startDate)
-                            && dateS.getEnds().isBefore(endDate))
+                            && dateS.getEnds().isBefore(endDate)
+                            || dateS.getStarts().isEqual(startDate)
+                            || dateS.getEnds().isEqual(endDate))
                     .collect(Collectors.toList());
 
         } else if (from == null || from.equals("") && to == null || to.equals("")) {
@@ -79,7 +81,7 @@ public class HolidayService {
         }
         LocalDate startDate = LocalDate.parse(from);
         LocalDate endDate = LocalDate.parse(to);
-        List<Holiday> filteredHoliday =holidaysRepository.findAllHolidaysByDateAndName(name, endDate, startDate);
+        List<Holiday> filteredHoliday = holidaysRepository.findAllHolidaysByDateAndName(name, endDate, startDate);
 
         for (Holiday holiday : filteredHoliday) {
 
@@ -92,9 +94,11 @@ public class HolidayService {
         }
         return newHolidayList.stream()
                 .filter(dateS -> dateS.getStarts().isAfter(startDate)
-                        && dateS.getEnds().isBefore(endDate))
+                        && dateS.getEnds().isBefore(endDate)
+                        || dateS.getStarts().isEqual(startDate)
+                        || dateS.getEnds().isEqual(endDate))
                 .collect(Collectors.toList());
-       // return holidaysRepository.findAllHolidaysByDateAndName(name, endDate, startDate);
+        // return holidaysRepository.findAllHolidaysByDateAndName(name, endDate, startDate);
     }
 
     public Holiday createHoliday(Holiday holiday) {

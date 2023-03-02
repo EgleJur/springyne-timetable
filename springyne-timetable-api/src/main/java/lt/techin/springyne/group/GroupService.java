@@ -76,24 +76,24 @@ public class GroupService {
 
         Pageable pageable = PageRequest.of(page, pageSize, Sort.by("deleted").and(Sort.by("name")));
 
-        if (programName == null || programName.isEmpty() || programName.isBlank()) {
-            if (groupYear == null || groupYear.isEmpty() || groupYear.isBlank()) {
-                if(name == null || name.isEmpty() || name.isBlank() || name.equals("")){
+        if (programName == null || programName.equals("")) {
+            if (groupYear == null || groupYear.equals("")) {
+                if (name == null || name.equals("")) {
                     return groupRepository.findAll(pageable);
                 }
                 return groupRepository.findAllByNameIgnoreCaseContaining(name, pageable);
-            } else if (name == null || name.isEmpty() || name.isBlank()) {
+            } else if (name == null || name.equals("")) {
                 return groupRepository.findAllByGroupYearIgnoreCaseContaining(groupYear, pageable);
             }
             return groupRepository.findAllByNameIgnoreCaseContainingOrGroupYearIgnoreCaseContaining(name, groupYear, pageable);
 
-        } else if (groupYear == null || groupYear.isEmpty() || groupYear.isBlank()) {
-            if (name == null || name.isEmpty() || name.isBlank()) {
+        } else if (groupYear == null || groupYear.equals("")) {
+            if (name == null || name.equals("")) {
 
                 return groupRepository.findAllByProgramNameIgnoreCaseContaining(programName, pageable);
             }
             return groupRepository.findAllByNameIgnoreCaseContainingOrProgramNameIgnoreCaseContaining(name, programName, pageable);
-        } else if (name == null || name.isEmpty() || name.isBlank() || name.equals("")) {
+        } else if (name == null || name.equals("")) {
             return groupRepository.findAllByProgramNameIgnoreCaseContainingOrGroupYearIgnoreCaseContaining(programName, groupYear, pageable);
         }
         return groupRepository.findAllByNameIgnoreCaseContainingOrProgramNameIgnoreCaseContainingOrGroupYearIgnoreCaseContaining(name, programName, groupYear, pageable);
@@ -103,19 +103,16 @@ public class GroupService {
         return groupRepository.findById(id);
     }
 
-    public Group addGroup(Long programId,Long shiftId, Group group) {
+    public Group addGroup(Long programId, Long shiftId, Group group) {
 
-       checkGroupNameEmpty(group.getName());
+        checkGroupNameEmpty(group.getName());
         String groupYear = group.getGroupYear();
-        int number = group.getStudents();
-        if (groupYear==null|| groupYear.equals("")) {
+
+        if (groupYear == null || groupYear.equals("")) {
             throw new ScheduleValidationException("Group year cannot be empty", "year",
                     "Year is empty", groupYear);
         }
-        if (String.valueOf(number).isEmpty()) {
-            throw new ScheduleValidationException("Student number cannot be empty", "number",
-                    "Number is empty", String.valueOf(programId));
-        }
+
         checkGroupNameUnique(group.getName());
         if (programId == null || programId.equals("")) {
             throw new ScheduleValidationException("Program id cannot be empty", "id",
@@ -126,7 +123,7 @@ public class GroupService {
                     "Id is empty", String.valueOf(shiftId));
         }
         group.setProgram(getProgramById(programId));
-            group.setShift(getShiftById(shiftId));
+        group.setShift(getShiftById(shiftId));
 
         return groupRepository.save(group);
     }
@@ -134,25 +131,34 @@ public class GroupService {
     public Group edit(Long groupId, Group group, Long shiftId, Long programId) {
 
         checkGroupNameEmpty(group.getName());
+
         Group updatedGroup = getGroupById(groupId);
         if (!updatedGroup.getName().equals(group.getName())) {
             checkGroupNameUnique(group.getName());
-
             updatedGroup.setName(group.getName());
         }
+        if (group.getGroupYear() == null || group.getGroupYear().equals("")) {
+            throw new ScheduleValidationException("Group year cannot be empty", "year",
+                    "Year is empty", group.getGroupYear());
+        }
+        if (shiftId == null) {
+            throw new ScheduleValidationException("Shift id cannot be empty", "id",
+                    "Id is empty", String.valueOf(shiftId));
+        }
 
+        if (programId == null) {
+            throw new ScheduleValidationException("Program id cannot be empty", "id",
+                    "Id is empty", String.valueOf(programId));
+        }
+
+        Program newProgram = getProgramById(programId);
+        updatedGroup.setProgram(newProgram);
+        Shift shiftToAdd = getShiftById(shiftId);
+        updatedGroup.setShift(shiftToAdd);
         updatedGroup.setGroupYear(group.getGroupYear());
         updatedGroup.setStudents(group.getStudents());
 
-        if (shiftId != null) {
-            Shift shiftToAdd = getShiftById(shiftId);
-            updatedGroup.setShift(shiftToAdd);
-        }
 
-        if (programId != null) {
-            Program newProgram = getProgramById(programId);
-            updatedGroup.setProgram(newProgram);
-        }
         return groupRepository.save(updatedGroup);
     }
 

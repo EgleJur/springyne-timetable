@@ -10,8 +10,10 @@ import lt.techin.springyne.program.Program;
 import lt.techin.springyne.shift.Shift;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -20,8 +22,9 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
-import java.nio.charset.StandardCharsets;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -30,6 +33,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
+@ExtendWith(MockitoExtension.class)
 class GroupControllerTest {
     @Autowired
     MockMvc mockMvc;
@@ -50,29 +54,30 @@ class GroupControllerTest {
 
     @Mock
     Group group;
+//    @BeforeEach
+//    public void setup() {
+//        mockMvc = standaloneSetup(new GroupController(groupService)).build();
+//    }
 
     private static final long Id = 1;
 
     @Test
-    void getAllGroupsContainsCorrectDtos() throws Exception {
+    public void testGetAllGroups() {
+        LocalDateTime now = LocalDateTime.now().now();
+        // Given
+        Group group1 = new Group(1L, "22/1", "2022-2023", 15, now, false, program, shift);
+        Group group2 = new  Group(2L, "22/2", "2022-2023", 15, now, false, program, shift);
+        List<Group> groups = Arrays.asList(group1, group2);
 
-        GroupDto testGroupDto1 = new GroupDto("E-22/1", "2022-2023 m.m.", 15);
-        GroupDto testGroupDto2 = new GroupDto("JP-22/1", "2022-2023 m.m.",15);
-        GroupDto testGroupDto3 = new GroupDto("JP-22/2", "2021-2022 m.m.",15);
+        when(groupService.getAllGroups()).thenReturn(groups);
 
-        List<GroupDto> expectedList = new ArrayList<>();
-        expectedList.add(testGroupDto1);
-        expectedList.add(testGroupDto2);
-        expectedList.add(testGroupDto3);
+        // When
+        List<Group> result = groupController.getAllGroups();
 
-        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/groups")
-        ).andExpect(status().isOk()).andReturn();
-
-        List<GroupDto> resultList = objectMapper.readValue(mvcResult.getResponse().getContentAsString(StandardCharsets.UTF_8), new TypeReference<List<GroupDto>>() {
-
-        });
-
-        Assertions.assertTrue(resultList.containsAll(expectedList));
+        // Then
+        assertEquals(groups.size(), result.size());
+        assertEquals(groups.get(0).getName(), result.get(0).getName());
+        assertEquals(groups.get(1).getName(), result.get(1).getName());
     }
 
     @Test
@@ -113,21 +118,45 @@ class GroupControllerTest {
     void addGroupThrowsExceptionWithNullOrEmptyValues() throws Exception {
         GroupDto testGroupDto1 = new GroupDto("", "", 15);
         GroupDto testGroupDto2 = new GroupDto(null, null, 15);
+        Long programId1 = 1L;
+        Long shiftId1 = 2L;
+
+        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/groups/createGroup")
+                .contentType(MediaType.APPLICATION_JSON)
+                .param("programId", String.valueOf(programId1))
+                .param("shiftId", String.valueOf(shiftId1))
+                .content(objectMapper.writeValueAsString(testGroupDto1))).andReturn();
+
+             MvcResult mvcResult2 = mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/groups/createGroup")
+                .contentType(MediaType.APPLICATION_JSON)
+                .param("programId", String.valueOf(programId1))
+                .param("shiftId", String.valueOf(shiftId1))
+                .content(objectMapper.writeValueAsString(testGroupDto2))).andReturn();
 
         String message = "Null or empty values should return bad request status";
 
-        assertEquals(400, performGroupPostBadRequest(testGroupDto1).getResponse().getStatus(), message);
-        assertEquals(400, performGroupPostBadRequest(testGroupDto2).getResponse().getStatus(), message);
+        assertEquals(400, mvcResult.getResponse().getStatus(), message);
+        assertEquals(400, mvcResult2.getResponse().getStatus(), message);
+
     }
 
     @Test
     void addGroupThrowsExceptionWithNonUniqueNameValue() throws Exception {
 
         GroupDto testGroupDto5 = new GroupDto("PT-22/2", "2022-2023m.m.",7);
+        Long programId = 1L;
+        Long shiftId = 2L;
+        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/groups/createGroup")
+                .contentType(MediaType.APPLICATION_JSON)
+                .param("programId", String.valueOf(programId))
+                .param("shiftId", String.valueOf(shiftId))
+                        .content(objectMapper.writeValueAsString(testGroupDto5))).andReturn();
 
-        assertEquals(400, performGroupPostBadRequest(testGroupDto5).getResponse().getStatus(),
+        assertEquals(400, mvcResult.getResponse().getStatus(),
                 "Non unique Group name should return bad request status");
-    }
+
+          }
+
 
     public MvcResult performGroupPostBadRequest(GroupDto groupDto) throws Exception {
 
@@ -137,7 +166,7 @@ class GroupControllerTest {
     }
     @Test
     void deleteGroupSetsDeletedPropertyToTrue() throws Exception {
-        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.patch("/api/v1/groups/delete/4").contentType(MediaType.APPLICATION_JSON))
+        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.patch("/api/v1/groups/delete/1").contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk()).andReturn();
         Group resultGroup = objectMapper.readValue(mvcResult.getResponse().getContentAsString(), new TypeReference<Group>() {});
         Assertions.assertTrue(resultGroup.isDeleted());
@@ -145,7 +174,7 @@ class GroupControllerTest {
 
     @Test
     void restoreGroupSetsDeletedPropertyToFalse() throws Exception {
-        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.patch("/api/v1/groups/restore/4").contentType(MediaType.APPLICATION_JSON))
+        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.patch("/api/v1/groups/restore/1").contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk()).andReturn();
         Group resultGroup = objectMapper.readValue(mvcResult.getResponse().getContentAsString(), new TypeReference<Group>() {});
         Assertions.assertFalse(resultGroup.isDeleted());
@@ -153,7 +182,7 @@ class GroupControllerTest {
 
     @Test
     void editGroupThrowsExceptionWithNonUniqueNameValue() throws Exception {
-        GroupDto testGroupDto = new GroupDto("E-22/1");
+        GroupDto testGroupDto = new GroupDto("PT-22/1", "2022-2023",5);
         MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.patch("/api/v1/groups/edit/2").contentType(MediaType.APPLICATION_JSON).
                 content(objectMapper.writeValueAsString(testGroupDto))).andReturn();
 
@@ -172,10 +201,15 @@ class GroupControllerTest {
     @Test
     void editGroupAllowsSavingWithUniqueName() throws Exception {
 
-        GroupDto testGroupDto = new GroupDto("PT-22/3");
-        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.patch("/api/v1/groups/edit/5").contentType(MediaType.APPLICATION_JSON).
-
-                content(objectMapper.writeValueAsString(testGroupDto))).andReturn();
+        GroupDto testGroupDto = new GroupDto("E-22/1", "2023-2024",5);
+        Long programId = 1L;
+        Long shiftId = 1L;
+        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders
+                .patch("/api/v1/groups/edit/1")
+                .contentType(MediaType.APPLICATION_JSON)
+                .param("programId", String.valueOf(programId))
+                .param("shiftId", String.valueOf(shiftId))
+                .content(objectMapper.writeValueAsString(testGroupDto))).andReturn();
 
         assertEquals(200, mvcResult.getResponse().getStatus(),"Unique value non empty name should return ok status");
     }

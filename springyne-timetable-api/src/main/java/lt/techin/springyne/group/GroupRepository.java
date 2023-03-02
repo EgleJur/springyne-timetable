@@ -5,6 +5,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 @Repository
 public interface GroupRepository extends JpaRepository<Group, Long> {
 
@@ -24,7 +26,8 @@ Page<Group> findAllByNameIgnoreCaseContaining(String name, Pageable pageable);
 
     boolean existsByNameIgnoreCase(String name);
 
+    Optional<Group> findById(Long id);
 
-//    List<Group> findByModuleIdOrderByDeletedAscIdAsc(Long moduleId);
+    //    List<Group> findByModuleIdOrderByDeletedAscIdAsc(Long moduleId);
 //    List<Group> findByDeletedFalseAndModuleIdNotOrModuleIdIsNull(Long moduleId);
 }

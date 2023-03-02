@@ -82,6 +82,7 @@ function CreateHolidayPage() {
           if (moment(ends, "YYYY-MM-DD").isValid()) {
             setEndDateError(true);
           }
+          setEndDate("");
           setTimeout(() => {
             setFailure(false);
           }, 5000);

@@ -124,11 +124,15 @@ class SubjectControllerTest {
 
     @Test
     void editSubjectThrowsExceptionWithNonUniqueNameValue() throws Exception {
-        SubjectDto testSubjectDto5 = new SubjectDto("Tinklapiai", "");
-        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.patch("/api/v1/subjects/edit/1?moduleId=4").contentType(MediaType.APPLICATION_JSON).
-                content(objectMapper.writeValueAsString(testSubjectDto5))).andReturn();
+        SubjectDto testSubjectDto5 = new SubjectDto("Java programavimas", "");
 
-        assertEquals(400, mvcResult.getResponse().getStatus(),"Non unique Subject name should return bad request status");
+        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders
+                .patch("/api/v1/subjects/edit/1")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(testSubjectDto5))).andReturn();
+
+        assertEquals(400, mvcResult.getResponse()
+                .getStatus(),"Non unique Subject name should return bad request status");
     }
     @Test
     void editSubjectThrowsExceptionWithEmptyValues() throws Exception {
@@ -144,9 +148,10 @@ class SubjectControllerTest {
     void editSubjectAllowsSavingWithUniqueName() throws Exception {
 
         SubjectDto testSubjectDto4 = new SubjectDto("Tarnybinės stotys ir operacinės sistemos2","Serveriai, programiniai paketai");
-        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.patch("/api/v1/subjects/edit/4?moduleId=4").contentType(MediaType.APPLICATION_JSON).
-
-                content(objectMapper.writeValueAsString(testSubjectDto4))).andReturn();
+        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders
+                .patch("/api/v1/subjects/edit/4")
+                .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(testSubjectDto4))).andReturn();
 
         assertEquals(200, mvcResult.getResponse().getStatus(),"Unique value non empty name should return ok status");
     }

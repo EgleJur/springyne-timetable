@@ -11,6 +11,7 @@ import org.springframework.data.annotation.LastModifiedDate;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
 @Entity
@@ -26,8 +27,11 @@ public class Group {
     private Long id;
 
     @NotBlank
+    @NotNull
     private String name;
 
+    @NotBlank
+    @NotNull
     @Column(name="group_year")
     private String groupYear;
 

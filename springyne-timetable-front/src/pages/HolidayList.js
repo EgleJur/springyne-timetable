@@ -28,11 +28,9 @@ moment().format();
       || searchStartDate === "" && searchEndDate != ""
       || searchStartDate > searchEndDate 
       || searchStartDate != "" && isNaN(moment(searchStartDate, "YYYY-MM-DD").isValid()) 
-      || moment(searchStartDate, "YYYY.MM.DD").isValid() || moment(searchStartDate, "YYYY/MM/DD").isValid()
-      || searchEndDate != "" && isNaN(moment(searchStartDate, "YYYY-MM-DD").isValid()) 
-      || moment(searchStartDate, "YYYY.MM.DD").isValid() || moment(searchStartDate, "YYYY/MM/DD").isValid()) {
-      setDateError(true);
-    } else {
+     || searchEndDate != "" && isNaN(moment(searchEndDate, "YYYY-MM-DD").isValid()) 
+      ) {setDateError(true);} 
+     else {
       fetch(
         `/api/v1/holidays/search?name=${searchName}&from=${searchStartDate}&to=${searchEndDate}`
       )
@@ -95,7 +93,7 @@ moment().format();
             <TextField
               error={!!dateError}
               onChange={(b) => setSearchStartDate(b.target.value)}
-              value={searchStartDate}
+              value={searchStartDate.replace(/[/,.]/g,"-")}
               id="search-date-from-input"
               label="Data nuo (MMMM-MM-DD)"
               className="form-control me-2"
@@ -106,7 +104,7 @@ moment().format();
             <TextField
               error={!!dateError}
               onChange={(b) => setSearchEndDate(b.target.value)}
-              value={searchEndDate}
+              value={searchEndDate.replace(/[/,.]/g,"-")}
               id="search-date-to-input"
               label="Data iki (MMMM-MM-DD)"
               className="form-control me-2"

@@ -45,7 +45,7 @@ public class GroupServiceTest {
 //        when(group.getShift()).thenReturn(shift);
 //
 //        when(groupRepository.findById(Id)).thenReturn(Optional.of(group));
-//        groupService.edit(1L, group, shift.getId(), program.getId());
+//        groupService.edit(Id, group, null, null);
 //        verify(groupRepository).save(group);
 //    }
 }

@@ -103,6 +103,7 @@ public class HolidayService {
 
     public Holiday createHoliday(Holiday holiday) {
 
+
         if (holiday.getName() == null || holiday.getName().isEmpty()) {
             throw new ScheduleValidationException("Name cannot be empty", "name",
                     "Name is empty", holiday.getName());
@@ -114,6 +115,11 @@ public class HolidayService {
         if (holiday.getEnds() == null) {
             throw new ScheduleValidationException("End date cannot be empty", "date",
                     "Date is empty", "End date");
+        }
+//        holidaysRepository.findAllByNameIgnoreCase(holiday.getName());
+        if(holidaysRepository.findAllByNameIgnoreCase(holiday.getName(), holiday.getStarts(), holiday.getEnds())){
+            throw new ScheduleValidationException("Holiday exists", "name",
+                    "Holiday exists", holiday.getName());
         }
 
         return holidaysRepository.save(holiday);

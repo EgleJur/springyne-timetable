@@ -13,6 +13,11 @@ public interface HolidaysRepository extends JpaRepository<Holiday, Long> {
     boolean existsByNameIgnoreCase(String name);
     List<Holiday> findAllByNameIgnoreCaseContainingOrderByStartsAsc(String name);
 
+    @Query(value = "select case when count(name)> 0 then true else false end from HOLIDAY " +
+            "where lower(NAME) like lower(:NAME) " +
+            "AND STARTS = :STARTS AND ENDS = :ENDS", nativeQuery = true)
+    boolean findAllByNameIgnoreCase(@Param("NAME") String name, @Param("STARTS") LocalDate starts, @Param("ENDS") LocalDate ends);
+
     List<Holiday> findAllByStartsLessThanEqualAndEndsGreaterThanEqualOrderByStartsAsc(LocalDate ends, LocalDate starts);
 
     List<Holiday> findAllByNameIgnoreCaseContainingOrStartsLessThanEqualAndEndsGreaterThanEqualOrderByStartsAsc(String name, LocalDate ends, LocalDate starts);
@@ -32,4 +37,5 @@ public interface HolidaysRepository extends JpaRepository<Holiday, Long> {
             "and ends<=:YEAR_END or lower(name) like %:NAME% " +
             "order by starts asc", nativeQuery = true)
     List<Holiday> findAllHolidaysByDateAndName(@Param("NAME") String name, @Param("YEAR_START") LocalDate starts, @Param("YEAR_END") LocalDate ends );
+
 }

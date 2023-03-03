@@ -1,16 +1,23 @@
 package lt.techin.springyne.group;
 
-import lt.techin.springyne.exception.ScheduleValidationException;
 import lt.techin.springyne.program.Program;
-import lt.techin.springyne.shift.Shift;
 import lt.techin.springyne.program.ProgramRepository;
+import lt.techin.springyne.shift.Shift;
 import lt.techin.springyne.shift.ShiftRepository;
+import lt.techin.springyne.validationUnits.GroupUtils;
+import lt.techin.springyne.validationUnits.ProgramUtils;
+import lt.techin.springyne.validationUnits.ShiftUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.*;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+
+import static lt.techin.springyne.validationUnits.ValidationUtilsNotNull.*;
 
 
 @Service
@@ -24,48 +31,22 @@ public class GroupService {
     @Autowired
     ProgramRepository programRepository;
 
+    GroupUtils groupUtils;
+
+    ProgramUtils programUtils;
+
+    ShiftUtils shiftUtils;
+
 
     public GroupService(GroupRepository groupRepository, ShiftRepository shiftRepository, ProgramRepository programRepository) {
         this.groupRepository = groupRepository;
         this.programRepository = programRepository;
         this.shiftRepository = shiftRepository;
 
-    }
+        groupUtils = new GroupUtils(groupRepository);
+        programUtils = new ProgramUtils(programRepository);
+        shiftUtils = new ShiftUtils(shiftRepository);
 
-    private Group getGroupById(Long id) {
-        return groupRepository.findById(id)
-                .orElseThrow(() -> new ScheduleValidationException("Group does not exist", "id",
-                        "Group not found", String.valueOf(id)));
-    }
-
-    private Shift getShiftById(Long id) {
-        return shiftRepository.findById(id)
-                .orElseThrow(() -> new ScheduleValidationException("Shift does not exist", "id",
-                        "Shift not found", String.valueOf(id)));
-    }
-
-    private Program getProgramById(Long id) {
-        return programRepository.findById(id)
-                .orElseThrow(() -> new ScheduleValidationException("Program does not exist", "id",
-                        "Program not found", String.valueOf(id)));
-    }
-
-    private void checkGroupNameEmpty(String name) {
-        if (name == null || name.equals("")) {
-            throw new ScheduleValidationException("Group name cannot be empty", "name",
-                    "Name is empty", name);
-        }
-    }
-
-    private void checkGroupNameUnique(String name) {
-        if (existsByName(name)) {
-            throw new ScheduleValidationException("Group name must be unique",
-                    "name", "Name already exists", name);
-        }
-    }
-
-    public boolean existsByName(String name) {
-        return groupRepository.existsByNameIgnoreCase(name);
     }
 
     public List<Group> getAllGroups() {
@@ -105,66 +86,49 @@ public class GroupService {
 
     public Group addGroup(Long programId, Long shiftId, Group group) {
 
-        checkGroupNameEmpty(group.getName());
-        String groupYear = group.getGroupYear();
+        isValidByName(group.getName());
+        isValidById(programId);
+        isValidById(shiftId);
 
-        if (groupYear == null || groupYear.equals("")) {
-            throw new ScheduleValidationException("Group year cannot be empty", "year",
-                    "Year is empty", groupYear);
-        }
+        isValidByGroupYear(group.getGroupYear());
 
-        checkGroupNameUnique(group.getName());
-        if (programId == null || programId.equals("")) {
-            throw new ScheduleValidationException("Program id cannot be empty", "id",
-                    "Id is empty", String.valueOf(programId));
-        }
-        if (shiftId == null || shiftId.equals("")) {
-            throw new ScheduleValidationException("Shift id cannot be empty", "id",
-                    "Id is empty", String.valueOf(shiftId));
-        }
-        group.setProgram(getProgramById(programId));
-        group.setShift(getShiftById(shiftId));
+        groupUtils.checkGroupNameUnique(group.getName());
+
+        group.setProgram(programUtils.getProgramById(programId));
+        group.setShift(shiftUtils.getShiftById(shiftId));
 
         return groupRepository.save(group);
     }
 
     public Group edit(Long groupId, Group group, Long shiftId, Long programId) {
 
-        checkGroupNameEmpty(group.getName());
+        isValidByName(group.getName());
+        isValidByGroupYear(group.getGroupYear());
 
-        Group updatedGroup = getGroupById(groupId);
+        Group updatedGroup = groupUtils.getGroupById(groupId);
+
         if (!updatedGroup.getName().equals(group.getName())) {
-            checkGroupNameUnique(group.getName());
+            groupUtils.checkGroupNameUnique(group.getName());
             updatedGroup.setName(group.getName());
         }
-        if (group.getGroupYear() == null || group.getGroupYear().equals("")) {
-            throw new ScheduleValidationException("Group year cannot be empty", "year",
-                    "Year is empty", group.getGroupYear());
+        if (programId != null) {
+            Program program = programUtils.getProgramById(programId);
+            updatedGroup.setProgram(program);
         }
-        if (shiftId == null) {
-            throw new ScheduleValidationException("Shift id cannot be empty", "id",
-                    "Id is empty", String.valueOf(shiftId));
-        }
-
-        if (programId == null) {
-            throw new ScheduleValidationException("Program id cannot be empty", "id",
-                    "Id is empty", String.valueOf(programId));
+        if (shiftId != null) {
+            Shift shift = shiftUtils.getShiftById(shiftId);
+            updatedGroup.setShift(shift);
         }
 
-        Program newProgram = getProgramById(programId);
-        updatedGroup.setProgram(newProgram);
-        Shift shiftToAdd = getShiftById(shiftId);
-        updatedGroup.setShift(shiftToAdd);
         updatedGroup.setGroupYear(group.getGroupYear());
         updatedGroup.setStudents(group.getStudents());
-
 
         return groupRepository.save(updatedGroup);
     }
 
     public Group delete(Long groupId) {
 
-        Group existingGroup = getGroupById(groupId);
+        Group existingGroup = groupUtils.getGroupById(groupId);
         if (!existingGroup.isDeleted()) {
             existingGroup.setDeleted(true);
             return groupRepository.save(existingGroup);
@@ -174,7 +138,7 @@ public class GroupService {
     }
 
     public Group restore(Long id) {
-        var existingGroup = getGroupById(id);
+        var existingGroup = groupUtils.getGroupById(id);
 
         if (existingGroup.isDeleted()) {
             existingGroup.setDeleted(false);

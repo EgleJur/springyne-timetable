@@ -311,31 +311,42 @@ function EditGroupPage() {
         </form>
       </div>
 
+{group.deleted ? (
       <div>
         <button
           type="submit"
           className="btn btn-primary me-2 mt-2 mb-5"
           onClick={editGroup}
-          disabled={group.deleted}
+          disabled
         >
           Redaguoti
         </button>
-        {group.deleted ? (
+         
           <button
             className="btn btn-secondary me-2 mt-2 mb-5"
             onClick={handleRestore}
           >
             Atstatyti
           </button>
+          </div>
         ) : (
+          <div>
+          <button
+          type="submit"
+          className="btn btn-primary me-2 mt-2 mb-5"
+          onClick={editGroup}
+          
+        >
+          Redaguoti
+        </button>
           <button
             className="btn btn-danger me-2 mt-2 mb-5"
             onClick={handleDelete}
           >
             Ištrinti
-          </button>
+          </button> </div>
         )}
-      </div>
+     
     </div>
   );
 }

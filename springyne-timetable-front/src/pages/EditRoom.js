@@ -52,7 +52,7 @@ function EditRoomPage() {
           fetchRoom();
           setTimeout(() => {
             setSuccess(false);
-                   }, 5000);
+          }, 5000);
         } else {
           setFailure(true);
           setSuccess(false);
@@ -60,7 +60,7 @@ function EditRoomPage() {
           setBuildingError(false);
           setTimeout(() => {
             setFailure(false);
-                   }, 5000);
+          }, 5000);
         }
       });
     }
@@ -86,7 +86,7 @@ function EditRoomPage() {
     setChanged(false);
     setTimeout(() => {
       setSuccess(false);
-             }, 5000);
+    }, 5000);
   };
 
   const handleRestore = () => {
@@ -102,7 +102,7 @@ function EditRoomPage() {
     setChanged(false);
     setTimeout(() => {
       setSuccess(false);
-             }, 5000);
+    }, 5000);
   };
 
   return (
@@ -188,7 +188,7 @@ function EditRoomPage() {
                 size="small"
                 InputLabelProps={{ shrink: true }}
                 disabled={room.deleted}
-                // required
+              // required
               />
             </div>
           </div>
@@ -206,23 +206,37 @@ function EditRoomPage() {
           <div className="col-md-8 mb-2 mb-md-0">{room.lastModifiedDate}</div>
         </div>
       </div>
-      <button
-        type="submit"
-        className="btn btn-primary me-2"
-        onClick={editRoom}
-        // disabled={!changed}
-      >
-        Redaguoti
-      </button>
-
       {room.deleted ? (
-        <button className="btn btn-secondary me-2" onClick={handleRestore}>
-          Atstatyti
-        </button>
+        <div>
+          <button
+            type="submit"
+            className="btn btn-primary me-2"
+            onClick={editRoom}
+            disabled
+          >
+            Redaguoti
+          </button>
+
+
+          <button className="btn btn-secondary me-2" 
+          onClick={handleRestore}>
+            Atstatyti
+          </button>
+          </div>
       ) : (
-        <button className="btn btn-danger me-2" onClick={handleDelete}>
-          Ištrinti
-        </button>
+        <div>
+          <button
+            type="submit"
+            className="btn btn-primary me-2"
+            onClick={editRoom}>
+            Redaguoti
+          </button>
+          <button 
+          className="btn btn-danger me-2" 
+          onClick={handleDelete}>
+            Ištrinti
+          </button>
+        </div>
       )}
     </div>
   );

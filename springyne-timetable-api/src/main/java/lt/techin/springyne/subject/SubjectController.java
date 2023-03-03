@@ -88,10 +88,6 @@ public class SubjectController {
 
     }
 
-    //    @PatchMapping("/{subjectId}/addModule/{moduleId}")
-//    public ResponseEntity<Subject> addModuleToSubject(@PathVariable Long subjectId, @PathVariable Long moduleId) {
-//        return ResponseEntity.ok(subjectService.addModuleToSubject(subjectId, moduleId));
-//    }
     @PatchMapping("/{subjectId}/deleteRoom/{roomId}")
     public void deleteRoomFromSubject(@PathVariable Long subjectId,
                                       @PathVariable Long roomId) {

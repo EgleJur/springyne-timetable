@@ -112,13 +112,6 @@ public class SubjectService {
 
         return subjectRepository.save(updatedSubject);
     }
-//    @Transactional
-//    public void deleteRoomFromSubject(Long subjectId, Long roomId) {
-//
-//        Subject getSubject = subjectUtils.getSubjectById(subjectId);
-//        getSubject.getRooms().remove(roomUtils.getRoomById(roomId));
-//
-//    }
 
     @Transactional
     public void deleteRoomFromSubject(Long subjectId, Long roomId) {
@@ -127,7 +120,7 @@ public class SubjectService {
 
         Subject getSubject = subjectUtils.getSubjectById(subjectId);
         getSubject.getRooms().remove(roomToRemove);
-//        subjectRepository.deleteRoomFromSubject(subjectId, roomId);
+
 
     }
 

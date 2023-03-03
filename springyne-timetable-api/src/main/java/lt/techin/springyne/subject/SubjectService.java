@@ -11,6 +11,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import lt.techin.springyne.module.Module;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -149,6 +150,11 @@ public class SubjectService {
             return existingSubject;
         }
     }
-
+    public Subject addModuleToSubject(Long subjectId, Long moduleId) {
+        Module moduleToAdd = moduleUtils.getModuleById(moduleId);
+        Subject updatedSubject = subjectUtils.getSubjectById(subjectId);
+        updatedSubject.setModule(moduleToAdd);
+        return subjectRepository.save(updatedSubject);
+    }
 
 }

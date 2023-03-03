@@ -96,14 +96,6 @@ public class SubjectController {
         return ResponseEntity.ok(subjectService.addModuleToSubject(subjectId, moduleId));
     }
 
-    @PatchMapping("/{subjectId}/deleteRoom/{roomId}")
-    public void deleteRoomFromSubject(@PathVariable Long subjectId, @PathVariable Long roomId) {
-        subjectService.deleteRoomFromSubject(subjectId, roomId);
-    }
-    @PatchMapping("/{subjectId}/addRoom/{roomId}")
-    public void addRoomFromSubject(@PathVariable Long subjectId, @PathVariable Long roomId) {
-        subjectService.addRoomFromSubject(subjectId, roomId);
-    }
 
 
 }

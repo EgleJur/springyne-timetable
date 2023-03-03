@@ -42,16 +42,11 @@ public class GroupService {
         this.groupRepository = groupRepository;
         this.programRepository = programRepository;
         this.shiftRepository = shiftRepository;
+
         groupUtils = new GroupUtils(groupRepository);
-
-       programUtils = new ProgramUtils(programRepository);
-
+        programUtils = new ProgramUtils(programRepository);
         shiftUtils = new ShiftUtils(shiftRepository);
 
-    }
-
-    public boolean existsByName(String name) {
-        return groupRepository.existsByNameIgnoreCase(name);
     }
 
     public List<Group> getAllGroups() {
@@ -95,7 +90,7 @@ public class GroupService {
         isValidById(programId);
         isValidById(shiftId);
 
-       isValidByGroupYear(group.getGroupYear());
+        isValidByGroupYear(group.getGroupYear());
 
         groupUtils.checkGroupNameUnique(group.getName());
 
@@ -116,10 +111,15 @@ public class GroupService {
             groupUtils.checkGroupNameUnique(group.getName());
             updatedGroup.setName(group.getName());
         }
-        Program program = programUtils.getProgramById(programId);
-        Shift shift = shiftUtils.getShiftById(shiftId);
-        updatedGroup.setProgram(program);
-        updatedGroup.setShift(shift);
+        if (programId != null) {
+            Program program = programUtils.getProgramById(programId);
+            updatedGroup.setProgram(program);
+        }
+        if (shiftId != null) {
+            Shift shift = shiftUtils.getShiftById(shiftId);
+            updatedGroup.setShift(shift);
+        }
+
         updatedGroup.setGroupYear(group.getGroupYear());
         updatedGroup.setStudents(group.getStudents());
 

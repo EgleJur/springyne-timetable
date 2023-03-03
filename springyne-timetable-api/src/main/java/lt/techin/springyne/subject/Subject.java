@@ -18,7 +18,6 @@ import java.util.Set;
 @Table(name = "SUBJECT_TABLE")
 @Data
 @AllArgsConstructor
-//@NoArgsConstructor
 @EqualsAndHashCode
 
 public class Subject {

@@ -28,6 +28,5 @@ Page<Group> findAllByNameIgnoreCaseContaining(String name, Pageable pageable);
 
     Optional<Group> findById(Long id);
 
-    //    List<Group> findByModuleIdOrderByDeletedAscIdAsc(Long moduleId);
-//    List<Group> findByDeletedFalseAndModuleIdNotOrModuleIdIsNull(Long moduleId);
+
 }

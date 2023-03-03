@@ -1,6 +1,5 @@
 package lt.techin.springyne.subject;
 
-import lt.techin.springyne.module.Module;
 import lt.techin.springyne.module.ModuleRepository;
 import lt.techin.springyne.room.Room;
 import lt.techin.springyne.room.RoomRepository;
@@ -38,7 +37,9 @@ public class SubjectService {
     RoomUtils roomUtils;
 
 
-    public SubjectService(SubjectRepository subjectRepository, ModuleRepository moduleRepository, RoomRepository roomRepository) {
+    public SubjectService(SubjectRepository subjectRepository,
+                          ModuleRepository moduleRepository,
+                          RoomRepository roomRepository) {
         this.subjectRepository = subjectRepository;
         this.moduleRepository = moduleRepository;
         this.roomRepository = roomRepository;
@@ -59,22 +60,13 @@ public class SubjectService {
 
         if(moduleName == null || moduleName.equals("")) {
             if(name == null || name.equals("")) {
-
                 return subjectRepository.findAll(pageable);
             }
             return subjectRepository.findAllByNameIgnoreCaseContaining(name, pageable);
         } else if (name == null ||  name.equals("")){
             return subjectRepository.findAllByModuleNameIgnoreCaseContaining(moduleName, pageable);
         }
-
         return  subjectRepository.findAllByNameIgnoreCaseContainingOrModuleNameIgnoreCaseContaining(name,moduleName, pageable);
-
-    }
-
-    public Page<Subject> getByModule(String name, int page, int pageSize) {
-
-        Pageable pageable = PageRequest.of(page, pageSize);
-        return subjectRepository.findAllByModuleNameIgnoreCaseContaining(name, pageable);
     }
 
     public Optional<Subject> getById(Long id) {
@@ -82,7 +74,6 @@ public class SubjectService {
     }
 
     public Subject createSubject(Long moduleId, Long roomId, Subject subject) {
-
 
         isValidByName(subject.getName());
         subjectUtils.checkSubjectNameUnique(subject.getName());
@@ -93,9 +84,7 @@ public class SubjectService {
         if (roomId != null) {
             Room roomToAdd = roomUtils.getRoomById(roomId);
             subject.getRooms().add(roomToAdd);
-
         }
-
         return subjectRepository.save(subject);
     }
 
@@ -123,20 +112,25 @@ public class SubjectService {
 
         return subjectRepository.save(updatedSubject);
     }
+//    @Transactional
+//    public void deleteRoomFromSubject(Long subjectId, Long roomId) {
+//
+//        Subject getSubject = subjectUtils.getSubjectById(subjectId);
+//        getSubject.getRooms().remove(roomUtils.getRoomById(roomId));
+//
+//    }
+
     @Transactional
     public void deleteRoomFromSubject(Long subjectId, Long roomId) {
 
+        Room roomToRemove = roomUtils.getRoomById(roomId);
+
         Subject getSubject = subjectUtils.getSubjectById(subjectId);
-        getSubject.getRooms().remove(roomUtils.getRoomById(roomId));
+        getSubject.getRooms().remove(roomToRemove);
+//        subjectRepository.deleteRoomFromSubject(subjectId, roomId);
 
     }
 
-    public Subject createSubjectDto(Subject subject) {
-
-        isValidByName(subject.getName());
-        subjectUtils.checkSubjectNameUnique(subject.getName());
-        return subjectRepository.save(subject);
-    }
 
 
     public Subject delete(Long subjectId) {
@@ -163,11 +157,5 @@ public class SubjectService {
         }
     }
 
-    public Subject addModuleToSubject(Long subjectId, Long moduleId) {
-        Module moduleToAdd = moduleUtils.getModuleById(moduleId);
-        Subject updatedSubject = subjectUtils.getSubjectById(subjectId);
-        updatedSubject.setModule(moduleToAdd);
-        return subjectRepository.save(updatedSubject);
-    }
 
 }

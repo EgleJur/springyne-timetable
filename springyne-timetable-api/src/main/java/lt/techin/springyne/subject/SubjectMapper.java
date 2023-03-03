@@ -9,8 +9,6 @@ public class SubjectMapper {
         subject.setName(subjectDto.getName());
         subject.setDescription(subjectDto.getDescription());
 
-
-
         return subject;
     }
 
@@ -18,11 +16,8 @@ public class SubjectMapper {
 
         SubjectDto subjectDto = new SubjectDto();
 
-
         subjectDto.setName(subject.getName());
         subjectDto.setDescription(subject.getDescription());
-
-
 
         return subjectDto;
     }

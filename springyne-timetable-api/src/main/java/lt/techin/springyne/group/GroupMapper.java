@@ -17,7 +17,6 @@ public class GroupMapper {
 
         GroupDto groupDto = new GroupDto();
 
-
         groupDto.setName(group.getName());
         groupDto.setGroupYear(group.getGroupYear());
         groupDto.setStudents(group.getStudents());

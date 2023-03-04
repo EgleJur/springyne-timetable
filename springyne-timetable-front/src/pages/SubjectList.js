@@ -33,13 +33,6 @@ function SubjectListPage() {
 
   useEffect(fetchSubjects, []);
 
-  const fetchSubjectsByModules = () => {
-    fetch(
-      `/api/v1/subjects/byModule/search?name=${searchModName}&page=${pageNumber}&pageSize=${pageSize}`
-    )
-      .then((response) => response.json())
-      .then((jsonResponse) => setSubjects(jsonResponse));
-  };
 
   const handlePageChange = (e, value) => {
     setPage(value);

@@ -1,6 +1,5 @@
 package lt.techin.springyne.group;
 
-import lt.techin.springyne.exception.ScheduleValidationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
@@ -10,7 +9,6 @@ import java.util.List;
 import java.util.Optional;
 
 import static lt.techin.springyne.group.GroupMapper.toGroup;
-
 import static lt.techin.springyne.group.GroupMapper.toGroupDto;
 import static org.springframework.http.ResponseEntity.ok;
 
@@ -49,10 +47,7 @@ public class GroupController {
     public ResponseEntity<GroupDto> addGroup(@RequestBody GroupDto groupDto,
                                                 @RequestParam Long programId,
                                                 @RequestParam Long shiftId) {
-        if(groupDto.getName()==null){
-            throw new ScheduleValidationException("Group name cannot be empty", "name",
-                    "Name is empty", String.valueOf(groupDto.getName()));
-        }
+
         var createdGroup = groupService.addGroup(programId, shiftId, toGroup(groupDto));
         return ok(toGroupDto(createdGroup));
     }
@@ -63,23 +58,20 @@ public class GroupController {
                                            @RequestParam(required = false) Long programId,
                                            @RequestParam(required = false) Long shiftId)
     {
-        var updatedGroup = groupService.edit(groupId, toGroup(groupDto), shiftId, programId);
 
-        return ok(updatedGroup);
+        return ok(groupService.edit(groupId, toGroup(groupDto), shiftId, programId));
     }
 
     @PatchMapping("/delete/{groupId}")
     public ResponseEntity<Group> deleteGroup(@PathVariable Long groupId) {
 
-        var updatedGroup = groupService.delete(groupId);
-        return ok(updatedGroup);
+        return ok(groupService.delete(groupId));
     }
 
     @PatchMapping("/restore/{groupId}")
     public ResponseEntity<Group> restoreGroup(@PathVariable Long groupId) {
 
-        var restoredGroup = groupService.restore(groupId);
-        return ok(restoredGroup);
+        return ok(groupService.restore(groupId));
 
     }
 

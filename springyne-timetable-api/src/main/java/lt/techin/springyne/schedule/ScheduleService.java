@@ -50,8 +50,25 @@ public class ScheduleService {
 
         Group group = groupRepository.findById(groupId).orElseThrow(() -> new ScheduleValidationException(
                 "Group does not exist", "id", "Group not found", String.valueOf(groupId)));
+
+        List <Schedule> existingGroupSchedules = scheduleRepository.findByGroupId(groupId);
+
+        Schedule overlappingSchedule = existingGroupSchedules.stream().filter((existingSchedule) -> checkOverlappingDateRange(
+                existingSchedule.getStartDate(), existingSchedule.getEndDate(), schedule.getStartDate(), schedule.getEndDate())).
+                findFirst().orElse(null);
+        if (overlappingSchedule != null) {
+            throw new ScheduleValidationException("Schedule start and/or end date cannot overlap with the current schedules of this group",
+                    "start - end date", "Dates overlap", (schedule.getStartDate().toString() + " - " + schedule.getEndDate().toString()));
+        }
+
         schedule.setGroup(group);
 
         return scheduleRepository.save(schedule);
+    }
+
+    public boolean checkOverlappingDateRange(LocalDate startDate1, LocalDate endDate1, LocalDate startDate2, LocalDate endDate2) {
+        return (startDate1.isBefore(endDate2) && startDate1.isAfter(startDate2)) || (endDate1.isBefore(endDate2) && endDate1.isAfter(startDate2))
+                || (startDate2.isBefore(endDate1) && startDate2.isAfter(startDate1)) || (endDate2.isBefore(endDate1) && endDate2.isAfter(endDate1))
+                || startDate1.isEqual(startDate2) || startDate1.isEqual(endDate2) || endDate1.isEqual(startDate2) || endDate1.isEqual(endDate2);
     }
 }

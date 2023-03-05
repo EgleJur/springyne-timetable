@@ -58,23 +58,20 @@ public class GroupController {
                                            @RequestParam(required = false) Long programId,
                                            @RequestParam(required = false) Long shiftId)
     {
-        var updatedGroup = groupService.edit(groupId, toGroup(groupDto), shiftId, programId);
 
-        return ok(updatedGroup);
+        return ok(groupService.edit(groupId, toGroup(groupDto), shiftId, programId));
     }
 
     @PatchMapping("/delete/{groupId}")
     public ResponseEntity<Group> deleteGroup(@PathVariable Long groupId) {
 
-        var updatedGroup = groupService.delete(groupId);
-        return ok(updatedGroup);
+        return ok(groupService.delete(groupId));
     }
 
     @PatchMapping("/restore/{groupId}")
     public ResponseEntity<Group> restoreGroup(@PathVariable Long groupId) {
 
-        var restoredGroup = groupService.restore(groupId);
-        return ok(restoredGroup);
+        return ok(groupService.restore(groupId));
 
     }
 

@@ -1,16 +1,20 @@
-package lt.techin.springyne.subject;
+package lt.techin.springyne.schedule;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class SubjectDto {
+public class ScheduleDto {
 
     private String name;
-    private String description;
 
+    private LocalDate startDate;
+
+    private LocalDate endDate;
 
 }

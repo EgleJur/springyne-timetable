@@ -38,7 +38,9 @@ public class GroupService {
     ShiftUtils shiftUtils;
 
 
-    public GroupService(GroupRepository groupRepository, ShiftRepository shiftRepository, ProgramRepository programRepository) {
+    public GroupService(GroupRepository groupRepository,
+                        ShiftRepository shiftRepository,
+                        ProgramRepository programRepository) {
         this.groupRepository = groupRepository;
         this.programRepository = programRepository;
         this.shiftRepository = shiftRepository;
@@ -53,7 +55,9 @@ public class GroupService {
         return groupRepository.findAll();
     }
 
-    public Page<Group> searchByNamePaged(String name, String programName, String groupYear, int page, int pageSize) {
+    public Page<Group> searchByNamePaged(String name,
+                                         String programName, String groupYear,
+                                         int page, int pageSize) {
 
         Pageable pageable = PageRequest.of(page, pageSize, Sort.by("deleted").and(Sort.by("name")));
 

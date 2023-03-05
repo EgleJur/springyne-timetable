@@ -9,7 +9,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class GroupDto {
 
-    //    private Long id;
     private String name;
     private String groupYear;
     private int students;

@@ -1,6 +1,10 @@
 package lt.techin.springyne.room;
 
 import lt.techin.springyne.exception.ScheduleValidationException;
+import lt.techin.springyne.group.Group;
+import lt.techin.springyne.program.Program;
+import lt.techin.springyne.validationUnits.GroupUtils;
+import lt.techin.springyne.validationUnits.RoomUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
@@ -8,23 +12,20 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 
+import static lt.techin.springyne.validationUnits.ValidationUtilsNotNull.isValidByName;
+
 @Service
 public class RoomService {
 
     @Autowired
     RoomRepository roomRepository;
 
-    private static final ExampleMatcher SEARCH_CONTAINS_NAME = ExampleMatcher.matchingAny()
-            .withMatcher("name", ExampleMatcher.GenericPropertyMatchers.contains().ignoreCase())
-            .withIgnorePaths("id", "deleted","building", "lastModifiedDate");
-
-    private static final ExampleMatcher SEARCH_CONTAINS_BUILDING = ExampleMatcher.matchingAny()
-            .withMatcher("building", ExampleMatcher.GenericPropertyMatchers.contains().ignoreCase())
-            .withIgnorePaths("id", "deleted", "name", "lastModifiedDate");
+    RoomUtils roomUtils;
 
     public RoomService(RoomRepository roomRepository) {
 
         this.roomRepository = roomRepository;
+        roomUtils = new RoomUtils(roomRepository);
     }
 
     public List<Room> getAllRooms() {
@@ -34,42 +35,34 @@ public class RoomService {
 
     public Room addRoom(Room room) {
 
-        if (existsByName(room.getName())) {
-        throw new ScheduleValidationException("Room name must be unique", "name", "Name already exists", room.getName());
-    }
-    return roomRepository.save(room);
-    }
-
-    public boolean existsByName(String name) {
-
-        return roomRepository.existsByNameIgnoreCase(name);
+        return roomRepository.save(room);
     }
 
     public Page<Room> searchByName(String name, int page, int pageSize) {
 
-        Room room = new Room();
-        if(name != null) {
-            room.setName(name);
-        }
-        Example<Room> roomExample = Example.of(room, SEARCH_CONTAINS_NAME);
         Pageable pageable = PageRequest.of(page,pageSize, Sort.by("deleted"));
-        return roomRepository.findAll(roomExample,pageable);
-    }
-
-    public boolean existsByBuilding(String building) {
-
-        return roomRepository.existsByBuildingIgnoreCase(building);
+        return roomRepository.findAllByNameIgnoreCaseContaining(name, pageable);
     }
 
     public Page<Room> searchByBuilding(String building, int page, int pageSize) {
 
-        Room room = new Room();
-        if(building != null) {
-            room.setBuilding(building);
-        }
-        Example<Room> roomExample = Example.of(room, SEARCH_CONTAINS_BUILDING);
         Pageable pageable = PageRequest.of(page,pageSize, Sort.by("deleted"));
-        return roomRepository.findAll(roomExample,pageable);
+        return roomRepository.findAllByBuildingIgnoreCaseContaining(building, pageable);
+    }
+
+    public Page<Room> searchByRoomAndBuildingPaged(String name, String building, int page, int pageSize) {
+
+        Pageable pageable = PageRequest.of(page, pageSize, Sort.by("deleted").and(Sort.by("name")));
+        if(building == null || building.isEmpty() || building.isBlank()) {
+            if(name == null || name.isEmpty()|| name.isBlank() || name.equals("")) {
+                return roomRepository.findAll(pageable);
+            }
+            return roomRepository.findAllByNameIgnoreCaseContaining(name, pageable);
+        } else if (name == null || name.isEmpty()|| name.isBlank() || name.equals("")) {
+            return roomRepository.findAllByBuildingIgnoreCaseContaining(building, pageable);
+        }
+
+        return  roomRepository.findAllByNameIgnoreCaseContainingOrBuildingIgnoreCaseContaining(name, building, pageable);
     }
 
     public Optional<Room> viewRoom(Long id) {
@@ -78,11 +71,15 @@ public class RoomService {
     }
 
     public Room editRoom(Long id, Room room) {
-        Room existingRoom = roomRepository.findById(id)
-                .orElseThrow(() -> new ScheduleValidationException("Room does not exist",
-                        "id", "Room not found", id.toString()));
 
-        existingRoom.setName(room.getName());
+        isValidByName(room.getName());
+        Room existingRoom = roomUtils.getRoomById(id);
+
+        if (!existingRoom.getName().equals(room.getName())) {
+            roomUtils.checkRoomNameUnique(room.getName());
+            existingRoom.setName(room.getName());
+        }
+
         existingRoom.setBuilding(room.getBuilding());
         existingRoom.setDescription(room.getDescription());
 
@@ -90,40 +87,18 @@ public class RoomService {
     }
 
     public Room delete(Long id) {
-        var existingRoom = roomRepository.findById(id)
-                .orElseThrow(() -> new ScheduleValidationException("Room does not exist",
-                        "id", "Room not found", id.toString()));
+
+        Room existingRoom = roomUtils.getRoomById(id);
 
         existingRoom.setDeleted(true);
         return roomRepository.save(existingRoom);
     }
 
     public Room restore(Long id) {
-        var existingRoom = roomRepository.findById(id)
-                .orElseThrow(() -> new ScheduleValidationException("Room does not exist",
-                        "id", "Room not found", id.toString()));
+
+       Room existingRoom = roomUtils.getRoomById(id);
 
         existingRoom.setDeleted(false);
         return roomRepository.save(existingRoom);
     }
-
-    public Page<Room> searchByRoomAndBuildingPaged(String name, String building, int page, int pageSize) {
-
-            Room room = new Room();
-            if (name != null) {
-                room.setName(name);
-            }
-
-            Pageable pageable = PageRequest.of(page, pageSize, Sort.by("deleted").and(Sort.by("name")));
-            if(building == null || building.isEmpty() || building.isBlank()) {
-                Example<Room> roomExample = Example.of(room, SEARCH_CONTAINS_NAME);
-                return roomRepository.findAll(roomExample, pageable);
-            }
-            if(name == null || name.isEmpty()|| name.isBlank() || name.equals("")) {
-
-                return roomRepository.findAllByBuildingIgnoreCaseContaining(building, pageable);
-            }
-            return  roomRepository.findAllByNameIgnoreCaseContainingOrBuildingIgnoreCaseContaining(name,building, pageable);
-
-        }
 }

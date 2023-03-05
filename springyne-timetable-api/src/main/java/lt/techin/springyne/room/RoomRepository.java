@@ -12,7 +12,7 @@ public interface RoomRepository extends JpaRepository<Room, Long> {
 
     boolean existsByNameIgnoreCase(String name);
 
-    boolean existsByBuildingIgnoreCase(String building);
+    Page<Room> findAllByNameIgnoreCaseContaining(String name, Pageable pageable);
 
     Page<Room> findAllByBuildingIgnoreCaseContaining(String building, Pageable pageable);
 

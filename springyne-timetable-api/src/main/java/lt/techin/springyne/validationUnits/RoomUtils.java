@@ -12,6 +12,7 @@ public class RoomUtils {
     RoomRepository roomRepository;
 
     public RoomUtils(RoomRepository roomRepository) {
+
         this.roomRepository = roomRepository;
     }
 
@@ -21,4 +22,14 @@ public class RoomUtils {
                         "Room not found", String.valueOf(id)));
     }
 
+    public boolean existsByName(String name) {
+
+        return roomRepository.existsByNameIgnoreCase(name);
+    }
+
+    public void checkRoomNameUnique(String name) {
+        if (existsByName(name)) {
+            throw new ScheduleValidationException("Room name must be unique", "name", "Name already exists", name);
+        }
+    }
 }

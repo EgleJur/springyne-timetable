@@ -4,10 +4,15 @@ import lt.techin.springyne.exception.ScheduleValidationException;
 import lt.techin.springyne.group.Group;
 import lt.techin.springyne.group.GroupRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ScheduleService {
@@ -70,5 +75,22 @@ public class ScheduleService {
         return (startDate1.isBefore(endDate2) && startDate1.isAfter(startDate2)) || (endDate1.isBefore(endDate2) && endDate1.isAfter(startDate2))
                 || (startDate2.isBefore(endDate1) && startDate2.isAfter(startDate1)) || (endDate2.isBefore(endDate1) && endDate2.isAfter(endDate1))
                 || startDate1.isEqual(startDate2) || startDate1.isEqual(endDate2) || endDate1.isEqual(startDate2) || endDate1.isEqual(endDate2);
+    }
+
+    public Optional<Schedule> getScheduleById(Long scheduleId) {
+        return scheduleRepository.findById(scheduleId);
+    }
+
+    public Page<Schedule> searchByNameDatePaged(String name, LocalDate date, int page, int pageSize) {
+        if (name==null) {
+            name = "";
+        }
+        Pageable pageable = PageRequest.of(page,pageSize, Sort.by("startDate").descending().and(Sort.by("groupId")));
+
+        if (date == null) {
+            return scheduleRepository.findAllByNameIgnoreCaseContaining(name, pageable);
+        } else {
+            return scheduleRepository.findAllByNameIgnoreCaseContainingAndEndDateGreaterThanEqual(name, date, pageable);
+        }
     }
 }

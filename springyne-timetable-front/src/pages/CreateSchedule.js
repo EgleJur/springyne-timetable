@@ -157,14 +157,6 @@ function CreateSchedulePage() {
           </Select>
         </FormControl>
 
-        <LocalizationProvider
-          dateAdapter={AdapterDateFns}
-          adapterLocale={lt}
-          localeText={{
-            previousMonth: "Ankstesnis mėnuo",
-            nextMonth: "Kitas mėnuo",
-          }}
-        >
           <DatePicker
             className="mb-3"
             label="Pradžios data"
@@ -206,7 +198,6 @@ function CreateSchedulePage() {
               />
             )}
           />
-        </LocalizationProvider>
 
         <TextField
           error={!!nameError}

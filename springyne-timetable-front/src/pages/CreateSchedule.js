@@ -2,19 +2,16 @@ import { useState, useEffect } from "react";
 import { Alert, Collapse } from "@mui/material";
 import { TextField } from "@mui/material";
 import { FormControl, MenuItem, Select, InputLabel } from "@mui/material";
-import { LocalizationProvider, DatePicker } from "@mui/x-date-pickers";
-import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
-import { lt } from "date-fns/locale";
+import { DatePicker } from "@mui/x-date-pickers";
 import dayjs from "dayjs";
 
 function CreateSchedulePage() {
   const [name, setName] = useState("");
   const today = dayjs();
-  const [startDate, setStartDate] = useState(null);
-  const [endDate, setEndDate] = useState(null);
+  const [startDateValue, setStartDateValue] = useState(null);
+  const [endDateValue, setEndDateValue] = useState(null);
   const [selectedGroup, setSelectedGroup] = useState("");
   const [groups, setGroups] = useState([]);
-  const [group, setGroup] = useState("");
   const [success, setSuccess] = useState(false);
   const [failure, setFailure] = useState(false);
   const [nameError, setNameError] = useState(false);
@@ -45,10 +42,10 @@ function CreateSchedulePage() {
     if (
       name === "" ||
       selectedGroup === "" ||
-      startDate === null ||
-      endDate === null ||
-      startDate > endDate ||
-      startDate < today
+      startDateValue === null ||
+      endDateValue === null ||
+      startDateValue > endDateValue ||
+      startDateValue < today
     ) {
       if (name === "") {
         setNameError(true);
@@ -56,13 +53,19 @@ function CreateSchedulePage() {
       if (selectedGroup === "") {
         setGroupError(true);
       }
-      if (startDate === null || startDate < today || ((startDate > endDate) && (endDate !== null))) {
+      if (
+        startDateValue === null ||
+        startDateValue < today ||
+        (startDateValue > endDateValue && endDateValue !== null)
+      ) {
         setStartDateError(true);
       }
-      if (endDate === null || endDate < today || endDate < startDate) {
+      if (endDateValue === null || endDateValue < today || endDateValue < startDateValue) {
         setEndDateError(true);
       }
     } else {
+      const startDate = dayjs(startDateValue).format("YYYY-MM-DD");
+      const endDate = dayjs(endDateValue).format("YYYY-MM-DD");
       fetch(`/api/v1/schedules?groupId=${selectedGroup}`, {
         method: "POST",
         headers: {
@@ -76,8 +79,8 @@ function CreateSchedulePage() {
       }).then((result) => {
         if (result.ok) {
           setName("");
-          setStartDate(null);
-          setEndDate(null);
+          setStartDateValue(null);
+          setEndDateValue(null);
           setSelectedGroup("");
           setNameError(false);
           setGroupError(false);
@@ -157,47 +160,49 @@ function CreateSchedulePage() {
           </Select>
         </FormControl>
 
-          <DatePicker
-            className="mb-3"
-            label="Pradžios data"
-            // inputFormat="mmmm-MM-dd"
-            value={startDate}
-            disablePast
-            maxDate={endDate}
-            onChange={(newValue) => {
-              setStartDate(newValue);
-            }}
-            renderInput={(params) => (
-              <TextField
-                fullWidth
-                size="small"
-                required
-                {...params}
-                error={!!startDateError}
-              />
-            )}
-          />
-          <DatePicker
-            className="mb-3"
-            label="Pabaigos data"
-            // inputFormat="yyyy-MM-dd"
-            value={endDate}
-            disablePast
-            minDate={startDate}
-            onChange={(newValue) => {
-              setEndDate(newValue);
-            }}
-            onError={() => setEndDateError(true)}
-            renderInput={(params) => (
-              <TextField
-                fullWidth
-                size="small"
-                required
-                {...params}
-                error={!!endDateError}
-              />
-            )}
-          />
+        <DatePicker
+          className="mb-3"
+          label="Pradžios data"
+          // inputFormat="mmmm-MM-dd"
+          value={startDateValue}
+          disablePast
+          maxDate={endDateValue}
+          onChange={(newValue) => {
+            console.log(newValue);
+            setStartDateValue(newValue);
+          }}
+          renderInput={(params) => (
+            <TextField
+              fullWidth
+              size="small"
+              required
+              {...params}
+              error={!!startDateError}
+            />
+          )}
+        />
+        <DatePicker
+          className="mb-3"
+          label="Pabaigos data"
+          // inputFormat="yyyy-MM-dd"
+          value={endDateValue}
+          disablePast
+          minDate={startDateValue}
+          onChange={(newValue) => {
+            console.log(newValue);
+            setEndDateValue(newValue);
+          }}
+          onError={() => setEndDateError(true)}
+          renderInput={(params) => (
+            <TextField
+              fullWidth
+              size="small"
+              required
+              {...params}
+              error={!!endDateError}
+            />
+          )}
+        />
 
         <TextField
           error={!!nameError}
@@ -205,7 +210,7 @@ function CreateSchedulePage() {
             setName(e.target.value);
           }}
           value={name}
-          id="program-name"
+          id="schedule-name"
           label="Pavadinimas"
           helperText="Pavadinimas privalomas"
           className="form-control mb-3"

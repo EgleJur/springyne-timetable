@@ -2,6 +2,7 @@ package lt.techin.springyne.controller;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lt.techin.springyne.schedule.Schedule;
 import lt.techin.springyne.schedule.ScheduleDto;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -18,6 +19,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -115,5 +117,23 @@ public class ScheduleControllerTest {
                 content(objectMapper.writeValueAsString(testScheduleDto1))).andReturn();
 
         assertEquals(400,mvcResult1.getResponse().getStatus(), message);
+    }
+
+    @Test
+    void getScheduleByIdReturnsCorrectDto() throws Exception {
+        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/schedules/1")
+        ).andExpect(status().isOk()).andReturn();
+        ScheduleDto result = objectMapper.readValue(mvcResult.getResponse().getContentAsString(StandardCharsets.UTF_8), new TypeReference<ScheduleDto>() {
+        });
+        assertEquals(result.getName(), "E-22/1 Java programuotojas (-a) Rytinė","Get schedule by Id should return schedule with correct name");
+    }
+
+    @Test
+    void getScheduleByIdReturnsEmptyWithInvalidId() throws Exception {
+        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/schedules/0")
+        ).andReturn();
+        Optional<Schedule> result = objectMapper.readValue(mvcResult.getResponse().getContentAsString(StandardCharsets.UTF_8), new TypeReference<Optional<Schedule>>() {
+        });
+        Assertions.assertTrue(result.isEmpty(),"Get schedule by invalid Id should return empty");
     }
 }

@@ -85,7 +85,7 @@ public class ScheduleService {
         if (name==null) {
             name = "";
         }
-        Pageable pageable = PageRequest.of(page,pageSize, Sort.by("startDate").descending().and(Sort.by("groupId")));
+        Pageable pageable = PageRequest.of(page,pageSize, Sort.by("startDate").descending().and(Sort.by("id")));
 
         if (date == null) {
             return scheduleRepository.findAllByNameIgnoreCaseContaining(name, pageable);

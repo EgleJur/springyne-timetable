@@ -7,7 +7,7 @@ import dayjs from "dayjs";
 
 function CreateSchedulePage() {
   const [name, setName] = useState("");
-  const today = dayjs();
+  const today = dayjs().format("YYYY-MM-DD");
   const [startDateValue, setStartDateValue] = useState(null);
   const [endDateValue, setEndDateValue] = useState(null);
   const [selectedGroup, setSelectedGroup] = useState("");

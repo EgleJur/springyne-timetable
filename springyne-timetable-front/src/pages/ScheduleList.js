@@ -106,7 +106,6 @@ function ScheduleListPage() {
               className="mb-3 me-2"
               label="Ieškoti pagal datą"
               value={searchDate}
-              disablePast
               onChange={(newValue) => {
                 console.log(dayjs(newValue).format("YYYY-MM-DD"));
                 setSearchDate(newValue);

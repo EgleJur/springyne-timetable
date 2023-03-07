@@ -17,6 +17,9 @@ function ScheduleListPage() {
   const today = dayjs();
   const [searchDate, setSearchDate] = useState(today);
   const [page, setPage] = useState(1);
+  const [deleted, setDeleted] = useState(false);
+  const [confirmDelete, setConfirmDelete] = useState(false);
+  const [deleteScheduleId, setDeleteScheduleId] = useState(null);
 
   const formatSearchDate = () => {
     return searchDate == "" || searchDate == null
@@ -26,8 +29,7 @@ function ScheduleListPage() {
 
   const fetchSchedules = () => {
     fetch(
-      `/api/v1/schedules/search?name=${searchName}&date=${formatSearchDate()
-      }&page=${pageNumber}&pageSize=${pageSize}`
+      `/api/v1/schedules/search?name=${searchName}&date=${formatSearchDate()}&page=${pageNumber}&pageSize=${pageSize}`
     )
       .then((response) => response.json())
       .then((jsonResponse) => setSchedules(jsonResponse));
@@ -70,19 +72,71 @@ function ScheduleListPage() {
       .then((jsonResponse) => setSchedules(jsonResponse));
   };
 
-  //  const deleteSchedule = (id) => {
-  //    fetch(`/api/v1/schedules/delete/` + id, {
-  //      method: "PATCH",
-  //    }).then(fetchSchedules);
-  //    setDeleted(true);
-  //    setTimeout(() => {
-  //      setDeleted(false);
-  //    }, 5000);
-  //  };
+  const deleteSchedule = (id) => {
+    fetch(`/api/v1/schedules/delete/` + id, {
+      method: "PATCH",
+    }).then(fetchSchedules);
+    setDeleted(true);
+    setTimeout(() => {
+      setDeleted(false);
+    }, 5000);
+  };
+
+  const handleDeleteClick = (id) => {
+    setDeleteScheduleId(id);
+    setConfirmDelete(true);
+  };
+
+  const handleDeleteConfirm = () => {
+    deleteSchedule(deleteScheduleId);
+    setConfirmDelete(false);
+  };
+
+  const handleDeleteCancel = () => {
+    setConfirmDelete(false);
+  };
 
   return (
     <div className="mx-3">
       <h2 className="my-5">Tvarkaraščiai</h2>
+
+      <Collapse in={deleted}>
+        <Alert
+          onClose={() => {
+            setDeleted(false);
+          }}
+          severity="info"
+          className="mb-3"
+        >
+          Įrašas sėkmingai ištrintas
+        </Alert>
+      </Collapse>
+
+      <Collapse in={confirmDelete}>
+        <Alert
+          severity="warning"
+          action={
+            <>
+              <button
+                onClick={handleDeleteConfirm}
+                className="btn btn-danger me-1 my-1"
+              >
+                Ištrinti
+              </button>
+              <button
+                onClick={handleDeleteCancel}
+                className="btn btn-secondary me-1 my-1"
+              >
+                Atšaukti
+              </button>
+            </>
+          }
+        >
+          <div style={{ fontSize: '1.2em' }} className="confirmation-message">Ar tikrai norite ištrinti tvarkaraštį?</div>
+        </Alert>
+      </Collapse>
+
+      <br></br>
 
       <div className="d-flex justify-content-end">
         <div className="me-auto d-flex">
@@ -159,11 +213,10 @@ function ScheduleListPage() {
                 </button>
 
                 <button
-                  className="btn btn-danger me-2 my-1 btn-link"
-                  title="Ištrinti"
-                  // onClick={() => deleteSchedule(schedule.id)}
+                  onClick={() => handleDeleteClick(schedule.id)}
+                  className="btn btn-outline-danger me-1 my-1 btn-link"
                 >
-                  <DeleteTwoToneIcon className="red-icon" />
+                  <DeleteTwoToneIcon className="red-icon"/>
                 </button>
               </td>
             </tr>
@@ -177,7 +230,7 @@ function ScheduleListPage() {
                 : `Rasta įrašų: ${schedules?.totalElements}`}
             </td>
           </tr>
-        </tfoot>
+        </tfoot>{" "}
       </table>
 
       <div className="d-flex justify-content-end">

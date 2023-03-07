@@ -3,7 +3,10 @@ package lt.techin.springyne.schedule;
 import lt.techin.springyne.exception.ScheduleValidationException;
 import lt.techin.springyne.group.Group;
 import lt.techin.springyne.group.GroupRepository;
+import lt.techin.springyne.module.Module;
+import lt.techin.springyne.room.Room;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -93,4 +96,14 @@ public class ScheduleService {
             return scheduleRepository.findAllByNameIgnoreCaseContainingAndEndDateGreaterThanEqual(name, date, pageable);
         }
     }
+
+    public boolean delete(Long scheduleId) {
+        try {
+                scheduleRepository.deleteById(scheduleId);
+                return true;
+        } catch (EmptyResultDataAccessException exception) {
+            return false;
+        }
+    }
+
 }

@@ -3,9 +3,13 @@ package lt.techin.springyne.controller;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lt.techin.springyne.schedule.Schedule;
+import lt.techin.springyne.schedule.ScheduleController;
 import lt.techin.springyne.schedule.ScheduleDto;
+import lt.techin.springyne.schedule.ScheduleService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -21,7 +25,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
@@ -34,6 +40,11 @@ public class ScheduleControllerTest {
     @Autowired
     ObjectMapper objectMapper;
 
+    @Mock
+    private ScheduleService scheduleService;
+
+    @InjectMocks
+    private ScheduleController scheduleController;
 
     @Test
     void getAllSchedulesContainsCorrectDtos() throws Exception {
@@ -120,6 +131,17 @@ public class ScheduleControllerTest {
     }
 
     @Test
+
+    void testDeleteSchedule() {
+        Long scheduleId = 1L;
+        when(scheduleService.delete(scheduleId)).thenReturn(true);
+
+        boolean actual = scheduleController.deleteSchedule(scheduleId);
+
+        assertThat(actual).isTrue();
+    }
+}
+
     void getScheduleByIdReturnsCorrectDto() throws Exception {
         MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/schedules/1")
         ).andExpect(status().isOk()).andReturn();
@@ -137,3 +159,4 @@ public class ScheduleControllerTest {
         Assertions.assertTrue(result.isEmpty(),"Get schedule by invalid Id should return empty");
     }
 }
+

@@ -8,8 +8,19 @@ import isTodayPlugin from "dayjs/plugin/isToday";
 import './Calendar.css';
 
 
-const Calendar = () => {
+const Calendar = (props) => {
 	const now = dayjs().locale('lt');
+
+	const params = useParams();
+  const [shedules, setShedules] = useState([]);
+  const [availabeShedules, setAvailableShedules] = useState([]);
+
+  const fetchShedules = () => {
+    fetch("/api/v1/schedules/" + params.id)
+      .then((response) => response.json())
+      .then((jsonResponse) => setShedules(jsonResponse));
+  };
+  useEffect(() => fetchShedules, []);
 
 	dayjs.extend(weekdayPlugin);
 	dayjs.extend(objectPlugin);
@@ -53,7 +64,7 @@ const Calendar = () => {
 	const renderDays = () => {
 		const dateFormat = "dddd";
 		const days = [];
-		days.push(<div className="col col-center">Pamokos</div>);
+		days.push(<div className="col-pam col-center " >#</div>);
 		// for view with weekends i < 7
 		for (let i = 0; i < 5; i++) {
 			days.push(
@@ -104,17 +115,24 @@ const Calendar = () => {
 		getAllDays();
 	}, [currentMonth]);
 
+	const shift = () =>{
+		const shift = [];
+		var starts = shedules?.group?.shift?.starts;
+		var ends = shedules?.group?.shift?.ends;
+		for(var i =starts; i<= ends; i++){
+			shift.push(
+				<div>{i}</div>
+			)
+
+			}
+		return <div className="col-shift cell">{shift}</div>
+	};
+
 	const renderCells = () => {
 		const rows = [];
 		let days = [];
 		days.push(
-			<div className="col cell">
-				
-				<td><tr>1</tr>
-					<tr>2</tr>
-					<tr>3</tr>
-					<tr>4</tr></td>
-			</div>
+			shift()
 		);
 
 		arrayOfDays.forEach((week, index) => {
@@ -140,12 +158,7 @@ const Calendar = () => {
 			);
 			days = [];
 			days.push(
-				<div className="col cell">
-					<td><tr>1</tr>
-					<tr>2</tr>
-					<tr>3</tr>
-					<tr>4</tr></td>
-				</div>
+				shift()
 			);
 		});
 

@@ -23,6 +23,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -130,6 +131,7 @@ public class ScheduleControllerTest {
     }
 
     @Test
+
     void testDeleteSchedule() {
         Long scheduleId = 1L;
         when(scheduleService.delete(scheduleId)).thenReturn(true);
@@ -139,3 +141,22 @@ public class ScheduleControllerTest {
         assertThat(actual).isTrue();
     }
 }
+
+    void getScheduleByIdReturnsCorrectDto() throws Exception {
+        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/schedules/1")
+        ).andExpect(status().isOk()).andReturn();
+        ScheduleDto result = objectMapper.readValue(mvcResult.getResponse().getContentAsString(StandardCharsets.UTF_8), new TypeReference<ScheduleDto>() {
+        });
+        assertEquals(result.getName(), "E-22/1 Java programuotojas (-a) Rytinė","Get schedule by Id should return schedule with correct name");
+    }
+
+    @Test
+    void getScheduleByIdReturnsEmptyWithInvalidId() throws Exception {
+        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/schedules/0")
+        ).andReturn();
+        Optional<Schedule> result = objectMapper.readValue(mvcResult.getResponse().getContentAsString(StandardCharsets.UTF_8), new TypeReference<Optional<Schedule>>() {
+        });
+        Assertions.assertTrue(result.isEmpty(),"Get schedule by invalid Id should return empty");
+    }
+}
+

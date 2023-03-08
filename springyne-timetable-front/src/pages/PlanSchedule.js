@@ -6,11 +6,11 @@ function PlanSchedulePage() {
   const params = useParams();
   const [schedule, setSchedule] = useState({});
 
-  useEffect(() => {
-    fetch("/api/v1/schedules/" + params.id)
-      .then((response) => response.json())
-      .then((jsonResponse) => setSchedule(jsonResponse));
-  }, []);
+    useEffect(() => {
+      fetch("/api/v1/schedules/" + params.id)
+        .then((response) => response.json())
+        .then((jsonResponse) => setSchedule(jsonResponse));
+    }, []);
 
   return (
     <div className="mx-3">
@@ -37,7 +37,7 @@ function PlanSchedulePage() {
       </div>
 
       <Calendar />
-      
+
     </div>
   );
 }

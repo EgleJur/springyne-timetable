@@ -46,4 +46,11 @@ public class ScheduleController {
 
         return scheduleService.searchByNameDatePaged(name, date, page, pageSize);
     }
+
+    @PatchMapping("/delete/{scheduleId}")
+    public boolean deleteSchedule(@PathVariable Long scheduleId) {
+
+        return scheduleService.delete(scheduleId);
+
+    }
 }

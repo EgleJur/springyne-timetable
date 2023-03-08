@@ -168,7 +168,7 @@ function CreateHolidayPage() {
               onChange={handleChange}
               inputProps={{ 'aria-label': 'controlled' }}
             />}
-            label="Atostogos kartojasi kiekvienais metais"
+            label="Kartojasi kiekvienais metais"
             labelPlacement="end"
           /></div>
 

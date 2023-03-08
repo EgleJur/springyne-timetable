@@ -37,6 +37,7 @@ import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { lt } from "date-fns/locale";
 import PlanSchedulePage from './pages/PlanSchedule';
+import Calendar from "./components/Calendar";
 
 function App() {
   return (
@@ -86,10 +87,8 @@ function App() {
               <Route path="/holidays/create" element={<CreateHolidayPage />} />
               <Route path="/schedules" element={<ScheduleListPage />} />
               <Route path="/schedules/plan/:id" element={<PlanSchedulePage />} />
-              <Route
-                path="/schedules/create"
-                element={<CreateSchedulePage />}
-              />
+              <Route path="/schedules/create" element={<CreateSchedulePage />} />
+              <Route path="/calendar" element={<Calendar />} />
             </Routes>
           </div>
         </HashRouter>

@@ -1,8 +1,10 @@
 package lt.techin.springyne.lesson;
 
+import lombok.extern.slf4j.Slf4j;
 import lt.techin.springyne.exception.ScheduleValidationException;
 import lt.techin.springyne.holiday.Holiday;
 import lt.techin.springyne.holiday.HolidaysRepository;
+import lt.techin.springyne.program.ProgramSubject;
 import lt.techin.springyne.room.Room;
 import lt.techin.springyne.room.RoomRepository;
 import lt.techin.springyne.schedule.Schedule;
@@ -14,6 +16,7 @@ import lt.techin.springyne.teacher.TeacherRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -21,6 +24,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
+@Slf4j
 public class LessonService {
 
     @Autowired
@@ -70,7 +74,7 @@ public class LessonService {
             throw new ScheduleValidationException("Invalid lesson date range", "lesson date range",
                     "Lesson date is invalid", lessonBlock.getStartDate().toString() + " - " + lessonBlock.getEndDate());
         }
-        if (lessonBlock.getStartTime() == null || lessonBlock.getEndTime() == null || lessonBlock.getStartTime() < lessonBlock.getEndTime()
+        if (lessonBlock.getStartTime() == null || lessonBlock.getEndTime() == null || lessonBlock.getStartTime() > lessonBlock.getEndTime()
         || lessonBlock.getStartTime() < 1 || lessonBlock.getStartTime() > 14 || lessonBlock.getEndTime() < 1 || lessonBlock.getEndTime() > 14
         || lessonBlock.getStartTime() < schedule.getGroup().getShift().getStarts() || lessonBlock.getEndTime() > schedule.getGroup().getShift()
                 .getEnds() || lessonBlock.getStartTime() > schedule.getGroup().getShift().getEnds() || lessonBlock.getEndTime() <
@@ -81,11 +85,11 @@ public class LessonService {
 
         Subject subject = subjectRepository.findById(subjectId).orElseThrow(() -> new ScheduleValidationException("Subject does not exist",
                 "subject id", "Subject not found", subjectId.toString()));
-        if (schedule.getGroup().getProgram().getSubjects().stream().noneMatch(
-                programSubject -> programSubject.getSubject().equals(subject))) {
-            throw new ScheduleValidationException("Subject is not covered by this program", "subject id",
-                    "Subject is invalid", subjectId.toString());
-        }
+
+        ProgramSubject lessonProgramSubject = schedule.getGroup().getProgram().getSubjects().stream().filter(programSubject ->
+                programSubject.getSubject().equals(subject)).findFirst().orElseThrow(() -> new ScheduleValidationException(
+                        "Subject is not covered by this program", "subject id", "Subject is invalid", subjectId.toString()));
+
 
         Teacher teacher = teacherRepository.findById(teacherId).orElseThrow(() -> new ScheduleValidationException("Teacher does not exist",
                 "teacher id", "Teacher not found", teacherId.toString()));
@@ -114,13 +118,19 @@ public class LessonService {
                     "Room is occupied", roomId.toString());
         }
 
+        if (existingLessons.stream().anyMatch(lesson -> lesson.getSchedule().equals(schedule))) {
+            throw new ScheduleValidationException("Schedule is already planned in this period", "schedule id",
+                    "Group is busy", scheduleId.toString());
+        }
+
         List<Holiday> holidays = holidaysRepository.findAllHolidaysByDate(schedule.getStartDate(), schedule.getEndDate());
 
-        List<LocalDate> holidayDateList = holidays.stream().flatMap(holiday -> holiday.getStarts().datesUntil(holiday.getEnds().plusDays(1))).collect(Collectors.toList());
+        List<LocalDate> holidayDateList = holidays.stream().flatMap(holiday -> holiday.getStarts().datesUntil(holiday.getEnds()
+                .plusDays(1))).collect(Collectors.toList());
 
         List <Lesson> lessons = new ArrayList<>();
-        for (LocalDate i = lessonBlock.getStartDate(); i.isAfter(lessonBlock.getEndDate()); i = i.plusDays(1)) {
-            if (holidayDateList.contains(i)) {
+        for (LocalDate i = lessonBlock.getStartDate(); !i.isAfter(lessonBlock.getEndDate()); i = i.plusDays(1)) {
+            if (holidayDateList.contains(i) || i.getDayOfWeek().equals(DayOfWeek.SATURDAY) || i.getDayOfWeek().equals(DayOfWeek.SUNDAY)) {
                 continue;
             }
             for (int j = lessonBlock.getStartTime(); j<=lessonBlock.getEndTime(); j++) {
@@ -130,8 +140,17 @@ public class LessonService {
                 newLesson.setRoom(room);
                 newLesson.setTeacher(teacher);
                 newLesson.setSubject(subject);
+                newLesson.setSchedule(schedule);
                 lessons.add(newLesson);
             }
+        }
+
+        Long remainingLessons = lessonProgramSubject.getHours() - lessonRepository.countBySubjectIdAndSchedule_GroupId(subjectId,
+                schedule.getGroup().getId());
+        log.info(remainingLessons.toString());
+        if (lessons.size() > remainingLessons) {
+            throw new ScheduleValidationException("Number of lessons is greater than covered by program", "subject id",
+                    "Subject is overbooked", lessonBlock.getStartDate().toString() + " - " + lessonBlock.getEndDate());
         }
 
 

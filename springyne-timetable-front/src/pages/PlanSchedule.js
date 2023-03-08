@@ -1,5 +1,6 @@
 import { useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
+import Calendar from "../components/Calendar";
 
 
 function PlanSchedulePage() {
@@ -31,6 +32,10 @@ function PlanSchedulePage() {
           </button>
         ))}
       </div>
+      
+      <h2 className="my-5">Planuoti {schedule?.group?.name} grupės tvarkaraštį</h2>
+<Calendar />
+
     </div>
   );
 }

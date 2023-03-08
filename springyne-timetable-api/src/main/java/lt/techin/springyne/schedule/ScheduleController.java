@@ -15,7 +15,7 @@ import java.util.Optional;
 public class ScheduleController {
 
     @Autowired
-    ScheduleService scheduleService;
+    private ScheduleService scheduleService;
 
     public ScheduleController(ScheduleService scheduleService) {
         this.scheduleService = scheduleService;

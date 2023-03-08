@@ -192,7 +192,7 @@ const Calendar = (props) => {
 						className={`col cell ${!d.isCurrentMonth || holidayList.includes(d.day)
 							? "disabled"
 							// 
-							: d.isCurrentDay ? "selected" : ""
+							: d.isCurrentDay ? "selectedDay" : ""
 							}`
 						}
 						key={i}

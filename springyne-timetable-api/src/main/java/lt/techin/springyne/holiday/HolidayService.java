@@ -15,19 +15,6 @@ public class HolidayService {
     @Autowired
     HolidaysRepository holidaysRepository;
 
-    private Holiday getHolidayById(Long id) {
-        return holidaysRepository.findById(id)
-                .orElseThrow(() -> new ScheduleValidationException("Holiday does not exist", "id",
-                        "Holiday not found", String.valueOf(id)));
-    }
-
-    private void checkHolidayNameEmpty(String name) {
-        if (name == null || name.equals("")) {
-            throw new ScheduleValidationException("Holiday name cannot be empty", "name",
-                    "Name is empty", name);
-        }
-    }
-
     public HolidayService(HolidaysRepository holidaysRepository) {
         this.holidaysRepository = holidaysRepository;
     }

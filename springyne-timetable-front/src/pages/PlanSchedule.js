@@ -3,20 +3,21 @@ import { useState, useEffect } from "react";
 import Calendar from "../components/Calendar";
 
 function PlanSchedulePage() {
-  const params = useParams();
-  const [schedule, setSchedule] = useState({});
+   const params = useParams();
+   const [schedule, setSchedule] = useState({});
 
-    useEffect(() => {
+   useEffect(() => {
       fetch("/api/v1/schedules/" + params.id)
-        .then((response) => response.json())
-        .then((jsonResponse) => setSchedule(jsonResponse));
-    }, []);
+         .then((response) => response.json())
+         .then((jsonResponse) => setSchedule(jsonResponse));
+   }, []);
 
-  return (
+   return (
     <div className="mx-3">
-      <h2 className="my-5">Planuoti {schedule?.group?.name} grupės tvarkaraštį</h2>
+      <h2 className="my-5">Planuoti {schedule?.group?.name} grupės tvarkaraštį</h2> 
+      
 <Calendar />
-    </div>
+    </div >
   );
 }
 

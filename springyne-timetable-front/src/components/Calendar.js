@@ -11,16 +11,38 @@ import './Calendar.css';
 const Calendar = (props) => {
 	const now = dayjs().locale('lt');
 
-	const params = useParams();
-  const [shedules, setShedules] = useState([]);
-  const [availabeShedules, setAvailableShedules] = useState([]);
 
-  const fetchShedules = () => {
-    fetch("/api/v1/schedules/" + params.id)
-      .then((response) => response.json())
-      .then((jsonResponse) => setShedules(jsonResponse));
-  };
-  useEffect(() => fetchShedules, []);
+
+	const [holidays, setHolidays] = useState([]);
+
+	const fetchHolidays = () => {
+		fetch(`/api/v1/holidays/search?name=${""}&from=${""}&to=${""}`)
+			.then((response) => response.json())
+			.then((jsonResponse) => setHolidays(jsonResponse));
+	};
+	useEffect(() => fetchHolidays, []);
+
+	const params = useParams();
+	const [shedules, setShedules] = useState([]);
+	const fetchShedules = () => {
+		fetch("/api/v1/schedules/" + params.id)
+			.then((response) => response.json())
+			.then((jsonResponse) => setShedules(jsonResponse));
+	};
+	useEffect(() => fetchShedules, []);
+
+	const shift = () => {
+		const shift = [];
+		var starts = shedules?.group?.shift?.starts;
+		var ends = shedules?.group?.shift?.ends;
+		for (var i = starts; i <= ends; i++) {
+			shift.push(
+				<div>{i}</div>
+			)
+
+		}
+		return <div className="col-shift cell">{shift}</div>
+	};
 
 	dayjs.extend(weekdayPlugin);
 	dayjs.extend(objectPlugin);
@@ -82,7 +104,6 @@ const Calendar = (props) => {
 
 		let allDates = [];
 		let weekDates = [];
-		//weekDates.push({ dates: null });
 
 		let weekCounter = 1;
 
@@ -90,13 +111,11 @@ const Calendar = (props) => {
 			const formated = formateDateObject(currentDate);
 
 			weekDates.push(formated);
-			// for view with if is not needed
 
 			// for view with weekends weekCounter ===7
 			if (weekCounter === 5) {
 				allDates.push({ dates: weekDates });
 				weekDates = [];
-				//weekDates.push({ dates: null });
 				weekCounter = 0;
 			}
 
@@ -115,19 +134,6 @@ const Calendar = (props) => {
 		getAllDays();
 	}, [currentMonth]);
 
-	const shift = () =>{
-		const shift = [];
-		var starts = shedules?.group?.shift?.starts;
-		var ends = shedules?.group?.shift?.ends;
-		for(var i =starts; i<= ends; i++){
-			shift.push(
-				<div>{i}</div>
-			)
-
-			}
-		return <div className="col-shift cell">{shift}</div>
-	};
-
 	const renderCells = () => {
 		const rows = [];
 		let days = [];
@@ -135,22 +141,63 @@ const Calendar = (props) => {
 			shift()
 		);
 
+		const holidayList = [];
+		var starts;
+		var ends;
+		var currentM = currentMonth.format("MM");
+		var currentD = currentMonth.daysInMonth();
+
+		holidays.forEach((holiday) => {
+			var dayStarts = dayjs(holiday.starts).format("D");
+			var dayEnds = dayjs(holiday.ends).format("D");
+			var monthStarts = dayjs(holiday.starts).format("MM");
+			var monthEnds = dayjs(holiday.ends).format("MM");
+
+			if (monthStarts === currentM) {
+				starts = parseInt(dayStarts);
+				if (monthEnds === currentM) {
+					ends = parseInt(dayEnds);
+				} else {
+					ends = currentD;
+				}
+			} else if (monthEnds === currentM) {
+				ends = currentD;
+				if (monthStarts !== currentM) {
+					starts = parseInt(1);
+				}
+			}
+
+			// 
+			if (monthStarts === currentM || monthEnds === currentM) {
+				console.log(starts + " st " + ends + " en");
+				for (var i = starts; i <= ends; i++) {
+					holidayList.push(i);
+				}
+			}
+		});
+
 		arrayOfDays.forEach((week, index) => {
-	
+
 			week.dates.forEach((d, i) => {
-			
+				// console.log(d.day + " day " + holidayList + " list");
 				days.push(
-					
-					<div
-						className={`col cell ${!d.isCurrentMonth ? "disabled" : d.isCurrentDay ? "selected" : ""
-							}`}
+
+					< div
+						className={`col cell ${!d.isCurrentMonth || holidayList.includes(d.day)
+							? "disabled"
+							// 
+							: d.isCurrentDay ? "selected" : ""
+							}`
+						}
 						key={i}
 					>
 						<span className="number">{d.day}</span>
 						{/* <span className="bg">{d.day}</span> */}
-					</div>
+					</div >
+
 				);
 			});
+
 			rows.push(
 				<div className="row" key={index}>
 					{days}

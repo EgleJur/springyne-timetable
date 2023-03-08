@@ -2,7 +2,6 @@ import { useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
 import Calendar from "../components/Calendar";
 
-
 function PlanSchedulePage() {
   const params = useParams();
   const [schedule, setSchedule] = useState({});
@@ -15,6 +14,10 @@ function PlanSchedulePage() {
 
   return (
     <div className="mx-3">
+      {/* <h2 className="my-5">
+        Planuoti {schedule?.group?.name} grupės tvarkaraštį
+      </h2> */}
+
       <h2 className="my-5">
         Planuoti {schedule?.group?.name} grupės tvarkaraštį
       </h2>
@@ -32,10 +35,9 @@ function PlanSchedulePage() {
           </button>
         ))}
       </div>
-      
-      <h2 className="my-5">Planuoti {schedule?.group?.name} grupės tvarkaraštį</h2>
-<Calendar />
 
+      <Calendar />
+      
     </div>
   );
 }

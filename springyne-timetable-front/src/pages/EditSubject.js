@@ -11,8 +11,6 @@ import {
 } from "@mui/material";
 import ClearIcon from "@mui/icons-material/Clear";
 
-
-
 function EditSubjectPage() {
   const [subject, setSubject] = useState({});
   const [nameError, setNameError] = useState("");
@@ -263,7 +261,14 @@ function EditSubjectPage() {
                   id={room.id}
                 >
                   {room.name}{" "}
-                  <ClearIcon color="disabled" sx={{ fontSize: 12 }} />
+                  <ClearIcon 
+          color="disabled" 
+          sx={{ fontSize: 12 }} 
+          value={room.id}
+          onClick={(e) => deleteRoom(room.id)}
+          key={`clearIcon-${room.id}`}
+          id={`clearIcon-${room.id}`}
+        />
                 </button>
               ))}
             </div>

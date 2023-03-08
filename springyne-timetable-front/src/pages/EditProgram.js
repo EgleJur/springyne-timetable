@@ -222,7 +222,14 @@ function EditProgramPage() {
                   disabled={program.deleted}
                 >
                   {subject.subject.name} {subject.hours} valandų{" "}
-                  <ClearIcon color="disabled" sx={{ fontSize: 12 }} />
+                  <ClearIcon 
+          color="disabled" 
+          sx={{ fontSize: 12 }} 
+          value={subject.subject.id}
+          onClick={(e) => deleteSubject(subject.subject.id)}
+          key={`clearIcon-${subject.subject.id}`}
+          id={`clearIcon-${subject.subject.id}`}
+        />
                 </button>
               ))}
             </div>

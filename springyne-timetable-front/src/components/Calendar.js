@@ -11,6 +11,8 @@ import './Calendar.css';
 const Calendar = (props) => {
 	const now = dayjs().locale('lt');
 
+	const isBetween = require('dayjs/plugin/isBetween')
+	dayjs.extend(isBetween)
 
 
 	const [holidays, setHolidays] = useState([]);
@@ -146,29 +148,33 @@ const Calendar = (props) => {
 		var ends;
 		var currentM = currentMonth.format("MM");
 		var currentD = currentMonth.daysInMonth();
+		//let curentDate = currentMonth.format('YYYY-MM-DD');
 
 		holidays.forEach((holiday) => {
 			var dayStarts = dayjs(holiday.starts).format("D");
 			var dayEnds = dayjs(holiday.ends).format("D");
 			var monthStarts = dayjs(holiday.starts).format("MM");
 			var monthEnds = dayjs(holiday.ends).format("MM");
-
-			if (monthStarts === currentM) {
-				starts = parseInt(dayStarts);
-				if (monthEnds === currentM) {
-					ends = parseInt(dayEnds);
-				} else {
+			
+				if (monthStarts === currentM) {
+					starts = parseInt(dayStarts);
+					if (monthEnds === currentM) {
+						ends = parseInt(dayEnds);
+					} else {
+						ends = currentD;
+					}
+				}
+				else if (dayjs(currentM).isBetween(monthStarts, monthEnds))
+				{starts = parseInt(1);
+					ends = currentD;} 
+				else if (monthEnds === currentM) {
 					ends = currentD;
+					if (monthStarts !== currentM) {
+						starts = parseInt(1);
+					}
 				}
-			} else if (monthEnds === currentM) {
-				ends = currentD;
-				if (monthStarts !== currentM) {
-					starts = parseInt(1);
-				}
-			}
 
-			// 
-			if (monthStarts === currentM || monthEnds === currentM) {
+			if (monthStarts === currentM || monthEnds === currentM ||dayjs(currentM).isBetween(monthStarts, monthEnds)) {
 				console.log(starts + " st " + ends + " en");
 				for (var i = starts; i <= ends; i++) {
 					holidayList.push(i);

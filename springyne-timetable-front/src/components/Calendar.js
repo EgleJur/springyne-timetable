@@ -10,7 +10,7 @@ import './Calendar.css';
 
 const Calendar = (props) => {
 	const now = dayjs().locale('lt');
-
+const params = useParams();
 	const isBetween = require('dayjs/plugin/isBetween')
 	dayjs.extend(isBetween)
 
@@ -24,7 +24,7 @@ const Calendar = (props) => {
 	};
 	useEffect(() => fetchHolidays, []);
 
-	const params = useParams();
+	
 	const [shedules, setShedules] = useState([]);
 	const fetchShedules = () => {
 		fetch("/api/v1/schedules/" + params.id)
@@ -45,6 +45,27 @@ const Calendar = (props) => {
 		}
 		return <div className="col-shift cell">{shift}</div>
 	};
+
+	const [lessons, setLessons] = useState([]);
+	const fetchLessons = () => {
+		fetch("/api/v1/lessons/" + params.id)
+			.then((response) => response.json())
+			.then((jsonResponse) => setLessons(jsonResponse));
+	};
+	useEffect(() => fetchLessons, []);
+
+	const lesson = (d) => {
+		const lessonList = [];
+		lessons.filter((e) => dayjs(e.lessonDate).format('YYYY-MM-DD') === d)
+		.forEach((les)=>{
+			lessonList.push(
+			<div>{les.lessonTime}</div>
+			)
+		});
+		
+		return <div /*className="col-shift cell"*/>{lessonList}</div>
+	};
+	
 
 	dayjs.extend(weekdayPlugin);
 	dayjs.extend(objectPlugin);
@@ -100,6 +121,49 @@ const Calendar = (props) => {
 		return <div className="days row">{days}</div>;
 	};
 
+	const getHolidays = () => {
+		const holidayList = [];
+		var starts;
+		var ends;
+		var currentM = currentMonth.format("MM");
+		var currentD = currentMonth.daysInMonth();
+		//let curentDate = currentMonth.format('YYYY-MM-DD');
+
+		holidays.forEach((holiday) => {
+			var dayStarts = dayjs(holiday.starts).format("D");
+			var dayEnds = dayjs(holiday.ends).format("D");
+			var monthStarts = dayjs(holiday.starts).format("MM");
+			var monthEnds = dayjs(holiday.ends).format("MM");
+
+			if (monthStarts === currentM) {
+				starts = parseInt(dayStarts);
+				if (monthEnds === currentM) {
+					ends = parseInt(dayEnds);
+				} else {
+					ends = currentD;
+				}
+			}
+			else if (dayjs(currentM).isBetween(monthStarts, monthEnds)) {
+				starts = parseInt(1);
+				ends = currentD;
+			}
+			else if (monthEnds === currentM) {
+				ends = currentD;
+				if (monthStarts !== currentM) {
+					starts = parseInt(1);
+				}
+			}
+
+			if (monthStarts === currentM || monthEnds === currentM || dayjs(currentM).isBetween(monthStarts, monthEnds)) {
+				for (var i = starts; i <= ends; i++) {
+					holidayList.push(i);
+				}
+			}
+		});
+		return holidayList;
+	};
+
+
 	const getAllDays = () => {
 		let currentDate = currentMonth.startOf("month").weekday(0);
 		const nextMonth = currentMonth.add(1, "month").month();
@@ -143,53 +207,15 @@ const Calendar = (props) => {
 			shift()
 		);
 
-		const holidayList = [];
-		var starts;
-		var ends;
-		var currentM = currentMonth.format("MM");
-		var currentD = currentMonth.daysInMonth();
-		//let curentDate = currentMonth.format('YYYY-MM-DD');
-
-		holidays.forEach((holiday) => {
-			var dayStarts = dayjs(holiday.starts).format("D");
-			var dayEnds = dayjs(holiday.ends).format("D");
-			var monthStarts = dayjs(holiday.starts).format("MM");
-			var monthEnds = dayjs(holiday.ends).format("MM");
-			
-				if (monthStarts === currentM) {
-					starts = parseInt(dayStarts);
-					if (monthEnds === currentM) {
-						ends = parseInt(dayEnds);
-					} else {
-						ends = currentD;
-					}
-				}
-				else if (dayjs(currentM).isBetween(monthStarts, monthEnds))
-				{starts = parseInt(1);
-					ends = currentD;} 
-				else if (monthEnds === currentM) {
-					ends = currentD;
-					if (monthStarts !== currentM) {
-						starts = parseInt(1);
-					}
-				}
-
-			if (monthStarts === currentM || monthEnds === currentM ||dayjs(currentM).isBetween(monthStarts, monthEnds)) {
-				console.log(starts + " st " + ends + " en");
-				for (var i = starts; i <= ends; i++) {
-					holidayList.push(i);
-				}
-			}
-		});
-
 		arrayOfDays.forEach((week, index) => {
 
 			week.dates.forEach((d, i) => {
 				// console.log(d.day + " day " + holidayList + " list");
+				//add lessons here???
 				days.push(
 
 					< div
-						className={`col cell ${!d.isCurrentMonth || holidayList.includes(d.day)
+						className={`col cell ${!d.isCurrentMonth || getHolidays().includes(d.day)
 							? "disabled"
 							// 
 							: d.isCurrentDay ? "selectedDay" : ""
@@ -198,6 +224,8 @@ const Calendar = (props) => {
 						key={i}
 					>
 						<span className="number">{d.day}</span>
+						{lesson(d.day)}
+
 						{/* <span className="bg">{d.day}</span> */}
 					</div >
 

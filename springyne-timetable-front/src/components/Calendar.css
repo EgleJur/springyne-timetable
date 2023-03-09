@@ -250,6 +250,13 @@ main {
   color: var(--neutral-color-);
   pointer-events: none;
 }
+.cell-lesson{
+  
+  font-size: 0.7em;
+  font-weight: 400;
+  color: var(--neutral-color-);
+  pointer-events: none;
+}
 /* .numbet-shift{
     position: absolute;
   font-size: 82.5%;

@@ -6,14 +6,21 @@ import weekdayPlugin from "dayjs/plugin/weekday";
 import objectPlugin from "dayjs/plugin/toObject";
 import isTodayPlugin from "dayjs/plugin/isToday";
 import './Calendar.css';
+import Table from 'react-bootstrap/Table';
 
 
 const Calendar = (props) => {
 	const now = dayjs().locale('lt');
-const params = useParams();
+	const params = useParams();
 	const isBetween = require('dayjs/plugin/isBetween')
 	dayjs.extend(isBetween)
 
+	// const generateColor = () => {
+	// 	const randomColor = Math.floor(Math.random() * 16777215)
+	// 	  .toString(16)
+	// 	  .padStart(6, '0');
+	// 	return `#${randomColor}`;
+	//   };
 
 	const [holidays, setHolidays] = useState([]);
 
@@ -24,7 +31,7 @@ const params = useParams();
 	};
 	useEffect(() => fetchHolidays, []);
 
-	
+
 	const [shedules, setShedules] = useState([]);
 	const fetchShedules = () => {
 		fetch("/api/v1/schedules/" + params.id)
@@ -35,20 +42,28 @@ const params = useParams();
 
 	const shift = () => {
 		const shift = [];
-		var starts = shedules?.group?.shift?.starts;
-		var ends = shedules?.group?.shift?.ends;
-		for (var i = starts; i <= ends; i++) {
+		let starts = shedules?.group?.shift?.starts;
+		let ends = shedules?.group?.shift?.ends;
+		for (let i = starts; i <= ends; i++) {
+
+			
 			shift.push(
 				<div>{i}</div>
 			)
 
 		}
 		return <div className="col-shift cell">{shift}</div>
+			{/* 
+		<Container>
+      <Row>
+        {shift}
+      </Row>
+    </Container></div> */}
 	};
 
 	const [lessons, setLessons] = useState([]);
 	const fetchLessons = () => {
-		fetch("/api/v1/lessons/" + params.id)
+		fetch("/api/v1/lessons/schedule/" + params.id)
 			.then((response) => response.json())
 			.then((jsonResponse) => setLessons(jsonResponse));
 	};
@@ -56,16 +71,62 @@ const params = useParams();
 
 	const lesson = (d) => {
 		const lessonList = [];
-		lessons.filter((e) => dayjs(e.lessonDate).format('YYYY-MM-DD') === d)
-		.forEach((les)=>{
-			lessonList.push(
-			<div>{les.lessonTime}</div>
-			)
+
+
+		const result = lessons.filter((e) =>
+			dayjs(e?.lessonDate).format('YYYY-MM') === currentMonth.format("YYYY-MM"));
+
+		let subjectName = "";
+		let teacherName = "";
+		let room = "";
+		let lessonNr = shedules?.group?.shift?.starts;
+		result.forEach((less) => {
+			let dayInList = parseInt(dayjs(less.lessonDate).format('D'));
+			
+			console.log(less?.lessonTime +" less "+lessonNr);
+			 if (dayInList === d) {
+				if (less?.lessonTime !== lessonNr) {
+					lessonList.push(
+						<div>{"_"}</div>
+					)
+					lessonNr++;
+				}
+				else if (less?.subject?.name !== subjectName) {
+
+					lessonList.push(
+						<div >{less?.subject?.name}</div>
+					)
+					subjectName = less?.subject?.name;
+					lessonNr++;
+				}
+				else if (less?.teacher?.name !== teacherName) {
+					lessonList.push(
+						<div>{less?.teacher?.name}</div>
+					)
+					teacherName = less?.teacher?.name;
+					lessonNr++;
+				}
+				else if (less?.room?.name !== room) {
+					lessonList.push(
+						<div>{less?.room?.name}</div>
+					)
+					room = less?.room?.name;
+					
+				}
+				
+				else {
+					lessonList.push(
+						<div>{"_"}</div>
+					)
+					
+				}
+			}
+			
 		});
-		
-		return <div /*className="col-shift cell"*/>{lessonList}</div>
+
+		return <div className="cell-lesson" >{lessonList}</div>
 	};
-	
+
 
 	dayjs.extend(weekdayPlugin);
 	dayjs.extend(objectPlugin);
@@ -123,17 +184,17 @@ const params = useParams();
 
 	const getHolidays = () => {
 		const holidayList = [];
-		var starts;
-		var ends;
-		var currentM = currentMonth.format("MM");
-		var currentD = currentMonth.daysInMonth();
+		let starts;
+		let ends;
+		let currentM = currentMonth.format("MM");
+		let currentD = currentMonth.daysInMonth();
 		//let curentDate = currentMonth.format('YYYY-MM-DD');
 
 		holidays.forEach((holiday) => {
-			var dayStarts = dayjs(holiday.starts).format("D");
-			var dayEnds = dayjs(holiday.ends).format("D");
-			var monthStarts = dayjs(holiday.starts).format("MM");
-			var monthEnds = dayjs(holiday.ends).format("MM");
+			let dayStarts = dayjs(holiday.starts).format("D");
+			let dayEnds = dayjs(holiday.ends).format("D");
+			let monthStarts = dayjs(holiday.starts).format("MM");
+			let monthEnds = dayjs(holiday.ends).format("MM");
 
 			if (monthStarts === currentM) {
 				starts = parseInt(dayStarts);
@@ -155,7 +216,7 @@ const params = useParams();
 			}
 
 			if (monthStarts === currentM || monthEnds === currentM || dayjs(currentM).isBetween(monthStarts, monthEnds)) {
-				for (var i = starts; i <= ends; i++) {
+				for (let i = starts; i <= ends; i++) {
 					holidayList.push(i);
 				}
 			}
@@ -250,9 +311,9 @@ const params = useParams();
 		const clonedObject = { ...date.toObject() };
 
 		const formatedObject = {
-			day: clonedObject.date,
-			month: clonedObject.months,
 			year: clonedObject.years,
+			month: clonedObject.months,
+			day: clonedObject.date,
 			isCurrentMonth: clonedObject.months === currentMonth.month(),
 			isCurrentDay: date.isToday(),
 		};

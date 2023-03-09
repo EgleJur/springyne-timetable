@@ -182,8 +182,8 @@ const colorArray=["#fff4f4", "#f4ffff",
 						chevron_left
 					</div>
 				</div>
-				<div className="col col-center">
-					<span>{currentMonth.format(dateFormat)}</span>
+				<div className="col col-center" >
+					<span style={{textTransform: 'uppercase'}}>{currentMonth.format(dateFormat)}</span>
 				</div>
 				<div className="col col-end" onClick={() => nextMonth()}>
 					<div className="icon">chevron_right</div>

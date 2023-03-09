@@ -127,7 +127,7 @@ main {
 }
 
 .calendar {
-  text-transform: uppercase;
+  text-transform: none;
   font-weight: 700;
   font-size: 115%;
   padding: 1.5em 0;
@@ -154,7 +154,7 @@ main {
 }
 
 .calendar .days {
-  text-transform: uppercase;
+  text-transform: none;
   font-weight: 400;
   color: var(--text-color-light);
   font-size: 70%;

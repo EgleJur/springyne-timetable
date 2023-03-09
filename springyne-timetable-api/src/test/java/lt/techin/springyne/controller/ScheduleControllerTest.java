@@ -140,7 +140,7 @@ public class ScheduleControllerTest {
 
         assertThat(actual).isTrue();
     }
-}
+
 
     void getScheduleByIdReturnsCorrectDto() throws Exception {
         MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/schedules/1")

@@ -35,6 +35,7 @@ function PlanSchedulePage() {
   const today = dayjs().format("YYYY-MM-DD");
   const [success, setSuccess] = useState(false);
   const [failure, setFailure] = useState(false);
+  const times = [1,2,3,4,5,6,7,8,9,10,11,12,13,14];
 
   useEffect(() => {
     fetch("/api/v1/schedules/" + params.id)
@@ -274,7 +275,6 @@ function PlanSchedulePage() {
               <Select
                 error={!!subjectError}
                 labelId="select-subject-label"
-                inputLabelProps={{ shrink: true }}
                 id="select-subject"
                 label="Pasirinkite dalyką"
                 fullWidth
@@ -307,7 +307,6 @@ function PlanSchedulePage() {
               <Select
                 error={!!teacherError}
                 labelId="select-teacher-label"
-                inputLabelProps={{ shrink: true }}
                 id="select-teacher"
                 label="Pasirinkite mokytoją"
                 fullWidth
@@ -334,7 +333,6 @@ function PlanSchedulePage() {
               <Select
                 error={!!roomError}
                 labelId="select-room-label"
-                inputLabelProps={{ shrink: true }}
                 id="select-room"
                 label="Pasirinkite kabinetą"
                 fullWidth
@@ -365,11 +363,17 @@ function PlanSchedulePage() {
               className="me-2"
               onChange={(e) => setStartTime(parseInt(e.target.value))}
             >
-              {Array.from(Array(14)).map((_, i) => (
-                <MenuItem key={i + 1} value={i + 1}>
-                  {i + 1}
-                </MenuItem>
-              ))}
+              {times
+                .filter(
+                  (time) =>
+                    time >= schedule?.group?.shift?.starts &&
+                    time <= schedule?.group?.shift?.ends
+                )
+                .map((time) => (
+                  <MenuItem key={time} value={time}>
+                    {time}
+                  </MenuItem>
+                ))}
             </Select>
 
             <label htmlFor="select-end-time" className="me-2" required>
@@ -383,11 +387,17 @@ function PlanSchedulePage() {
               className="me-2"
               onChange={(e) => setEndTime(parseInt(e.target.value))}
             >
-              {Array.from(Array(14)).map((_, i) => (
-                <MenuItem key={i + 1} value={i + 1}>
-                  {i + 1}
-                </MenuItem>
-              ))}
+              {times
+                .filter(
+                  (time) =>
+                    time >= schedule?.group?.shift?.starts &&
+                    time <= schedule?.group?.shift?.ends
+                )
+                .map((time) => (
+                  <MenuItem key={time} value={time}>
+                    {time}
+                  </MenuItem>
+                ))}
             </Select>
           </form>
         </DialogContent>
@@ -412,6 +422,10 @@ function PlanSchedulePage() {
             value={sub.id}
             key={sub.id}
             id={sub.id}
+            onClick={() => {
+              setSelectedSubject(sub.subject.id);
+              setOpen(true);
+            }}
           >
             {sub.subject.name} {sub.hours} 
           </button>

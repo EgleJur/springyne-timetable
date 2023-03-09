@@ -7,10 +7,7 @@ import objectPlugin from "dayjs/plugin/toObject";
 import isTodayPlugin from "dayjs/plugin/isToday";
 import './Calendar.css';
 import Table from 'react-bootstrap/Table';
-import ListItem from '@mui/material/ListItem';
-import ListItemButton from '@mui/material/ListItemButton';
-import ListItemText from '@mui/material/ListItemText';
-import { FixedSizeList } from 'react-window';
+import { width } from "@mui/system";
 
 
 const Calendar = (props) => {
@@ -44,26 +41,7 @@ const Calendar = (props) => {
 	};
 	useEffect(() => fetchShedules, []);
 
-	const shift = () => {
-		const shift = [];
-		let starts = shedules?.group?.shift?.starts;
-		let ends = shedules?.group?.shift?.ends;
-		for (let i = starts; i <= ends; i++) {
-
-
-			shift.push(
-				<div>{i}</div>
-			)
-
-		}
-		return <div className="col-shift cell">{shift}</div>
-		{/* 
-		<Container>
-      <Row>
-        {shift}
-      </Row>
-    </Container></div> */}
-	};
+	
 
 	const [lessons, setLessons] = useState([]);
 	const fetchLessons = () => {
@@ -78,59 +56,59 @@ const Calendar = (props) => {
 
 
 		const result = lessons.filter((e) =>
-			// dayjs(e?.lessonDate).format('YYYY-MM') === currentMonth.format("YYYY-MM"));
 			dayjs(e?.lessonDate).format('YYYY-MM') === currentMonth.format("YYYY-MM")
 			&& parseInt(dayjs(e?.lessonDate).format('D')) === d.day);
+
 		let subjectName = "";
 		let teacherName = "";
 		let room = "";
-		let later = 0;
 		let lessonNr = shedules?.group?.shift?.starts;
+		let later = 0;
 		result.forEach((less) => {
-			//let dayInList = parseInt(dayjs(less.lessonDate).format('D'));
+			//console.log(less.lessonTime + " t " + lessonNr);
 
-	// 		<ListItem style={style} key={index} component="div" disablePadding>
-    //   <ListItemButton>
-    //     <ListItemText primary={`Item ${index + 1}`} />
-    //   </ListItemButton>
-    // </ListItem>
 			if (less?.lessonTime > lessonNr && later === 0) {
 				for (let n = lessonNr; n < less?.lessonTime; n++)
 					lessonList.push(
-						<div class="d-grid gap-2">
-							<button type="button" class="btn btn-outline-secondary"
-								style={{ fontSize: 1 }}
-								disabled></button></div>
+						<tr>{"_"}</tr>
 					)
 				later++;
+				// return;
 			}
 			if (less?.subject?.name !== subjectName) {
 
 				lessonList.push(
-					<div class="d-grid gap-2">
-						<button type="button" class="btn btn-outline-secondary"
-							disabled>{less?.subject?.name}</button></div>)
+					<tr>{less?.subject?.name}</tr>
+				)
 				subjectName = less?.subject?.name;
-				lessonNr++;
+
+				// 
 			}
 			else if (less?.teacher?.name !== teacherName) {
-				lessonList.push(<div>{less?.teacher?.name}</div>)
+				lessonList.push(
+					<tr>{less?.teacher?.name}</tr>
+				)
 				teacherName = less?.teacher?.name;
-				lessonNr++;
 			}
+
 			else if (less?.room?.name !== room) {
-				lessonList.push(<div>{less?.room?.name}</div>)
+				lessonList.push(
+					<tr>{less?.room?.name}</tr>
+				)
 				room = less?.room?.name;
-			}
 
+			}
 			else {
-				lessonList.push(<div>_</div>)
+				lessonList.push(
+					<tr>{"_"}</tr>
+				)
 
 			}
+
 			lessonNr++;
 		});
 
-		return <div className="cell-lesson" >{lessonList}</div>
+		return lessonList
 	};
 
 
@@ -176,16 +154,16 @@ const Calendar = (props) => {
 	const renderDays = () => {
 		const dateFormat = "dddd";
 		const days = [];
-		days.push(<div className="col-pam col-center " >#</div>);
+		days.push(<th style={{ width: 50 }}>#</th>);
 		// for view with weekends i < 7
 		for (let i = 0; i < 5; i++) {
 			days.push(
-				<div className="col col-center" key={i}>
+				<th class="col">
 					{now.weekday(i).format(dateFormat)}
-				</div>
+				</th>
 			);
 		}
-		return <div className="days row">{days}</div>;
+		return <thead className="table-light"><tr class="row">{days}</tr></thead>;
 	};
 
 	const getHolidays = () => {
@@ -267,11 +245,24 @@ const Calendar = (props) => {
 		getAllDays();
 	}, [currentMonth]);
 
+	let starts = shedules?.group?.shift?.starts;
+	let ends = shedules?.group?.shift?.ends;
+
+	const shiftColumn = () => {
+		const shift = [];
+		for (let i = starts; i <= ends; i++) {
+			shift.push(
+				<tr>{i}</tr>
+			)
+		}
+		return <th class="col-shift" style={{ width: 50 }}>{shift}</th>
+	};
+
 	const renderCells = () => {
 		const rows = [];
 		let days = [];
 		days.push(
-			shift()
+			shiftColumn()
 		);
 
 		arrayOfDays.forEach((week, index) => {
@@ -281,7 +272,7 @@ const Calendar = (props) => {
 				//add lessons here???
 				days.push(
 
-					< div
+					< th
 						className={`col cell ${!d.isCurrentMonth || getHolidays().includes(d.day)
 							? "disabled"
 							// 
@@ -291,33 +282,90 @@ const Calendar = (props) => {
 						key={i}
 					>
 						<span className="number">{d.day}</span>
-
-						<FixedSizeList				
-							itemCount={4}
-						>
-							{lesson(d)}
-						</FixedSizeList>
 						{lesson(d)}
 
-						{/* <span className="bg">{d.day}</span> */}
-					</div >
+					</th >
 
 				);
 			});
 
 			rows.push(
-				<div className="row" key={index}>
+				<tr class="row" key={index}>
 					{days}
-				</div>
+				</tr>
 			);
 			days = [];
 			days.push(
-				shift()
+				shiftColumn()
 			);
 		});
 
-		return <div className="body">{rows}</div>;
+		return <tbody>{rows}</tbody>;
 	};
+
+	// <table className="table table-hover shadow p-3 mb-5 bg-body rounded align-middle">
+	//    
+	//     <tbody>
+	//       {groups.content?.map((group) => (
+	//         <tr key={group.id} 
+	//         id={group.id}
+	//           className={group.deleted ? "text-black-50" : ""}>
+	//           <td>{group.name}</td>
+	//           <td>{group.program?.name}</td>
+	//           <td>{group.groupYear}</td>
+	//           <td>{group.students}</td>
+	//           <td>{group.deleted ? "Ištrintas" : ""}</td>
+	//           <td className="text-end">
+	//             <button className="btn btn-outline-primary me-1 my-1 btn-link" title="Žiūrėti">
+	//               <Link
+	//                 className="nav-link"
+	//                 to={"/groups/view/" + group.id}
+	//               >
+	//                 <VisibilityTwoToneIcon/>
+	//               </Link>
+	//             </button>
+
+	//             <button
+	//               className="btn btn-outline-primary me-1 my-1 btn-link" title="Redaguoti"
+	//               disabled={group.deleted}
+	//             >
+	//               <Link
+	//                 className="nav-link"
+	//                 to={"/groups/edit/" + group.id}
+	//               >
+	//                 <EditTwoToneIcon/>
+	//               </Link>
+	//             </button>
+
+	//             {group.deleted ? (
+	//               <button
+	//               className="btn btn-outline-secondary me-1 my-1 btn-link" title="Atstatyti"
+	//                 onClick={() => restoreGroup(group.id)}
+	//               >
+	//                 <RestoreTwoToneIcon/>
+	//               </button>
+	//             ) : (
+	//               <button
+	//                 className="btn btn-danger me-2 my-1 btn-link" title="Ištrinti"
+	//                 onClick={() => deleteGroup(group.id)}
+	//               >
+	//                 <DeleteTwoToneIcon className="red-icon" />
+	//               </button>
+	//             )}
+	//           </td>
+	//         </tr>
+	//       ))}
+	//     </tbody>
+	//     <tfoot className="table-light">
+	//       <tr>
+	//         <td colSpan={6}>
+	//           {groups.totalElements == "0"
+	//             ? "Įrašų nerasta"
+	//             : `Rasta įrašų: ${groups.totalElements}`}
+	//         </td>
+	//       </tr>
+	//     </tfoot>
+	//   </table>
 
 	const formateDateObject = date => {
 		const clonedObject = { ...date.toObject() };
@@ -335,11 +383,15 @@ const Calendar = (props) => {
 
 	return (
 		<div>
-
 			<div className="calendar">
+
 				{renderHeader()}
-				{renderDays()}
-				{renderCells()}
+				<div>
+					<table className="table rounded">
+						{renderDays()}
+						{renderCells()}
+					</table>
+				</div>
 			</div>
 		</div>
 	);

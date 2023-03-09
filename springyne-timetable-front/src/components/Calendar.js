@@ -10,7 +10,10 @@ import Table from 'react-bootstrap/Table';
 import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
-import { FixedSizeList } from 'react-window';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import Divider from '@mui/material/Divider';
+import List from '@mui/material/List';
+
 
 
 const Calendar = (props) => {
@@ -19,13 +22,8 @@ const Calendar = (props) => {
 	const isBetween = require('dayjs/plugin/isBetween')
 	dayjs.extend(isBetween)
 
-	// const generateColor = () => {
-	// 	const randomColor = Math.floor(Math.random() * 16777215)
-	// 	  .toString(16)
-	// 	  .padStart(6, '0');
-	// 	return `#${randomColor}`;
-	//   };
-
+const colorArray=["#fff4f4", "#f4ffff",
+"#fff4fa","#fffaf4","#fffff4","#f4fff4", "#fff4f8","#fbf4ff", "#fcfff0"];
 	const [holidays, setHolidays] = useState([]);
 
 	const fetchHolidays = () => {
@@ -52,17 +50,13 @@ const Calendar = (props) => {
 
 
 			shift.push(
-				<div>{i}</div>
-			)
-
-		}
-		return <div className="col-shift cell">{shift}</div>
-		{/* 
-		<Container>
-      <Row>
-        {shift}
-      </Row>
-    </Container></div> */}
+				<ListItem disablePadding>
+					<ListItemButton sx={{ height: "40px", p:1}}>
+						<ListItemText sx={{ fontSize: "0.85rem", m: 0 }} disableTypography primary={i} />
+					</ListItemButton>
+				</ListItem>
+			)}
+		return <div className="col-shift cell"><List>{shift}</List></div>
 	};
 
 	const [lessons, setLessons] = useState([]);
@@ -76,9 +70,7 @@ const Calendar = (props) => {
 	const lesson = (d) => {
 		const lessonList = [];
 
-
 		const result = lessons.filter((e) =>
-			// dayjs(e?.lessonDate).format('YYYY-MM') === currentMonth.format("YYYY-MM"));
 			dayjs(e?.lessonDate).format('YYYY-MM') === currentMonth.format("YYYY-MM")
 			&& parseInt(dayjs(e?.lessonDate).format('D')) === d.day);
 		let subjectName = "";
@@ -87,52 +79,79 @@ const Calendar = (props) => {
 		let later = 0;
 		let lessonNr = shedules?.group?.shift?.starts;
 		result.forEach((less) => {
-			//let dayInList = parseInt(dayjs(less.lessonDate).format('D'));
-
-	// 		<ListItem style={style} key={index} component="div" disablePadding>
-    //   <ListItemButton>
-    //     <ListItemText primary={`Item ${index + 1}`} />
-    //   </ListItemButton>
-    // </ListItem>
+			let colorId = less?.subject?.id;
+			//console.log(colorArray[colorId]);
 			if (less?.lessonTime > lessonNr && later === 0) {
 				for (let n = lessonNr; n < less?.lessonTime; n++)
 					lessonList.push(
-						<div class="d-grid gap-2">
-							<button type="button" class="btn btn-outline-secondary"
-								style={{ fontSize: 1 }}
-								disabled></button></div>
+						<ListItem disablePadding>
+							<ListItemButton sx={{ height: "40px", p:0 }}>
+								<ListItemText primary="" />
+							</ListItemButton>
+						</ListItem>
+
 					)
 				later++;
 			}
 			if (less?.subject?.name !== subjectName) {
 
 				lessonList.push(
-					<div class="d-grid gap-2">
-						<button type="button" class="btn btn-outline-secondary"
-							disabled>{less?.subject?.name}</button></div>)
+					<ListItem disablePadding>
+						<ListItemButton sx={{ height: "40px", p:1, bgcolor:colorArray[colorId]}}>
+							<ListItemText 
+							sx={{ fontSize: "0.85rem", m: 0  }} 
+							disableTypography 
+							primary={less?.subject?.name} />
+						</ListItemButton>
+					</ListItem>
+				
+				)
 				subjectName = less?.subject?.name;
 				lessonNr++;
 			}
 			else if (less?.teacher?.name !== teacherName) {
-				lessonList.push(<div>{less?.teacher?.name}</div>)
+				lessonList.push(
+					<ListItem disablePadding>
+						<ListItemButton sx={{ height: "40px", p:1, bgcolor: colorArray[colorId] }}>
+							<ListItemText 
+							sx={{ fontSize: "0.85rem", fontWeight: 300, m: 0 }} 
+							disableTypography 
+							primary={less?.teacher?.name} />
+						</ListItemButton>
+					</ListItem>
+				)
 				teacherName = less?.teacher?.name;
 				lessonNr++;
 			}
 			else if (less?.room?.name !== room) {
-				lessonList.push(<div>{less?.room?.name}</div>)
+				lessonList.push(
+					<ListItem disablePadding>
+						<ListItemButton sx={{ height: "40px", p:1,  bgcolor: colorArray[colorId] }}>
+							<ListItemText 
+							sx={{ fontSize: "0.85rem", fontWeight: 300, m: 0 }} 
+							disableTypography 
+							primary={less?.room?.name} />
+						</ListItemButton>
+					</ListItem>
+				)
 				room = less?.room?.name;
 			}
 
 			else {
-				lessonList.push(<div>_</div>)
+				lessonList.push(
+					<ListItem disablePadding>
+						<ListItemButton sx={{ height: "40px", p:0, bgcolor: colorArray[colorId] }}>
+							<ListItemText primary="" />
+						</ListItemButton>
+					</ListItem>
+					// <div>_</div>
+				)
 
 			}
 			lessonNr++;
 		});
-
-		return <div className="cell-lesson" >{lessonList}</div>
+		return <List>{lessonList}</List>
 	};
-
 
 	dayjs.extend(weekdayPlugin);
 	dayjs.extend(objectPlugin);
@@ -194,7 +213,6 @@ const Calendar = (props) => {
 		let ends;
 		let currentM = currentMonth.format("MM");
 		let currentD = currentMonth.daysInMonth();
-		//let curentDate = currentMonth.format('YYYY-MM-DD');
 
 		holidays.forEach((holiday) => {
 			let dayStarts = dayjs(holiday.starts).format("D");
@@ -277,31 +295,14 @@ const Calendar = (props) => {
 		arrayOfDays.forEach((week, index) => {
 
 			week.dates.forEach((d, i) => {
-				// console.log(d.day + " day " + holidayList + " list");
-				//add lessons here???
 				days.push(
-
 					< div
 						className={`col cell ${!d.isCurrentMonth || getHolidays().includes(d.day)
-							? "disabled"
-							// 
-							: d.isCurrentDay ? "selectedDay" : ""
-							}`
-						}
-						key={i}
-					>
-						<span className="number">{d.day}</span>
-
-						<FixedSizeList				
-							itemCount={4}
-						>
-							{lesson(d)}
-						</FixedSizeList>
+							? "disabled" : d.isCurrentDay ? "selectedDay" : ""}`}
+						key={i}>
+						<span style={{zIndex: '5'}} className="number">{d.day}</span>
 						{lesson(d)}
-
-						{/* <span className="bg">{d.day}</span> */}
 					</div >
-
 				);
 			});
 

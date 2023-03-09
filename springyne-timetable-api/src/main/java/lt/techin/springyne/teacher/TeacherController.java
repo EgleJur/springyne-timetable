@@ -74,4 +74,9 @@ public class TeacherController {
         return ResponseEntity.ok(teacherService.removeSubjectFromTeacher(teacherId,subjectId));
     }
 
+    @GetMapping("/subject")
+    public List<Teacher> getTeachersBySubjectId(@RequestParam(required = false) Long subjectId) {
+        return teacherService.getTeachersBySubjectId(subjectId);
+    }
+
 }

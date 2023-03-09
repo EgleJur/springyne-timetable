@@ -1,12 +1,11 @@
 package lt.techin.springyne.room;
 
-import lt.techin.springyne.exception.ScheduleValidationException;
-import lt.techin.springyne.group.Group;
-import lt.techin.springyne.program.Program;
-import lt.techin.springyne.validationUnits.GroupUtils;
 import lt.techin.springyne.validationUnits.RoomUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.*;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

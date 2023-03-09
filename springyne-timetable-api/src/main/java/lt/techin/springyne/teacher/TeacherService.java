@@ -173,4 +173,8 @@ public class TeacherService {
         teacherToUpdate.getSubjects().remove(subject);
         return teacherRepository.save(teacherToUpdate);
     }
+
+    public List<Teacher> getTeachersBySubjectId(Long subjectId) {
+        return teacherRepository.findBySubjects_Id(subjectId);
+    }
 }

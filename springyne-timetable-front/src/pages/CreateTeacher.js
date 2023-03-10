@@ -212,7 +212,7 @@ function CreateTeacherPage() {
             Pasirinkite pamainą
           </InputLabel>
           <Select
-            error={subjectError}
+            error={shiftError}
             labelId="select-shift-label"
             id="select-shift"
             label="Pasirinkite pamainą"

@@ -37,11 +37,12 @@ function PlanSchedulePage() {
   const [failure, setFailure] = useState(false);
   const times = [1,2,3,4,5,6,7,8,9,10,11,12,13,14];
 
-  useEffect(() => {
+  const fetchShedule=()=>{
     fetch("/api/v1/schedules/" + params.id)
-      .then((response) => response.json())
-      .then((jsonResponse) => setSchedule(jsonResponse));
-  }, []);
+  .then((response) => response.json())
+  .then((jsonResponse) => setSchedule(jsonResponse));
+};
+  useEffect(fetchShedule, []);
 
   const fetchTeachers = () => {
     fetch("/api/v1/teachers/subject?subjectId=" + selectedSubject)
@@ -169,7 +170,10 @@ function PlanSchedulePage() {
             setFailure(false);
           }, 5000);
         }
-      });
+      })
+      // .then(setTimeout(() => {
+      //   window.location.reload(false);
+      // }, 6000))
     }
   };
 

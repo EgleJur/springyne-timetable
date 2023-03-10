@@ -57,13 +57,15 @@ const Calendar = (props) => {
 		return <div className="col-shift cell"><List>{shift}</List></div>
 	};
 
-	const [lessons, setLessons] = useState([]);
-	const fetchLessons = () => {
-		fetch("/api/v1/lessons/schedule/" + params.id)
-			.then((response) => response.json())
-			.then((jsonResponse) => setLessons(jsonResponse));
-	};
-	useEffect(() => fetchLessons, []);
+	// const [lessons, setLessons] = useState([]);
+	// const fetchLessons = () => {
+	// 	fetch("/api/v1/lessons/schedule/" + params.id)
+	// 		.then((response) => response.json())
+	// 		.then((jsonResponse) => setLessons(jsonResponse));
+	// };
+	// useEffect(() => fetchLessons, []);
+
+	const lessons = props.lessons;
 
 	const lesson = (d) => {
 		const lessonList = [];

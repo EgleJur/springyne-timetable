@@ -36,6 +36,8 @@ function PlanSchedulePage() {
   const [success, setSuccess] = useState(false);
   const [failure, setFailure] = useState(false);
   const times = [1,2,3,4,5,6,7,8,9,10,11,12,13,14];
+  const [lessons, setLessons] = useState([]);
+  
 
   useEffect(() => {
     fetch("/api/v1/schedules/" + params.id)
@@ -65,6 +67,13 @@ function PlanSchedulePage() {
   };
 
   useEffect(prefillRooms, [selectedSubject]);
+
+  const fetchLessons = () => {
+    fetch("/api/v1/lessons/schedule/" + params.id)
+      .then((response) => response.json())
+      .then((jsonResponse) => setLessons(jsonResponse));
+  };
+  useEffect(() => fetchLessons, []);
 
   const createNewLesson = (e) => {
     e.preventDefault();
@@ -158,6 +167,7 @@ function PlanSchedulePage() {
           setSuccess(true);
           setFailure(false);
           setOpen(false);
+          fetchLessons();
           setTimeout(() => {
             setSuccess(false);
           }, 5000);
@@ -432,7 +442,7 @@ function PlanSchedulePage() {
         ))}
       </div>
 
-      <Calendar />
+      <Calendar lessons={lessons}/>
     </div>
   );
 }

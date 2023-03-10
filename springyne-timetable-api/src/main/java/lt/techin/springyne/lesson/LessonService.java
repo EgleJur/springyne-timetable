@@ -97,6 +97,10 @@ public class LessonService {
             throw new ScheduleValidationException("Teacher does not teach this subject", "teacher id",
                     "Teacher is invalid", subjectId.toString());
         }
+        if(!((lessonBlock.getStartTime() >= teacher.getShift().getStarts()) && (lessonBlock.getEndTime() <= teacher.getShift().getEnds()))) {
+            throw new ScheduleValidationException("Teacher does not teach on these hours", "teacher id",
+                    "Teacher is invalid", subjectId.toString());
+        }
 
         Room room = roomRepository.findById(roomId).orElseThrow(() -> new ScheduleValidationException("Room does not exist",
                 "room id", "Room not found", roomId.toString()));

@@ -72,7 +72,8 @@ const colorArray=["#fff4f4", "#f4ffff",
 
 		const result = lessons.filter((e) =>
 			dayjs(e?.lessonDate).format('YYYY-MM') === currentMonth.format("YYYY-MM")
-			&& parseInt(dayjs(e?.lessonDate).format('D')) === d.day);
+			&& parseInt(dayjs(e?.lessonDate).format('D')) === d.day)
+			.sort((a, b) => a.lessonTime > b.lessonTime? 1 : -1);
 		let subjectName = "";
 		let teacherName = "";
 		let room = "";

@@ -427,7 +427,7 @@ function PlanSchedulePage() {
               setOpen(true);
             }}
           >
-            {sub.subject.name} {sub.hours} 
+            {sub.subject.name} {sub.hours}
           </button>
         ))}
       </div>

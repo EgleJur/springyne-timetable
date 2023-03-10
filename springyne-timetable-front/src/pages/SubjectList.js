@@ -7,6 +7,7 @@ import EditTwoToneIcon from '@mui/icons-material/EditTwoTone';
 import DeleteTwoToneIcon from '@mui/icons-material/DeleteTwoTone';
 import RestoreTwoToneIcon from '@mui/icons-material/RestoreTwoTone';
 import VisibilityTwoToneIcon from '@mui/icons-material/VisibilityTwoTone';
+import { apiUrl } from "../App";
 
 
 function SubjectListPage() {
@@ -25,7 +26,7 @@ function SubjectListPage() {
 
   const fetchSubjects = () => {
     fetch(
-      `api/v1/subjects/search?name=${searchName}&moduleName=${searchModName}&page=${pageNumber}&pageSize=${pageSize}`
+      `${apiUrl}/api/v1/subjects/search?name=${searchName}&moduleName=${searchModName}&page=${pageNumber}&pageSize=${pageSize}`
     )
       .then((response) => response.json())
       .then((jsonResponse) => setSubjects(jsonResponse));
@@ -38,10 +39,8 @@ function SubjectListPage() {
     setPage(value);
     setPageNumber(value - 1);
     fetch(
-      `/api/v1/subjects/search?name=${searchName}&moduleName=${searchModName}
-      &page=${
-        value - 1
-      }&pageSize=${pageSize}`
+      `${apiUrl}/api/v1/subjects/search?name=${searchName}&moduleName=${searchModName}
+      &page=${value - 1}&pageSize=${pageSize}`
     )
       .then((response) => response.json())
       .then((jsonResponse) => setSubjects(jsonResponse));
@@ -52,17 +51,15 @@ function SubjectListPage() {
     setPage(1);
     setPageNumber(0);
     fetch(
-      `/api/v1/subjects/search?name=${searchName}&moduleName=${searchModName}
-      &page=${0}&pageSize=${
-        e.target.value
-      }`
+      `${apiUrl}/api/v1/subjects/search?name=${searchName}&moduleName=${searchModName}
+      &page=${0}&pageSize=${e.target.value}`
     )
       .then((response) => response.json())
       .then((jsonResponse) => setSubjects(jsonResponse));
   };
 
   const deleteSubject = (id) => {
-    fetch("/api/v1/subjects/delete/" + id, {
+    fetch(`${apiUrl}/api/v1/subjects/delete/` + id, {
       method: "PATCH",
       headers: JSON_HEADERS,
     }).then(fetchSubjects);
@@ -74,7 +71,7 @@ function SubjectListPage() {
   };
 
   const restoreSubject = (id) => {
-    fetch("/api/v1/subjects/restore/" + id, {
+    fetch(`${apiUrl}/api/v1/subjects/restore/` + id, {
       method: "PATCH",
       headers: JSON_HEADERS,
     }).then(fetchSubjects);

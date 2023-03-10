@@ -7,6 +7,7 @@ import EditTwoToneIcon from '@mui/icons-material/EditTwoTone';
 import DeleteTwoToneIcon from '@mui/icons-material/DeleteTwoTone';
 import RestoreTwoToneIcon from '@mui/icons-material/RestoreTwoTone';
 import VisibilityTwoToneIcon from '@mui/icons-material/VisibilityTwoTone';
+import { apiUrl } from "../App";
 
 
 function TeacherListPage() {
@@ -24,7 +25,7 @@ function TeacherListPage() {
 
   const fetchTeachers = () => {
     fetch(
-      `/api/v1/teachers/search?name=${searchName}&shiftId=${searchShift}&subjectId=${searchSubject}&page=${pageNumber}&pageSize=${pageSize}`
+      `${apiUrl}/api/v1/teachers/search?name=${searchName}&shiftId=${searchShift}&subjectId=${searchSubject}&page=${pageNumber}&pageSize=${pageSize}`
     )
       .then((response) => response.json())
       .then((jsonResponse) => setTeachers(jsonResponse));
@@ -33,13 +34,13 @@ function TeacherListPage() {
   useEffect(fetchTeachers, []);
 
   useEffect(() => {
-    fetch(`/api/v1/subjects`)
+    fetch(`${apiUrl}/api/v1/subjects`)
       .then((response) => response.json())
       .then((jsonResponse) => setSubjects(jsonResponse));
   }, []);
 
   useEffect(() => {
-    fetch(`/api/v1/shifts`)
+    fetch(`${apiUrl}/api/v1/shifts`)
       .then((response) => response.json())
       .then((jsonResponse) => setShifts(jsonResponse));
   }, []);
@@ -48,7 +49,7 @@ function TeacherListPage() {
     setPage(value);
     setPageNumber(value - 1);
     fetch(
-      `/api/v1/teachers/search?name=${searchName}&shiftId=${searchShift}&subjectId=${searchSubject}&page=${
+      `${apiUrl}/api/v1/teachers/search?name=${searchName}&shiftId=${searchShift}&subjectId=${searchSubject}&page=${
         value - 1
       }&pageSize=${pageSize}`
     )
@@ -61,7 +62,7 @@ function TeacherListPage() {
     setPage(1);
     setPageNumber(0);
     fetch(
-      `/api/v1/teachers/search?name=${searchName}&shiftId=${searchShift}&subjectId=${searchSubject}&page=${0}&pageSize=${
+      `${apiUrl}/api/v1/teachers/search?name=${searchName}&shiftId=${searchShift}&subjectId=${searchSubject}&page=${0}&pageSize=${
         e.target.value
       }`
     )
@@ -73,14 +74,14 @@ function TeacherListPage() {
     setPage(1);
     setPageNumber(0);
     fetch(
-      `/api/v1/teachers/search?name=${searchName}&shiftId=${searchShift}&subjectId=${searchSubject}&page=${0}&pageSize=${pageSize}`
+      `${apiUrl}/api/v1/teachers/search?name=${searchName}&shiftId=${searchShift}&subjectId=${searchSubject}&page=${0}&pageSize=${pageSize}`
     )
       .then((response) => response.json())
       .then((jsonResponse) => setTeachers(jsonResponse));
   };
 
   const deleteTeacher = (id) => {
-    fetch(`/api/v1/teachers/delete/` + id, {
+    fetch(`${apiUrl}/api/v1/teachers/delete/` + id, {
       method: "PATCH",
     }).then(fetchTeachers);
     setDeleted(true);
@@ -90,7 +91,7 @@ function TeacherListPage() {
              }, 5000);
   };
   const restoreTeacher = (id) => {
-    fetch(`/api/v1/teachers/restore/` + id, {
+    fetch(`${apiUrl}/api/v1/teachers/restore/` + id, {
       method: "PATCH",
     }).then(fetchTeachers);
     setDeleted(false);

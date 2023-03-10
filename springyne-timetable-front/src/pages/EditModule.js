@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { TextField } from "@mui/material";
 import EditModuleSubjects from "../components/EditModuleSubjects";
+import { apiUrl } from "../App";
 
 function EditModulePage() {
   const [module, setModule] = useState({});
@@ -14,7 +15,7 @@ function EditModulePage() {
   const params = useParams();
 
   const fetchModule = () => {
-    fetch("/api/v1/modules/" + params.id)
+    fetch(`${apiUrl}/api/v1/modules/` + params.id)
       .then((response) => response.json())
       .then((jsonResponse) => setModule(jsonResponse));
   };
@@ -33,7 +34,7 @@ function EditModulePage() {
         setNameError(true);
       }
     } else {
-      fetch("/api/v1/modules/update/" + params.id, {
+      fetch(`${apiUrl}/api/v1/modules/update/` + params.id, {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
@@ -69,7 +70,7 @@ function EditModulePage() {
   };
 
   const handleDelete = () => {
-    fetch(`/api/v1/modules/delete/` + params.id, {
+    fetch(`${apiUrl}/api/v1/modules/delete/` + params.id, {
       method: "PATCH",
     })
       .then((response) => response.json())
@@ -85,7 +86,7 @@ function EditModulePage() {
   };
 
   const handleRestore = () => {
-    fetch(`/api/v1/modules/restore/` + params.id, {
+    fetch(`${apiUrl}/api/v1/modules/restore/` + params.id, {
       method: "PATCH",
     })
       .then((response) => response.json())

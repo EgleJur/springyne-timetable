@@ -1,11 +1,10 @@
 import { useEffect, useState } from "react";
 import { Alert, Collapse } from "@mui/material";
 import { TextField } from "@mui/material";
-import FormControlLabel from '@mui/material/FormControlLabel';
-import FormLabel from '@mui/material/FormLabel';
-import Checkbox from '@mui/material/Checkbox';
-
-
+import FormControlLabel from "@mui/material/FormControlLabel";
+import FormLabel from "@mui/material/FormLabel";
+import Checkbox from "@mui/material/Checkbox";
+import { apiUrl } from "../App";
 
 function CreateHolidayPage() {
   const [name, setName] = useState("");
@@ -19,7 +18,7 @@ function CreateHolidayPage() {
   const [failure, setFailure] = useState(false);
   const [shrink1, setShrink1] = useState(false);
 
-  var moment = require('moment'); // require
+  var moment = require("moment"); // require
   moment().format();
 
   const createNewRoom = (e) => {
@@ -47,10 +46,9 @@ function CreateHolidayPage() {
         if (ends === "") {
           setStartDateError(false);
         }
-
       }
     } else {
-      fetch("/api/v1/holidays/createHoliday/", {
+      fetch(`${apiUrl}/api/v1/holidays/createHoliday/`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -59,7 +57,7 @@ function CreateHolidayPage() {
           name,
           starts,
           ends,
-          repeats
+          repeats,
         }),
       }).then((result) => {
         if (result.ok) {
@@ -163,15 +161,17 @@ function CreateHolidayPage() {
 
           <FormControlLabel
             value="end"
-            control={<Checkbox
-              checked={repeats}
-              onChange={handleChange}
-              inputProps={{ 'aria-label': 'controlled' }}
-            />}
+            control={
+              <Checkbox
+                checked={repeats}
+                onChange={handleChange}
+                inputProps={{ "aria-label": "controlled" }}
+              />
+            }
             label="Kartojasi kiekvienais metais"
             labelPlacement="end"
-          /></div>
-
+          />
+        </div>
 
         <button
           type="submit"

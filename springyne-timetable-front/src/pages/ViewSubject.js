@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { Collapse, Alert } from "@mui/material";
+import { apiUrl } from "../App";
 
 function ViewSubjectPage() {
   const [subject, setSubject] = useState({});
@@ -10,13 +11,13 @@ function ViewSubjectPage() {
   const params = useParams();
 
   useEffect(() => {
-    fetch("/api/v1/subjects/" + params.id)
+    fetch(`${apiUrl}/api/v1/subjects/` + params.id)
       .then((response) => response.json())
       .then((jsonResponse) => setSubject(jsonResponse));
   }, [params.id]);
 
   const handleDelete = () => {
-    fetch(`/api/v1/subjects/delete/` + params.id, {
+    fetch(`${apiUrl}/api/v1/subjects/delete/` + params.id, {
       method: "PATCH",
     })
       .then((response) => response.json())
@@ -29,7 +30,7 @@ function ViewSubjectPage() {
   };
 
   const handleRestore = () => {
-    fetch(`/api/v1/subjects/restore/` + params.id, {
+    fetch(`${apiUrl}/api/v1/subjects/restore/` + params.id, {
       method: "PATCH",
     })
       .then((response) => response.json())

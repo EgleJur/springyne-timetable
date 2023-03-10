@@ -20,5 +20,5 @@ public interface TeacherRepository extends JpaRepository<Teacher,Long> {
     Page<Teacher> findAllByNameIgnoreCaseContainingAndShiftId(String name, Long shiftId, Pageable pageable);
     Page<Teacher> findAllByNameIgnoreCaseContainingAndSubjects_Id(String name, Long SubjectId, Pageable pageable);
 
-    List<Teacher> findBySubjects_Id(Long subjectId);
+    List<Teacher> findBySubjects_IdAndShift_StartsLessThanEqualAndShift_EndsGreaterThanEqual(Long subjectId, Integer startTime, Integer endTime);
 }

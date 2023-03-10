@@ -6,6 +6,7 @@ import { Collapse, Alert } from "@mui/material";
 import EditTwoToneIcon from '@mui/icons-material/EditTwoTone';
 import DeleteTwoToneIcon from '@mui/icons-material/DeleteTwoTone';
 import RestoreTwoToneIcon from '@mui/icons-material/RestoreTwoTone';
+import { apiUrl } from "../App";
 
 
 function ShiftListPage() {
@@ -18,10 +19,15 @@ function ShiftListPage() {
 
   const fetchShifts = () => {
     setPage(1);
-    fetch('/api/v1/shifts')
-    .then(response => response.json())
-    .then(jsonResponse => setShifts(jsonResponse
-      .filter(shift => shift.name.toLowerCase().includes(searchName.toLowerCase()))));
+    fetch(`${apiUrl}/api/v1/shifts`)
+      .then((response) => response.json())
+      .then((jsonResponse) =>
+        setShifts(
+          jsonResponse.filter((shift) =>
+            shift.name.toLowerCase().includes(searchName.toLowerCase())
+          )
+        )
+      );
   };
 
   useEffect(() => {
@@ -40,7 +46,7 @@ function ShiftListPage() {
 
   const deleteShift = (shift) => {
     shift.visible = 0;
-    fetch('/api/v1/shifts/' + shift.id, {
+    fetch(`${apiUrl}/api/v1/shifts/` + shift.id, {
       method: 'PATCH',
       headers: {
           'Content-Type': 'application/json'
@@ -55,7 +61,7 @@ function ShiftListPage() {
   };
   const restoreShift = (shift) => {
     shift.visible = 1;
-    fetch('/api/v1/shifts/' + shift.id, {
+    fetch(`${apiUrl}/api/v1/shifts/` + shift.id, {
       method: 'PATCH',
       headers: {
           'Content-Type': 'application/json'

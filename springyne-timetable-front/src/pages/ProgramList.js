@@ -7,6 +7,7 @@ import EditTwoToneIcon from '@mui/icons-material/EditTwoTone';
 import DeleteTwoToneIcon from '@mui/icons-material/DeleteTwoTone';
 import RestoreTwoToneIcon from '@mui/icons-material/RestoreTwoTone';
 import VisibilityTwoToneIcon from '@mui/icons-material/VisibilityTwoTone';
+import { apiUrl } from "../App";
 
 function ProgramListPage() {
   const [programs, setPrograms] = useState({});
@@ -19,7 +20,7 @@ function ProgramListPage() {
 
   const fetchPrograms = () => {
     fetch(
-      `/api/v1/programs/search?name=${searchName}&page=${pageNumber}&pageSize=${pageSize}`
+      `${apiUrl}/api/v1/programs/search?name=${searchName}&page=${pageNumber}&pageSize=${pageSize}`
     )
       .then((response) => response.json())
       .then((jsonResponse) => setPrograms(jsonResponse));
@@ -31,7 +32,7 @@ function ProgramListPage() {
     setPage(value);
     setPageNumber(value - 1);
     fetch(
-      `/api/v1/programs/search?name=${searchName}&page=${
+      `${apiUrl}/api/v1/programs/search?name=${searchName}&page=${
         value - 1
       }&pageSize=${pageSize}`
     )
@@ -44,7 +45,7 @@ function ProgramListPage() {
     setPage(1);
     setPageNumber(0);
     fetch(
-      `/api/v1/programs/search?name=${searchName}&page=${0}&pageSize=${
+      `${apiUrl}/api/v1/programs/search?name=${searchName}&page=${0}&pageSize=${
         e.target.value
       }`
     )
@@ -56,14 +57,14 @@ function ProgramListPage() {
     setPage(1);
     setPageNumber(0);
     fetch(
-      `/api/v1/programs/search?name=${searchName}&page=${0}&pageSize=${pageSize}`
+      `${apiUrl}/api/v1/programs/search?name=${searchName}&page=${0}&pageSize=${pageSize}`
     )
       .then((response) => response.json())
       .then((jsonResponse) => setPrograms(jsonResponse));
   };
 
   const deleteProgram = (id) => {
-    fetch(`/api/v1/programs/delete/` + id, {
+    fetch(`${apiUrl}/api/v1/programs/delete/` + id, {
       method: "PATCH",
     }).then(fetchPrograms);
     setDeleted(true);
@@ -73,7 +74,7 @@ function ProgramListPage() {
              }, 5000);
   };
   const restoreProgram = (id) => {
-    fetch(`/api/v1/programs/restore/` + id, {
+    fetch(`${apiUrl}/api/v1/programs/restore/` + id, {
       method: "PATCH",
     }).then(fetchPrograms);
     setDeleted(false);

@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { TextField, Select, MenuItem } from "@mui/material";
 import ClearIcon from "@mui/icons-material/Clear";
+import { apiUrl } from "../App";
 
 function EditProgramPage() {
   const [program, setProgram] = useState({});
@@ -18,7 +19,7 @@ function EditProgramPage() {
   const params = useParams();
 
   const fetchProgram = () => {
-    fetch("/api/v1/programs/" + params.id)
+    fetch(`${apiUrl}/api/v1/programs/` + params.id)
       .then((response) => response.json())
       .then((jsonResponse) => setProgram(jsonResponse));
   };
@@ -26,13 +27,13 @@ function EditProgramPage() {
   useEffect(() => fetchProgram, []);
 
   useEffect(() => {
-    fetch("api/v1/subjects/")
+    fetch(`${apiUrl}/api/v1/subjects/`)
       .then((response) => response.json())
       .then(setSubjects);
   }, []);
 
   const deleteSubject = (e) => {
-    fetch(`/api/v1/programs/${params.id}/removeSubject/${e}`, {
+    fetch(`${apiUrl}/api/v1/programs/${params.id}/removeSubject/${e}`, {
       method: "PATCH",
     }).then(fetchProgram);
   };
@@ -64,7 +65,7 @@ function EditProgramPage() {
       }
     } else {
       fetch(
-        `/api/v1/programs/update/${params.id}?&subjectId=${selectedSubject}&hours=${hours}`,
+        `${apiUrl}/api/v1/programs/update/${params.id}?&subjectId=${selectedSubject}&hours=${hours}`,
         {
           method: "PATCH",
           headers: {
@@ -81,13 +82,13 @@ function EditProgramPage() {
           setHours("");
           setTimeout(() => {
             setSuccess(false);
-                   }, 5000);
+          }, 5000);
         } else {
           setFailure(true);
           setSuccess(false);
           setTimeout(() => {
             setFailure(false);
-                   }, 5000);
+          }, 5000);
         }
       });
     }
@@ -101,7 +102,7 @@ function EditProgramPage() {
   };
 
   const handleDelete = () => {
-    fetch(`/api/v1/programs/delete/` + params.id, {
+    fetch(`${apiUrl}/api/v1/programs/delete/` + params.id, {
       method: "PATCH",
     })
       .then((response) => response.json())
@@ -116,7 +117,7 @@ function EditProgramPage() {
              }, 5000);
   };
   const handleRestore = () => {
-    fetch(`/api/v1/programs/restore/` + params.id, {
+    fetch(`${apiUrl}/api/v1/programs/restore/` + params.id, {
       method: "PATCH",
     })
       .then((response) => response.json())

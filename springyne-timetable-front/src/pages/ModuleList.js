@@ -8,6 +8,7 @@ import EditTwoToneIcon from '@mui/icons-material/EditTwoTone';
 import DeleteTwoToneIcon from '@mui/icons-material/DeleteTwoTone';
 import RestoreTwoToneIcon from '@mui/icons-material/RestoreTwoTone';
 import VisibilityTwoToneIcon from '@mui/icons-material/VisibilityTwoTone';
+import { apiUrl } from "../App";
 
 function ModuleListPage() {
   const [modules, setModules] = useState({});
@@ -20,7 +21,7 @@ function ModuleListPage() {
 
   const fetchModules = () => {
     fetch(
-      `/api/v1/modules/search?name=${searchName}&page=${pageNumber}&pageSize=${pageSize}`
+      `${apiUrl}/api/v1/modules/search?name=${searchName}&page=${pageNumber}&pageSize=${pageSize}`
     )
       .then((response) => response.json())
       .then((jsonResponse) => setModules(jsonResponse));
@@ -32,7 +33,7 @@ function ModuleListPage() {
     setPage(value);
     setPageNumber(value - 1);
     fetch(
-      `/api/v1/modules/search?name=${searchName}&page=${
+      `${apiUrl}/api/v1/modules/search?name=${searchName}&page=${
         value - 1
       }&pageSize=${pageSize}`
     )
@@ -45,7 +46,7 @@ function ModuleListPage() {
     setPage(1);
     setPageNumber(0);
     fetch(
-      `/api/v1/modules/search?name=${searchName}&page=${0}&pageSize=${
+      `${apiUrl}/api/v1/modules/search?name=${searchName}&page=${0}&pageSize=${
         e.target.value
       }`
     )
@@ -54,7 +55,7 @@ function ModuleListPage() {
   };
 
   const deleteModule = (id) => {
-    fetch(`/api/v1/modules/delete/` + id, {
+    fetch(`${apiUrl}/api/v1/modules/delete/` + id, {
       method: "PATCH",
     }).then(fetchModules);
     setDeleted(true);
@@ -64,7 +65,7 @@ function ModuleListPage() {
              }, 5000);
   };
   const restoreModule = (id) => {
-    fetch(`/api/v1/modules/restore/` + id, {
+    fetch(`${apiUrl}/api/v1/modules/restore/` + id, {
       method: "PATCH",
     }).then(fetchModules);
     setDeleted(false);

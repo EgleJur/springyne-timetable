@@ -11,6 +11,8 @@ import { DatePicker } from "@mui/x-date-pickers";
 import { Select, MenuItem } from "@mui/material";
 import dayjs from "dayjs";
 import { Alert, Collapse } from "@mui/material";
+import { apiUrl } from "../App";
+
 
 function PlanSchedulePage() {
   const params = useParams();
@@ -35,23 +37,29 @@ function PlanSchedulePage() {
   const today = dayjs().format("YYYY-MM-DD");
   const [success, setSuccess] = useState(false);
   const [failure, setFailure] = useState(false);
-  const times = [1,2,3,4,5,6,7,8,9,10,11,12,13,14];
+  const times = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14];
   const [lessons, setLessons] = useState([]);
-  
 
   useEffect(() => {
-    fetch("/api/v1/schedules/" + params.id)
+    fetch(`${apiUrl}/api/v1/schedules/` + params.id)
       .then((response) => response.json())
       .then((jsonResponse) => setSchedule(jsonResponse));
   }, []);
 
+  const fetchLessons = () => {
+    fetch("/api/v1/lessons/schedule/" + params.id)
+      .then((response) => response.json())
+      .then((jsonResponse) => setLessons(jsonResponse));
+  };
+  useEffect(() => fetchLessons, []);
+
   const fetchTeachers = () => {
-    fetch("/api/v1/teachers/subject?subjectId=" + selectedSubject)
+    fetch(`${apiUrl}/api/v1/teachers/subject?subjectId=` + selectedSubject)
       .then((response) => response.json())
       .then((jsonResponse) => setTeachers(jsonResponse));
   };
 
-  useEffect(fetchTeachers, [selectedSubject]);
+  useEffect(fetchTeachers, [selectedSubject, schedule]);
 
   const prefillRooms = () => {
     if (selectedSubject === "") {
@@ -67,13 +75,6 @@ function PlanSchedulePage() {
   };
 
   useEffect(prefillRooms, [selectedSubject]);
-
-  const fetchLessons = () => {
-    fetch("/api/v1/lessons/schedule/" + params.id)
-      .then((response) => response.json())
-      .then((jsonResponse) => setLessons(jsonResponse));
-  };
-  useEffect(() => fetchLessons, []);
 
   const createNewLesson = (e) => {
     e.preventDefault();
@@ -135,7 +136,7 @@ function PlanSchedulePage() {
       const startDate = dayjs(startDateValue).format("YYYY-MM-DD");
       const endDate = dayjs(endDateValue).format("YYYY-MM-DD");
       fetch(
-        `/api/v1/lessons/schedule/${params.id}?subjectId=${selectedSubject}&teacherId=${selectedTeacher}&roomId=${selectedRoom}`,
+        `${apiUrl}/api/v1/lessons/schedule/${params.id}?subjectId=${selectedSubject}&teacherId=${selectedTeacher}&roomId=${selectedRoom}`,
         {
           method: "POST",
           headers: {
@@ -442,7 +443,7 @@ function PlanSchedulePage() {
         ))}
       </div>
 
-      <Calendar lessons={lessons}/>
+      <Calendar lessons={lessons} />
     </div>
   );
 }

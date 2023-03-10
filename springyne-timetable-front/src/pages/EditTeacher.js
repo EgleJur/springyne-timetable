@@ -10,6 +10,7 @@ import {
   OutlinedInput,
 } from "@mui/material";
 import ClearIcon from "@mui/icons-material/Clear";
+import { apiUrl } from "../App";
 
 function EditTeacherPage() {
   const [teacher, setTeacher] = useState({});
@@ -25,7 +26,7 @@ function EditTeacherPage() {
   const params = useParams();
 
   const fetchTeacher = () => {
-    fetch("/api/v1/teachers/" + params.id)
+    fetch(`${apiUrl}/api/v1/teachers/` + params.id)
       .then((response) => response.json())
       .then((jsonResponse) => setTeacher(jsonResponse));
   };
@@ -34,19 +35,19 @@ function EditTeacherPage() {
   useEffect(() => fetchTeacher, []);
 
   useEffect(() => {
-    fetch("api/v1/subjects/")
+    fetch(`${apiUrl}/api/v1/subjects/`)
       .then((response) => response.json())
       .then(setSubjects);
   }, []);
 
   useEffect(() => {
-    fetch("api/v1/shifts/")
+    fetch(`${apiUrl}/api/v1/shifts/`)
       .then((response) => response.json())
       .then(setShifts);
   }, []);
 
   const deleteSubject = (e) => {
-    fetch(`/api/v1/teachers/${params.id}/removeSubject/${e}`, {
+    fetch(`${apiUrl}/api/v1/teachers/${params.id}/removeSubject/${e}`, {
       method: "PATCH",
     }).then(fetchTeacher);
   };
@@ -72,7 +73,7 @@ function EditTeacherPage() {
       }
     } else {
       fetch(
-        `/api/v1/teachers/update/${params.id}?shiftId=${selectedShift}&subjectId=${selectedSubject}`,
+        `${apiUrl}/api/v1/teachers/update/${params.id}?shiftId=${selectedShift}&subjectId=${selectedSubject}`,
         {
           method: "PATCH",
           headers: {
@@ -100,7 +101,7 @@ function EditTeacherPage() {
   };
 
   const handleDelete = () => {
-    fetch(`/api/v1/teachers/delete/` + params.id, {
+    fetch(`${apiUrl}/api/v1/teachers/delete/` + params.id, {
       method: "PATCH",
     })
       .then((response) => response.json())
@@ -110,7 +111,7 @@ function EditTeacherPage() {
     setNameError(false);
   };
   const handleRestore = () => {
-    fetch(`/api/v1/teachers/restore/` + params.id, {
+    fetch(`${apiUrl}/api/v1/teachers/restore/` + params.id, {
       method: "PATCH",
     })
       .then((response) => response.json())

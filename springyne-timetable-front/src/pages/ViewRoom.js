@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { Collapse, Alert } from "@mui/material";
+import { apiUrl } from "../App";
 
 function ViewRoomPage() {
   const [room, setRoom] = useState({});
@@ -10,13 +11,13 @@ function ViewRoomPage() {
   const params = useParams();
 
   useEffect(() => {
-    fetch("/api/v1/rooms/" + params.id)
+    fetch(`${apiUrl}/api/v1/rooms/` + params.id)
       .then((response) => response.json())
       .then((jsonResponse) => setRoom(jsonResponse));
   }, [params.id]);
 
   const handleDelete = () => {
-    fetch(`/api/v1/rooms/delete/` + params.id, {
+    fetch(`${apiUrl}/api/v1/rooms/delete/` + params.id, {
       method: "PATCH",
     })
       .then((response) => response.json())
@@ -29,7 +30,7 @@ function ViewRoomPage() {
   };
 
   const handleRestore = () => {
-    fetch(`/api/v1/rooms/restore/` + params.id, {
+    fetch(`${apiUrl}/api/v1/rooms/restore/` + params.id, {
       method: "PATCH",
     })
       .then((response) => response.json())

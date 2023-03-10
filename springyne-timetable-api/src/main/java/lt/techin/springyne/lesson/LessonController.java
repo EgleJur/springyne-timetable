@@ -43,4 +43,9 @@ public class LessonController {
         return ResponseEntity.ok(lessonService.addLesson(lessonBlock, scheduleId,
                 subjectId, teacherId, roomId));
     }
+//
+//    @GetMapping("/schedule/{scheduleId}/subject/{subjectId}")
+//    public Lesson getLessonsBySchedule(@PathVariable Long scheduleId) {
+//        return lessonService.getLessonsBySchedule(scheduleId);
+//    }
 }

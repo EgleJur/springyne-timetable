@@ -4,6 +4,7 @@ import { TextField } from "@mui/material";
 import { Select, MenuItem, Pagination } from "@mui/material";
 import { Collapse, Alert } from "@mui/material";
 import DeleteTwoToneIcon from '@mui/icons-material/DeleteTwoTone';
+import { apiUrl } from "../App";
 
 function HolidayListPage() {
   const [holidays, setHolidays] = useState([]);
@@ -32,7 +33,7 @@ moment().format();
       ) {setDateError(true);} 
      else {
       fetch(
-        `/api/v1/holidays/search?name=${searchName}&from=${searchStartDate}&to=${searchEndDate}`
+        `${apiUrl}/api/v1/holidays/search?name=${searchName}&from=${searchStartDate}&to=${searchEndDate}`
       )
         .then((response) => response.json())
         .then((jsonResponse) => setHolidays(jsonResponse));
@@ -42,7 +43,7 @@ moment().format();
   useEffect(fetchHolidays, []);
 
   const deleteHoliday = (id) => {
-    fetch("/api/v1/holidays/delete/" + id, {
+    fetch(`${apiUrl}/api/v1/holidays/delete/` + id, {
       method: "PATCH",
       headers: JSON_HEADERS,
     }).then(fetchHolidays);

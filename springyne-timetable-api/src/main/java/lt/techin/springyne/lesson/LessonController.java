@@ -44,20 +44,19 @@ public class LessonController {
                 subjectId, teacherId, roomId));
     }
 
-    @PatchMapping("/editSingleLesson/{lessonId}") // koks???
+
+    @PatchMapping("/editSingleLesson/{lessonId}")
     public ResponseEntity<Lesson> editLesson(@PathVariable Long lessonId,
-                                             @RequestParam Long subjectId,
                                              @RequestParam Long teacherId,
                                              @RequestParam Long roomId) {
-        return ResponseEntity.ok(lessonService.editSingleLesson(lessonId, subjectId, teacherId, roomId));
+        return ResponseEntity.ok(lessonService.editSingleLesson(lessonId, teacherId, roomId));
     }
 
-    @PatchMapping("/editMultipleLessons/{lessonId}") // koks???
-    public ResponseEntity<List<Lesson>> editLessonList(@PathVariable Long lessonId,
-                                                       @RequestParam Long scheduleId,
+    @PatchMapping("/editMultipleLessons/{scheduleId}")
+    public ResponseEntity<List<Lesson>> editLessonList(@PathVariable Long scheduleId,
                                                        @RequestParam Long subjectId,
                                                        @RequestParam Long teacherId,
                                                        @RequestParam Long roomId) {
-        return ResponseEntity.ok(lessonService.editMultipleLessons(lessonId, scheduleId, subjectId, teacherId, roomId));
+        return ResponseEntity.ok(lessonService.editMultipleLessons(scheduleId, subjectId, teacherId, roomId));
     }
 }

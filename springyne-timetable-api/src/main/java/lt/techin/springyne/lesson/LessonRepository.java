@@ -12,4 +12,10 @@ public interface LessonRepository extends JpaRepository<Lesson,Long> {
     List<Lesson> findByLessonDateBetweenAndLessonTimeBetween(LocalDate startDate, LocalDate endDate, Integer startTime, Integer endTime);
 
     Long countBySubjectIdAndSchedule_GroupId(Long subjectId, Long groupId);
+
+    List<Lesson> findBySubjectIdAndScheduleIdAndTeacherIdAndRoomId(Long subjectId, Long sheduleId, Long teacherId, Long roomId);
+    List<Lesson> findAllBySubjectIdAndScheduleId(Long subjectId, Long sheduleId);
+
+    Lesson findBySubjectIdAndScheduleId(Long subjectId, Long sheduleId);
+
 }

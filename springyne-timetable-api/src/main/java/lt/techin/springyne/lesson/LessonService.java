@@ -9,6 +9,7 @@ import lt.techin.springyne.room.Room;
 import lt.techin.springyne.room.RoomRepository;
 import lt.techin.springyne.schedule.Schedule;
 import lt.techin.springyne.schedule.ScheduleRepository;
+import lt.techin.springyne.shift.Shift;
 import lt.techin.springyne.subject.Subject;
 import lt.techin.springyne.subject.SubjectRepository;
 import lt.techin.springyne.teacher.Teacher;
@@ -75,8 +76,8 @@ public class LessonService {
                     "Lesson date is invalid", lessonBlock.getStartDate().toString() + " - " + lessonBlock.getEndDate());
         }
         if (lessonBlock.getStartTime() == null || lessonBlock.getEndTime() == null || lessonBlock.getStartTime() > lessonBlock.getEndTime()
-        || lessonBlock.getStartTime() < 1 || lessonBlock.getStartTime() > 14 || lessonBlock.getEndTime() < 1 || lessonBlock.getEndTime() > 14
-        || lessonBlock.getStartTime() < schedule.getGroup().getShift().getStarts() || lessonBlock.getEndTime() > schedule.getGroup().getShift()
+                || lessonBlock.getStartTime() < 1 || lessonBlock.getStartTime() > 14 || lessonBlock.getEndTime() < 1 || lessonBlock.getEndTime() > 14
+                || lessonBlock.getStartTime() < schedule.getGroup().getShift().getStarts() || lessonBlock.getEndTime() > schedule.getGroup().getShift()
                 .getEnds() || lessonBlock.getStartTime() > schedule.getGroup().getShift().getEnds() || lessonBlock.getEndTime() <
                 schedule.getGroup().getShift().getStarts()) {
             throw new ScheduleValidationException("Invalid lesson time range", "lesson time",
@@ -88,7 +89,7 @@ public class LessonService {
 
         ProgramSubject lessonProgramSubject = schedule.getGroup().getProgram().getSubjects().stream().filter(programSubject ->
                 programSubject.getSubject().equals(subject)).findFirst().orElseThrow(() -> new ScheduleValidationException(
-                        "Subject is not covered by this program", "subject id", "Subject is invalid", subjectId.toString()));
+                "Subject is not covered by this program", "subject id", "Subject is invalid", subjectId.toString()));
 
 
         Teacher teacher = teacherRepository.findById(teacherId).orElseThrow(() -> new ScheduleValidationException("Teacher does not exist",
@@ -97,7 +98,11 @@ public class LessonService {
             throw new ScheduleValidationException("Teacher does not teach this subject", "teacher id",
                     "Teacher is invalid", subjectId.toString());
         }
+
+        if (!((lessonBlock.getStartTime() >= teacher.getShift().getStarts()) && (lessonBlock.getEndTime() <= teacher.getShift().getEnds()))) {
+
         if(!((lessonBlock.getStartTime() >= teacher.getShift().getStarts()) && (lessonBlock.getEndTime() <= teacher.getShift().getEnds()))) {
+
             throw new ScheduleValidationException("Teacher does not teach on these hours", "teacher id",
                     "Teacher is invalid", subjectId.toString());
         }
@@ -110,7 +115,7 @@ public class LessonService {
         }
 
         List<Lesson> existingLessons = lessonRepository.findByLessonDateBetweenAndLessonTimeBetween(lessonBlock.getStartDate(),
-                lessonBlock.getEndDate(),lessonBlock.getStartTime(),lessonBlock.getEndTime());
+                lessonBlock.getEndDate(), lessonBlock.getStartTime(), lessonBlock.getEndTime());
 
         if (existingLessons.stream().anyMatch(lesson -> lesson.getTeacher().equals(teacher))) {
             throw new ScheduleValidationException("Teacher time is already reserved in this period", "teacher id",
@@ -132,12 +137,12 @@ public class LessonService {
         List<LocalDate> holidayDateList = holidays.stream().flatMap(holiday -> holiday.getStarts().datesUntil(holiday.getEnds()
                 .plusDays(1))).collect(Collectors.toList());
 
-        List <Lesson> lessons = new ArrayList<>();
+        List<Lesson> lessons = new ArrayList<>();
         for (LocalDate i = lessonBlock.getStartDate(); !i.isAfter(lessonBlock.getEndDate()); i = i.plusDays(1)) {
             if (holidayDateList.contains(i) || i.getDayOfWeek().equals(DayOfWeek.SATURDAY) || i.getDayOfWeek().equals(DayOfWeek.SUNDAY)) {
                 continue;
             }
-            for (int j = lessonBlock.getStartTime(); j<=lessonBlock.getEndTime(); j++) {
+            for (int j = lessonBlock.getStartTime(); j <= lessonBlock.getEndTime(); j++) {
                 Lesson newLesson = new Lesson();
                 newLesson.setLessonDate(i);
                 newLesson.setLessonTime(j);
@@ -157,6 +162,89 @@ public class LessonService {
                     "Subject is overbooked", lessonBlock.getStartDate().toString() + " - " + lessonBlock.getEndDate());
         }
 
+
+        return lessonRepository.saveAll(lessons);
+    }
+
+    public Lesson editSingleLesson(Long lessonId, Long subjectId, Long teacherId, Long roomId) {
+
+        Lesson existingLesson = lessonRepository.findById(lessonId)
+                .orElseThrow(() -> new ScheduleValidationException("Lesson does not exist",
+                        "lessonId", "Lesson not found", String.valueOf(lessonId)));
+
+        Subject subject = subjectRepository.findById(subjectId).orElseThrow(() -> new ScheduleValidationException("Subject does not exist",
+                "subject id", "Subject not found", subjectId.toString()));
+
+        if (teacherId != null) {
+            Teacher teacher = teacherRepository.findById(teacherId)
+                    .orElseThrow(() -> new ScheduleValidationException("Teacher does not exist",
+                            "teacher id", "Teacher not found", teacherId.toString()));
+
+            if (!teacher.getSubjects().contains(subject)) {
+                throw new ScheduleValidationException("Teacher does not teach this subject", "teacher id",
+                        "Teacher is invalid", subjectId.toString());
+            }
+            existingLesson.setTeacher(teacher);
+        }
+        if (roomId != null) {
+            Room room = roomRepository.findById(roomId)
+                    .orElseThrow(() -> new ScheduleValidationException("Room does not exist",
+                            "room id", "Room not found", roomId.toString()));
+
+            if (!subject.getRooms().contains(room)) {
+                throw new ScheduleValidationException("Subject cannot be taught in this room", "room id",
+                        "Room is invalid", subjectId.toString());
+            }
+            existingLesson.setRoom(room);
+        }
+        return lessonRepository.save(existingLesson);
+    }
+
+    public List<Lesson> editMultipleLessons(Long scheduleId, Long subjectId, Long teacherId, Long roomId) {
+
+        Schedule schedule = scheduleRepository.findById(scheduleId)
+                .orElseThrow(() -> new ScheduleValidationException("Schedule does not exist",
+                        "schedule id", "Schedule not found", scheduleId.toString()));
+
+        Subject subject = subjectRepository.findById(subjectId)
+                .orElseThrow(() -> new ScheduleValidationException("Subject does not exist",
+                        "subject id", "Subject not found", subjectId.toString()));
+
+
+        Teacher teacher = teacherRepository.findById(teacherId)
+                .orElseThrow(() -> new ScheduleValidationException("Teacher does not exist",
+                        "teacher id", "Teacher not found", teacherId.toString()));
+
+        Room room = roomRepository.findById(roomId)
+                .orElseThrow(() -> new ScheduleValidationException("Room does not exist",
+                        "room id", "Room not found", roomId.toString()));
+
+
+        if (!teacher.getSubjects().contains(subject)) {
+            throw new ScheduleValidationException("Teacher does not teach this subject", "teacher id",
+                    "Teacher is invalid", subjectId.toString());
+        }
+
+        Shift shift = schedule.getGroup().getShift();
+
+        if (!(( shift.getStarts() == teacher.getShift().getStarts()) && (shift.getEnds() <= teacher.getShift().getEnds()))) {
+            throw new ScheduleValidationException("Teacher does not teach on these hours", "teacher id",
+                    "Teacher is invalid", subjectId.toString());
+        }
+
+        if (!subject.getRooms().contains(room)) {
+            throw new ScheduleValidationException("Subject cannot be taught in this room", "room id",
+                    "Room is invalid", subjectId.toString());
+        }
+        List<Lesson> lessons = lessonRepository.findAllBySubjectIdAndScheduleId(subjectId, scheduleId);
+        for (Lesson lesson : lessons) {
+            if (teacherId != null) {
+                lesson.setTeacher(teacher);
+                if (roomId != null) {
+                    lesson.setRoom(room);
+                }
+            } else if(roomId != null) {lesson.setRoom(room);}
+        }
 
         return lessonRepository.saveAll(lessons);
     }

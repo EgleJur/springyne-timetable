@@ -39,7 +39,12 @@ function PlanSchedulePage() {
   const [lessons, setLessons] = useState([]);
   
 
+
+
+  useEffect(() => {
+
   const fetchShedule=()=>{
+
     fetch("/api/v1/schedules/" + params.id)
   .then((response) => response.json())
   .then((jsonResponse) => setSchedule(jsonResponse));
@@ -186,6 +191,7 @@ function PlanSchedulePage() {
       // }, 6000))
     }
   };
+
 
   return (
     <div className="mx-3">

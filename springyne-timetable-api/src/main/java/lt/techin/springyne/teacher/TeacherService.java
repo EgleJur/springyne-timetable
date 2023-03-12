@@ -174,7 +174,7 @@ public class TeacherService {
         return teacherRepository.save(teacherToUpdate);
     }
 
-    public List<Teacher> getTeachersBySubjectId(Long subjectId) {
-        return teacherRepository.findBySubjects_Id(subjectId);
+    public List<Teacher> getAvailableTeachersBySubjectId(Long subjectId, Integer startHours, Integer endHours) {
+        return teacherRepository.findBySubjects_IdAndShift_StartsLessThanEqualAndShift_EndsGreaterThanEqual(subjectId, startHours, endHours);
     }
 }

@@ -4,6 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
+
 
 @Data
 @AllArgsConstructor
@@ -12,9 +14,9 @@ public class HolidayDto {
 
     private String name;
 
-    private String starts;
+    private LocalDate starts;
 
-    private String ends;
+    private LocalDate ends;
 
     private boolean repeats;
 

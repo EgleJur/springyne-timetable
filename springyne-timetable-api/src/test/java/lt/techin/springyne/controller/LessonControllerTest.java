@@ -1,19 +1,35 @@
 package lt.techin.springyne.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import lt.techin.springyne.lesson.LessonBlock;
+import lt.techin.springyne.group.GroupDto;
+import lt.techin.springyne.lesson.*;
+import lt.techin.springyne.room.Room;
+import lt.techin.springyne.shift.ShiftDto;
+import lt.techin.springyne.subject.Subject;
+import lt.techin.springyne.teacher.Teacher;
+import lt.techin.springyne.teacher.TeacherDto;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.Optional;
 
+import static org.junit.Assert.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.when;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -146,4 +162,40 @@ public class LessonControllerTest {
         assertEquals(400,mvcResult1.getResponse().getStatus(), message);
     }
 
+    @Test
+    void editLessonAllowsSavingWithCorrectValues() throws Exception{
+        Long subjectId = 1L;
+        Long teacherId = 1L;
+        Long roomId = 4L;
+        String message = "Correct values should allow to edit the lesson";
+
+        MvcResult mvcResult1 = mockMvc.perform(MockMvcRequestBuilders.patch("/api/v1/lessons/editSingleLesson/1")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .param("subjectId", subjectId.toString())
+                        .param("teacherId", teacherId.toString())
+                        .param("roomId", roomId.toString()))
+                .andReturn();
+
+        assertEquals(200, mvcResult1.getResponse().getStatus(), message);
+    }
+
+    @Test
+    void editLessonsAllowsSavingWithCorrectValues() throws Exception{
+        Long scheduleId = 2L;
+        Long subjectId = 1L;
+        Long teacherId = 1L;
+        Long roomId = 4L;
+        String message = "Correct values should allow to edit the lesson";
+
+        MvcResult mvcResult1 = mockMvc.perform(MockMvcRequestBuilders.patch("/api/v1/lessons/editMultipleLessons/1")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .param("scheduleId", scheduleId.toString())
+                        .param("subjectId", subjectId.toString())
+                        .param("teacherId", teacherId.toString())
+                        .param("roomId", roomId.toString()))
+                .andReturn();
+
+        assertEquals(200, mvcResult1.getResponse().getStatus(), message);
+    }
 }
+

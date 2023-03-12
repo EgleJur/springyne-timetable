@@ -39,6 +39,7 @@ import { lt } from "date-fns/locale";
 import PlanSchedulePage from './pages/PlanSchedule';
 import Calendar from "./components/Calendar";
 
+
 function App() {
   return (
     <LocalizationProvider
@@ -89,6 +90,7 @@ function App() {
               <Route path="/schedules/plan/:id" element={<PlanSchedulePage />} />
               <Route path="/schedules/create" element={<CreateSchedulePage />} />
               <Route path="/calendar" element={<Calendar />} />
+
             </Routes>
           </div>
         </HashRouter>

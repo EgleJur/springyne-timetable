@@ -38,13 +38,12 @@ function PlanSchedulePage() {
   const times = [1,2,3,4,5,6,7,8,9,10,11,12,13,14];
   const [lessons, setLessons] = useState([]);
   
-
-  useEffect(() => {
+  const fetchShedule=()=>{
     fetch("/api/v1/schedules/" + params.id)
-      .then((response) => response.json())
-      .then((jsonResponse) => setSchedule(jsonResponse))
-      .then((schedule) => setStartTime(schedule?.group?.shift?.starts));
-  }, []);
+  .then((response) => response.json())
+  .then((jsonResponse) => setSchedule(jsonResponse));
+  };
+  useEffect(fetchShedule, []);
 
   const fetchTeachers = () => {
     if (selectedSubject === "" || schedule === "") {
@@ -196,8 +195,12 @@ function PlanSchedulePage() {
           }, 5000);
         }
       });
+      // .then(setTimeout(() => {
+      //   window.location.reload(false);
+      // }, 6000))
     }
   };
+
 
   return (
     <div className="mx-3">

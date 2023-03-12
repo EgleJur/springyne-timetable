@@ -65,8 +65,9 @@ public class LessonService {
 
     public List<Lesson> addLesson(LessonBlock lessonBlock, Long scheduleId, Long subjectId, Long teacherId, Long roomId) {
 
-        Schedule schedule = scheduleRepository.findById(scheduleId).orElseThrow(() -> new ScheduleValidationException("Schedule does not exist",
-                "schedule id", "Schedule not found", scheduleId.toString()));
+        Schedule schedule = scheduleRepository.findById(scheduleId)
+                .orElseThrow(() -> new ScheduleValidationException("Schedule does not exist",
+                        "schedule id", "Schedule not found", scheduleId.toString()));
 
         if (lessonBlock.getStartDate() == null || lessonBlock.getEndDate() == null || lessonBlock.getEndDate().isBefore(lessonBlock.
                 getStartDate()) || lessonBlock.getStartDate().isBefore(schedule.getStartDate()) || lessonBlock.getStartDate().
@@ -84,8 +85,9 @@ public class LessonService {
                     "Lesson time is invalid", lessonBlock.getStartTime().toString() + " - " + lessonBlock.getEndTime());
         }
 
-        Subject subject = subjectRepository.findById(subjectId).orElseThrow(() -> new ScheduleValidationException("Subject does not exist",
-                "subject id", "Subject not found", subjectId.toString()));
+        Subject subject = subjectRepository.findById(subjectId)
+                .orElseThrow(() -> new ScheduleValidationException("Subject does not exist",
+                        "subject id", "Subject not found", subjectId.toString()));
 
         ProgramSubject lessonProgramSubject = schedule.getGroup().getProgram().getSubjects().stream().filter(programSubject ->
                 programSubject.getSubject().equals(subject)).findFirst().orElseThrow(() -> new ScheduleValidationException(
@@ -99,9 +101,9 @@ public class LessonService {
                     "Teacher is invalid", subjectId.toString());
         }
 
-        if (!((lessonBlock.getStartTime() >= teacher.getShift().getStarts()) && (lessonBlock.getEndTime() <= teacher.getShift().getEnds()))) {
+//        if (!((lessonBlock.getStartTime() >= teacher.getShift().getStarts()) && (lessonBlock.getEndTime() <= teacher.getShift().getEnds()))) {
 
-        if(!((lessonBlock.getStartTime() >= teacher.getShift().getStarts()) && (lessonBlock.getEndTime() <= teacher.getShift().getEnds()))) {
+        if (!((lessonBlock.getStartTime() >= teacher.getShift().getStarts()) && (lessonBlock.getEndTime() <= teacher.getShift().getEnds()))) {
 
             throw new ScheduleValidationException("Teacher does not teach on these hours", "teacher id",
                     "Teacher is invalid", subjectId.toString());
@@ -227,7 +229,7 @@ public class LessonService {
 
         Shift shift = schedule.getGroup().getShift();
 
-        if (!(( shift.getStarts() == teacher.getShift().getStarts()) && (shift.getEnds() <= teacher.getShift().getEnds()))) {
+        if (!((shift.getStarts() == teacher.getShift().getStarts()) && (shift.getEnds() <= teacher.getShift().getEnds()))) {
             throw new ScheduleValidationException("Teacher does not teach on these hours", "teacher id",
                     "Teacher is invalid", subjectId.toString());
         }
@@ -243,9 +245,13 @@ public class LessonService {
                 if (roomId != null) {
                     lesson.setRoom(room);
                 }
-            } else if(roomId != null) {lesson.setRoom(room);}
+            } else if (roomId != null) {
+                lesson.setRoom(room);
+            }
         }
 
         return lessonRepository.saveAll(lessons);
     }
 }
+
+

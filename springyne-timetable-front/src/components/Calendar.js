@@ -9,8 +9,6 @@ import './Calendar.css';
 import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import Divider from '@mui/material/Divider';
 import List from '@mui/material/List';
 
 
@@ -21,8 +19,8 @@ const Calendar = (props) => {
 	const isBetween = require('dayjs/plugin/isBetween')
 	dayjs.extend(isBetween)
 
-const colorArray=["#fff4f4", "#f4ffff",
-"#fff4fa","#fffaf4","#fffff4","#f4fff4", "#fff4f8","#fbf4ff", "#fcfff0"];
+	const colorArray = ["#fff4f4", "#f4ffff",
+		"#fff4fa", "#fffaf4", "#fffff4", "#f4fff4", "#fff4f8", "#fbf4ff", "#fcfff0"];
 	const [holidays, setHolidays] = useState([]);
 
 	const fetchHolidays = () => {
@@ -50,21 +48,24 @@ const colorArray=["#fff4f4", "#f4ffff",
 
 			shift.push(
 				<ListItem disablePadding>
-					<ListItemButton sx={{ height: "40px", p:1}}>
+					<ListItemButton sx={{ height: "40px", p: 1 }}>
 						<ListItemText sx={{ fontSize: "0.85rem", m: 0 }} disableTypography primary={i} />
 					</ListItemButton>
 				</ListItem>
-			)}
+			)
+		}
 		return <div className="col-shift cell"><List>{shift}</List></div>
 	};
 
-	const [lessons, setLessons] = useState([]);
-	const fetchLessons = () => {
-		fetch("/api/v1/lessons/schedule/" + params.id)
-			.then((response) => response.json())
-			.then((jsonResponse) => setLessons(jsonResponse));
-	};
-	useEffect(() => fetchLessons, []);
+	// const [lessons, setLessons] = useState([]);
+	// const fetchLessons = () => {
+	// 	fetch("/api/v1/lessons/schedule/" + params.id)
+	// 		.then((response) => response.json())
+	// 		.then((jsonResponse) => setLessons(jsonResponse));
+	// };
+	// useEffect(() => fetchLessons, []);
+
+	const lessons = props.lessons;
 
 	const lesson = (d) => {
 		const lessonList = [];
@@ -72,7 +73,7 @@ const colorArray=["#fff4f4", "#f4ffff",
 		const result = lessons.filter((e) =>
 			dayjs(e?.lessonDate).format('YYYY-MM') === currentMonth.format("YYYY-MM")
 			&& parseInt(dayjs(e?.lessonDate).format('D')) === d.day)
-			.sort((a, b) => a.lessonTime > b.lessonTime? 1 : -1);
+			.sort((a, b) => a.lessonTime > b.lessonTime ? 1 : -1);
 		let subjectName = "";
 		let teacherName = "";
 		let room = "";
@@ -85,7 +86,7 @@ const colorArray=["#fff4f4", "#f4ffff",
 				for (let n = lessonNr; n < less?.lessonTime; n++)
 					lessonList.push(
 						<ListItem disablePadding>
-							<ListItemButton sx={{ height: "40px", p:0 }}>
+							<ListItemButton sx={{ height: "40px", p: 0 }}>
 								<ListItemText primary="" />
 							</ListItemButton>
 						</ListItem>
@@ -97,14 +98,14 @@ const colorArray=["#fff4f4", "#f4ffff",
 
 				lessonList.push(
 					<ListItem disablePadding>
-						<ListItemButton sx={{ height: "40px", p:1, bgcolor:colorArray[colorId]}}>
-							<ListItemText 
-							sx={{ fontSize: "0.85rem", m: 0  }} 
-							disableTypography 
-							primary={less?.subject?.name} />
+						<ListItemButton sx={{ height: "40px", p: 1, bgcolor: colorArray[colorId] }}>
+							<ListItemText
+								sx={{ fontSize: "0.85rem", m: 0 }}
+								disableTypography
+								primary={less?.subject?.name} />
 						</ListItemButton>
 					</ListItem>
-				
+
 				)
 				subjectName = less?.subject?.name;
 				lessonNr++;
@@ -112,11 +113,11 @@ const colorArray=["#fff4f4", "#f4ffff",
 			else if (less?.teacher?.name !== teacherName) {
 				lessonList.push(
 					<ListItem disablePadding>
-						<ListItemButton sx={{ height: "40px", p:1, bgcolor: colorArray[colorId] }}>
-							<ListItemText 
-							sx={{ fontSize: "0.85rem", fontWeight: 300, m: 0 }} 
-							disableTypography 
-							primary={less?.teacher?.name} />
+						<ListItemButton sx={{ height: "40px", p: 1, bgcolor: colorArray[colorId] }}>
+							<ListItemText
+								sx={{ fontSize: "0.85rem", fontWeight: 300, m: 0 }}
+								disableTypography
+								primary={less?.teacher?.name} />
 						</ListItemButton>
 					</ListItem>
 				)
@@ -126,11 +127,11 @@ const colorArray=["#fff4f4", "#f4ffff",
 			else if (less?.room?.name !== room) {
 				lessonList.push(
 					<ListItem disablePadding>
-						<ListItemButton sx={{ height: "40px", p:1,  bgcolor: colorArray[colorId] }}>
-							<ListItemText 
-							sx={{ fontSize: "0.85rem", fontWeight: 300, m: 0 }} 
-							disableTypography 
-							primary={less?.room?.name} />
+						<ListItemButton sx={{ height: "40px", p: 1, bgcolor: colorArray[colorId] }}>
+							<ListItemText
+								sx={{ fontSize: "0.85rem", fontWeight: 300, m: 0 }}
+								disableTypography
+								primary={less?.room?.name} />
 						</ListItemButton>
 					</ListItem>
 				)
@@ -140,7 +141,7 @@ const colorArray=["#fff4f4", "#f4ffff",
 			else {
 				lessonList.push(
 					<ListItem disablePadding>
-						<ListItemButton sx={{ height: "40px", p:0, bgcolor: colorArray[colorId] }}>
+						<ListItemButton sx={{ height: "40px", p: 0, bgcolor: colorArray[colorId] }}>
 							<ListItemText primary="" />
 						</ListItemButton>
 					</ListItem>
@@ -183,7 +184,7 @@ const colorArray=["#fff4f4", "#f4ffff",
 					</div>
 				</div>
 				<div className="col col-center" >
-					<span style={{textTransform: 'uppercase'}}>{currentMonth.format(dateFormat)}</span>
+					<span style={{ textTransform: 'uppercase' }}>{currentMonth.format(dateFormat)}</span>
 				</div>
 				<div className="col col-end" onClick={() => nextMonth()}>
 					<div className="icon">chevron_right</div>
@@ -219,6 +220,7 @@ const colorArray=["#fff4f4", "#f4ffff",
 			let dayEnds = dayjs(holiday.ends).format("D");
 			let monthStarts = dayjs(holiday.starts).format("MM");
 			let monthEnds = dayjs(holiday.ends).format("MM");
+			let holidayName = holiday.name;
 
 			if (monthStarts === currentM) {
 				starts = parseInt(dayStarts);
@@ -241,7 +243,8 @@ const colorArray=["#fff4f4", "#f4ffff",
 
 			if (monthStarts === currentM || monthEnds === currentM || dayjs(currentM).isBetween(monthStarts, monthEnds)) {
 				for (let i = starts; i <= ends; i++) {
-					holidayList.push(i);
+					holidayList.push({ day:i, name: holidayName, month: parseInt(currentM)});
+					// console.log(holidayList);
 				}
 			}
 		});
@@ -280,6 +283,10 @@ const colorArray=["#fff4f4", "#f4ffff",
 
 		setArrayOfDays(allDates);
 	};
+	const found=(d) => getHolidays().find(obj => {
+		//console.log(d.month);
+		return obj.day === d.day; //&& obj.month === d.month;
+	});
 
 	useEffect(() => {
 		getAllDays();
@@ -297,11 +304,16 @@ const colorArray=["#fff4f4", "#f4ffff",
 			week.dates.forEach((d, i) => {
 				days.push(
 					< div
-						className={`col cell ${!d.isCurrentMonth || getHolidays().includes(d.day)
-							? "disabled" : d.isCurrentDay ? "selectedDay" : ""}`}
+						className={`col cell ${!d.isCurrentMonth 
+							|| getHolidays().some(index => index.day === d.day)
+							? "disabled" :  ""}`}
 						key={i}>
-						<span style={{zIndex: '5'}} className="number">{d.day}</span>
-						{lesson(d)}
+						<span style={{ zIndex: '5' }} className="number">{d.day}</span>
+						{d.isCurrentMonth && found(d) && (
+							<div class="my-5 mx-3 text-center">{found(d).name}</div>
+						)}
+
+						{d.isCurrentMonth && lesson(d)}
 					</div >
 				);
 			});

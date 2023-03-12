@@ -162,19 +162,21 @@ public class LessonService {
         return lessonRepository.saveAll(lessons);
     }
 
-    public Lesson editSingleLesson(Long lessonId, Long teacherId, Long roomId) {
+    public Lesson editSingleLesson(Long lessonId, Long subjectId, Long teacherId, Long roomId) {
 
         Lesson existingLesson = lessonRepository.findById(lessonId)
                 .orElseThrow(() -> new ScheduleValidationException("Lesson does not exist",
                         "lessonId", "Lesson not found", String.valueOf(lessonId)));
 
-        Long subjectId = existingLesson.getSubject().getId();
+        Subject subject = subjectRepository.findById(subjectId).orElseThrow(() -> new ScheduleValidationException("Subject does not exist",
+                "subject id", "Subject not found", subjectId.toString()));
+
         if (teacherId != null) {
             Teacher teacher = teacherRepository.findById(teacherId)
                     .orElseThrow(() -> new ScheduleValidationException("Teacher does not exist",
                             "teacher id", "Teacher not found", teacherId.toString()));
 
-            if (!teacher.getSubjects().contains(subjectId)) {
+            if (!teacher.getSubjects().contains(subject)) {
                 throw new ScheduleValidationException("Teacher does not teach this subject", "teacher id",
                         "Teacher is invalid", subjectId.toString());
             }
@@ -185,7 +187,7 @@ public class LessonService {
                     .orElseThrow(() -> new ScheduleValidationException("Room does not exist",
                             "room id", "Room not found", roomId.toString()));
 
-            if (!existingLesson.getSubject().getRooms().contains(room)) {
+            if (!subject.getRooms().contains(room)) {
                 throw new ScheduleValidationException("Subject cannot be taught in this room", "room id",
                         "Room is invalid", subjectId.toString());
             }

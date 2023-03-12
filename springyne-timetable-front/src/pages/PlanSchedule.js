@@ -37,6 +37,7 @@ function PlanSchedulePage() {
   const [failure, setFailure] = useState(false);
   const times = [1,2,3,4,5,6,7,8,9,10,11,12,13,14];
 
+
   useEffect(() => {
     fetch("/api/v1/schedules/" + params.id)
       .then((response) => response.json())
@@ -65,6 +66,7 @@ function PlanSchedulePage() {
   };
 
   useEffect(prefillRooms, [selectedSubject]);
+
 
   const createNewLesson = (e) => {
     e.preventDefault();
@@ -172,6 +174,7 @@ function PlanSchedulePage() {
       });
     }
   };
+
 
   return (
     <div className="mx-3">

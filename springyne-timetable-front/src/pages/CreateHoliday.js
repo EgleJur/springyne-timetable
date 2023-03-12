@@ -1,55 +1,49 @@
 import { useEffect, useState } from "react";
 import { Alert, Collapse } from "@mui/material";
 import { TextField } from "@mui/material";
-import FormControlLabel from '@mui/material/FormControlLabel';
-import FormLabel from '@mui/material/FormLabel';
-import Checkbox from '@mui/material/Checkbox';
-
-
+import FormControlLabel from "@mui/material/FormControlLabel";
+import FormLabel from "@mui/material/FormLabel";
+import Checkbox from "@mui/material/Checkbox";
+import { DatePicker } from "@mui/x-date-pickers";
+import dayjs from "dayjs";
 
 function CreateHolidayPage() {
   const [name, setName] = useState("");
-  const [starts, setStartDate] = useState("");
-  const [ends, setEndDate] = useState("");
   const [repeats, setRepeats] = useState(false);
   const [nameError, setNameError] = useState("");
   const [startDateError, setStartDateError] = useState("");
   const [endDateError, setEndDateError] = useState("");
   const [success, setSuccess] = useState(false);
   const [failure, setFailure] = useState(false);
-  const [shrink1, setShrink1] = useState(false);
+  const [startDateValue, setStartDateValue] = useState(null);
+  const [endDateValue, setEndDateValue] = useState(null);
 
-  var moment = require('moment'); // require
-  moment().format();
-
-  const createNewRoom = (e) => {
+  const createNewHoliday = (e) => {
     e.preventDefault();
     setNameError(false);
     setStartDateError(false);
     setEndDateError(false);
-    setEndDate();
-    if (name === "" || starts === "" || ends === "" || starts > ends) {
+    if (
+      name === "" ||
+      startDateValue === null ||
+      endDateValue === null ||
+      startDateValue > endDateValue
+    ) {
       if (name === "") {
         setNameError(true);
       }
-      if (starts === "") {
+      if (
+        startDateValue === null ||
+        (startDateValue > endDateValue && endDateValue != null)
+      ) {
         setStartDateError(true);
       }
-      if (ends === "") {
+      if (endDateValue === null || endDateValue < startDateValue) {
         setEndDateError(true);
-      }
-      if (starts > ends) {
-        setStartDateError(true);
-        setEndDateError(true);
-        if (starts === "") {
-          setEndDateError(false);
-        }
-        if (ends === "") {
-          setStartDateError(false);
-        }
-
       }
     } else {
+      const starts = dayjs(startDateValue).format("YYYY-MM-DD");
+      const ends = dayjs(endDateValue).format("YYYY-MM-DD");
       fetch("/api/v1/holidays/createHoliday/", {
         method: "POST",
         headers: {
@@ -59,30 +53,22 @@ function CreateHolidayPage() {
           name,
           starts,
           ends,
-          repeats
+          repeats,
         }),
       }).then((result) => {
         if (result.ok) {
           setName("");
-          setStartDate("");
-          setEndDate("");
+          setStartDateValue(null);
+          setEndDateValue(null);
           setRepeats(false);
           setSuccess(true);
           setFailure(false);
-          setShrink1(false);
           setTimeout(() => {
             setSuccess(false);
           }, 5000);
         } else {
           setFailure(true);
           setSuccess(false);
-          if (moment(starts, "YYYY-MM-DD").isValid()) {
-            setStartDateError(true);
-          }
-          if (moment(ends, "YYYY-MM-DD").isValid()) {
-            setEndDateError(true);
-          }
-          setEndDate("");
           setTimeout(() => {
             setFailure(false);
           }, 5000);
@@ -126,36 +112,52 @@ function CreateHolidayPage() {
           error={!!nameError}
           onChange={(e) => setName(e.target.value)}
           value={name}
-          id="create-holoday-name-with-error"
+          id="create-holiday-name-with-error"
           label="Pavadinimas"
           helperText="Pavadinimas privalomas"
           className="form-control mb-3"
           size="small"
           required
         />
-        <TextField
-          error={!!startDateError}
-          onChange={(e) => setStartDate(e.target.value)}
-          value={starts}
-          id="create-holiday-start-date-with-error"
-          label="Atostogų pradžia (MMMM-MM-DD)"
-          helperText="Pradžios data privaloma"
-          className="form-control mb-3"
-          size="small"
-          required
+
+        <DatePicker
+          className="mb-3"
+          label="Pradžios data"
+          value={startDateValue}
+          maxDate={endDateValue}
+          onChange={(newValue) => {
+            setStartDateValue(newValue);
+          }}
+          renderInput={(params) => (
+            <TextField
+              fullWidth
+              size="small"
+              required
+              {...params}
+              error={!!startDateError}
+            />
+          )}
         />
-        <TextField
-          error={!!endDateError}
-          onChange={(e) => setEndDate(e.target.value)}
-          value={ends}
-          id="create-holiday-end-date-with-error"
-          label="Atostogų pabaiga (MMMM-MM-DD)"
-          helperText="Pabaigos data privaloma"
-          className="form-control mb-3"
-          size="small"
-          required
-          onSelect={() => setShrink1(true)}
-          InputLabelProps={{ shrink: shrink1 }}
+
+        <DatePicker
+          className="mb-3"
+          label="Pabaigos data"
+          // inputFormat="yyyy-MM-dd"
+          value={endDateValue}
+          minDate={startDateValue}
+          onChange={(newValue) => {
+            setEndDateValue(newValue);
+          }}
+          onError={() => setEndDateError(true)}
+          renderInput={(params) => (
+            <TextField
+              fullWidth
+              size="small"
+              required
+              {...params}
+              error={!!endDateError}
+            />
+          )}
         />
 
         <div className="mb-3">
@@ -163,20 +165,22 @@ function CreateHolidayPage() {
 
           <FormControlLabel
             value="end"
-            control={<Checkbox
-              checked={repeats}
-              onChange={handleChange}
-              inputProps={{ 'aria-label': 'controlled' }}
-            />}
+            control={
+              <Checkbox
+                checked={repeats}
+                onChange={handleChange}
+                inputProps={{ "aria-label": "controlled" }}
+              />
+            }
             label="Kartojasi kiekvienais metais"
             labelPlacement="end"
-          /></div>
-
+          />
+        </div>
 
         <button
           type="submit"
           className="btn btn-primary"
-          onClick={createNewRoom}
+          onClick={createNewHoliday}
         >
           Pridėti
         </button>

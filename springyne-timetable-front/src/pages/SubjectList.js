@@ -38,10 +38,7 @@ function SubjectListPage() {
     setPage(value);
     setPageNumber(value - 1);
     fetch(
-      `api/v1/subjects/search?name=${searchName}&moduleName=${searchModName}
-      &page=${
-        value - 1
-      }&pageSize=${pageSize}`
+      `api/v1/subjects/search?name=${searchName}&moduleName=${searchModName}&page=${value - 1}&pageSize=${pageSize}`
     )
       .then((response) => response.json())
       .then((jsonResponse) => setSubjects(jsonResponse));

@@ -208,7 +208,7 @@ function CreateTeacherPage() {
         </FormControl>
 
         <FormControl fullWidth size="small" className="mb-3">
-          <InputLabel id="select-shift-label" error={subjectError} required>
+          <InputLabel id="select-shift-label" error={shiftError} required>
             Pasirinkite pamainą
           </InputLabel>
           <Select

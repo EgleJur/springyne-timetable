@@ -6,7 +6,6 @@ import lt.techin.springyne.schedule.Schedule;
 import lt.techin.springyne.schedule.ScheduleController;
 import lt.techin.springyne.schedule.ScheduleDto;
 import lt.techin.springyne.schedule.ScheduleService;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -25,9 +24,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.when;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
@@ -62,7 +60,7 @@ public class ScheduleControllerTest {
 
         List<ScheduleDto> resultList = objectMapper.readValue(mvcResult.getResponse().getContentAsString(StandardCharsets.UTF_8), new TypeReference<List<ScheduleDto>>() {});
 
-        Assertions.assertTrue(resultList.containsAll(expectedList));
+        assertTrue(resultList.containsAll(expectedList));
     }
 
     //            creates test data in database
@@ -130,18 +128,31 @@ public class ScheduleControllerTest {
         assertEquals(400,mvcResult1.getResponse().getStatus(), message);
     }
 
+    //deletes from database
+//    @Test
+//    void deleteScheduleByIdDeletesScheduleAndLessons() throws Exception {
+//        MvcResult mvcResult1 = mockMvc.perform(MockMvcRequestBuilders.delete("/api/v1/schedules/delete/1")).andExpect(status()
+//                .isOk()).andReturn();
+//        String message = "Should allow deleting a schedule with a valid id";
+//        assertEquals(200,mvcResult1.getResponse().getStatus(), message);
+//
+//        MvcResult mvcResult2 = mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/lessons/schedule/1")
+//        ).andExpect(status().isOk()).andReturn();
+//
+//        List<Lesson> resultList = objectMapper.readValue(mvcResult2.getResponse().getContentAsString(StandardCharsets.UTF_8), new TypeReference<List<Lesson>>() {});
+//        assertTrue(resultList.isEmpty());
+//    }
+
     @Test
-
-    void testDeleteSchedule() {
-        Long scheduleId = 1L;
-        when(scheduleService.delete(scheduleId)).thenReturn(true);
-
-        boolean actual = scheduleController.deleteSchedule(scheduleId);
-
-        assertThat(actual).isTrue();
+    void deleteScheduleByIdThrowsExceptionWithInvalidId() throws Exception {
+        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.delete("/api/v1/schedules/delete/0")).andExpect(status()
+                .isBadRequest()).andReturn();
+        String message = "Invalid schedule id should return bad request status";
+        assertEquals(400,mvcResult.getResponse().getStatus(), message);
     }
 
 
+    @Test
     void getScheduleByIdReturnsCorrectDto() throws Exception {
         MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/schedules/1")
         ).andExpect(status().isOk()).andReturn();
@@ -156,7 +167,7 @@ public class ScheduleControllerTest {
         ).andReturn();
         Optional<Schedule> result = objectMapper.readValue(mvcResult.getResponse().getContentAsString(StandardCharsets.UTF_8), new TypeReference<Optional<Schedule>>() {
         });
-        Assertions.assertTrue(result.isEmpty(),"Get schedule by invalid Id should return empty");
+        assertTrue(result.isEmpty(),"Get schedule by invalid Id should return empty");
     }
 }
 

@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import java.text.ParseException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,8 +29,8 @@ class HolidayControllerTest {
     @Test
     void testGetAll() {
         List<Holiday> expected = new ArrayList<>();
-        expected.add(toHoliday(new HolidayDto("Holiday 1", "2023-05-05", "2023-05-10",false)));
-        expected.add(toHoliday(new HolidayDto("Holiday 2", "2023-04-05", "2023-04-10",false)));
+        expected.add(toHoliday(new HolidayDto("Holiday 1", LocalDate.of(2023,5,5), LocalDate.of(2023,5,10),false)));
+        expected.add(toHoliday(new HolidayDto("Holiday 2", LocalDate.of(2023,4,5),LocalDate.of(2023,4,19),false)));
         when(holidayService.getAll()).thenReturn(expected);
 
         List<Holiday> actual = holidayController.getAll();
@@ -50,7 +51,7 @@ class HolidayControllerTest {
     @Test
     void testSearchByDate() throws ParseException {
         List<Holiday> expected = new ArrayList<>();
-        expected.add(toHoliday(new HolidayDto("Holiday 1", "2023-05-05", "2023-05-10",false)));
+        expected.add(toHoliday(new HolidayDto("Holiday 1", LocalDate.of(2023,5,5), LocalDate.of(2023,5,10),false)));
         when(holidayService.searchByNameAndDate(null, "2023-01-01", null)).thenReturn(expected);
 
         List<Holiday> actual = holidayController.searchByDate(null, "2023-01-01", null);
@@ -62,8 +63,8 @@ class HolidayControllerTest {
     void testCreateHoliday() {
         HolidayDto holidayDto = new HolidayDto();
         holidayDto.setName("New Year's Day");
-        holidayDto.setStarts("2024-01-01");
-        holidayDto.setEnds("2024-01-02");
+        holidayDto.setStarts(LocalDate.of(2024,1,1));
+        holidayDto.setEnds(LocalDate.of(2024,1,2));
         holidayDto.setRepeats(false);
         Holiday expected = (toHoliday(new HolidayDto(holidayDto.getName(),
                 holidayDto.getStarts(), holidayDto.getEnds(), holidayDto.isRepeats())));

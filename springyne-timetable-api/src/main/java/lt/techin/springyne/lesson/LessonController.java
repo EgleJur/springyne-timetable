@@ -43,13 +43,6 @@ public class LessonController {
         return ResponseEntity.ok(lessonService.addLesson(lessonBlock, scheduleId,
                 subjectId, teacherId, roomId));
     }
-<<<<<<< HEAD
-//
-//    @GetMapping("/schedule/{scheduleId}/subject/{subjectId}")
-//    public Lesson getLessonsBySchedule(@PathVariable Long scheduleId) {
-//        return lessonService.getLessonsBySchedule(scheduleId);
-//    }
-=======
 
     @PatchMapping("/editSingleLesson/{lessonId}")
     public ResponseEntity<Lesson> editLesson(@PathVariable Long lessonId,
@@ -66,5 +59,4 @@ public class LessonController {
                                                        @RequestParam Long roomId) {
         return ResponseEntity.ok(lessonService.editMultipleLessons(scheduleId, subjectId, teacherId, roomId));
     }
->>>>>>> development
 }

@@ -12,6 +12,7 @@ import ListItemText from '@mui/material/ListItemText';
 import List from '@mui/material/List';
 import LessonToCalendar from "./LessonToCalendar";
 import HolidayToCalendar from "./HolidayToCalendar";
+import LongMenu from "./LongMenu";
 
 const Calendar = (props) => {
 	const now = dayjs().locale('lt');

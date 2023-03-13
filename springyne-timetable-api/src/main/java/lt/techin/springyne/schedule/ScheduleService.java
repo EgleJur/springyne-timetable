@@ -3,10 +3,9 @@ package lt.techin.springyne.schedule;
 import lt.techin.springyne.exception.ScheduleValidationException;
 import lt.techin.springyne.group.Group;
 import lt.techin.springyne.group.GroupRepository;
-import lt.techin.springyne.module.Module;
-import lt.techin.springyne.room.Room;
+import lt.techin.springyne.lesson.Lesson;
+import lt.techin.springyne.lesson.LessonRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -24,10 +23,14 @@ public class ScheduleService {
     ScheduleRepository scheduleRepository;
     @Autowired
     GroupRepository groupRepository;
+    @Autowired
+    LessonRepository lessonRepository;
 
-    public ScheduleService(ScheduleRepository scheduleRepository, GroupRepository groupRepository) {
+    public ScheduleService(ScheduleRepository scheduleRepository, GroupRepository groupRepository,
+                           LessonRepository lessonRepository) {
         this.scheduleRepository = scheduleRepository;
         this.groupRepository = groupRepository;
+        this.lessonRepository = lessonRepository;
     }
 
     public List<Schedule> getAllSchedules() {
@@ -97,13 +100,23 @@ public class ScheduleService {
         }
     }
 
-    public boolean delete(Long scheduleId) {
-        try {
-                scheduleRepository.deleteById(scheduleId);
-                return true;
-        } catch (EmptyResultDataAccessException exception) {
-            return false;
-        }
+    public void deleteSchedule(Long scheduleId) {
+
+        Schedule schedule = scheduleRepository.findById(scheduleId)
+                .orElseThrow(() -> new ScheduleValidationException("Schedule does not exist",
+                        "schedule id", "Schedule not found", scheduleId.toString()));
+
+        List<Lesson> existingLessons = lessonRepository.findByScheduleId(scheduleId);
+
+        lessonRepository.deleteAll(existingLessons);
+        scheduleRepository.delete(schedule);
+
+//        try {
+//                scheduleRepository.deleteById(scheduleId);
+//                return true;
+//        } catch (EmptyResultDataAccessException exception) {
+//            return false;
+//        }
     }
 
 }

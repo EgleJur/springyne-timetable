@@ -10,6 +10,9 @@ import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemText from "@mui/material/ListItemText";
 import List from "@mui/material/List";
+import LessonToCalendar from "./LessonToCalendar";
+import HolidayToCalendar from "./HolidayToCalendar";
+import LongMenu from "./LongMenu";
 import { apiUrl } from "../App";
 
 const Calendar = (props) => {
@@ -17,18 +20,10 @@ const Calendar = (props) => {
   const params = useParams();
   const isBetween = require("dayjs/plugin/isBetween");
   dayjs.extend(isBetween);
+  const lessons = props.lessons;
 
-  const colorArray = [
-    "#fff4f4",
-    "#f4ffff",
-    "#fff4fa",
-    "#fffaf4",
-    "#fffff4",
-    "#f4fff4",
-    "#fff4f8",
-    "#fbf4ff",
-    "#fcfff0",
-  ];
+  // const colorArray = ["#fff4f4", "#f4ffff",
+  // 	"#fff4fa", "#fffaf4", "#fffff4", "#f4fff4", "#fff4f8", "#fbf4ff", "#fcfff0"];
   const [holidays, setHolidays] = useState([]);
 
   const fetchHolidays = () => {
@@ -68,110 +63,6 @@ const Calendar = (props) => {
         <List>{shift}</List>
       </div>
     );
-  };
-
-  // const [lessons, setLessons] = useState([]);
-  // const fetchLessons = () => {
-  // 	fetch(`${apiUrl}/api/v1/lessons/schedule/` + params.id)
-  // 		.then((response) => response.json())
-  // 		.then((jsonResponse) => setLessons(jsonResponse));
-  // };
-  // useEffect(() => fetchLessons, []);
-
-  const lessons = props.lessons;
-
-  const lesson = (d) => {
-    const lessonList = [];
-
-    const result = lessons
-      .filter(
-        (e) =>
-          dayjs(e?.lessonDate).format("YYYY-MM") ===
-            currentMonth.format("YYYY-MM") &&
-          parseInt(dayjs(e?.lessonDate).format("D")) === d.day
-      )
-      .sort((a, b) => (a.lessonTime > b.lessonTime ? 1 : -1));
-    let subjectName = "";
-    let teacherName = "";
-    let room = "";
-    let later = 0;
-    let lessonNr = shedules?.group?.shift?.starts;
-    result.forEach((less) => {
-      let colorId = less?.subject?.id;
-      //console.log(colorArray[colorId]);
-      if (less?.lessonTime > lessonNr && later === 0) {
-        for (let n = lessonNr; n < less?.lessonTime; n++)
-          lessonList.push(
-            <ListItem disablePadding>
-              <ListItemButton sx={{ height: "40px", p: 0 }}>
-                <ListItemText primary="" />
-              </ListItemButton>
-            </ListItem>
-          );
-        later++;
-      }
-      if (less?.subject?.name !== subjectName) {
-        lessonList.push(
-          <ListItem disablePadding>
-            <ListItemButton
-              sx={{ height: "40px", p: 1, bgcolor: colorArray[colorId] }}
-            >
-              <ListItemText
-                sx={{ fontSize: "0.85rem", m: 0 }}
-                disableTypography
-                primary={less?.subject?.name}
-              />
-            </ListItemButton>
-          </ListItem>
-        );
-        subjectName = less?.subject?.name;
-        lessonNr++;
-      } else if (less?.teacher?.name !== teacherName) {
-        lessonList.push(
-          <ListItem disablePadding>
-            <ListItemButton
-              sx={{ height: "40px", p: 1, bgcolor: colorArray[colorId] }}
-            >
-              <ListItemText
-                sx={{ fontSize: "0.85rem", fontWeight: 300, m: 0 }}
-                disableTypography
-                primary={less?.teacher?.name}
-              />
-            </ListItemButton>
-          </ListItem>
-        );
-        teacherName = less?.teacher?.name;
-        lessonNr++;
-      } else if (less?.room?.name !== room) {
-        lessonList.push(
-          <ListItem disablePadding>
-            <ListItemButton
-              sx={{ height: "40px", p: 1, bgcolor: colorArray[colorId] }}
-            >
-              <ListItemText
-                sx={{ fontSize: "0.85rem", fontWeight: 300, m: 0 }}
-                disableTypography
-                primary={less?.room?.name}
-              />
-            </ListItemButton>
-          </ListItem>
-        );
-        room = less?.room?.name;
-      } else {
-        lessonList.push(
-          <ListItem disablePadding>
-            <ListItemButton
-              sx={{ height: "40px", p: 0, bgcolor: colorArray[colorId] }}
-            >
-              <ListItemText primary="" />
-            </ListItemButton>
-          </ListItem>
-          // <div>_</div>
-        );
-      }
-      lessonNr++;
-    });
-    return <List>{lessonList}</List>;
   };
 
   dayjs.extend(weekdayPlugin);
@@ -230,55 +121,6 @@ const Calendar = (props) => {
     return <div className="days row">{days}</div>;
   };
 
-  const getHolidays = () => {
-    const holidayList = [];
-    let starts;
-    let ends;
-    let currentM = currentMonth.format("MM");
-    let currentD = currentMonth.daysInMonth();
-
-    holidays.forEach((holiday) => {
-      let dayStarts = dayjs(holiday.starts).format("D");
-      let dayEnds = dayjs(holiday.ends).format("D");
-      let monthStarts = dayjs(holiday.starts).format("MM");
-      let monthEnds = dayjs(holiday.ends).format("MM");
-      let holidayName = holiday.name;
-
-      if (monthStarts === currentM) {
-        starts = parseInt(dayStarts);
-        if (monthEnds === currentM) {
-          ends = parseInt(dayEnds);
-        } else {
-          ends = currentD;
-        }
-      } else if (dayjs(currentM).isBetween(monthStarts, monthEnds)) {
-        starts = parseInt(1);
-        ends = currentD;
-      } else if (monthEnds === currentM) {
-        ends = currentD;
-        if (monthStarts !== currentM) {
-          starts = parseInt(1);
-        }
-      }
-
-      if (
-        monthStarts === currentM ||
-        monthEnds === currentM ||
-        dayjs(currentM).isBetween(monthStarts, monthEnds)
-      ) {
-        for (let i = starts; i <= ends; i++) {
-          holidayList.push({
-            day: i,
-            name: holidayName,
-            month: parseInt(currentM),
-          });
-          // console.log(holidayList);
-        }
-      }
-    });
-    return holidayList;
-  };
-
   const getAllDays = () => {
     let currentDate = currentMonth.startOf("month").weekday(0);
     const nextMonth = currentMonth.add(1, "month").month();
@@ -292,14 +134,12 @@ const Calendar = (props) => {
       const formated = formateDateObject(currentDate);
 
       weekDates.push(formated);
-
       // for view with weekends weekCounter ===7
       if (weekCounter === 5) {
         allDates.push({ dates: weekDates });
         weekDates = [];
         weekCounter = 0;
       }
-
       if (weekCounter === 0) {
         currentDate = currentDate.add(2, "day");
       }
@@ -309,11 +149,16 @@ const Calendar = (props) => {
 
     setArrayOfDays(allDates);
   };
-  const found = (d) =>
-    getHolidays().find((obj) => {
-      //console.log(d.month);
-      return obj.day === d.day; //&& obj.month === d.month;
+  const found = (d) => {
+    const holiday = HolidayToCalendar(holidays, currentMonth).filter((obj) => {
+      return obj.day === d.day;
     });
+    if (holiday.length > 0) {
+      return holiday.map((holiday) => holiday.name);
+    } else {
+      return null;
+    }
+  };
 
   useEffect(() => {
     getAllDays();
@@ -330,7 +175,9 @@ const Calendar = (props) => {
           <div
             className={`col cell ${
               !d.isCurrentMonth ||
-              getHolidays().some((index) => index.day === d.day)
+              HolidayToCalendar(holidays, currentMonth).some(
+                (index) => index.day === d.day
+              )
                 ? "disabled"
                 : ""
             }`}
@@ -340,10 +187,15 @@ const Calendar = (props) => {
               {d.day}
             </span>
             {d.isCurrentMonth && found(d) && (
-              <div class="my-5 mx-3 text-center">{found(d).name}</div>
+              <div class="mx-3 text-center">
+                {found(d).map((name) => (
+                  <div class="my-3">{name}</div>
+                ))}
+              </div>
             )}
 
-            {d.isCurrentMonth && lesson(d)}
+            {d.isCurrentMonth &&
+              LessonToCalendar(d, shedules, lessons, currentMonth)}
           </div>
         );
       });

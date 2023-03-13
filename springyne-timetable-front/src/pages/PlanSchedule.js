@@ -39,25 +39,25 @@ function PlanSchedulePage() {
   const [failure, setFailure] = useState(false);
   const times = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14];
   const [lessons, setLessons] = useState([]);
-
-  useEffect(() => {
+  
+  const fetchShedule=()=>{
     fetch(`${apiUrl}/api/v1/schedules/` + params.id)
       .then((response) => response.json())
       .then((jsonResponse) => setSchedule(jsonResponse));
-  }, []);
-
-  const fetchLessons = () => {
-    fetch("/api/v1/lessons/schedule/" + params.id)
-      .then((response) => response.json())
-      .then((jsonResponse) => setLessons(jsonResponse));
   };
-  useEffect(() => fetchLessons, []);
+  useEffect(fetchShedule, []);
 
   const fetchTeachers = () => {
-    fetch(`${apiUrl}/api/v1/teachers/subject?subjectId=` + selectedSubject)
-      .then((response) => response.json())
-      .then((jsonResponse) => setTeachers(jsonResponse));
-  };
+    if (selectedSubject === "" || schedule === "") {
+      setTeachers([]);
+    } else {
+      fetch(
+        `${apiUrl}/api/v1/teachers/subject?subjectId=${selectedSubject}&startTime=${schedule?.group?.shift?.starts}&endTime=${schedule?.group?.shift?.ends}`
+      )
+        .then((response) => response.json())
+        .then((jsonResponse) => setTeachers(jsonResponse));
+    }
+  }
 
   useEffect(fetchTeachers, [selectedSubject, schedule]);
 
@@ -74,7 +74,23 @@ function PlanSchedulePage() {
     }
   };
 
-  useEffect(prefillRooms, [selectedSubject]);
+  useEffect(prefillRooms, [selectedSubject, schedule]);
+
+  const fetchLessons = () => {
+    fetch(`${apiUrl}/api/v1/lessons/schedule/` + params.id)
+      .then((response) => response.json())
+      .then((jsonResponse) => setLessons(jsonResponse));
+  };
+  useEffect(fetchLessons, [params]);
+
+  const handleSubjectSelection = (subjectValue) => {
+    setSelectedSubject(subjectValue);
+    const existingLessons = lessons.filter((lesson) => (lesson.subject.id === subjectValue));
+    if (existingLessons.length > 0) {
+      setSelectedRoom(existingLessons[0].room.id);
+      setSelectedTeacher(existingLessons[0].teacher.id);
+    }
+  }
 
   const createNewLesson = (e) => {
     e.preventDefault();
@@ -95,8 +111,8 @@ function PlanSchedulePage() {
       startDateValue < today ||
       startDateValue < schedule?.startDate ||
       endDateValue > schedule?.endDate ||
-      startTime === null ||
-      endTime === null ||
+      startTime === "" ||
+      endTime === "" ||
       endTime < startTime ||
       startTime < schedule?.group?.shift?.starts ||
       endTime > schedule?.group?.shift?.ends
@@ -110,10 +126,10 @@ function PlanSchedulePage() {
       if (selectedRoom === "") {
         setRoomError(true);
       }
-      if (startTime === "") {
+      if (startTime === "" || startTime === null || startTime === undefined) {
         setStartTimeError(true);
       }
-      if (endTime === "") {
+      if (endTime === "" || endTime === null || endTime === undefined) {
         setEndTimeError(true);
       }
       if (
@@ -181,8 +197,12 @@ function PlanSchedulePage() {
           }, 5000);
         }
       });
+      // .then(setTimeout(() => {
+      //   window.location.reload(false);
+      // }, 6000))
     }
   };
+
 
   return (
     <div className="mx-3">
@@ -291,7 +311,7 @@ function PlanSchedulePage() {
                 fullWidth
                 value={selectedSubject}
                 onChange={(e) => {
-                  setSelectedSubject(e.target.value);
+                  handleSubjectSelection(e.target.value);
                 }}
                 required
               >
@@ -372,7 +392,7 @@ function PlanSchedulePage() {
               value={startTime}
               size="small"
               className="me-2"
-              onChange={(e) => setStartTime(parseInt(e.target.value))}
+              onChange={(e) => setStartTime(e.target.value)}
             >
               {times
                 .filter(
@@ -396,7 +416,7 @@ function PlanSchedulePage() {
               value={endTime}
               size="small"
               className="me-2"
-              onChange={(e) => setEndTime(parseInt(e.target.value))}
+              onChange={(e) => setEndTime(e.target.value)}
             >
               {times
                 .filter(
@@ -430,11 +450,10 @@ function PlanSchedulePage() {
           <button
             type="submit"
             className="btn btn-light me-2 mb-2"
-            value={sub.id}
-            key={sub.id}
-            id={sub.id}
+            key={sub.subject.id}
+            id={sub.subject.id}
             onClick={() => {
-              setSelectedSubject(sub.subject.id);
+              handleSubjectSelection(sub.subject.id);
               setOpen(true);
             }}
           >

@@ -36,16 +36,35 @@ public class LessonController {
 
     @PostMapping("/schedule/{scheduleId}")
     public ResponseEntity<List<Lesson>> addLesson(@Valid @RequestBody LessonBlock lessonBlock,
-                                                @PathVariable Long scheduleId,
-                                                @RequestParam Long subjectId,
-                                                @RequestParam Long teacherId,
-                                                @RequestParam Long roomId) {
+                                                  @PathVariable Long scheduleId,
+                                                  @RequestParam Long subjectId,
+                                                  @RequestParam Long teacherId,
+                                                  @RequestParam Long roomId) {
         return ResponseEntity.ok(lessonService.addLesson(lessonBlock, scheduleId,
                 subjectId, teacherId, roomId));
     }
+<<<<<<< HEAD
 //
 //    @GetMapping("/schedule/{scheduleId}/subject/{subjectId}")
 //    public Lesson getLessonsBySchedule(@PathVariable Long scheduleId) {
 //        return lessonService.getLessonsBySchedule(scheduleId);
 //    }
+=======
+
+    @PatchMapping("/editSingleLesson/{lessonId}")
+    public ResponseEntity<Lesson> editLesson(@PathVariable Long lessonId,
+                                             @RequestParam Long subjectId,
+                                             @RequestParam Long teacherId,
+                                             @RequestParam Long roomId) {
+        return ResponseEntity.ok(lessonService.editSingleLesson(lessonId, subjectId, teacherId, roomId));
+    }
+
+    @PatchMapping("/editMultipleLessons/{scheduleId}")
+    public ResponseEntity<List<Lesson>> editLessonList(@PathVariable Long scheduleId,
+                                                       @RequestParam Long subjectId,
+                                                       @RequestParam Long teacherId,
+                                                       @RequestParam Long roomId) {
+        return ResponseEntity.ok(lessonService.editMultipleLessons(scheduleId, subjectId, teacherId, roomId));
+    }
+>>>>>>> development
 }

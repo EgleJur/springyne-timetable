@@ -38,9 +38,7 @@ function GroupListPage() {
     setPage(value);
     setPageNumber(value - 1);
     fetch(
-      `${apiUrl}/api/v1/groups/search?name=${searchName}
-      &programName=${searchProgName}&year=${searchYear}
-      &page=${value - 1}&pageSize=${pageSize}`
+      `${apiUrl}/api/v1/groups/search?name=${searchName}&programName=${searchProgName}&groupYear=${searchYear}&page=${value - 1}&pageSize=${pageSize}`
     )
       .then((response) => response.json())
       .then((jsonResponse) => setGroups(jsonResponse));
@@ -51,9 +49,7 @@ function GroupListPage() {
     setPage(1);
     setPageNumber(0);
     fetch(
-      `${apiUrl}/api/v1/groups/search?name=${searchName}
-      &programName=${searchProgName}&year=${searchYear}
-      &page=${0}&pageSize=${e.target.value}`
+      `${apiUrl}/api/v1/groups/search?name=${searchName}&programName=${searchProgName}&groupYear=${searchYear}&page=${0}&pageSize=${e.target.value}`
     )
       .then((response) => response.json())
       .then((jsonResponse) => setGroups(jsonResponse));

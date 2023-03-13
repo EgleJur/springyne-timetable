@@ -75,7 +75,7 @@ function ScheduleListPage() {
 
   const deleteSchedule = (id) => {
     fetch(`${apiUrl}/api/v1/schedules/delete/` + id, {
-      method: "PATCH",
+      method: "DELETE",
     }).then(fetchSchedules);
     setDeleted(true);
     setTimeout(() => {
@@ -120,13 +120,13 @@ function ScheduleListPage() {
             <>
               <button
                 onClick={handleDeleteConfirm}
-                className="btn btn-danger me-1 my-1"
+                className="btn btn-danger me-2"
               >
                 Ištrinti
               </button>
               <button
                 onClick={handleDeleteCancel}
-                className="btn btn-secondary me-1 my-1"
+                className="btn btn-secondary"
               >
                 Atšaukti
               </button>

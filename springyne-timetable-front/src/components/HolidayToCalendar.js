@@ -37,10 +37,11 @@ const HolidayToCalendar = (holidays, currentMonth) => {
 			if (monthStarts === currentM || monthEnds === currentM || dayjs(currentM).isBetween(monthStarts, monthEnds)) {
 				for (let i = starts; i <= ends; i++) {
 					holidayList.push({ day:i, name: holidayName, month: parseInt(currentM)});
-					// console.log(holidayList);
+					 
 				}
 			}
 		});
+		//console.log(holidayList);
 		return holidayList;
 	};
 

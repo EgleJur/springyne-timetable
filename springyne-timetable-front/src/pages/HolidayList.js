@@ -3,34 +3,43 @@ import { Link } from "react-router-dom";
 import { TextField } from "@mui/material";
 import { Select, MenuItem, Pagination } from "@mui/material";
 import { Collapse, Alert } from "@mui/material";
-import DeleteTwoToneIcon from '@mui/icons-material/DeleteTwoTone';
+import DeleteTwoToneIcon from "@mui/icons-material/DeleteTwoTone";
+import { DatePicker } from "@mui/x-date-pickers";
+import dayjs from "dayjs";
 
 function HolidayListPage() {
   const [holidays, setHolidays] = useState([]);
   const [searchName, setSearchName] = useState("");
-  const [searchStartDate, setSearchStartDate] = useState("");
-  const [searchEndDate, setSearchEndDate] = useState("");
   const [deleted, setDeleted] = useState(false);
-  const [dateError, setDateError] = useState("");
+  const [startDateValue, setStartDateValue] = useState(null);
+  const [endDateValue, setEndDateValue] = useState(null);
+  const [startDateError, setStartDateError] = useState("");
+  const [endDateError, setEndDateError] = useState("");
 
-  var moment = require('moment'); // require
-moment().format(); 
 
   const JSON_HEADERS = {
     "Content-Type": "application/json",
   };
 
-
-  const fetchHolidays = (e) => {
-    if (e && e.preventDefault) { e.preventDefault(); }
-    setDateError(false);
-    if (searchStartDate != "" && searchEndDate === ""
-      || searchStartDate === "" && searchEndDate != ""
-      || searchStartDate > searchEndDate 
-      || searchStartDate != "" && isNaN(moment(searchStartDate, "YYYY-MM-DD").isValid()) 
-     || searchEndDate != "" && isNaN(moment(searchEndDate, "YYYY-MM-DD").isValid()) 
-      ) {setDateError(true);} 
-     else {
+  const fetchHolidays = () => {
+    setStartDateError(false);
+    setEndDateError(false);
+    if (!!startDateValue ^ !!endDateValue) {
+      if (startDateValue === null) {
+        setStartDateError(true);
+      }
+      if (endDateValue === null) {
+        setEndDateError(true);
+      }
+    } else {
+      const searchStartDate =
+        startDateValue === "" || startDateValue === null
+          ? ""
+          : dayjs(startDateValue).format("YYYY-MM-DD");
+      const searchEndDate =
+        endDateValue === "" || endDateValue === null
+          ? ""
+          : dayjs(endDateValue).format("YYYY-MM-DD");
       fetch(
         `/api/v1/holidays/search?name=${searchName}&from=${searchStartDate}&to=${searchEndDate}`
       )
@@ -49,7 +58,7 @@ moment().format();
     setDeleted(true);
     setTimeout(() => {
       setDeleted(false);
-             }, 5000);
+    }, 5000);
   };
 
   return (
@@ -76,9 +85,7 @@ moment().format();
           </button>
         </div>
         <div className="mb-4">
-          <form className="d-flex" role="search">
-
-          </form>
+          <form className="d-flex" role="search"></form>
         </div>
         <div className="mb-4">
           <form className="d-flex" role="search">
@@ -90,30 +97,43 @@ moment().format();
               className="form-control me-2"
               size="small"
             />
-            <TextField
-              error={!!dateError}
-              onChange={(b) => setSearchStartDate(b.target.value)}
-              value={searchStartDate.replace(/[/,.]/g,"-")}
-              id="search-date-from-input"
-              label="Data nuo (MMMM-MM-DD)"
-              className="form-control me-2"
-              size="small"
-              required={searchEndDate}
+            <DatePicker
+              className="mb-3 me-2"
+              label="Data nuo"
+              value={startDateValue}
+              maxDate={endDateValue}
+              onChange={(newValue) => {
+                setStartDateValue(newValue);
+              }}
+              renderInput={(params) => (
+                <TextField
+                  fullWidth
+                  size="small"
+                  {...params}
+                  error={!!startDateError}
+                />
+              )}
             />
-
-            <TextField
-              error={!!dateError}
-              onChange={(b) => setSearchEndDate(b.target.value)}
-              value={searchEndDate.replace(/[/,.]/g,"-")}
-              id="search-date-to-input"
-              label="Data iki (MMMM-MM-DD)"
-              className="form-control me-2"
-              size="small"
-              required={searchStartDate}
+            <DatePicker
+              className="mb-3 me-2"
+              label="Data iki"
+              // inputFormat="yyyy-MM-dd"
+              value={endDateValue}
+              minDate={startDateValue}
+              onChange={(newValue) => {
+                setEndDateValue(newValue);
+              }}
+              renderInput={(params) => (
+                <TextField
+                  fullWidth
+                  size="small"
+                  {...params}
+                  error={!!endDateError}
+                />
+              )}
             />
-
             <button
-              className="btn btn-outline-primary"
+              className="btn btn-outline-primary mb-3"
               type="submit"
               onClick={fetchHolidays}
             >
@@ -134,21 +154,19 @@ moment().format();
         </thead>
         <tbody>
           {holidays?.map((holiday) => (
-
             <tr key={holiday.id} id={holiday.id}>
               <td>{holiday.name}</td>
               <td>{holiday.starts}</td>
               <td>{holiday.ends}</td>
 
               <td className="text-end">
-
                 <button
-                  className="btn btn-danger me-2 my-1 btn-link" title="Ištrinti"
+                  className="btn btn-danger me-2 my-1 btn-link"
+                  title="Ištrinti"
                   onClick={() => deleteHoliday(holiday.id)}
                 >
                   <DeleteTwoToneIcon className="red-icon" />
                 </button>
-
               </td>
             </tr>
           ))}
@@ -157,14 +175,13 @@ moment().format();
           <tr>
             <td colSpan={4}>
               {/* {count} */}
-              {holidays.length == "0"
+              {holidays?.length == "0"
                 ? "Įrašų nerasta"
                 : `Rasta įrašų: ${holidays.length}`}
             </td>
           </tr>
         </tfoot>
       </table>
-
     </div>
   );
 }

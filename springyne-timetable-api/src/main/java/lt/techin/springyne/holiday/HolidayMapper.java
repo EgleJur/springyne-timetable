@@ -1,6 +1,5 @@
 package lt.techin.springyne.holiday;
 
-import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
 public class HolidayMapper {
@@ -13,8 +12,8 @@ public class HolidayMapper {
 
         holiday.setName(holidayDto.getName());
 
-        holiday.setStarts(LocalDate.parse(holidayDto.getStarts()));
-        holiday.setEnds(LocalDate.parse(holidayDto.getEnds()));
+        holiday.setStarts(holidayDto.getStarts());
+        holiday.setEnds(holidayDto.getEnds());
         holiday.setRepeats(holidayDto.isRepeats());
 
         return holiday;
@@ -26,8 +25,8 @@ public class HolidayMapper {
         HolidayDto holidayDto = new HolidayDto();
 
         holidayDto.setName(holiday.getName());
-        holidayDto.setStarts(dateFormatter.format(holiday.getStarts()));
-        holidayDto.setEnds(dateFormatter.format(holiday.getEnds()));
+        holidayDto.setStarts(holiday.getStarts());
+        holidayDto.setEnds(holiday.getEnds());
         holidayDto.setRepeats(holiday.isRepeats());
 
         return holidayDto;

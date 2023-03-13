@@ -140,9 +140,16 @@ const Calendar = (props) => {
 
 		setArrayOfDays(allDates);
 	};
-	const found=(d) => HolidayToCalendar(holidays, currentMonth).find(obj => {
-		return obj.day === d.day;
-	});
+	const found = (d) => {
+		const holiday = HolidayToCalendar(holidays, currentMonth).filter(obj => {
+		  return obj.day === d.day;
+		});
+		if (holiday.length > 0) {
+		  return holiday.map(holiday => holiday.name);
+		} else {
+		  return null;
+		}
+	  };
 
 	useEffect(() => {
 		getAllDays();
@@ -167,7 +174,10 @@ const Calendar = (props) => {
 						key={i}>
 						<span style={{ zIndex: '5' }} className="number">{d.day}</span>
 						{d.isCurrentMonth && found(d) && (
-							<div class="my-5 mx-3 text-center">{found(d).name}</div>
+							<div class="mx-3 text-center">
+								{found(d).map(name => (
+								<div class="my-3">{name}</div>
+							  ))}</div>
 						)}
 
 						{d.isCurrentMonth && 

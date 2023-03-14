@@ -177,7 +177,7 @@ public class LessonService {
         Subject subject = subjectRepository.findById(subjectId).orElseThrow(() -> new ScheduleValidationException("Subject does not exist",
                 "subject id", "Subject not found", subjectId.toString()));
 
-        List<Lesson> lessonsSameDay = lessonRepository.findAllByLessonDate(existingLesson.getLessonDate());
+        List<Lesson> lessonsSameDay = lessonRepository.findAllByLessonDateAndSubjectId(existingLesson.getLessonDate(), subjectId);
 
         //lessonsSameDay.stream().forEach();
            Teacher teacher = teacherRepository.findById(teacherId)
@@ -267,6 +267,8 @@ public class LessonService {
         return lessonRepository.saveAll(lessons);
     }
     public boolean deleteLessonById(Long lessonId) {
+
+
         Optional<Lesson> lesson = lessonRepository.findById(lessonId);
         if (lesson.isPresent()) {
             lessonRepository.delete(lesson.get());

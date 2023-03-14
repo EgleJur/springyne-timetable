@@ -168,7 +168,7 @@ public class LessonService {
         return lessonRepository.saveAll(lessons);
     }
 
-    public Lesson editSingleLesson(Long lessonId, Long subjectId, Long teacherId, Long roomId) {
+    public List<Lesson> editSingleLesson(Long lessonId, Long subjectId, Long teacherId, Long roomId) {
 
         Lesson existingLesson = lessonRepository.findById(lessonId)
                 .orElseThrow(() -> new ScheduleValidationException("Lesson does not exist",
@@ -177,8 +177,10 @@ public class LessonService {
         Subject subject = subjectRepository.findById(subjectId).orElseThrow(() -> new ScheduleValidationException("Subject does not exist",
                 "subject id", "Subject not found", subjectId.toString()));
 
-        if (teacherId != null) {
-            Teacher teacher = teacherRepository.findById(teacherId)
+        List<Lesson> lessonsSameDay = lessonRepository.findAllByLessonDate(existingLesson.getLessonDate());
+
+        //lessonsSameDay.stream().forEach();
+           Teacher teacher = teacherRepository.findById(teacherId)
                     .orElseThrow(() -> new ScheduleValidationException("Teacher does not exist",
                             "teacher id", "Teacher not found", teacherId.toString()));
 
@@ -186,10 +188,9 @@ public class LessonService {
                 throw new ScheduleValidationException("Teacher does not teach this subject", "teacher id",
                         "Teacher is invalid", subjectId.toString());
             }
-            existingLesson.setTeacher(teacher);
-        }
-        if (roomId != null) {
-            Room room = roomRepository.findById(roomId)
+           // existingLesson.setTeacher(teacher);
+
+           Room room = roomRepository.findById(roomId)
                     .orElseThrow(() -> new ScheduleValidationException("Room does not exist",
                             "room id", "Room not found", roomId.toString()));
 
@@ -197,9 +198,22 @@ public class LessonService {
                 throw new ScheduleValidationException("Subject cannot be taught in this room", "room id",
                         "Room is invalid", subjectId.toString());
             }
-            existingLesson.setRoom(room);
+          //  existingLesson.setRoom(room);
+
+       // List<Lesson> lessonsSameDay = lessonRepository.findAllBySubjectIdAndScheduleId(subjectId, scheduleId);
+        for (Lesson lesson : lessonsSameDay) {
+            if (teacherId != null) {
+                lesson.setTeacher(teacher);
+                if (roomId != null) {
+                    lesson.setRoom(room);
+                }
+            } else if (roomId != null) {
+                lesson.setRoom(room);
+            }
         }
-        return lessonRepository.save(existingLesson);
+
+        return lessonRepository.saveAll(lessonsSameDay);
+        //return lessonRepository.save(existingLesson);
     }
 
     public List<Lesson> editMultipleLessons(Long scheduleId, Long subjectId, Long teacherId, Long roomId) {

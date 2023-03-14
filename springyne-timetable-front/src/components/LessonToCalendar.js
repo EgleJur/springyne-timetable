@@ -94,7 +94,7 @@ const LessonToCalendar = (d, shedules, lessons, currentMonth) => {
 					</ListItemButton>
 				</ListItem>
 			)
-			
+			teacherName =less.teacher.name;
 			starts++;
 		}
 		else if (less.room.name !== room && less.subject.id === result[index-1]?.subject.id && less.teacher.id === result[index-1]?.teacher.id) {

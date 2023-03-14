@@ -172,7 +172,7 @@ function EditModulePage() {
         <div className="row mb-md-4">
           <div className="col-md-4 mb-2 mb-md-0 fw-bold">Būsena</div>
           <div className="col-md-8 mb-2 mb-md-0">
-            {module.deleted ? "Modulis ištrintas" : "Aktyvus"}
+            {module.deleted ? "Ištrintas" : "Aktyvus"}
           </div>
         </div>
         <div className="row mb-md-4">

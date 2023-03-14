@@ -15,6 +15,7 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -30,6 +31,8 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -40,6 +43,9 @@ public class LessonControllerTest {
 
     @Autowired
     ObjectMapper objectMapper;
+
+    @MockBean
+    private LessonService lessonService;
 
 //    @Test
 //    void addLessonThrowsExceptionWithNullValues() throws Exception {
@@ -196,6 +202,24 @@ public class LessonControllerTest {
                 .andReturn();
 
         assertEquals(200, mvcResult1.getResponse().getStatus(), message);
+    }
+
+    @Test
+    public void testDeleteSingleLessonSuccess() throws Exception {
+        Long lessonId = 1L;
+        when(lessonService.deleteLessonById(lessonId)).thenReturn(true);
+
+        mockMvc.perform(delete("/api/v1/lessons/{lessonId}", lessonId))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    public void testDeleteSingleLessonNotFound() throws Exception {
+        Long lessonId = 1L;
+        when(lessonService.deleteLessonById(lessonId)).thenReturn(false);
+
+        mockMvc.perform(delete("/api/v1/lessons/{lessonId}", lessonId))
+                .andExpect(status().isNotFound());
     }
 }
 

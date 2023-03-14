@@ -33,18 +33,20 @@ const Calendar = (props) => {
   };
   useEffect(() => fetchHolidays, []);
 
-  const [shedules, setShedules] = useState([]);
-  const fetchShedules = () => {
-    fetch(`${apiUrl}/api/v1/schedules/` + params.id)
-      .then((response) => response.json())
-      .then((jsonResponse) => setShedules(jsonResponse));
-  };
-  useEffect(() => fetchShedules, []);
+  // const [shedules, setShedules] = useState([]);
+  // const fetchShedules = () => {
+  //   fetch(`${apiUrl}/api/v1/schedules/` + params.id)
+  //     .then((response) => response.json())
+  //     .then((jsonResponse) => setShedules(jsonResponse));
+  // };
+  // useEffect(() => fetchShedules, []);
+
+  const schedule = props.schedule;
 
   const shift = () => {
     const shift = [];
-    let starts = shedules?.group?.shift?.starts;
-    let ends = shedules?.group?.shift?.ends;
+    let starts = schedule?.group?.shift?.starts;
+    let ends = schedule?.group?.shift?.ends;
     for (let i = starts; i <= ends; i++) {
       shift.push(
         <ListItem disablePadding>
@@ -64,6 +66,7 @@ const Calendar = (props) => {
       </div>
     );
   };
+
 
   dayjs.extend(weekdayPlugin);
   dayjs.extend(objectPlugin);
@@ -195,7 +198,7 @@ const Calendar = (props) => {
             )}
 
             {d.isCurrentMonth &&
-              LessonToCalendar(d, shedules, lessons, currentMonth)}
+              LessonToCalendar(d, schedule, lessons, currentMonth)}
           </div>
         );
       });

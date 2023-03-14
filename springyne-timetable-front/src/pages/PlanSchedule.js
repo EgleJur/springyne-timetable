@@ -462,7 +462,7 @@ function PlanSchedulePage() {
         ))}
       </div>
 
-      <Calendar lessons={lessons} />
+      <Calendar lessons={lessons} schedule={schedule}/>
     </div>
   );
 }

@@ -252,6 +252,15 @@ public class LessonService {
 
         return lessonRepository.saveAll(lessons);
     }
+    public boolean deleteLessonById(Long lessonId) {
+        Optional<Lesson> lesson = lessonRepository.findById(lessonId);
+        if (lesson.isPresent()) {
+            lessonRepository.delete(lesson.get());
+            return true;
+        } else {
+            return false;
+        }
+    }
 }
 
 

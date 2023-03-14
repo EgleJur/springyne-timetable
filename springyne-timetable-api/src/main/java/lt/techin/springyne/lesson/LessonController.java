@@ -59,4 +59,14 @@ public class LessonController {
                                                        @RequestParam Long roomId) {
         return ResponseEntity.ok(lessonService.editMultipleLessons(scheduleId, subjectId, teacherId, roomId));
     }
+
+    @DeleteMapping("/{lessonId}")
+    public ResponseEntity<?> deleteSingleLesson(@PathVariable Long lessonId) {
+        boolean isDeleted = lessonService.deleteLessonById(lessonId);
+        if (isDeleted) {
+            return ResponseEntity.ok().build();
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
 }

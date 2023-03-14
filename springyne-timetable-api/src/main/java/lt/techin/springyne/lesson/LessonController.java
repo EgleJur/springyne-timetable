@@ -45,7 +45,7 @@ public class LessonController {
     }
 
     @PatchMapping("/editSingleLesson/{lessonId}")
-    public ResponseEntity<Lesson> editLesson(@PathVariable Long lessonId,
+    public ResponseEntity<List<Lesson>> editLesson(@PathVariable Long lessonId,
                                              @RequestParam Long subjectId,
                                              @RequestParam Long teacherId,
                                              @RequestParam Long roomId) {

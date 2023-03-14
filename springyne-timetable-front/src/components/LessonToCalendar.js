@@ -1,4 +1,5 @@
 import dayjs from "dayjs";
+import { useState } from 'react';
 import 'dayjs/locale/lt';
 import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
@@ -12,7 +13,7 @@ import Tooltip, { tooltipClasses } from '@mui/material/Tooltip';
 const LessonToCalendar = (d, shedules, lessons, currentMonth) => {
 	const colorArray = ["#fff4f4", "#f4ffff",
 		"#fff4fa", "#fffaf4", "#fffff4", "#f4fff4", "#fff4f8", "#fbf4ff", "#fcfff0"];
-
+		
 		const LightTooltip = styled(({ className, ...props }) => (
 			<Tooltip {...props} classes={{ popper: className }} />
 		  ))(({ theme }) => ({
@@ -23,6 +24,7 @@ const LessonToCalendar = (d, shedules, lessons, currentMonth) => {
 			  fontSize: 11,
 			},
 		  }));
+		  
 
 	const lessonList = [];
 
@@ -34,12 +36,13 @@ const LessonToCalendar = (d, shedules, lessons, currentMonth) => {
 	let teacherName = "";
 	let room = "";
 	let later = 0;
-	let lessonNr = shedules?.group?.shift?.starts;
+	let starts = shedules?.group?.shift?.starts;
+	let ends = shedules?.group?.shift?.ends;
 	result.forEach((less) => {
 		let colorId = less?.subject?.id;
 		//console.log(colorArray[colorId]);
-		if (less?.lessonTime > lessonNr && later === 0) {
-			for (let n = lessonNr; n < less?.lessonTime; n++)
+		if (less?.lessonTime > starts && later === 0) {
+			for (let n = starts; n < less?.lessonTime; n++)
 				lessonList.push(
 					<ListItem disablePadding>
 						<ListItemButton sx={{ height: "40px", p: 0 }}>
@@ -51,7 +54,10 @@ const LessonToCalendar = (d, shedules, lessons, currentMonth) => {
 			later++;
 		}
 		if (less?.subject?.name !== subjectName) {
-
+const lessonId = less?.id;
+const subjectId = less?.subject?.id;
+const teacherId = less?.teacher?.id;
+const roomId = less?.room?.id;
 			lessonList.push(
 				<ListItem disablePadding>
 					<LightTooltip title={less?.teacher?.name && less?.room?.name 
@@ -59,16 +65,23 @@ const LessonToCalendar = (d, shedules, lessons, currentMonth) => {
 					>
 						<ListItemButton
 							sx={{ height: "40px", p: 1, fontSize: "0.85rem", m: 0, bgcolor: colorArray[colorId] }}
-							disableTypography>
+							disableTypography
+							lessonId={lessonId}>
 							{less?.subject?.name}
 						</ListItemButton>
 						</LightTooltip>
-						<LongMenu color={colorArray[colorId]}/>
+						{/* {console.log(lessonId +" id")} */}
+						<LongMenu color={colorArray[colorId]} 
+						lesson={less}
+						lessonId={lessonId} subjectId={subjectId}
+						teacherId={teacherId} roomId = {roomId}
+						starts={starts} ends={ends} />
 				</ListItem>
 
 			)
+			
 			subjectName = less?.subject?.name;
-			lessonNr++;
+			starts++;
 		}
 		else if (less?.teacher?.name !== teacherName) {
 			lessonList.push(
@@ -82,7 +95,7 @@ const LessonToCalendar = (d, shedules, lessons, currentMonth) => {
 				</ListItem>
 			)
 			teacherName = less?.teacher?.name;
-			lessonNr++;
+			starts++;
 		}
 		else if (less?.room?.name !== room) {
 			lessonList.push(
@@ -109,7 +122,7 @@ const LessonToCalendar = (d, shedules, lessons, currentMonth) => {
 			)
 
 		}
-		lessonNr++;
+		starts++;
 	});
 	return <List>{lessonList}</List>
 };

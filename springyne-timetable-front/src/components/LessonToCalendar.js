@@ -53,22 +53,20 @@ const LessonToCalendar = (d, shedules, lessons, currentMonth) => {
 				)
 			later++;
 		}
-		if (less.subject.name !== result[index-1]?.subject.name) {
-			const lessonId = less?.id;
-			const subjectId = less?.subject.id;
-			const teacherId = less?.teacher.id;
+		if (less.subject.id !== result[index-1]?.subject.id) {
+			const lessonId = less.id;
+			const subjectId = less.subject.id;
+			const teacherId = less.teacher.id;
 			const roomId = less.room.id;
-			const tName = less.teacher.name;
-			const rName = less?.room.name;
 			lessonList.push(
 				<ListItem disablePadding>
-					<LightTooltip title={`${tName}\n${rName}`}
+					<LightTooltip title={`${less.teacher.name}\n${less.room.name}`}
 					>
 						<ListItemButton sx={{ height: "40px", p: 1, bgcolor: colorArray[colorId] }}>
 							<ListItemText
 								sx={{ fontSize: "0.85rem", m: 0 }}
 								disableTypography
-								primary={less?.subject?.name} />
+								primary={less.subject.name} />
 						</ListItemButton>
 					</LightTooltip>
 					{/* {console.log(lessonId +" id")} */}
@@ -81,35 +79,36 @@ const LessonToCalendar = (d, shedules, lessons, currentMonth) => {
 
 			)
 
-			subjectName = less?.subject?.name;
+			subjectName = less.subject.name;
 			starts++;
 		}
-		else if (less?.teacher?.name !== teacherName) {
+		else if (less.teacher.name !== teacherName 
+			&& less.subject.id === result[index-1].subject.id) {
 			lessonList.push(
 				<ListItem disablePadding>
 					<ListItemButton sx={{ height: "40px", p: 1, bgcolor: colorArray[colorId] }}>
 						<ListItemText
 							sx={{ fontSize: "0.85rem", fontWeight: 300, m: 0 }}
 							disableTypography
-							primary={less?.teacher?.name} />
+							primary={less.teacher.name} />
 					</ListItemButton>
 				</ListItem>
 			)
-			teacherName = less?.teacher?.name;
+			
 			starts++;
 		}
-		else if (less?.room?.name !== room) {
+		else if (less.room.name !== room && less.subject.id === result[index-1]?.subject.id && less.teacher.id === result[index-1]?.teacher.id) {
 			lessonList.push(
 				<ListItem disablePadding>
 					<ListItemButton sx={{ height: "40px", p: 1, bgcolor: colorArray[colorId] }}>
 						<ListItemText
 							sx={{ fontSize: "0.85rem", fontWeight: 300, m: 0 }}
 							disableTypography
-							primary={less?.room?.name} />
+							primary={less.room.name} />
 					</ListItemButton>
 				</ListItem>
 			)
-			room = less?.room?.name;
+			room = less.room.name;
 		}
 
 		else {

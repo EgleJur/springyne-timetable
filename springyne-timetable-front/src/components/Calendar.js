@@ -20,6 +20,7 @@ const Calendar = (props) => {
 	const isBetween = require('dayjs/plugin/isBetween');
 	dayjs.extend(isBetween);
 	const lessons = props.lessons;
+	const schedule = props.schedule;
 
 	// const colorArray = ["#fff4f4", "#f4ffff",
 	// 	"#fff4fa", "#fffaf4", "#fffff4", "#f4fff4", "#fff4f8", "#fbf4ff", "#fcfff0"];
@@ -33,18 +34,18 @@ const Calendar = (props) => {
 	useEffect(() => fetchHolidays, []);
 
 
-	const [shedules, setShedules] = useState([]);
-	const fetchShedules = () => {
-		fetch("/api/v1/schedules/" + params.id)
-			.then((response) => response.json())
-			.then((jsonResponse) => setShedules(jsonResponse));
-	};
-	useEffect(() => fetchShedules, []);
+	// const [shedules, setShedules] = useState([]);
+	// const fetchShedules = () => {
+	// 	fetch("/api/v1/schedules/" + params.id)
+	// 		.then((response) => response.json())
+	// 		.then((jsonResponse) => setShedules(jsonResponse));
+	// };
+	// useEffect(() => fetchShedules, []);
 
 	const shift = () => {
 		const shift = [];
-		let starts = shedules?.group?.shift?.starts;
-		let ends = shedules?.group?.shift?.ends;
+		let starts = schedule?.group?.shift?.starts;
+		let ends = schedule?.group?.shift?.ends;
 		for (let i = starts; i <= ends; i++) {
 
 			shift.push(
@@ -181,7 +182,7 @@ const Calendar = (props) => {
 						)}
 
 						{d.isCurrentMonth && 
-						LessonToCalendar(d, shedules, lessons, currentMonth)}
+						LessonToCalendar(d, schedule, lessons, currentMonth)}
 					</div >
 				);
 			});

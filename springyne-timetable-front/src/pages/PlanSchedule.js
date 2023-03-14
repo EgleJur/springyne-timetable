@@ -256,17 +256,6 @@ function PlanSchedulePage() {
         </div>
       </div>
 
-      <div className="d-flex">
-        <div className="me-auto d-flex">
-          <button
-            className="btn btn-primary mb-4 me-2"
-            onClick={() => setOpenEdit(true)}
-          >
-            Redaguoti pamoką
-          </button>
-        </div>
-      </div>
-
       <Dialog open={open} onClose={() => setOpen(false)}>
         <DialogTitle className="mt-2 mb-2">Pridėti naują pamoką</DialogTitle>
         <DialogContent>
@@ -484,7 +473,7 @@ function PlanSchedulePage() {
         ))}
       </div>
 
-      <Calendar lessons={lessons}/>
+      <Calendar lessons={lessons} schedule={schedule}/>
     </div>
   );
 }

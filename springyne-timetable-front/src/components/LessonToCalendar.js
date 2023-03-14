@@ -13,18 +13,18 @@ import Tooltip, { tooltipClasses } from '@mui/material/Tooltip';
 const LessonToCalendar = (d, shedules, lessons, currentMonth) => {
 	const colorArray = ["#fff4f4", "#f4ffff",
 		"#fff4fa", "#fffaf4", "#fffff4", "#f4fff4", "#fff4f8", "#fbf4ff", "#fcfff0"];
-		
-		const LightTooltip = styled(({ className, ...props }) => (
-			<Tooltip {...props} classes={{ popper: className }} />
-		  ))(({ theme }) => ({
-			[`& .${tooltipClasses.tooltip}`]: {
-			  backgroundColor: theme.palette.common.white,
-			  color: 'rgba(0, 0, 0, 0.87)',
-			  boxShadow: theme.shadows[1],
-			  fontSize: 11,
-			},
-		  }));
-		  
+
+	const LightTooltip = styled(({ className, ...props }) => (
+		<Tooltip {...props} classes={{ popper: className }} />
+	))(({ theme }) => ({
+		[`& .${tooltipClasses.tooltip}`]: {
+			backgroundColor: theme.palette.common.white,
+			color: 'rgba(0, 0, 0, 0.87)',
+			boxShadow: theme.shadows[1],
+			fontSize: 11,
+		},
+	}));
+
 
 	const lessonList = [];
 
@@ -38,7 +38,7 @@ const LessonToCalendar = (d, shedules, lessons, currentMonth) => {
 	let later = 0;
 	let starts = shedules?.group?.shift?.starts;
 	let ends = shedules?.group?.shift?.ends;
-	result.forEach((less) => {
+	result.forEach((less, index) => {
 		let colorId = less?.subject?.id;
 		//console.log(colorArray[colorId]);
 		if (less?.lessonTime > starts && later === 0) {
@@ -53,33 +53,34 @@ const LessonToCalendar = (d, shedules, lessons, currentMonth) => {
 				)
 			later++;
 		}
-		if (less?.subject?.name !== subjectName) {
-const lessonId = less?.id;
-const subjectId = less?.subject?.id;
-const teacherId = less?.teacher?.id;
-const roomId = less?.room?.id;
+		if (less.subject.name !== result[index-1]?.subject.name) {
+			const lessonId = less?.id;
+			const subjectId = less?.subject.id;
+			const teacherId = less?.teacher.id;
+			const roomId = less.room.id;
+			const tName = less.teacher.name;
+			const rName = less?.room.name;
 			lessonList.push(
 				<ListItem disablePadding>
-					<LightTooltip title={less?.teacher?.name && less?.room?.name 
-					? `${less?.teacher?.name}\n${less?.room?.name}` : ''}
+					<LightTooltip title={`${tName}\n${rName}`}
 					>
-						<ListItemButton
-							sx={{ height: "40px", p: 1, fontSize: "0.85rem", m: 0, bgcolor: colorArray[colorId] }}
-							disableTypography
-							lessonId={lessonId}>
-							{less?.subject?.name}
+						<ListItemButton sx={{ height: "40px", p: 1, bgcolor: colorArray[colorId] }}>
+							<ListItemText
+								sx={{ fontSize: "0.85rem", m: 0 }}
+								disableTypography
+								primary={less?.subject?.name} />
 						</ListItemButton>
-						</LightTooltip>
-						{/* {console.log(lessonId +" id")} */}
-						<LongMenu color={colorArray[colorId]} 
+					</LightTooltip>
+					{/* {console.log(lessonId +" id")} */}
+					<LongMenu color={colorArray[colorId]}
 						lesson={less}
 						lessonId={lessonId} subjectId={subjectId}
-						teacherId={teacherId} roomId = {roomId}
+						teacherId={teacherId} roomId={roomId}
 						starts={starts} ends={ends} />
 				</ListItem>
 
 			)
-			
+
 			subjectName = less?.subject?.name;
 			starts++;
 		}

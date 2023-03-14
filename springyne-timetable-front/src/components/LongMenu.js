@@ -15,6 +15,8 @@ import { FormControl, InputLabel, TextField } from "@mui/material";
 import { DatePicker } from "@mui/x-date-pickers";
 import { Select, OutlinedInput } from "@mui/material";
 import dayjs from "dayjs";
+import LessonToCalendar from './LessonToCalendar';
+import Calendar from './Calendar';
 
 import FormControlLabel from '@mui/material/FormControlLabel';
 import FormLabel from '@mui/material/FormLabel';
@@ -44,6 +46,7 @@ const LongMenu = ({ color, lesson, lessonId, subjectId, teacherId, roomId, start
     const [repeats, setRepeats] = useState(false);
     const [showTeacherMenuItem, setShowTeacherMenuItem] = useState(true);
     const [showRoomMenuItem, setShowRoomMenuItem] = useState(true);
+    const schedule = lesson?.schedule?.id;
 
 
     const fetchTeachers = () => {
@@ -62,15 +65,39 @@ const LongMenu = ({ color, lesson, lessonId, subjectId, teacherId, roomId, start
 
     useEffect(prefillRooms, []);
 
-    const fetchLessons = () => {
-        fetch("/api/v1/lessons/schedule/" + params.id)
-            .then((response) => response.json())
-            .then((jsonResponse) => setLessons(jsonResponse));
-    };
-    useEffect(fetchLessons, [params]);
-
     const editLesson = (e) => {
         e.preventDefault();
+        if(repeats){
+            fetch(
+                `/api/v1/lessons/editMultipleLessons/${schedule}?subjectId=${subjectId}&teacherId=${selectedTeacher}&roomId=${selectedRoom}`,
+                {
+                    method: "PATCH",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                }).then((result) => {
+                    if (result.ok) {
+                        setRepeats(false);
+                        setSelectedSubject("");
+                        setSelectedTeacher("");
+                        setSelectedRoom("");
+                        setSuccess(true);
+                        setFailure(false);
+                        setOpenEdit(false);
+                        setTimeout(() => {
+                            setSuccess(false);
+                        }, 5000);
+                        // window.location.reload(false);
+                    } else {
+                        setOpenEdit(false);
+                        setFailure(true);
+                        setSuccess(false);
+                        setTimeout(() => {
+                            setFailure(false);
+                        }, 5000);
+                    }
+                });
+        }else{
         fetch(
             `/api/v1/lessons/editSingleLesson/${lessonId}?subjectId=${subjectId}&teacherId=${selectedTeacher}&roomId=${selectedRoom}`,
             {
@@ -88,10 +115,10 @@ const LongMenu = ({ color, lesson, lessonId, subjectId, teacherId, roomId, start
                 setSuccess(true);
                 setFailure(false);
                 setOpenEdit(false);
-                fetchLessons();
                 setTimeout(() => {
                     setSuccess(false);
                 }, 5000);
+                // window.location.reload(false);
             } else {
                 setOpenEdit(false);
                 setFailure(true);
@@ -101,6 +128,7 @@ const LongMenu = ({ color, lesson, lessonId, subjectId, teacherId, roomId, start
                 }, 5000);
             }
         });
+    }
     };
 
     const handleChange = (event) => {
@@ -235,6 +263,19 @@ const LongMenu = ({ color, lesson, lessonId, subjectId, teacherId, roomId, start
                                 ))}
                             </Select>
                         </FormControl>
+                        <div className="mb-3">
+                            <FormLabel id="demo-radio-buttons-group-label"></FormLabel>
+
+                            <FormControlLabel
+                                value="end"
+                                control={<Checkbox
+                                    checked={repeats}
+                                    onChange={handleChange}
+                                    inputProps={{ 'aria-label': 'controlled' }}
+                                />}
+                                label="Pakeisti visoms šio dalyko pamokoms"
+                                labelPlacement="end"
+                            /></div>
                     </form>
                 </DialogContent>
                 <DialogActions>
@@ -251,6 +292,7 @@ const LongMenu = ({ color, lesson, lessonId, subjectId, teacherId, roomId, start
             </Dialog>
 
         </div>
+
     );
 
 }

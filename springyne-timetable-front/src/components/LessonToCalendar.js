@@ -10,7 +10,7 @@ import { styled } from '@mui/material/styles';
 import Button from '@mui/material/Button';
 import Tooltip, { tooltipClasses } from '@mui/material/Tooltip';
 
-const LessonToCalendar = (d, shedules, lessons, currentMonth, onLessonEdited, errorOrSucsess) => {
+const LessonToCalendar = (d, shedules, lessons, currentMonth, onLessonEdited, setSuccess, setFailure) => {
 	const colorArray = ["#fff4f4", "#f4ffff",
 		"#fff4fa", "#fffaf4", "#fffff4", "#f4fff4", "#fff4f8", "#fbf4ff", "#fcfff0"];
 
@@ -75,7 +75,8 @@ const LessonToCalendar = (d, shedules, lessons, currentMonth, onLessonEdited, er
 						lessonId={lessonId} subjectId={subjectId}
 						teacherId={teacherId} roomId={roomId}
 						starts={starts} ends={ends} 
-						onLessonEdited={onLessonEdited} errorOrSucsess={errorOrSucsess}/>
+						onLessonEdited={onLessonEdited} setSuccess={setSuccess}
+						setFailure={setFailure}/>
 				</ListItem>
 
 			)

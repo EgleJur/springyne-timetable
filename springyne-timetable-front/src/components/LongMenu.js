@@ -26,7 +26,8 @@ import Checkbox from '@mui/material/Checkbox';
 
 const ITEM_HEIGHT = 48;
 
-const LongMenu = ({ color, lesson, lessonId, subjectId, teacherId, roomId, starts, ends, onLessonEdited, errorOrSucsess}) => {
+const LongMenu = ({ color, lesson, lessonId, subjectId, teacherId, roomId, starts, ends, onLessonEdited, setSuccess,
+    setFailure}) => {
     const [anchorEl, setAnchorEl] = React.useState(null);
     const openMenu = Boolean(anchorEl);
 
@@ -39,8 +40,6 @@ const LongMenu = ({ color, lesson, lessonId, subjectId, teacherId, roomId, start
     const [teachers, setTeachers] = useState([]);
     const [rooms, setRooms] = useState([]);
     const today = dayjs().format("YYYY-MM-DD");
-    const [success, setSuccess] = useState(false);
-    const [failure, setFailure] = useState(false);
     const times = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14];
     const [lessons, setLessons] = useState([]);
     const [openEdit, setOpenEdit] = useState(false);
@@ -90,7 +89,6 @@ const LongMenu = ({ color, lesson, lessonId, subjectId, teacherId, roomId, start
                         }, 5000);
                         //window.location.reload(false);
                         onLessonEdited();
-                        errorOrSucsess();
                     } else {
                         setOpenEdit(false);
                         setFailure(true);
@@ -98,7 +96,6 @@ const LongMenu = ({ color, lesson, lessonId, subjectId, teacherId, roomId, start
                         setTimeout(() => {
                             setFailure(false);
                         }, 5000);
-                        errorOrSucsess();
                     }
                 });
         }else{
@@ -119,7 +116,6 @@ const LongMenu = ({ color, lesson, lessonId, subjectId, teacherId, roomId, start
                 setSuccess(true);
                 setFailure(false);
                 setOpenEdit(false);
-                errorOrSucsess();
                 setTimeout(() => {
                     setSuccess(false);
                 }, 5000);
@@ -129,7 +125,6 @@ const LongMenu = ({ color, lesson, lessonId, subjectId, teacherId, roomId, start
                 setOpenEdit(false);
                 setFailure(true);
                 setSuccess(false);
-                errorOrSucsess();
                 setTimeout(() => {
                     setFailure(false);
                 }, 5000);

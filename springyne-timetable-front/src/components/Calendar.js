@@ -23,6 +23,8 @@ const Calendar = (props) => {
 	const schedule = props.schedule;
 	const onLessonEdited=props.onLessonEdited;
 	const errorOrSucsess=props.errorOrSucsess;
+	const setSuccess=props.setSuccess;
+    const setFailure=props.setFailure;
 
 	// const colorArray = ["#fff4f4", "#f4ffff",
 	// 	"#fff4fa", "#fffaf4", "#fffff4", "#f4fff4", "#fff4f8", "#fbf4ff", "#fcfff0"];
@@ -185,7 +187,8 @@ const Calendar = (props) => {
 
 						{d.isCurrentMonth && 
 						LessonToCalendar(d, schedule, lessons, 
-						currentMonth, onLessonEdited, errorOrSucsess)}
+						currentMonth, onLessonEdited, setSuccess,
+						setFailure)}
 					</div >
 				);
 			});

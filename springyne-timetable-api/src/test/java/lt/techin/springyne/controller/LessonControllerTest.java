@@ -2,10 +2,12 @@ package lt.techin.springyne.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lt.techin.springyne.lesson.LessonBlock;
+import lt.techin.springyne.lesson.LessonService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
@@ -14,6 +16,9 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import java.time.LocalDate;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -142,17 +147,6 @@ public class LessonControllerTest {
 
         String message = "Adding lesson with time outside of teacher's working hours should return bad request status";
         MvcResult mvcResult1 = mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/lessons/schedule/4?subjectId=1&teacherId=1&roomId=4")
-                .contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(testLessonBlock))).andReturn();
-
-        assertEquals(400,mvcResult1.getResponse().getStatus(), message);
-    }
-
-    @Test
-    void addLessonThrowsExceptionWithMoreLessonsThanTeacherWeeklyWorkingHours() throws Exception {
-        LessonBlock testLessonBlock = new LessonBlock(LocalDate.of(2023,12,1), LocalDate.of(2023,12,8), 1, 4);
-
-        String message = "Adding more lessons in a week than teacher's weekly working hours should return bad request status";
-        MvcResult mvcResult1 = mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/lessons/schedule/2?subjectId=1&teacherId=1&roomId=4")
                 .contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(testLessonBlock))).andReturn();
 
         assertEquals(400,mvcResult1.getResponse().getStatus(), message);

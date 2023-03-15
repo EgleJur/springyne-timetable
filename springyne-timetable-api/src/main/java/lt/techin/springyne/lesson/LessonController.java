@@ -62,7 +62,7 @@ public class LessonController {
 
     @DeleteMapping("/{lessonId}")
     public ResponseEntity<?> deleteSingleLesson(@PathVariable Long lessonId) {
-        boolean isDeleted = lessonService.deleteLessonById(lessonId);
+        boolean isDeleted = lessonService.deleteLessonsByDateAndId(lessonId);
         if (isDeleted) {
             return ResponseEntity.ok().build();
         } else {

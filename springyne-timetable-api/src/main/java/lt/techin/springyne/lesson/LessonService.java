@@ -199,6 +199,9 @@ public class LessonService {
                 throw new ScheduleValidationException("Teacher does not teach this subject", "teacher id",
                         "Teacher is invalid", subjectId.toString());
             }
+
+            //lesson same date pasiimti lesson time ir tokrinti ar egzistuoja find by teacher id for ciklas
+
            // existingLesson.setTeacher(teacher);
 
            Room room = roomRepository.findById(roomId)
@@ -213,7 +216,7 @@ public class LessonService {
 
        // List<Lesson> lessonsSameDay = lessonRepository.findAllBySubjectIdAndScheduleId(subjectId, scheduleId);
         for (Lesson lesson : lessonsSameDay) {
-            if (teacherId != null) {
+            if (teacherId != null) { //(lessonRepository.findByTEACHERid AND LESSON TIME) REIKIA PATIKRINTI VISAS DIENOS PAMOKAS IR TADA SAUGOTI
                 lesson.setTeacher(teacher);
                 if (roomId != null) {
                     lesson.setRoom(room);
@@ -277,17 +280,20 @@ public class LessonService {
 
         return lessonRepository.saveAll(lessons);
     }
-    public boolean deleteLessonById(Long lessonId) {
-
-
+    public boolean deleteLessonsByDateAndId(Long lessonId) {
         Optional<Lesson> lesson = lessonRepository.findById(lessonId);
         if (lesson.isPresent()) {
-            lessonRepository.delete(lesson.get());
+            LocalDate lessonDate = lesson.get().getLessonDate();
+            List<Lesson> lessonsToDelete = lessonRepository.findByLessonDate(lessonDate);
+            for (Lesson l : lessonsToDelete) {
+                lessonRepository.delete(l);
+            }
             return true;
         } else {
             return false;
         }
     }
+
 }
 
 

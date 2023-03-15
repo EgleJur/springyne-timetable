@@ -25,7 +25,7 @@ import Checkbox from '@mui/material/Checkbox';
 
 const ITEM_HEIGHT = 48;
 
-const LongMenu = ({ color, lesson, lessonId, subjectId, teacherId, roomId, starts, ends }) => {
+const LongMenu = ({ color, lesson, lessonId, subjectId, teacherId, roomId, starts, ends, onLessonEdited }) => {
     const [anchorEl, setAnchorEl] = React.useState(null);
     const openMenu = Boolean(anchorEl);
 
@@ -87,7 +87,8 @@ const LongMenu = ({ color, lesson, lessonId, subjectId, teacherId, roomId, start
                         setTimeout(() => {
                             setSuccess(false);
                         }, 5000);
-                        // window.location.reload(false);
+                        //window.location.reload(false);
+                        onLessonEdited();
                     } else {
                         setOpenEdit(false);
                         setFailure(true);
@@ -118,7 +119,8 @@ const LongMenu = ({ color, lesson, lessonId, subjectId, teacherId, roomId, start
                 setTimeout(() => {
                     setSuccess(false);
                 }, 5000);
-                // window.location.reload(false);
+                //window.location.reload(false);
+                onLessonEdited();
             } else {
                 setOpenEdit(false);
                 setFailure(true);
@@ -141,7 +143,9 @@ const LongMenu = ({ color, lesson, lessonId, subjectId, teacherId, roomId, start
             if (result.ok) {
               // Handle successful deletion
               console.log("Lesson deleted successfully.");
-              window.location.reload(true);
+              //window.location.reload(true);
+              onLessonEdited();
+              
             } else {
               // Handle error
               console.error("Error deleting lesson.");

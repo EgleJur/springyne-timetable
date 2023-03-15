@@ -96,7 +96,8 @@ function PlanSchedulePage() {
       setSelectedRoom(existingLessons[0].room.id);
       setSelectedTeacher(existingLessons[0].teacher.id);
     }
-  }
+  };
+
 
   const createNewLesson = (e) => {
     e.preventDefault();
@@ -473,7 +474,7 @@ function PlanSchedulePage() {
         ))}
       </div>
 
-      <Calendar lessons={lessons} schedule={schedule}/>
+      <Calendar lessons={lessons} schedule={schedule} onLessonEdited={fetchLessons}/>
     </div>
   );
 }

@@ -210,19 +210,10 @@ function PlanSchedulePage() {
     }
   };
 
-
-  const handleChange = (event) => {
-    setRepeats(event.target.checked);
-  };
-
-
-  return (
-    <div className="mx-3">
-      <h2 className="my-5">
-        Planuoti {schedule?.group?.name} grupės tvarkaraštį
-      </h2>
-
-      <Collapse in={success}>
+const errorOrSucsess=()=>{
+  return(
+    <div>
+<Collapse in={success}>
         <Alert
           onClose={() => {
             setSuccess(false);
@@ -245,6 +236,17 @@ function PlanSchedulePage() {
           Įrašo nepavyko sukurti
         </Alert>
       </Collapse>
+      </div>
+      );
+};
+
+  return (
+    <div className="mx-3">
+      <h2 className="my-5">
+        Planuoti {schedule?.group?.name} grupės tvarkaraštį
+      </h2>
+
+      {errorOrSucsess()}
 
       <div className="d-flex">
         <div className="me-auto d-flex">
@@ -474,7 +476,9 @@ function PlanSchedulePage() {
         ))}
       </div>
 
-      <Calendar lessons={lessons} schedule={schedule} onLessonEdited={fetchLessons}/>
+      <Calendar lessons={lessons} schedule={schedule} 
+      onLessonEdited={fetchLessons} setSuccess={setSuccess}
+      setFailure={setFailure}/>
     </div>
   );
 }

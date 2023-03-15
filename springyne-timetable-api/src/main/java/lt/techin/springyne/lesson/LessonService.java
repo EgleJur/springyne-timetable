@@ -189,6 +189,14 @@ public class LessonService {
                         "Teacher is invalid", subjectId.toString());
             }
            // existingLesson.setTeacher(teacher);
+        List<Lesson> ocupiedTeacher = new ArrayList<>();
+        for(Lesson lesson:lessonsSameDay){
+            ocupiedTeacher.add(lessonRepository.findByLessonDateAndTeacherIdAndLessonTime(lesson.getLessonDate(),teacherId, lesson.getLessonTime()));}
+
+        if(ocupiedTeacher.size()>0){
+                throw new ScheduleValidationException("Teacher already has lessons", "teacher id",
+                        "Teacher has lessons", subjectId.toString());
+        }
 
            Room room = roomRepository.findById(roomId)
                     .orElseThrow(() -> new ScheduleValidationException("Room does not exist",

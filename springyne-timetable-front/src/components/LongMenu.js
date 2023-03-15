@@ -17,6 +17,7 @@ import { Select, OutlinedInput } from "@mui/material";
 import dayjs from "dayjs";
 import LessonToCalendar from './LessonToCalendar';
 import Calendar from './Calendar';
+import { Alert, Collapse } from "@mui/material";
 
 import FormControlLabel from '@mui/material/FormControlLabel';
 import FormLabel from '@mui/material/FormLabel';
@@ -25,7 +26,7 @@ import Checkbox from '@mui/material/Checkbox';
 
 const ITEM_HEIGHT = 48;
 
-const LongMenu = ({ color, lesson, lessonId, subjectId, teacherId, roomId, starts, ends, onLessonEdited }) => {
+const LongMenu = ({ color, lesson, lessonId, subjectId, teacherId, roomId, starts, ends, onLessonEdited, errorOrSucsess}) => {
     const [anchorEl, setAnchorEl] = React.useState(null);
     const openMenu = Boolean(anchorEl);
 
@@ -89,6 +90,7 @@ const LongMenu = ({ color, lesson, lessonId, subjectId, teacherId, roomId, start
                         }, 5000);
                         //window.location.reload(false);
                         onLessonEdited();
+                        errorOrSucsess();
                     } else {
                         setOpenEdit(false);
                         setFailure(true);
@@ -96,6 +98,7 @@ const LongMenu = ({ color, lesson, lessonId, subjectId, teacherId, roomId, start
                         setTimeout(() => {
                             setFailure(false);
                         }, 5000);
+                        errorOrSucsess();
                     }
                 });
         }else{
@@ -116,6 +119,7 @@ const LongMenu = ({ color, lesson, lessonId, subjectId, teacherId, roomId, start
                 setSuccess(true);
                 setFailure(false);
                 setOpenEdit(false);
+                errorOrSucsess();
                 setTimeout(() => {
                     setSuccess(false);
                 }, 5000);
@@ -125,6 +129,7 @@ const LongMenu = ({ color, lesson, lessonId, subjectId, teacherId, roomId, start
                 setOpenEdit(false);
                 setFailure(true);
                 setSuccess(false);
+                errorOrSucsess();
                 setTimeout(() => {
                     setFailure(false);
                 }, 5000);
@@ -177,6 +182,7 @@ const LongMenu = ({ color, lesson, lessonId, subjectId, teacherId, roomId, start
 
     return (
         <div>
+            
             <IconButton
                 aria-label="more"
                 id="long-button"

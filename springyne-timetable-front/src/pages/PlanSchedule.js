@@ -4,6 +4,7 @@ import Calendar from "../components/Calendar";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import { FormControl, InputLabel, TextField } from "@mui/material";
 import { DatePicker } from "@mui/x-date-pickers";
@@ -54,7 +55,7 @@ function PlanSchedulePage() {
         .then((response) => response.json())
         .then((jsonResponse) => setTeachers(jsonResponse));
     }
-  }
+  };
 
   useEffect(fetchTeachers, [selectedSubject, schedule]);
 
@@ -82,12 +83,15 @@ function PlanSchedulePage() {
 
   const handleSubjectSelection = (subjectValue) => {
     setSelectedSubject(subjectValue);
-    const existingLessons = lessons.filter((lesson) => (lesson.subject.id === subjectValue));
+    const existingLessons = lessons.filter(
+      (lesson) => lesson.subject.id === subjectValue
+    );
     if (existingLessons.length > 0) {
       setSelectedRoom(existingLessons[0].room.id);
       setSelectedTeacher(existingLessons[0].teacher.id);
     }
   };
+
 
   const createNewLesson = (e) => {
     e.preventDefault();
@@ -101,7 +105,9 @@ function PlanSchedulePage() {
     if (
       selectedSubject === null ||
       selectedRoom === null ||
+      selectedRoom === "" ||
       selectedTeacher === null ||
+      selectedTeacher === "" ||
       startDateValue === null ||
       endDateValue === null ||
       startDateValue > endDateValue ||
@@ -114,13 +120,13 @@ function PlanSchedulePage() {
       startTime < schedule?.group?.shift?.starts ||
       endTime > schedule?.group?.shift?.ends
     ) {
-      if (selectedSubject === "") {
+      if (selectedSubject === "" || selectedSubject === null) {
         setSubjectError(true);
       }
-      if (selectedTeacher === "") {
+      if (selectedTeacher === "" || selectedTeacher === null) {
         setTeacherError(true);
       }
-      if (selectedRoom === "") {
+      if (selectedRoom === "" || selectedRoom === null) {
         setRoomError(true);
       }
       if (startTime === "" || startTime === null || startTime === undefined) {
@@ -253,6 +259,7 @@ const errorOrSucsess=()=>{
             <DatePicker
               className="mb-3 mt-2"
               label="Pradžios data"
+              // inputFormat="mmmm-MM-dd"
               value={startDateValue}
               disablePast
               minDate={schedule?.startDate}
@@ -273,6 +280,7 @@ const errorOrSucsess=()=>{
             <DatePicker
               className="mb-3"
               label="Pabaigos data"
+              // inputFormat="yyyy-MM-dd"
               value={endDateValue}
               disablePast
               minDate={
@@ -294,7 +302,7 @@ const errorOrSucsess=()=>{
               )}
             />
 
-            <FormControl fullWidth size="small" className="mb-3">
+            <FormControl fullWidth size="small" className="mb-3" required>
               <InputLabel
                 id="select-subject-label"
                 error={!!subjectError}
@@ -326,7 +334,7 @@ const errorOrSucsess=()=>{
               </Select>
             </FormControl>
 
-            <FormControl fullWidth size="small" className="mb-3">
+            <FormControl fullWidth size="small" className="mb-3" required>
               <InputLabel
                 id="select-teacher-label"
                 error={!!teacherError}
@@ -356,7 +364,7 @@ const errorOrSucsess=()=>{
               </Select>
             </FormControl>
 
-            <FormControl fullWidth size="small" className="mb-3">
+            <FormControl fullWidth size="small" className="mb-3" required>
               <InputLabel id="select-room-label" error={!!roomError} required>
                 Pasirinkite kabinetą
               </InputLabel>
@@ -461,7 +469,7 @@ const errorOrSucsess=()=>{
         ))}
       </div>
 
-      <Calendar lessons={lessons} schedule={schedule} 
+      <Calendar lessons={lessons} schedule={schedule}
       onLessonEdited={fetchLessons} setSuccess={setSuccess}
       setFailure={setFailure}/>
     </div>

@@ -130,6 +130,31 @@ const LongMenu = ({ color, lesson, lessonId, subjectId, teacherId, roomId, start
         });
     }
     };
+    const deleteLesson = (lessonId, starts, ends) => {
+        fetch(`/api/v1/lessons/${lessonId}?startTime=${starts}&endTime=${ends}`, {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        })
+          .then((result) => {
+            if (result.ok) {
+              // Handle successful deletion
+              console.log("Lesson deleted successfully.");
+              window.location.reload(true);
+            } else {
+              // Handle error
+              console.error("Error deleting lesson.");
+            }
+          })
+          .catch((error) => {
+            // Handle network error
+            console.error("Network error:", error);
+          });
+      };
+      const handleDelete = () => {
+        deleteLesson(lessonId, starts, ends);
+      };
 
     const handleChange = (event) => {
         setRepeats(event.target.checked);
@@ -177,7 +202,7 @@ const LongMenu = ({ color, lesson, lessonId, subjectId, teacherId, roomId, start
                 <MenuItem key='Redaguoti' selected={'Redaguoti' === 'Pyxis'} onClick={() => setOpenEdit(true)}>
                     Redaguoti
                 </MenuItem>
-                <MenuItem key='Istrinti' selected={'Ištrinti' === 'Pyxis'} onClick={() => setOpenEdit(true)}>
+                <MenuItem key='Istrinti' selected={'Ištrinti' === 'Pyxis'} onClick={handleDelete}>
                     Ištrinti
                 </MenuItem>
             </Menu>

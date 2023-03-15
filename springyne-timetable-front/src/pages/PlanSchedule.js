@@ -12,11 +12,6 @@ import { Select, MenuItem } from "@mui/material";
 import dayjs from "dayjs";
 import { Alert, Collapse } from "@mui/material";
 
-import FormControlLabel from "@mui/material/FormControlLabel";
-import FormLabel from "@mui/material/FormLabel";
-import Checkbox from "@mui/material/Checkbox";
-// import EditLessonPage from "./EditLesson";
-
 function PlanSchedulePage() {
   const params = useParams();
   const [schedule, setSchedule] = useState({});
@@ -96,6 +91,7 @@ function PlanSchedulePage() {
       setSelectedTeacher(existingLessons[0].teacher.id);
     }
   };
+
 
   const createNewLesson = (e) => {
     e.preventDefault();
@@ -204,19 +200,13 @@ function PlanSchedulePage() {
           }, 5000);
         }
       });
-      // .then(setTimeout(() => {
-      //   window.location.reload(false);
-      // }, 6000))
     }
   };
 
-  return (
-    <div className="mx-3">
-      <h2 className="my-5">
-        Planuoti {schedule?.group?.name} grupės tvarkaraštį
-      </h2>
-
-      <Collapse in={success}>
+const errorOrSucsess=()=>{
+  return(
+    <div>
+<Collapse in={success}>
         <Alert
           onClose={() => {
             setSuccess(false);
@@ -239,6 +229,17 @@ function PlanSchedulePage() {
           Įrašo nepavyko sukurti
         </Alert>
       </Collapse>
+      </div>
+      );
+};
+
+  return (
+    <div className="mx-3">
+      <h2 className="my-5">
+        Planuoti {schedule?.group?.name} grupės tvarkaraštį
+      </h2>
+
+      {errorOrSucsess()}
 
       <div className="d-flex">
         <div className="me-auto d-flex">
@@ -467,9 +468,10 @@ function PlanSchedulePage() {
           </button>
         ))}
       </div>
-      
-      <Calendar lessons={lessons} schedule={schedule} onLessonEdited={fetchLessons}/>
 
+      <Calendar lessons={lessons} schedule={schedule}
+      onLessonEdited={fetchLessons} setSuccess={setSuccess}
+      setFailure={setFailure}/>
     </div>
   );
 }

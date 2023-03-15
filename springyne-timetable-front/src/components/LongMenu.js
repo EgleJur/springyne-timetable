@@ -12,20 +12,16 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from "@mui/material/DialogTitle";
 import { FormControl, InputLabel, TextField } from "@mui/material";
-import { DatePicker } from "@mui/x-date-pickers";
 import { Select, OutlinedInput } from "@mui/material";
 import dayjs from "dayjs";
-import LessonToCalendar from './LessonToCalendar';
-import Calendar from './Calendar';
-
 import FormControlLabel from '@mui/material/FormControlLabel';
 import FormLabel from '@mui/material/FormLabel';
 import Checkbox from '@mui/material/Checkbox';
 
-
 const ITEM_HEIGHT = 48;
 
-const LongMenu = ({ color, lesson, lessonId, subjectId, teacherId, roomId, starts, ends, onLessonEdited }) => {
+const LongMenu = ({ color, lesson, lessonId, subjectId, teacherId, roomId, starts, ends, onLessonEdited, setSuccess,
+    setFailure}) => {
     const [anchorEl, setAnchorEl] = React.useState(null);
     const openMenu = Boolean(anchorEl);
 
@@ -38,16 +34,12 @@ const LongMenu = ({ color, lesson, lessonId, subjectId, teacherId, roomId, start
     const [teachers, setTeachers] = useState([]);
     const [rooms, setRooms] = useState([]);
     const today = dayjs().format("YYYY-MM-DD");
-    const [success, setSuccess] = useState(false);
-    const [failure, setFailure] = useState(false);
     const times = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14];
-    const [lessons, setLessons] = useState([]);
     const [openEdit, setOpenEdit] = useState(false);
     const [repeats, setRepeats] = useState(false);
     const [showTeacherMenuItem, setShowTeacherMenuItem] = useState(true);
     const [showRoomMenuItem, setShowRoomMenuItem] = useState(true);
     const schedule = lesson?.schedule?.id;
-
 
     const fetchTeachers = () => {
         fetch(
@@ -87,7 +79,6 @@ const LongMenu = ({ color, lesson, lessonId, subjectId, teacherId, roomId, start
                         setTimeout(() => {
                             setSuccess(false);
                         }, 5000);
-                        //window.location.reload(false);
                         onLessonEdited();
                     } else {
                         setOpenEdit(false);
@@ -119,7 +110,6 @@ const LongMenu = ({ color, lesson, lessonId, subjectId, teacherId, roomId, start
                 setTimeout(() => {
                     setSuccess(false);
                 }, 5000);
-                //window.location.reload(false);
                 onLessonEdited();
             } else {
                 setOpenEdit(false);
@@ -171,9 +161,6 @@ const LongMenu = ({ color, lesson, lessonId, subjectId, teacherId, roomId, start
     const handleClose = () => {
         setAnchorEl(null);
     };
-    // const color = props.color;
-
-    //console.log(lesson);
 
     return (
         <div>
@@ -319,10 +306,7 @@ const LongMenu = ({ color, lesson, lessonId, subjectId, teacherId, roomId, start
                     </button>
                 </DialogActions>
             </Dialog>
-
         </div>
-
     );
-
 }
 export default LongMenu;

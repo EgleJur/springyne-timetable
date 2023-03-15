@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
 import dayjs from "dayjs";
 import 'dayjs/locale/lt';
 import weekdayPlugin from "dayjs/plugin/weekday";
@@ -12,19 +11,17 @@ import ListItemText from '@mui/material/ListItemText';
 import List from '@mui/material/List';
 import LessonToCalendar from "./LessonToCalendar";
 import HolidayToCalendar from "./HolidayToCalendar";
-import LongMenu from "./LongMenu";
 
 const Calendar = (props) => {
 	const now = dayjs().locale('lt');
-	const params = useParams();
 	const isBetween = require('dayjs/plugin/isBetween');
 	dayjs.extend(isBetween);
 	const lessons = props.lessons;
 	const schedule = props.schedule;
 	const onLessonEdited=props.onLessonEdited;
+	const setSuccess=props.setSuccess;
+    const setFailure=props.setFailure;
 
-	// const colorArray = ["#fff4f4", "#f4ffff",
-	// 	"#fff4fa", "#fffaf4", "#fffff4", "#f4fff4", "#fff4f8", "#fbf4ff", "#fcfff0"];
 	const [holidays, setHolidays] = useState([]);
 
 	const fetchHolidays = () => {
@@ -33,15 +30,6 @@ const Calendar = (props) => {
 			.then((jsonResponse) => setHolidays(jsonResponse));
 	};
 	useEffect(() => fetchHolidays, []);
-
-
-	// const [shedules, setShedules] = useState([]);
-	// const fetchShedules = () => {
-	// 	fetch("/api/v1/schedules/" + params.id)
-	// 		.then((response) => response.json())
-	// 		.then((jsonResponse) => setShedules(jsonResponse));
-	// };
-	// useEffect(() => fetchShedules, []);
 
 	const shift = () => {
 		const shift = [];
@@ -183,7 +171,9 @@ const Calendar = (props) => {
 						)}
 
 						{d.isCurrentMonth && 
-						LessonToCalendar(d, schedule, lessons, currentMonth, onLessonEdited)}
+						LessonToCalendar(d, schedule, lessons, 
+						currentMonth, onLessonEdited, setSuccess,
+						setFailure)}
 					</div >
 				);
 			});

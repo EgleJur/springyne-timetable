@@ -191,32 +191,45 @@ public class LessonService {
         List<Lesson> lessonsSameDay = lessonRepository.findAllByLessonDateAndSubjectId(existingLesson.getLessonDate(), subjectId);
 
         //lessonsSameDay.stream().forEach();
-           Teacher teacher = teacherRepository.findById(teacherId)
-                    .orElseThrow(() -> new ScheduleValidationException("Teacher does not exist",
-                            "teacher id", "Teacher not found", teacherId.toString()));
+        Teacher teacher = teacherRepository.findById(teacherId)
+                .orElseThrow(() -> new ScheduleValidationException("Teacher does not exist",
+                        "teacher id", "Teacher not found", teacherId.toString()));
 
-            if (!teacher.getSubjects().contains(subject)) {
-                throw new ScheduleValidationException("Teacher does not teach this subject", "teacher id",
-                        "Teacher is invalid", subjectId.toString());
-            }
+        if (!teacher.getSubjects().contains(subject)) {
+            throw new ScheduleValidationException("Teacher does not teach this subject", "teacher id",
+                    "Teacher is invalid", subjectId.toString());
+        }
+        // existingLesson.setTeacher(teacher);
+        List<Lesson> occupiedTeacher = new ArrayList<>();
+        List<Lesson> occupiedRoom = new ArrayList<>();
+        for (Lesson lesson : lessonsSameDay) {
+            occupiedTeacher.add(lessonRepository.findByLessonDateAndTeacherIdAndLessonTime(lesson.getLessonDate(), teacherId, lesson.getLessonTime()));
+            occupiedRoom.add(lessonRepository.findByLessonDateAndRoomIdAndLessonTime(lesson.getLessonDate(), roomId, lesson.getLessonTime()));
 
-            //lesson same date pasiimti lesson time ir tokrinti ar egzistuoja find by teacher id for ciklas
+        }
 
-           // existingLesson.setTeacher(teacher);
+        if (occupiedTeacher.size() > 0) {
+            throw new ScheduleValidationException("Teacher already has lessons this day", "teacher id",
+                    "Teacher has lessons", teacherId.toString());
+        }
 
-           Room room = roomRepository.findById(roomId)
-                    .orElseThrow(() -> new ScheduleValidationException("Room does not exist",
-                            "room id", "Room not found", roomId.toString()));
+        Room room = roomRepository.findById(roomId)
+                .orElseThrow(() -> new ScheduleValidationException("Room does not exist",
+                        "room id", "Room not found", roomId.toString()));
 
-            if (!subject.getRooms().contains(room)) {
-                throw new ScheduleValidationException("Subject cannot be taught in this room", "room id",
-                        "Room is invalid", subjectId.toString());
-            }
-          //  existingLesson.setRoom(room);
+        if (!subject.getRooms().contains(room)) {
+            throw new ScheduleValidationException("Subject cannot be taught in this room", "room id",
+                    "Room is invalid", subjectId.toString());
+        }
+        if (occupiedRoom.size() > 0) {
+            throw new ScheduleValidationException("Room already has lessons this day", "teacher id",
+                    "Room has lessons", roomId.toString());
+        }
+        //  existingLesson.setRoom(room);
 
        // List<Lesson> lessonsSameDay = lessonRepository.findAllBySubjectIdAndScheduleId(subjectId, scheduleId);
         for (Lesson lesson : lessonsSameDay) {
-            if (teacherId != null) { //(lessonRepository.findByTEACHERid AND LESSON TIME) REIKIA PATIKRINTI VISAS DIENOS PAMOKAS IR TADA SAUGOTI
+            if (teacherId != null) {
                 lesson.setTeacher(teacher);
                 if (roomId != null) {
                     lesson.setRoom(room);
@@ -293,7 +306,6 @@ public class LessonService {
             return false;
         }
     }
-
 }
 
 

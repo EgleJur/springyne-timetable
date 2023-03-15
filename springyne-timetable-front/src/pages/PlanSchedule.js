@@ -12,9 +12,9 @@ import { Select, MenuItem } from "@mui/material";
 import dayjs from "dayjs";
 import { Alert, Collapse } from "@mui/material";
 
-import FormControlLabel from '@mui/material/FormControlLabel';
-import FormLabel from '@mui/material/FormLabel';
-import Checkbox from '@mui/material/Checkbox';
+import FormControlLabel from "@mui/material/FormControlLabel";
+import FormLabel from "@mui/material/FormLabel";
+import Checkbox from "@mui/material/Checkbox";
 // import EditLessonPage from "./EditLesson";
 
 function PlanSchedulePage() {
@@ -43,9 +43,6 @@ function PlanSchedulePage() {
   const times = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14];
   const [lessons, setLessons] = useState([]);
 
-  const [openEdit, setOpenEdit] = useState(false);
-  const [repeats, setRepeats] = useState(false);
-
   const fetchShedule = () => {
     fetch("/api/v1/schedules/" + params.id)
       .then((response) => response.json())
@@ -63,7 +60,7 @@ function PlanSchedulePage() {
         .then((response) => response.json())
         .then((jsonResponse) => setTeachers(jsonResponse));
     }
-  }
+  };
 
   useEffect(fetchTeachers, [selectedSubject, schedule]);
 
@@ -91,12 +88,14 @@ function PlanSchedulePage() {
 
   const handleSubjectSelection = (subjectValue) => {
     setSelectedSubject(subjectValue);
-    const existingLessons = lessons.filter((lesson) => (lesson.subject.id === subjectValue));
+    const existingLessons = lessons.filter(
+      (lesson) => lesson.subject.id === subjectValue
+    );
     if (existingLessons.length > 0) {
       setSelectedRoom(existingLessons[0].room.id);
       setSelectedTeacher(existingLessons[0].teacher.id);
     }
-  }
+  };
 
   const createNewLesson = (e) => {
     e.preventDefault();
@@ -110,7 +109,9 @@ function PlanSchedulePage() {
     if (
       selectedSubject === null ||
       selectedRoom === null ||
+      selectedRoom === "" ||
       selectedTeacher === null ||
+      selectedTeacher === "" ||
       startDateValue === null ||
       endDateValue === null ||
       startDateValue > endDateValue ||
@@ -123,13 +124,13 @@ function PlanSchedulePage() {
       startTime < schedule?.group?.shift?.starts ||
       endTime > schedule?.group?.shift?.ends
     ) {
-      if (selectedSubject === "") {
+      if (selectedSubject === "" || selectedSubject === null) {
         setSubjectError(true);
       }
-      if (selectedTeacher === "") {
+      if (selectedTeacher === "" || selectedTeacher === null) {
         setTeacherError(true);
       }
-      if (selectedRoom === "") {
+      if (selectedRoom === "" || selectedRoom === null) {
         setRoomError(true);
       }
       if (startTime === "" || startTime === null || startTime === undefined) {
@@ -208,12 +209,6 @@ function PlanSchedulePage() {
       // }, 6000))
     }
   };
-
-
-  const handleChange = (event) => {
-    setRepeats(event.target.checked);
-  };
-
 
   return (
     <div className="mx-3">
@@ -306,7 +301,7 @@ function PlanSchedulePage() {
               )}
             />
 
-            <FormControl fullWidth size="small" className="mb-3">
+            <FormControl fullWidth size="small" className="mb-3" required>
               <InputLabel
                 id="select-subject-label"
                 error={!!subjectError}
@@ -338,7 +333,7 @@ function PlanSchedulePage() {
               </Select>
             </FormControl>
 
-            <FormControl fullWidth size="small" className="mb-3">
+            <FormControl fullWidth size="small" className="mb-3" required>
               <InputLabel
                 id="select-teacher-label"
                 error={!!teacherError}
@@ -368,7 +363,7 @@ function PlanSchedulePage() {
               </Select>
             </FormControl>
 
-            <FormControl fullWidth size="small" className="mb-3">
+            <FormControl fullWidth size="small" className="mb-3" required>
               <InputLabel id="select-room-label" error={!!roomError} required>
                 Pasirinkite kabinetą
               </InputLabel>
@@ -473,7 +468,7 @@ function PlanSchedulePage() {
         ))}
       </div>
 
-      <Calendar lessons={lessons} schedule={schedule}/>
+      <Calendar lessons={lessons} schedule={schedule} />
     </div>
   );
 }

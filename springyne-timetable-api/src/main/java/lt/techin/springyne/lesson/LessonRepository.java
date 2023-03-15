@@ -1,6 +1,5 @@
 package lt.techin.springyne.lesson;
 
-import lt.techin.springyne.subject.Subject;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.time.LocalDate;
@@ -20,6 +19,8 @@ public interface LessonRepository extends JpaRepository<Lesson,Long> {
     Lesson findBySubjectIdAndScheduleId(Long subjectId, Long sheduleId);
 
     List<Lesson> findAllByLessonDateAndSubjectId(LocalDate lessonDate, Long subjectId);
+
+    List<Lesson> findAllByTeacherId(Long teacherId);
 
     List<Lesson> findByLessonDate(LocalDate lessonDate);
 

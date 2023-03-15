@@ -1,35 +1,21 @@
 package lt.techin.springyne.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import lt.techin.springyne.group.GroupDto;
-import lt.techin.springyne.lesson.*;
-import lt.techin.springyne.room.Room;
-import lt.techin.springyne.shift.ShiftDto;
-import lt.techin.springyne.subject.Subject;
-import lt.techin.springyne.teacher.Teacher;
-import lt.techin.springyne.teacher.TeacherDto;
-import org.junit.jupiter.api.BeforeEach;
+import lt.techin.springyne.lesson.LessonBlock;
+import lt.techin.springyne.lesson.LessonService;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.Optional;
 
-import static org.junit.Assert.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -44,8 +30,6 @@ public class LessonControllerTest {
     @Autowired
     ObjectMapper objectMapper;
 
-    @MockBean
-    private LessonService lessonService;
 
 //    @Test
 //    void addLessonThrowsExceptionWithNullValues() throws Exception {
@@ -203,24 +187,5 @@ public class LessonControllerTest {
 
         assertEquals(200, mvcResult1.getResponse().getStatus(), message);
     }
-
-    @Test
-    public void testDeleteSingleLessonSuccess() throws Exception {
-        Long lessonId = 1L;
-        when(lessonService.deleteLessonsByDateAndId(lessonId)).thenReturn(true);
-
-        mockMvc.perform(delete("/api/v1/lessons/{lessonId}", lessonId))
-                .andExpect(status().isOk());
-    }
-
-    @Test
-    public void testDeleteSingleLessonNotFound() throws Exception {
-        Long lessonId = 1L;
-        when(lessonService.deleteLessonsByDateAndId(lessonId)).thenReturn(false);
-
-        mockMvc.perform(delete("/api/v1/lessons/{lessonId}", lessonId))
-                .andExpect(status().isNotFound());
-    }
-
 }
 

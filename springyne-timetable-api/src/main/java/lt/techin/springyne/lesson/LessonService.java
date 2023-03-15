@@ -19,8 +19,10 @@ import org.springframework.stereotype.Service;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.time.temporal.TemporalAdjusters;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -164,6 +166,15 @@ public class LessonService {
                     "Subject is overbooked", lessonBlock.getStartDate().toString() + " - " + lessonBlock.getEndDate());
         }
 
+        List<Lesson> existingTeacherLessons = lessonRepository.findAllByTeacherId(teacherId);
+        existingTeacherLessons.addAll(lessons);
+        Map<LocalDate,Long> teacherLessonCountPerWeek = existingTeacherLessons.stream().collect(Collectors.groupingBy(lesson -> lesson.getLessonDate()
+                .with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY)), Collectors.counting()));
+        boolean isTeacherWeekOverbooked = teacherLessonCountPerWeek.entrySet().stream().anyMatch(entry -> entry.getValue() > teacher.getHours());
+        if (isTeacherWeekOverbooked) {
+            throw new ScheduleValidationException("Number of lessons per week greater than teacher week working hours", "teacher id",
+                    "Teacher is overbooked", teacherId.toString());
+        }
 
         return lessonRepository.saveAll(lessons);
     }

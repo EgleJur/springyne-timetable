@@ -4,18 +4,12 @@ import Calendar from "../components/Calendar";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
-import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import { FormControl, InputLabel, TextField } from "@mui/material";
 import { DatePicker } from "@mui/x-date-pickers";
 import { Select, MenuItem } from "@mui/material";
 import dayjs from "dayjs";
 import { Alert, Collapse } from "@mui/material";
-
-import FormControlLabel from '@mui/material/FormControlLabel';
-import FormLabel from '@mui/material/FormLabel';
-import Checkbox from '@mui/material/Checkbox';
-// import EditLessonPage from "./EditLesson";
 
 function PlanSchedulePage() {
   const params = useParams();
@@ -42,9 +36,6 @@ function PlanSchedulePage() {
   const [failure, setFailure] = useState(false);
   const times = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14];
   const [lessons, setLessons] = useState([]);
-
-  const [openEdit, setOpenEdit] = useState(false);
-  const [repeats, setRepeats] = useState(false);
 
   const fetchShedule = () => {
     fetch("/api/v1/schedules/" + params.id)
@@ -97,7 +88,6 @@ function PlanSchedulePage() {
       setSelectedTeacher(existingLessons[0].teacher.id);
     }
   };
-
 
   const createNewLesson = (e) => {
     e.preventDefault();
@@ -204,9 +194,6 @@ function PlanSchedulePage() {
           }, 5000);
         }
       });
-      // .then(setTimeout(() => {
-      //   window.location.reload(false);
-      // }, 6000))
     }
   };
 
@@ -266,7 +253,6 @@ const errorOrSucsess=()=>{
             <DatePicker
               className="mb-3 mt-2"
               label="Pradžios data"
-              // inputFormat="mmmm-MM-dd"
               value={startDateValue}
               disablePast
               minDate={schedule?.startDate}
@@ -287,7 +273,6 @@ const errorOrSucsess=()=>{
             <DatePicker
               className="mb-3"
               label="Pabaigos data"
-              // inputFormat="yyyy-MM-dd"
               value={endDateValue}
               disablePast
               minDate={

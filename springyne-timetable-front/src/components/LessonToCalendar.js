@@ -1,5 +1,4 @@
 import dayjs from "dayjs";
-import { useState } from 'react';
 import 'dayjs/locale/lt';
 import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
@@ -7,7 +6,6 @@ import ListItemText from '@mui/material/ListItemText';
 import List from '@mui/material/List';
 import LongMenu from "./LongMenu";
 import { styled } from '@mui/material/styles';
-import Button from '@mui/material/Button';
 import Tooltip, { tooltipClasses } from '@mui/material/Tooltip';
 
 const LessonToCalendar = (d, shedules, lessons, currentMonth, onLessonEdited, setSuccess, setFailure) => {
@@ -24,7 +22,6 @@ const LessonToCalendar = (d, shedules, lessons, currentMonth, onLessonEdited, se
 			fontSize: 11,
 		},
 	}));
-
 
 	const lessonList = [];
 
@@ -120,9 +117,7 @@ const LessonToCalendar = (d, shedules, lessons, currentMonth, onLessonEdited, se
 						<ListItemText primary="" />
 					</ListItemButton>
 				</ListItem>
-				// <div>_</div>
 			)
-
 		}
 		starts++;
 	});

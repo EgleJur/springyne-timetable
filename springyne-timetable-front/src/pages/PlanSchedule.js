@@ -468,8 +468,6 @@ function PlanSchedulePage() {
         ))}
       </div>
       
-      <Calendar lessons={lessons} schedule={schedule} />
-      
       <Calendar lessons={lessons} schedule={schedule} onLessonEdited={fetchLessons}/>
 
     </div>

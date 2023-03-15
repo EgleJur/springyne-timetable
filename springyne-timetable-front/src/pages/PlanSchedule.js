@@ -467,8 +467,11 @@ function PlanSchedulePage() {
           </button>
         ))}
       </div>
-
+      
       <Calendar lessons={lessons} schedule={schedule} />
+      
+      <Calendar lessons={lessons} schedule={schedule} onLessonEdited={fetchLessons}/>
+
     </div>
   );
 }

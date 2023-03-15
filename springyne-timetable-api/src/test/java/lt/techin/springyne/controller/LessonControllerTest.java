@@ -207,7 +207,7 @@ public class LessonControllerTest {
     @Test
     public void testDeleteSingleLessonSuccess() throws Exception {
         Long lessonId = 1L;
-        when(lessonService.deleteLessonById(lessonId)).thenReturn(true);
+        when(lessonService.deleteLessonsByDateAndId(lessonId)).thenReturn(true);
 
         mockMvc.perform(delete("/api/v1/lessons/{lessonId}", lessonId))
                 .andExpect(status().isOk());
@@ -216,10 +216,11 @@ public class LessonControllerTest {
     @Test
     public void testDeleteSingleLessonNotFound() throws Exception {
         Long lessonId = 1L;
-        when(lessonService.deleteLessonById(lessonId)).thenReturn(false);
+        when(lessonService.deleteLessonsByDateAndId(lessonId)).thenReturn(false);
 
         mockMvc.perform(delete("/api/v1/lessons/{lessonId}", lessonId))
                 .andExpect(status().isNotFound());
     }
+
 }
 

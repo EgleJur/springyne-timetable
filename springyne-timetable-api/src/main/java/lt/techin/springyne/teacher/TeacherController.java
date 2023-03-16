@@ -81,4 +81,12 @@ public class TeacherController {
         return teacherService.getAvailableTeachersBySubjectId(subjectId, startTime, endTime);
     }
 
+//    @GetMapping("/lesson")
+//    public List<Teacher> findAvailableTeachers( @RequestParam Long lessonId,
+//                                                @RequestParam Long subjectId,
+//                                                @RequestParam Integer startHours,
+//                                                @RequestParam Integer endHours) {
+//        return teacherService.findAvailableTeachers(lessonId, subjectId, startHours, endHours);
+//    }
+
 }

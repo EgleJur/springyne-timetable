@@ -200,18 +200,18 @@ public class LessonService {
                     "Teacher is invalid", subjectId.toString());
         }
         // existingLesson.setTeacher(teacher);
-        List<Lesson> occupiedTeacher = new ArrayList<>();
-        List<Lesson> occupiedRoom = new ArrayList<>();
-        for (Lesson lesson : lessonsSameDay) {
-            occupiedTeacher.add(lessonRepository.findByLessonDateAndTeacherIdAndLessonTime(lesson.getLessonDate(), teacherId, lesson.getLessonTime()));
-            occupiedRoom.add(lessonRepository.findByLessonDateAndRoomIdAndLessonTime(lesson.getLessonDate(), roomId, lesson.getLessonTime()));
+//        List<Lesson> occupiedTeacher = new ArrayList<>();
+//        List<Lesson> occupiedRoom = new ArrayList<>();
+//        for (Lesson lesson : lessonsSameDay) {
+//            occupiedTeacher.add(lessonRepository.findByLessonDateAndTeacherIdAndLessonTime(lesson.getLessonDate(), teacherId, lesson.getLessonTime()));
+//            occupiedRoom.add(lessonRepository.findByLessonDateAndRoomIdAndLessonTime(lesson.getLessonDate(), roomId, lesson.getLessonTime()));
+//
+//        }
 
-        }
-
-        if (occupiedTeacher.size() > 0) {
-            throw new ScheduleValidationException("Teacher already has lessons this day", "teacher id",
-                    "Teacher has lessons", teacherId.toString());
-        }
+//        if (occupiedTeacher.size() > 0) {
+//            throw new ScheduleValidationException("Teacher already has lessons this day", "teacher id",
+//                    "Teacher has lessons", teacherId.toString());
+//        }
 
         Room room = roomRepository.findById(roomId)
                 .orElseThrow(() -> new ScheduleValidationException("Room does not exist",
@@ -221,10 +221,10 @@ public class LessonService {
             throw new ScheduleValidationException("Subject cannot be taught in this room", "room id",
                     "Room is invalid", subjectId.toString());
         }
-        if (occupiedRoom.size() > 0) {
-            throw new ScheduleValidationException("Room already has lessons this day", "teacher id",
-                    "Room has lessons", roomId.toString());
-        }
+//        if (occupiedRoom.size() > 0) {
+//            throw new ScheduleValidationException("Room already has lessons this day", "teacher id",
+//                    "Room has lessons", roomId.toString());
+//        }
         //  existingLesson.setRoom(room);
 
        // List<Lesson> lessonsSameDay = lessonRepository.findAllBySubjectIdAndScheduleId(subjectId, scheduleId);

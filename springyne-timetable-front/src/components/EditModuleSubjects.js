@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { Select, MenuItem } from "@mui/material";
+import { apiUrl } from "../App";
 
 function EditModuleSubjects(props) {
   const params = useParams();
@@ -9,13 +10,13 @@ function EditModuleSubjects(props) {
   const [chosenSubject, setChosenSubject] = useState("");
 
   const fetchSubjects = () => {
-    fetch("/api/v1/modules/subjects/" + params.id)
+    fetch(`${apiUrl}/api/v1/modules/subjects/` + params.id)
       .then((response) => response.json())
       .then((jsonResponse) => setSubjects(jsonResponse));
   };
 
   const fetchAvailableSubjects = () => {
-    fetch(`/api/v1/modules/subjects/available/` + params.id)
+    fetch(`${apiUrl}/api/v1/modules/subjects/available/` + params.id)
       .then((response) => response.json())
       .then((jsonResponse) => setAvailableSubjects(jsonResponse));
   };
@@ -25,7 +26,7 @@ function EditModuleSubjects(props) {
   useEffect(() => fetchAvailableSubjects, []);
 
   const handleAddModule = () => {
-    fetch(`/api/v1/subjects/${chosenSubject}/addModule/` + params.id, {
+    fetch(`${apiUrl}/api/v1/subjects/${chosenSubject}/addModule/` + params.id, {
       method: "PATCH",
     })
       .then(fetchSubjects)

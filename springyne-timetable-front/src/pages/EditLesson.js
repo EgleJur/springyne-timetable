@@ -10,10 +10,10 @@ import { DatePicker } from "@mui/x-date-pickers";
 import { Select, MenuItem } from "@mui/material";
 import dayjs from "dayjs";
 import { Alert, Collapse } from "@mui/material";
-
 import FormControlLabel from "@mui/material/FormControlLabel";
 import FormLabel from "@mui/material/FormLabel";
 import Checkbox from "@mui/material/Checkbox";
+import { apiUrl } from "../App";
 
 function EditLessonPage() {
   const params = useParams();
@@ -45,14 +45,14 @@ function EditLessonPage() {
   const [repeats, setRepeats] = useState(false);
 
   const fetchShedule = () => {
-    fetch("/api/v1/schedules/" + params.id)
+    fetch(`${apiUrl}/api/v1/schedules/` + params.id)
       .then((response) => response.json())
       .then((jsonResponse) => setSchedule(jsonResponse));
   };
   useEffect(fetchShedule, []);
 
   const fetchTeachers = () => {
-    fetch("/api/v1/teachers/subject?subjectId=" + selectedSubject)
+    fetch(`${apiUrl}/api/v1/teachers/subject?subjectId=` + selectedSubject)
       .then((response) => response.json())
       .then((jsonResponse) => setTeachers(jsonResponse));
   };
@@ -75,7 +75,7 @@ function EditLessonPage() {
   useEffect(prefillRooms, [selectedSubject]);
 
   const fetchLessons = () => {
-    fetch("/api/v1/lessons/schedule/" + params.id)
+    fetch(`${apiUrl}/api/v1/lessons/schedule/` + params.id)
       .then((response) => response.json())
       .then((jsonResponse) => setLessons(jsonResponse));
   };
@@ -141,7 +141,7 @@ function EditLessonPage() {
       const startDate = dayjs(startDateValue).format("YYYY-MM-DD");
       const endDate = dayjs(endDateValue).format("YYYY-MM-DD");
       fetch(
-        `/api/v1/lessons/schedule/${params.id}?subjectId=${selectedSubject}&teacherId=${selectedTeacher}&roomId=${selectedRoom}`,
+        `${apiUrl}/api/v1/lessons/schedule/${params.id}?subjectId=${selectedSubject}&teacherId=${selectedTeacher}&roomId=${selectedRoom}`,
         {
           method: "POST",
           headers: {

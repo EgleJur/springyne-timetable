@@ -4,6 +4,7 @@ import { TextField } from "@mui/material";
 import { FormControl, MenuItem, Select, InputLabel } from "@mui/material";
 import { DatePicker } from "@mui/x-date-pickers";
 import dayjs from "dayjs";
+import { apiUrl } from "../App";
 
 function CreateSchedulePage() {
   const [name, setName] = useState("");
@@ -20,7 +21,7 @@ function CreateSchedulePage() {
   const [groupError, setGroupError] = useState(false);
 
   useEffect(() => {
-    fetch("api/v1/groups/")
+    fetch(`${apiUrl}/api/v1/groups/`)
       .then((response) => response.json())
       .then(setGroups);
   }, []);
@@ -66,7 +67,7 @@ function CreateSchedulePage() {
     } else {
       const startDate = dayjs(startDateValue).format("YYYY-MM-DD");
       const endDate = dayjs(endDateValue).format("YYYY-MM-DD");
-      fetch(`/api/v1/schedules?groupId=${selectedGroup}`, {
+      fetch(`${apiUrl}/api/v1/schedules?groupId=${selectedGroup}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

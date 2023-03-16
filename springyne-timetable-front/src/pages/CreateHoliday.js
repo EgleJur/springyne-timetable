@@ -6,6 +6,7 @@ import FormLabel from "@mui/material/FormLabel";
 import Checkbox from "@mui/material/Checkbox";
 import { DatePicker } from "@mui/x-date-pickers";
 import dayjs from "dayjs";
+import { apiUrl } from "../App";
 
 function CreateHolidayPage() {
   const [name, setName] = useState("");
@@ -44,7 +45,7 @@ function CreateHolidayPage() {
     } else {
       const starts = dayjs(startDateValue).format("YYYY-MM-DD");
       const ends = dayjs(endDateValue).format("YYYY-MM-DD");
-      fetch("/api/v1/holidays/createHoliday/", {
+      fetch(`${apiUrl}/api/v1/holidays/createHoliday/`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

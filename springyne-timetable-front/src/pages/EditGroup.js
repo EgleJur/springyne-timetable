@@ -9,6 +9,7 @@ import {
   InputLabel,
   OutlinedInput,
 } from "@mui/material";
+import { apiUrl } from "../App";
 
 function EditGroupPage() {
   const [group, setGroup] = useState({});
@@ -26,21 +27,21 @@ function EditGroupPage() {
   const [showShiftMenuItem, setShowShiftMenuItem] = useState(true);
 
   const fetchGroup = () => {
-    fetch("/api/v1/groups/" + params.id)
+    fetch(`${apiUrl}/api/v1/groups/` + params.id)
       .then((response) => response.json())
       .then((jsonResponse) => setGroup(jsonResponse));
   };
 
-  useEffect(() => fetchGroup, []);
+  useEffect(fetchGroup, [params.id]);
 
   useEffect(() => {
-    fetch("api/v1/programs/")
+    fetch(`${apiUrl}/api/v1/programs/`)
       .then((response) => response.json())
       .then(setPrograms);
   }, []);
 
   useEffect(() => {
-    fetch("api/v1/shifts/")
+    fetch(`${apiUrl}/api/v1/shifts/`)
       .then((response) => response.json())
       .then(setShifts);
   }, []);
@@ -62,7 +63,7 @@ function EditGroupPage() {
       }
     } else {
       fetch(
-        `api/v1/groups/edit/${params.id}?programId=${selectedProgram}&shiftId=${selectedShift}`,
+        `${apiUrl}/api/v1/groups/edit/${params.id}?programId=${selectedProgram}&shiftId=${selectedShift}`,
         {
           method: "PATCH",
           headers: {
@@ -70,20 +71,20 @@ function EditGroupPage() {
           },
           body: JSON.stringify(group),
         }
-        ).then((result) => {
-          if (result.ok) {
-            setSuccess(true);
-            setFailure(false);
+      ).then((result) => {
+        if (result.ok) {
+          setSuccess(true);
+          setFailure(false);
           fetchGroup();
           setTimeout(() => {
             setSuccess(false);
-                   }, 5000);
+          }, 5000);
         } else {
           setFailure(true);
           setSuccess(false);
           setTimeout(() => {
             setFailure(false);
-                   }, 5000);
+          }, 5000);
         }
       });
     }
@@ -96,7 +97,7 @@ function EditGroupPage() {
   };
 
   const handleDelete = () => {
-    fetch(`/api/v1/groups/delete/` + params.id, {
+    fetch(`${apiUrl}/api/v1/groups/delete/` + params.id, {
       method: "PATCH",
     })
       .then((response) => response.json())
@@ -109,7 +110,7 @@ function EditGroupPage() {
              }, 5000);
   };
   const handleRestore = () => {
-    fetch(`/api/v1/groups/restore/` + params.id, {
+    fetch(`${apiUrl}/api/v1/groups/restore/` + params.id, {
       method: "PATCH",
     })
       .then((response) => response.json())

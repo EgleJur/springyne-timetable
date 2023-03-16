@@ -6,6 +6,7 @@ import { Collapse, Alert } from "@mui/material";
 import DeleteTwoToneIcon from "@mui/icons-material/DeleteTwoTone";
 import { DatePicker } from "@mui/x-date-pickers";
 import dayjs from "dayjs";
+import { apiUrl } from "../App";
 
 function HolidayListPage() {
   const [holidays, setHolidays] = useState([]);
@@ -41,7 +42,7 @@ function HolidayListPage() {
           ? ""
           : dayjs(endDateValue).format("YYYY-MM-DD");
       fetch(
-        `/api/v1/holidays/search?name=${searchName}&from=${searchStartDate}&to=${searchEndDate}`
+        `${apiUrl}/api/v1/holidays/search?name=${searchName}&from=${searchStartDate}&to=${searchEndDate}`
       )
         .then((response) => response.json())
         .then((jsonResponse) => setHolidays(jsonResponse));
@@ -51,7 +52,7 @@ function HolidayListPage() {
   useEffect(fetchHolidays, []);
 
   const deleteHoliday = (id) => {
-    fetch("/api/v1/holidays/delete/" + id, {
+    fetch(`${apiUrl}/api/v1/holidays/delete/` + id, {
       method: "PATCH",
       headers: JSON_HEADERS,
     }).then(fetchHolidays);

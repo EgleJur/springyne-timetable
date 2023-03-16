@@ -7,6 +7,7 @@ import EditTwoToneIcon from '@mui/icons-material/EditTwoTone';
 import DeleteTwoToneIcon from '@mui/icons-material/DeleteTwoTone';
 import RestoreTwoToneIcon from '@mui/icons-material/RestoreTwoTone';
 import VisibilityTwoToneIcon from '@mui/icons-material/VisibilityTwoTone';
+import { apiUrl } from "../App";
 
 function GroupListPage() {
   const [groups, setGroups] = useState({});
@@ -25,8 +26,9 @@ function GroupListPage() {
 
   const fetchGroups = () => {
     fetch(
-      `api/v1/groups/search?name=${searchName}&programName=${searchProgName}&groupYear=${searchYear}&page=${pageNumber}&pageSize=${pageSize}`)
-     .then((response) => response.json())
+      `${apiUrl}/api/v1/groups/search?name=${searchName}&programName=${searchProgName}&groupYear=${searchYear}&page=${pageNumber}&pageSize=${pageSize}`
+    )
+      .then((response) => response.json())
       .then((jsonResponse) => setGroups(jsonResponse));
   };
 
@@ -36,7 +38,7 @@ function GroupListPage() {
     setPage(value);
     setPageNumber(value - 1);
     fetch(
-      `api/v1/groups/search?name=${searchName}&programName=${searchProgName}&groupYear=${searchYear}&page=${value - 1}&pageSize=${pageSize}`
+      `${apiUrl}/api/v1/groups/search?name=${searchName}&programName=${searchProgName}&groupYear=${searchYear}&page=${value - 1}&pageSize=${pageSize}`
     )
       .then((response) => response.json())
       .then((jsonResponse) => setGroups(jsonResponse));
@@ -47,14 +49,14 @@ function GroupListPage() {
     setPage(1);
     setPageNumber(0);
     fetch(
-      `api/v1/groups/search?name=${searchName}&programName=${searchProgName}&groupYear=${searchYear}&page=${0}&pageSize=${e.target.value}`
+      `${apiUrl}/api/v1/groups/search?name=${searchName}&programName=${searchProgName}&groupYear=${searchYear}&page=${0}&pageSize=${e.target.value}`
     )
       .then((response) => response.json())
       .then((jsonResponse) => setGroups(jsonResponse));
   };
 
   const deleteGroup = (id) => {
-    fetch("/api/v1/groups/delete/" + id, {
+    fetch(`${apiUrl}/api/v1/groups/delete/` + id, {
       method: "PATCH",
       headers: JSON_HEADERS,
     }).then(fetchGroups);
@@ -66,7 +68,7 @@ function GroupListPage() {
   };
 
   const restoreGroup = (id) => {
-    fetch("/api/v1/groups/restore/" + id, {
+    fetch(`${apiUrl}/api/v1/groups/restore/` + id, {
       method: "PATCH",
       headers: JSON_HEADERS,
     }).then(fetchGroups);

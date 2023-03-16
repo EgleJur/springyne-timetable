@@ -2,6 +2,8 @@ import { Collapse, Alert } from "@mui/material";
 import { useState, useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
 import { TextField } from "@mui/material";
+import { apiUrl } from "../App";
+
 
 function EditRoomPage() {
   const [room, setRoom] = useState({});
@@ -13,7 +15,7 @@ function EditRoomPage() {
   const params = useParams();
 
   const fetchRoom = () => {
-    fetch("/api/v1/rooms/" + params.id)
+    fetch(`${apiUrl}/api/v1/rooms/` + params.id)
       .then((response) => response.json())
       .then((jsonResponse) => setRoom(jsonResponse));
   };
@@ -38,7 +40,7 @@ function EditRoomPage() {
         setBuildingError(true);
       }
     } else {
-      fetch("/api/v1/rooms/edit/" + params.id, {
+      fetch(`${apiUrl}/api/v1/rooms/edit/` + params.id, {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
@@ -74,7 +76,7 @@ function EditRoomPage() {
   };
 
   const handleDelete = () => {
-    fetch(`/api/v1/rooms/delete/` + params.id, {
+    fetch(`${apiUrl}/api/v1/rooms/delete/` + params.id, {
       method: "PATCH",
     })
       .then((response) => response.json())
@@ -90,7 +92,7 @@ function EditRoomPage() {
   };
 
   const handleRestore = () => {
-    fetch(`/api/v1/rooms/restore/` + params.id, {
+    fetch(`${apiUrl}/api/v1/rooms/restore/` + params.id, {
       method: "PATCH",
     })
       .then((response) => response.json())

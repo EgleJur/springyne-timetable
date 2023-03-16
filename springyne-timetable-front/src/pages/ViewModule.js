@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { Collapse, Alert } from "@mui/material";
+import { apiUrl } from "../App";
 
 function ViewModulePage() {
   const [module, setModule] = useState({});
@@ -11,19 +12,19 @@ function ViewModulePage() {
   const [subjects, setSubjects] = useState([]);
 
   useEffect(() => {
-    fetch("/api/v1/modules/" + params.id)
+    fetch(`${apiUrl}/api/v1/modules/` + params.id)
       .then((response) => response.json())
       .then((jsonResponse) => setModule(jsonResponse));
   }, [params.id]);
 
   useEffect(() => {
-    fetch("/api/v1/modules/subjects/" + params.id)
+    fetch(`${apiUrl}/api/v1/modules/subjects/` + params.id)
       .then((response) => response.json())
       .then((jsonResponse) => setSubjects(jsonResponse));
   }, [params.id]);
 
   const handleDelete = () => {
-    fetch(`/api/v1/modules/delete/` + params.id, {
+    fetch(`${apiUrl}/api/v1/modules/delete/` + params.id, {
       method: "PATCH",
     })
       .then((response) => response.json())
@@ -36,7 +37,7 @@ function ViewModulePage() {
   };
 
   const handleRestore = () => {
-    fetch(`/api/v1/modules/restore/` + params.id, {
+    fetch(`${apiUrl}/api/v1/modules/restore/` + params.id, {
       method: "PATCH",
     })
       .then((response) => response.json())

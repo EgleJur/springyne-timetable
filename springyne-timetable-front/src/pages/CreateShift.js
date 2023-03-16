@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Alert, Collapse } from "@mui/material";
 import { TextField } from "@mui/material";
 import { Select, MenuItem} from "@mui/material";
+import { apiUrl } from "../App";
 
 function CreateShiftPage() {
   const [name, setName] = useState("");
@@ -27,7 +28,7 @@ function CreateShiftPage() {
         setEndError(true);
       }
     } else {
-      fetch('/api/v1/shifts', {
+      fetch(`${apiUrl}/api/v1/shifts`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'

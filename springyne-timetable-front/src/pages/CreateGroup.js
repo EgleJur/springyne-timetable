@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Alert, Collapse } from "@mui/material";
 import { TextField, FormControl, MenuItem, Select, InputLabel } from "@mui/material";
 import { useParams } from "react-router-dom";
+import { apiUrl } from "../App";
 
 
 function CreateGroupPage() {
@@ -22,16 +23,16 @@ function CreateGroupPage() {
   const [selectedShift, setSelectedShift] = useState("");
 
   useEffect(() => {
-    fetch('api/v1/programs/')
+    fetch(`${apiUrl}/api/v1/programs/`)
       .then(response => response.json())
       .then(setPrograms)
 
   }, []);
 
   useEffect(() => {
-    fetch('api/v1/shifts/')
-      .then(response => response.json())
-      .then(setShifts)
+    fetch(`${apiUrl}/api/v1/shifts/`)
+      .then((response) => response.json())
+      .then(setShifts);
 
   }, []);
 
@@ -55,19 +56,19 @@ function CreateGroupPage() {
 
     } else {
       fetch(
-        `/api/v1/groups/createGroup?programId=${selectedProgram}&shiftId=${selectedShift}`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          name,
-          groupYear,
-          students,
-
-        })
-        ,
-      }).then((result) => {
+        `${apiUrl}/api/v1/groups/createGroup?programId=${selectedProgram}&shiftId=${selectedShift}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            name,
+            groupYear,
+            students,
+          }),
+        }
+      ).then((result) => {
         if (result.ok) {
           setName("");
           setYear("");
@@ -76,13 +77,13 @@ function CreateGroupPage() {
           setFailure(false);
           setTimeout(() => {
             setSuccess(false);
-                   }, 5000);
+          }, 5000);
         } else {
           setFailure(true);
           setSuccess(false);
           setTimeout(() => {
             setFailure(false);
-                   }, 5000);
+          }, 5000);
         }
       });
     }

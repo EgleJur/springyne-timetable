@@ -24,7 +24,7 @@ function EditProgramPage() {
       .then((jsonResponse) => setProgram(jsonResponse));
   };
 
-  useEffect(() => fetchProgram, []);
+  useEffect(fetchProgram, [params.id]);
 
   useEffect(() => {
     fetch(`${apiUrl}/api/v1/subjects/`)

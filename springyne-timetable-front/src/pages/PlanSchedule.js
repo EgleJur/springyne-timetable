@@ -45,7 +45,7 @@ function PlanSchedulePage() {
       .then((response) => response.json())
       .then((jsonResponse) => setSchedule(jsonResponse));
   };
-  useEffect(fetchShedule, []);
+  useEffect(fetchShedule, [params.id]);
 
   const fetchTeachers = () => {
     if (selectedSubject === "" || schedule === "") {

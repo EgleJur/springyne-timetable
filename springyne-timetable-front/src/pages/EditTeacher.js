@@ -32,7 +32,7 @@ function EditTeacherPage() {
   };
 
   // useEffect(() => fetchTeacher, [params.id]);
-  useEffect(() => fetchTeacher, []);
+  useEffect(fetchTeacher, [params.id]);
 
   useEffect(() => {
     fetch(`${apiUrl}/api/v1/subjects/`)

@@ -32,7 +32,7 @@ function EditGroupPage() {
       .then((jsonResponse) => setGroup(jsonResponse));
   };
 
-  useEffect(() => fetchGroup, []);
+  useEffect(fetchGroup, [params.id]);
 
   useEffect(() => {
     fetch(`${apiUrl}/api/v1/programs/`)

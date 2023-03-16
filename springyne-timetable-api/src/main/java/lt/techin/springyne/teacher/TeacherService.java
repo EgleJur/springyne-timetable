@@ -1,9 +1,10 @@
 package lt.techin.springyne.teacher;
 
 import lt.techin.springyne.exception.ScheduleValidationException;
+import lt.techin.springyne.lesson.LessonRepository;
 import lt.techin.springyne.shift.Shift;
-import lt.techin.springyne.subject.Subject;
 import lt.techin.springyne.shift.ShiftRepository;
+import lt.techin.springyne.subject.Subject;
 import lt.techin.springyne.subject.SubjectRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -26,11 +27,14 @@ public class TeacherService {
 
     @Autowired
     SubjectRepository subjectRepository;
+    @Autowired
+    LessonRepository lessonRepository;
 
-    public TeacherService(TeacherRepository teacherRepository, ShiftRepository shiftRepository, SubjectRepository subjectRepository) {
+    public TeacherService(TeacherRepository teacherRepository, ShiftRepository shiftRepository, SubjectRepository subjectRepository, LessonRepository lessonRepository) {
         this.teacherRepository = teacherRepository;
         this.shiftRepository = shiftRepository;
         this.subjectRepository = subjectRepository;
+        this.lessonRepository= lessonRepository;
     }
 
     public List<Teacher> getAllTeachers() {
@@ -177,4 +181,21 @@ public class TeacherService {
     public List<Teacher> getAvailableTeachersBySubjectId(Long subjectId, Integer startHours, Integer endHours) {
         return teacherRepository.findBySubjects_IdAndShift_StartsLessThanEqualAndShift_EndsGreaterThanEqual(subjectId, startHours, endHours);
     }
+
+//    public List<Teacher> findAvailableTeachers(Long lessonId, Long subjectId, Integer startHours, Integer endHours) {
+//        Lesson existingLesson = lessonRepository.findById(lessonId)
+//                .orElseThrow(() -> new ScheduleValidationException("Lesson does not exist",
+//                "lessonId", "Lesson not found", String.valueOf(lessonId)));
+//        Subject subject = subjectRepository.findById(subjectId)
+//                .orElseThrow(() -> new ScheduleValidationException("Subject does not exist",
+//                        "subjectId", "Subject not found", String.valueOf(subjectId)));
+//
+//        List<Lesson> lessonsSameDay = lessonRepository.findAllByLessonDateAndSubjectId(existingLesson.getLessonDate(), subjectId);
+//        List<Long> teacherIds=new ArrayList<>();
+//        for (Lesson lesson : lessonsSameDay) {
+//            teacherIds.add(lesson.getTeacher().getId());
+//        }
+//        return teacherRepository.findAllBySubjectsAndShift_StartsLessThanEqualAndShift_EndsGreaterThanEqualAndIdNotIn(subject, startHours, endHours, teacherIds);
+//    }
+
 }

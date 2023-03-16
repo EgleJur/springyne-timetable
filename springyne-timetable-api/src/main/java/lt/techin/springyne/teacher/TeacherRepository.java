@@ -1,5 +1,6 @@
 package lt.techin.springyne.teacher;
 
+import lt.techin.springyne.subject.Subject;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -22,5 +23,9 @@ public interface TeacherRepository extends JpaRepository<Teacher,Long> {
 
     List<Teacher> findBySubjects_IdAndShift_StartsLessThanEqualAndShift_EndsGreaterThanEqual(Long subjectId, Integer startTime,
                                                                                              Integer endTime);
+
+   // List<Teacher> findBySubjectIdAndShiftStartsLessThanEqualAndShiftEndsGreaterThanEqual(Long subjectId, Integer startHours, Integer endHours);
+
+    List<Teacher> findAllBySubjectsAndShift_StartsLessThanEqualAndShift_EndsGreaterThanEqualAndIdNotIn(Subject subject, Integer startHours, Integer endHours, List<Long> teacherIds);
 
 }

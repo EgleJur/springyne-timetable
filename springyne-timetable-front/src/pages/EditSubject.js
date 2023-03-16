@@ -35,7 +35,7 @@ function EditSubjectPage() {
       .then((jsonResponse) => setSubject(jsonResponse));
   };
 
-  useEffect(() => fetchSubject, [params.id]);
+  useEffect(fetchSubject, [params.id]);
 
   useEffect(() => {
     fetch(`${apiUrl}/api/v1/rooms/`)

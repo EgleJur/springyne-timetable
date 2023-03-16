@@ -36,8 +36,10 @@ public interface HolidaysRepository extends JpaRepository<Holiday, Long> {
 
     List<Holiday> findByStartsBetweenAndEndsBetweenOrderByStartsAsc(LocalDate sStarts, LocalDate sEnds, LocalDate eStarts, LocalDate eEnds);
 
-    @Query(value = "SELECT * FROM HOLIDAY where TO_CHAR(starts, 'MM-DD')>=TO_CHAR(:YEAR_START, 'MM-DD') " +
-            "and ends<=:YEAR_END or lower(name) like %:NAME% " +
+    @Query(value = "SELECT * FROM HOLIDAY where lower(name) like '%' || LOWER(:NAME) || '%' " +
+            "and (TO_CHAR(starts, 'MM-DD')>=TO_CHAR(:YEAR_START, 'MM-DD') " +
+            "or TO_CHAR(starts, 'MM-DD')<=TO_CHAR(:YEAR_END, 'MM-DD') " +
+            "and ends<=:YEAR_END) " +
             "order by starts asc", nativeQuery = true)
     List<Holiday> findAllHolidaysByDateAndName(@Param("NAME") String name, @Param("YEAR_START") LocalDate starts, @Param("YEAR_END") LocalDate ends );
 

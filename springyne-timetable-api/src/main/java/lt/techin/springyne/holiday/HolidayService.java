@@ -82,27 +82,44 @@ public class HolidayService {
 
         } else if (from == null || from.equals("") && to == null || to.equals("")) {
             return holidaysRepository.findAllByNameIgnoreCaseContainingOrderByStartsAsc(name);
-        }
-        LocalDate startDate = LocalDate.parse(from);
-        LocalDate endDate = LocalDate.parse(to);
-        List<Holiday> filteredHoliday = holidaysRepository.findAllHolidaysByDateAndName(name, endDate, startDate);
+        } else {
+            LocalDate startDate = LocalDate.parse(from);
+            LocalDate endDate = LocalDate.parse(to);
+            List<Holiday> filteredHoliday = holidaysRepository.findAllHolidaysByDateAndName(name, endDate, startDate);
 
-        for (Holiday holiday : filteredHoliday) {
+            for (Holiday holiday : filteredHoliday) {
 
-            if (holiday.isRepeats()) {
-                long i = startDate.getYear() - holiday.getStarts().getYear();
-                holiday.setStarts(holiday.getStarts().plusYears(i));
-                holiday.setEnds(holiday.getEnds().plusYears(i));
+                if (holiday.isRepeats()) {
+                    LocalDate holidayStarts = holiday.getStarts();
+                    LocalDate holidayEnds = holiday.getEnds();
+                    int holidayStartYear = holidayStarts.getYear();
+                    int holidayEndYear = holidayEnds.getYear();
+
+                    for (int year = startDate.getYear(); year <= endDate.getYear(); year++) {
+                        LocalDate newHolidayStarts = holidayStarts.plusYears(year - holidayStartYear);
+                        LocalDate newHolidayEnds = holidayEnds.plusYears(year - holidayEndYear);
+                        Holiday newHoliday = new Holiday();
+                        newHoliday.setName(holiday.getName());
+                        newHoliday.setStarts(newHolidayStarts);
+                        newHoliday.setEnds(newHolidayEnds);
+                        newHolidayList.add(newHoliday);
+                    }
+                } else {
+                    newHolidayList.add(holiday);
+                }
             }
-            newHolidayList.add(holiday);
+            List<Holiday> sortedHolidayList = newHolidayList.stream()
+                    .sorted(Comparator.comparing(Holiday::getStarts))
+                    .collect(Collectors.toList());
+
+            return sortedHolidayList.stream()
+                    .filter(dateS -> dateS.getStarts().isAfter(startDate)
+                            && dateS.getEnds().isBefore(endDate)
+                            || dateS.getStarts().isEqual(startDate)
+                            || dateS.getEnds().isEqual(endDate))
+                    .collect(Collectors.toList());
+            // return holidaysRepository.findAllHolidaysByDateAndName(name, endDate, startDate);
         }
-        return newHolidayList.stream()
-                .filter(dateS -> dateS.getStarts().isAfter(startDate)
-                        && dateS.getEnds().isBefore(endDate)
-                        || dateS.getStarts().isEqual(startDate)
-                        || dateS.getEnds().isEqual(endDate))
-                .collect(Collectors.toList());
-        // return holidaysRepository.findAllHolidaysByDateAndName(name, endDate, startDate);
     }
 
     public Holiday createHoliday(Holiday holiday) {

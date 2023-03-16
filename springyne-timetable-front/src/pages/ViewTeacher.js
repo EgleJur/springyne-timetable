@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { Collapse, Alert } from "@mui/material";
+import { apiUrl } from "../App";
 
 function ViewTeacherPage() {
   const [teacher, setTeacher] = useState({});
@@ -10,13 +11,13 @@ function ViewTeacherPage() {
   const params = useParams();
 
   useEffect(() => {
-    fetch("/api/v1/teachers/" + params.id)
+    fetch(`${apiUrl}/api/v1/teachers/` + params.id)
       .then((response) => response.json())
       .then((jsonResponse) => setTeacher(jsonResponse));
   }, [params.id]);
 
   const handleDelete = () => {
-    fetch(`/api/v1/teachers/delete/` + params.id, {
+    fetch(`${apiUrl}/api/v1/teachers/delete/` + params.id, {
       method: "PATCH",
     })
       .then((response) => response.json())
@@ -29,7 +30,7 @@ function ViewTeacherPage() {
   };
 
   const handleRestore = () => {
-    fetch(`/api/v1/teachers/restore/` + params.id, {
+    fetch(`${apiUrl}/api/v1/teachers/restore/` + params.id, {
       method: "PATCH",
     })
       .then((response) => response.json())

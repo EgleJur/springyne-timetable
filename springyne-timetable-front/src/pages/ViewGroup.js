@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { Collapse, Alert } from "@mui/material";
+import { apiUrl } from "../App";
 
 function ViewGroupPage() {
   const [group, setGroup] = useState({});
@@ -10,13 +11,13 @@ function ViewGroupPage() {
   const params = useParams();
 
   useEffect(() => {
-    fetch("/api/v1/groups/" + params.id)
+    fetch(`${apiUrl}/api/v1/groups/` + params.id)
       .then((response) => response.json())
       .then((jsonResponse) => setGroup(jsonResponse));
   }, [params.id]);
 
   const handleDelete = () => {
-    fetch(`/api/v1/groups/delete/` + params.id, {
+    fetch(`${apiUrl}/api/v1/groups/delete/` + params.id, {
       method: "PATCH",
     })
       .then((response) => response.json())
@@ -29,7 +30,7 @@ function ViewGroupPage() {
   };
 
   const handleRestore = () => {
-    fetch(`/api/v1/groups/restore/` + params.id, {
+    fetch(`${apiUrl}/api/v1/groups/restore/` + params.id, {
       method: "PATCH",
     })
       .then((response) => response.json())

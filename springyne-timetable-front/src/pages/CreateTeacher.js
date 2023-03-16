@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Alert, Collapse } from "@mui/material";
 import { TextField } from "@mui/material";
 import { Select, MenuItem, FormControl, OutlinedInput, InputLabel } from "@mui/material";
+import { apiUrl } from "../App";
 
 function CreateTeacherPage() {
   const [name, setName] = useState("");
@@ -22,13 +23,13 @@ function CreateTeacherPage() {
   const [selectedSubject, setSelectedSubject] = useState("");
 
   useEffect(() => {
-    fetch("api/v1/shifts/")
+    fetch(`${apiUrl}/api/v1/shifts/`)
       .then((response) => response.json())
       .then(setShifts);
   }, []);
 
   useEffect(() => {
-    fetch("api/v1/subjects/")
+    fetch(`${apiUrl}/api/v1/subjects/`)
       .then((response) => response.json())
       .then(setSubjects);
   }, []);
@@ -64,7 +65,7 @@ function CreateTeacherPage() {
       }
     } else {
       fetch(
-        `/api/v1/teachers?shiftId=${selectedShift}&subjectId=${selectedSubject}`,
+        `${apiUrl}/api/v1/teachers?shiftId=${selectedShift}&subjectId=${selectedSubject}`,
         {
           method: "POST",
           headers: {
@@ -91,13 +92,13 @@ function CreateTeacherPage() {
           setFailure(false);
           setTimeout(() => {
             setSuccess(false);
-                   }, 5000);
+          }, 5000);
         } else {
           setFailure(true);
           setSuccess(false);
           setTimeout(() => {
             setFailure(false);
-                   }, 5000);
+          }, 5000);
         }
       });
     }

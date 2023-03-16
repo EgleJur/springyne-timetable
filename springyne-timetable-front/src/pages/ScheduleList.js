@@ -8,6 +8,7 @@ import { Collapse, Alert } from "@mui/material";
 import EditTwoToneIcon from "@mui/icons-material/EditTwoTone";
 import DeleteTwoToneIcon from "@mui/icons-material/DeleteTwoTone";
 import EventTwoToneIcon from "@mui/icons-material/EventTwoTone";
+import { apiUrl } from "../App";
 
 function ScheduleListPage() {
   const [schedules, setSchedules] = useState({});
@@ -29,7 +30,7 @@ function ScheduleListPage() {
 
   const fetchSchedules = () => {
     fetch(
-      `/api/v1/schedules/search?name=${searchName}&date=${formatSearchDate()}&page=${pageNumber}&pageSize=${pageSize}`
+      `${apiUrl}/api/v1/schedules/search?name=${searchName}&date=${formatSearchDate()}&page=${pageNumber}&pageSize=${pageSize}`
     )
       .then((response) => response.json())
       .then((jsonResponse) => setSchedules(jsonResponse));
@@ -41,7 +42,7 @@ function ScheduleListPage() {
     setPage(value);
     setPageNumber(value - 1);
     fetch(
-      `/api/v1/schedules/search?name=${searchName}&date=${formatSearchDate()}&page=${
+      `${apiUrl}/api/v1/schedules/search?name=${searchName}&date=${formatSearchDate()}&page=${
         value - 1
       }&pageSize=${pageSize}`
     )
@@ -54,7 +55,7 @@ function ScheduleListPage() {
     setPage(1);
     setPageNumber(0);
     fetch(
-      `/api/v1/schedules/search?name=${searchName}&date=${formatSearchDate()}&page=${0}&pageSize=${
+      `${apiUrl}/api/v1/schedules/search?name=${searchName}&date=${formatSearchDate()}&page=${0}&pageSize=${
         e.target.value
       }`
     )
@@ -66,14 +67,14 @@ function ScheduleListPage() {
     setPage(1);
     setPageNumber(0);
     fetch(
-      `/api/v1/schedules/search?name=${searchName}&date=${formatSearchDate()}&page=${0}&pageSize=${pageSize}`
+      `${apiUrl}/api/v1/schedules/search?name=${searchName}&date=${formatSearchDate()}&page=${0}&pageSize=${pageSize}`
     )
       .then((response) => response.json())
       .then((jsonResponse) => setSchedules(jsonResponse));
   };
 
   const deleteSchedule = (id) => {
-    fetch(`/api/v1/schedules/delete/` + id, {
+    fetch(`${apiUrl}/api/v1/schedules/delete/` + id, {
       method: "DELETE",
     }).then(fetchSchedules);
     setDeleted(true);

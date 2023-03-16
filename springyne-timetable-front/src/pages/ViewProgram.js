@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { Collapse, Alert } from "@mui/material";
+import { apiUrl } from "../App";
 
 function ViewProgramPage() {
   const [program, setProgram] = useState({});
@@ -10,13 +11,13 @@ function ViewProgramPage() {
   const params = useParams();
 
   useEffect(() => {
-    fetch("/api/v1/programs/" + params.id)
+    fetch(`${apiUrl}/api/v1/programs/` + params.id)
       .then((response) => response.json())
       .then((jsonResponse) => setProgram(jsonResponse));
   }, [params.id]);
 
   const handleDelete = () => {
-    fetch(`/api/v1/programs/delete/` + params.id, {
+    fetch(`${apiUrl}/api/v1/programs/delete/` + params.id, {
       method: "PATCH",
     })
       .then((response) => response.json())
@@ -29,7 +30,7 @@ function ViewProgramPage() {
   };
 
   const handleRestore = () => {
-    fetch(`/api/v1/programs/restore/` + params.id, {
+    fetch(`${apiUrl}/api/v1/programs/restore/` + params.id, {
       method: "PATCH",
     })
       .then((response) => response.json())

@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Alert,Collapse } from "@mui/material";
 import { TextField } from "@mui/material";
+import { apiUrl } from "../App";
 
 function CreateModulePage() {
   const [number, setNumber] = useState("");
@@ -22,7 +23,7 @@ function CreateModulePage() {
         setNameError(true);
       }
     } else {
-      fetch("/api/v1/modules/", {
+      fetch(`${apiUrl}/api/v1/modules/`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

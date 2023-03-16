@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Alert, Collapse } from "@mui/material";
 import { TextField } from "@mui/material";
 import { FormControl, MenuItem, Select, InputLabel } from "@mui/material";
+import { apiUrl } from "../App";
 
 function CreateProgramPage() {
   const [name, setName] = useState("");
@@ -17,7 +18,7 @@ function CreateProgramPage() {
   const [selectedSubject, setSelectedSubject] = useState("");
 
   useEffect(() => {
-    fetch("api/v1/subjects/")
+    fetch(`${apiUrl}/api/v1/subjects/`)
       .then((response) => response.json())
       .then(setSubjects);
   }, []);
@@ -47,16 +48,19 @@ function CreateProgramPage() {
         setSubjectError(true);
       }
     } else {
-      fetch(`/api/v1/programs?subjectId=${selectedSubject}&hours=${hours}`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          name,
-          description,
-        }),
-      }).then((result) => {
+      fetch(
+        `${apiUrl}/api/v1/programs?subjectId=${selectedSubject}&hours=${hours}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            name,
+            description,
+          }),
+        }
+      ).then((result) => {
         if (result.ok) {
           setName("");
           setDescription("");
@@ -66,13 +70,13 @@ function CreateProgramPage() {
           setFailure(false);
           setTimeout(() => {
             setSuccess(false);
-                   }, 5000);
+          }, 5000);
         } else {
           setFailure(true);
           setSuccess(false);
           setTimeout(() => {
             setFailure(false);
-                   }, 5000);
+          }, 5000);
         }
       });
     }

@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
+import { apiUrl } from "../App";
 
 function HomePage() {
 
     const [version, setVersion] = useState([]);
 
     useEffect(() => {
-        fetch("/api/v1/timetable/info")
+        fetch(`${apiUrl}/api/v1/timetable/info`)
         .then((response) => response.text())
         .then(setVersion);
     },[])

@@ -3,6 +3,7 @@ import { Alert, Collapse } from "@mui/material";
 import { FormControl, MenuItem, Select, InputLabel } from "@mui/material";
 import { TextField } from "@mui/material";
 import { useParams } from "react-router-dom";
+import { apiUrl } from "../App";
 
 
 function CreateSubjectPage() {
@@ -22,14 +23,14 @@ function CreateSubjectPage() {
   const [selectedRoom, setSelectedRoom] = useState('');
 
   useEffect(() => {
-    fetch('api/v1/modules/')
+    fetch(`${apiUrl}/api/v1/modules/`)
       .then(response => response.json())
       .then(setModules)
 
   }, []);
 
   useEffect(() => {
-    fetch('api/v1/rooms/')
+    fetch(`${apiUrl}/api/v1/rooms/`)
       .then(response => response.json())
       .then(setRooms)
 
@@ -49,17 +50,19 @@ function CreateSubjectPage() {
       if (selectedModule === "") { setModuleError(true); }
       if (description === "") { setDescriptionError(true);}
     } else {
-      fetch(`/api/v1/subjects/createSubject?moduleId=${selectedModule}&roomId=${selectedRoom}`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          name,
-          description,
-        })
-        ,
-      }).then((result) => {
+      fetch(
+        `${apiUrl}/api/v1/subjects/createSubject?moduleId=${selectedModule}&roomId=${selectedRoom}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            name,
+            description,
+          }),
+        }
+      ).then((result) => {
         if (result.ok) {
           setName("");
           setDescription("");
@@ -67,13 +70,13 @@ function CreateSubjectPage() {
           setFailure(false);
           setTimeout(() => {
             setSuccess(false);
-                   }, 5000);
+          }, 5000);
         } else {
           setFailure(true);
           setSuccess(false);
           setTimeout(() => {
             setFailure(false);
-                   }, 5000);
+          }, 5000);
         }
       });
     }

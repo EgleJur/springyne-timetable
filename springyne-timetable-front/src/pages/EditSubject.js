@@ -10,6 +10,7 @@ import {
   OutlinedInput,
 } from "@mui/material";
 import ClearIcon from "@mui/icons-material/Clear";
+import { apiUrl } from "../App";
 
 function EditSubjectPage() {
   const [subject, setSubject] = useState({});
@@ -29,36 +30,36 @@ function EditSubjectPage() {
   const [showModuleMenuItem, setShowModuleMenuItem] = useState(true);
 
   const fetchSubject = () => {
-    fetch("/api/v1/subjects/" + params.id)
+    fetch(`${apiUrl}/api/v1/subjects/` + params.id)
       .then((response) => response.json())
       .then((jsonResponse) => setSubject(jsonResponse));
   };
 
-  useEffect(() => fetchSubject, [params.id]);
+  useEffect(fetchSubject, [params.id]);
 
   useEffect(() => {
-    fetch('api/v1/rooms/')
+    fetch(`${apiUrl}/api/v1/rooms/`)
       .then(response => response.json())
       .then(setRooms)
 
   }, []);
 
   useEffect(() => {
-    fetch('api/v1/modules/')
+    fetch(`${apiUrl}/api/v1/modules/`)
       .then(response => response.json())
       .then(setModules)
 
   }, []);
 
   const deleteRoom = (e) => {
-    fetch(`/api/v1/subjects/${params.id}/deleteRoom/${e}`, {
+    fetch(`${apiUrl}/api/v1/subjects/${params.id}/deleteRoom/${e}`, {
       method: "PATCH",
     }).then(fetchSubject)
   };
   const addRoom = (e) => {
-    fetch(`/api/v1/subjects/${params.id}/addRoom/${e}`, {
+    fetch(`${apiUrl}/api/v1/subjects/${params.id}/addRoom/${e}`, {
       method: "PATCH",
-    }).then(fetchSubject)
+    }).then(fetchSubject);
   };
 
   const editsubject = (e) => {
@@ -68,13 +69,16 @@ function EditSubjectPage() {
       if (subject.name === "") { setNameError(true); }
       if (subject.description === "") { setDescriptionError(true) }
     } else {
-      fetch(`api/v1/subjects/edit/${params.id}?moduleId=${selectedModule}&roomId=${selectedRoom}`, {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(subject),
-      }).then((result) => {
+      fetch(
+        `${apiUrl}/api/v1/subjects/edit/${params.id}?moduleId=${selectedModule}&roomId=${selectedRoom}`,
+        {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(subject),
+        }
+      ).then((result) => {
         if (result.ok) {
           setSuccess(true);
           setFailure(false);
@@ -82,13 +86,13 @@ function EditSubjectPage() {
           fetchSubject();
           setTimeout(() => {
             setSuccess(false);
-                   }, 5000);
+          }, 5000);
         } else {
           setFailure(true);
           setSuccess(false);
           setTimeout(() => {
             setFailure(false);
-                   }, 5000);
+          }, 5000);
         }
       });
     }
@@ -102,7 +106,7 @@ function EditSubjectPage() {
   };
 
   const handleDelete = () => {
-    fetch(`/api/v1/subjects/delete/` + params.id, {
+    fetch(`${apiUrl}/api/v1/subjects/delete/` + params.id, {
       method: "PATCH",
     })
       .then((response) => response.json())
@@ -116,7 +120,7 @@ function EditSubjectPage() {
              }, 5000);
   };
   const handleRestore = () => {
-    fetch(`/api/v1/subjects/restore/` + params.id, {
+    fetch(`${apiUrl}/api/v1/subjects/restore/` + params.id, {
       method: "PATCH",
     })
       .then((response) => response.json())

@@ -17,6 +17,7 @@ import dayjs from "dayjs";
 import FormControlLabel from '@mui/material/FormControlLabel';
 import FormLabel from '@mui/material/FormLabel';
 import Checkbox from '@mui/material/Checkbox';
+import { apiUrl } from "../App";
 
 const ITEM_HEIGHT = 48;
 
@@ -43,7 +44,7 @@ const LongMenu = ({ color, lesson, lessonId, subjectId, teacherId, roomId, start
 
     const fetchTeachers = () => {
         fetch(
-            `/api/v1/teachers/subject?subjectId=${subjectId}&startTime=${starts}&endTime=${ends}`
+            `${apiUrl}/api/v1/teachers/subject?subjectId=${subjectId}&startTime=${starts}&endTime=${ends}`
         )
             .then((response) => response.json())
             .then((jsonResponse) => setTeachers(jsonResponse));
@@ -61,7 +62,7 @@ const LongMenu = ({ color, lesson, lessonId, subjectId, teacherId, roomId, start
         e.preventDefault();
         if(repeats){
             fetch(
-                `/api/v1/lessons/editMultipleLessons/${schedule}?subjectId=${subjectId}&teacherId=${selectedTeacher}&roomId=${selectedRoom}`,
+                `${apiUrl}/api/v1/lessons/editMultipleLessons/${schedule}?subjectId=${subjectId}&teacherId=${selectedTeacher}&roomId=${selectedRoom}`,
                 {
                     method: "PATCH",
                     headers: {
@@ -91,51 +92,53 @@ const LongMenu = ({ color, lesson, lessonId, subjectId, teacherId, roomId, start
                 });
         }else{
         fetch(
-            `/api/v1/lessons/editSingleLesson/${lessonId}?subjectId=${subjectId}&teacherId=${selectedTeacher}&roomId=${selectedRoom}`,
-            {
-                method: "PATCH",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-            }
+          `${apiUrl}/api/v1/lessons/editSingleLesson/${lessonId}?subjectId=${subjectId}&teacherId=${selectedTeacher}&roomId=${selectedRoom}`,
+          {
+            method: "PATCH",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
         ).then((result) => {
-            if (result.ok) {
-                setRepeats(false);
-                setSelectedSubject("");
-                setSelectedTeacher("");
-                setSelectedRoom("");
-                setSuccess(true);
-                setFailure(false);
-                setOpenEdit(false);
-                setTimeout(() => {
-                    setSuccess(false);
-                }, 5000);
-                onLessonEdited();
-            } else {
-                setOpenEdit(false);
-                setFailure(true);
-                setSuccess(false);
-                setTimeout(() => {
-                    setFailure(false);
-                }, 5000);
-            }
+          if (result.ok) {
+            setRepeats(false);
+            setSelectedSubject("");
+            setSelectedTeacher("");
+            setSelectedRoom("");
+            setSuccess(true);
+            setFailure(false);
+            setOpenEdit(false);
+            setTimeout(() => {
+              setSuccess(false);
+            }, 5000);
+            onLessonEdited();
+          } else {
+            setOpenEdit(false);
+            setFailure(true);
+            setSuccess(false);
+            setTimeout(() => {
+              setFailure(false);
+            }, 5000);
+          }
         });
     }
     };
     const deleteLesson = (lessonId, starts, ends) => {
-        fetch(`/api/v1/lessons/${lessonId}?startTime=${starts}&endTime=${ends}`, {
-          method: "DELETE",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        })
+        fetch(
+          `${apiUrl}/api/v1/lessons/${lessonId}?startTime=${starts}&endTime=${ends}`,
+          {
+            method: "DELETE",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        )
           .then((result) => {
             if (result.ok) {
               // Handle successful deletion
               console.log("Lesson deleted successfully.");
               //window.location.reload(true);
               onLessonEdited();
-              
             } else {
               // Handle error
               console.error("Error deleting lesson.");

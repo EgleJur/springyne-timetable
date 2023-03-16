@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Alert, Collapse } from "@mui/material";
 import { TextField } from "@mui/material";
+import { apiUrl } from "../App";
 
 function CreateRoomPage() {
   const [name, setName] = useState("");
@@ -26,7 +27,7 @@ function CreateRoomPage() {
         setBuildingError(true);
       }
     } else {
-      fetch("/api/v1/rooms/", {
+      fetch(`${apiUrl}/api/v1/rooms/`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -45,13 +46,13 @@ function CreateRoomPage() {
           setFailure(false);
           setTimeout(() => {
             setSuccess(false);
-                   }, 5000);
+          }, 5000);
         } else {
           setFailure(true);
           setSuccess(false);
           setTimeout(() => {
             setFailure(false);
-                   }, 5000);
+          }, 5000);
         }
       });
     }

@@ -2,6 +2,7 @@ import { Collapse, Alert, Select, MenuItem } from "@mui/material";
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { TextField } from "@mui/material";
+import { apiUrl } from "../App";
 
 function EditShiftPage() {
     const [shift, setShift] = useState({
@@ -23,7 +24,7 @@ function EditShiftPage() {
   }, [params.id]);
 
   const fetchShift = () => {
-    fetch("/api/v1/shifts/" + params.id)
+    fetch(`${apiUrl}/api/v1/shifts/` + params.id)
       .then((response) => response.json())
       .then((jsonResponse) => setShift(jsonResponse));
   }
@@ -40,7 +41,7 @@ function EditShiftPage() {
         setNumberError(true);
       }
       } else {
-        fetch('/api/v1/shifts/' + params.id, {
+        fetch(`${apiUrl}/api/v1/shifts/` + params.id, {
             method: 'PATCH',
             headers: {
                 'Content-Type': 'application/json'
@@ -74,7 +75,7 @@ function EditShiftPage() {
   };
   const deleteShift = (shift) => {
     shift.visible = 0;
-    fetch('/api/v1/shifts/' + shift.id, {
+    fetch(`${apiUrl}/api/v1/shifts/` + shift.id, {
       method: 'PATCH',
       headers: {
           'Content-Type': 'application/json'
@@ -89,7 +90,7 @@ function EditShiftPage() {
   };
   const restoreShift = (shift) => {
     shift.visible = 1;
-    fetch('/api/v1/shifts/' + shift.id, {
+    fetch(`${apiUrl}/api/v1/shifts/` + shift.id, {
       method: 'PATCH',
       headers: {
           'Content-Type': 'application/json'

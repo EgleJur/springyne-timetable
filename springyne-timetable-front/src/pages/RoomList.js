@@ -7,6 +7,7 @@ import EditTwoToneIcon from '@mui/icons-material/EditTwoTone';
 import DeleteTwoToneIcon from '@mui/icons-material/DeleteTwoTone';
 import RestoreTwoToneIcon from '@mui/icons-material/RestoreTwoTone';
 import VisibilityTwoToneIcon from '@mui/icons-material/VisibilityTwoTone';
+import { apiUrl } from "../App";
 
 
 function RoomListPage() {
@@ -25,7 +26,7 @@ function RoomListPage() {
 
   const fectchRooms = () => {
     fetch(
-      `/api/v1/rooms/search?name=${searchName}&building=${searchBuinding}&page=${pageNumber}&pageSize=${pageSize}`
+      `${apiUrl}/api/v1/rooms/search?name=${searchName}&building=${searchBuinding}&page=${pageNumber}&pageSize=${pageSize}`
     )
       .then((response) => response.json())
       .then((jsonResponse) => setRooms(jsonResponse));
@@ -35,7 +36,7 @@ function RoomListPage() {
 
   const fectchRoomsByBuildings = () => {
     fetch(
-      `/api/v1/rooms/searchByBuilding?building=${searchBuinding}&page=${pageNumber}&pageSize=${pageSize}`
+      `${apiUrl}/api/v1/rooms/searchByBuilding?building=${searchBuinding}&page=${pageNumber}&pageSize=${pageSize}`
     )
       .then((response) => response.json())
       .then((jsonResponse) => setRooms(jsonResponse));
@@ -45,7 +46,7 @@ function RoomListPage() {
     setPage(value);
     setPageNumber(value - 1);
     fetch(
-      `/api/v1/rooms/searchByName?name=${searchName}&page=${
+      `${apiUrl}/api/v1/rooms/searchByName?name=${searchName}&page=${
         value - 1
       }&pageSize=${pageSize}`
     )
@@ -58,7 +59,7 @@ function RoomListPage() {
     setPage(1);
     setPageNumber(0);
     fetch(
-      `/api/v1/rooms/searchByName?name=${searchName}&page=${0}&pageSize=${
+      `${apiUrl}/api/v1/rooms/searchByName?name=${searchName}&page=${0}&pageSize=${
         e.target.value
       }`
     )
@@ -67,7 +68,7 @@ function RoomListPage() {
   };
 
   const deleteRoom = (id) => {
-    fetch("/api/v1/rooms/delete/" + id, {
+    fetch(`${apiUrl}/api/v1/rooms/delete/` + id, {
       method: "PATCH",
       headers: JSON_HEADERS,
     }).then(fectchRooms);
@@ -79,7 +80,7 @@ function RoomListPage() {
   };
 
   const restoreRoom = (id) => {
-    fetch("/api/v1/rooms/restore/" + id, {
+    fetch(`${apiUrl}/api/v1/rooms/restore/` + id, {
       method: "PATCH",
       headers: JSON_HEADERS,
     }).then(fectchRooms);

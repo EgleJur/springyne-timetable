@@ -11,6 +11,8 @@ import { DatePicker } from "@mui/x-date-pickers";
 import { Select, MenuItem } from "@mui/material";
 import dayjs from "dayjs";
 import { Alert, Collapse } from "@mui/material";
+import { apiUrl } from "../App";
+
 
 function PlanSchedulePage() {
   const params = useParams();
@@ -37,20 +39,20 @@ function PlanSchedulePage() {
   const [failure, setFailure] = useState(false);
   const times = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14];
   const [lessons, setLessons] = useState([]);
-
-  const fetchShedule = () => {
-    fetch("/api/v1/schedules/" + params.id)
+  
+  const fetchShedule=()=>{
+    fetch(`${apiUrl}/api/v1/schedules/` + params.id)
       .then((response) => response.json())
       .then((jsonResponse) => setSchedule(jsonResponse));
   };
-  useEffect(fetchShedule, []);
+  useEffect(fetchShedule, [params.id]);
 
   const fetchTeachers = () => {
     if (selectedSubject === "" || schedule === "") {
       setTeachers([]);
     } else {
       fetch(
-        `/api/v1/teachers/subject?subjectId=${selectedSubject}&startTime=${schedule?.group?.shift?.starts}&endTime=${schedule?.group?.shift?.ends}`
+        `${apiUrl}/api/v1/teachers/subject?subjectId=${selectedSubject}&startTime=${schedule?.group?.shift?.starts}&endTime=${schedule?.group?.shift?.ends}`
       )
         .then((response) => response.json())
         .then((jsonResponse) => setTeachers(jsonResponse));
@@ -75,7 +77,7 @@ function PlanSchedulePage() {
   useEffect(prefillRooms, [selectedSubject, schedule]);
 
   const fetchLessons = () => {
-    fetch("/api/v1/lessons/schedule/" + params.id)
+    fetch(`${apiUrl}/api/v1/lessons/schedule/` + params.id)
       .then((response) => response.json())
       .then((jsonResponse) => setLessons(jsonResponse));
   };
@@ -89,6 +91,9 @@ function PlanSchedulePage() {
     if (existingLessons.length > 0) {
       setSelectedRoom(existingLessons[0].room.id);
       setSelectedTeacher(existingLessons[0].teacher.id);
+    } else {
+      setSelectedRoom("");
+      setSelectedTeacher("");
     }
   };
 
@@ -155,7 +160,7 @@ function PlanSchedulePage() {
       const startDate = dayjs(startDateValue).format("YYYY-MM-DD");
       const endDate = dayjs(endDateValue).format("YYYY-MM-DD");
       fetch(
-        `/api/v1/lessons/schedule/${params.id}?subjectId=${selectedSubject}&teacherId=${selectedTeacher}&roomId=${selectedRoom}`,
+        `${apiUrl}/api/v1/lessons/schedule/${params.id}?subjectId=${selectedSubject}&teacherId=${selectedTeacher}&roomId=${selectedRoom}`,
         {
           method: "POST",
           headers: {

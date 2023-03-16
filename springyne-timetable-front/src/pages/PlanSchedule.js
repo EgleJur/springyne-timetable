@@ -219,6 +219,36 @@ const errorOrSucsess=()=>{
           severity="success"
           className="mb-3"
         >
+          Įrašas sėkmingai atnaujintas
+        </Alert>
+      </Collapse>
+
+      <Collapse in={failure}>
+        <Alert
+          onClose={() => {
+            setFailure(false);
+          }}
+          severity="error"
+          className="mb-3"
+        >
+          Įrašo nepavyko atnaujinti
+        </Alert>
+      </Collapse>
+      </div>
+      );
+};
+
+const addErrorOrSucsess=()=>{
+  return(
+    <div>
+<Collapse in={success}>
+        <Alert
+          onClose={() => {
+            setSuccess(false);
+          }}
+          severity="success"
+          className="mb-3"
+        >
           Įrašas sėkmingai sukurtas
         </Alert>
       </Collapse>
@@ -244,7 +274,7 @@ const errorOrSucsess=()=>{
         Planuoti {schedule?.group?.name} grupės tvarkaraštį
       </h2>
 
-      {errorOrSucsess()}
+      {addErrorOrSucsess()}
 
       <div className="d-flex">
         <div className="me-auto d-flex">

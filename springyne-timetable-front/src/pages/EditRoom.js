@@ -198,7 +198,7 @@ function EditRoomPage() {
         <div className="row mb-md-4">
           <div className="col-md-4 mb-2 mb-md-0 fw-bold">Būsena</div>
           <div className="col-md-8 mb-2 mb-md-0">
-            {room.deleted ? "Kabinetas ištrintas" : "Aktyvus"}
+            {room.deleted ? "Ištrintas" : "Aktyvus"}
           </div>
         </div>
         <div className="row mb-md-4">

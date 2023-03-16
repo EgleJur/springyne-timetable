@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -50,13 +51,29 @@ public class HolidayService {
             // List<Holiday> newHolidayList = new ArrayList<>();
             for (Holiday holiday : filteredHoliday) {
                 if (holiday.isRepeats()) {
+                    LocalDate holidayStarts = holiday.getStarts();
+                    LocalDate holidayEnds = holiday.getEnds();
+                    int holidayStartYear = holidayStarts.getYear();
+                    int holidayEndYear = holidayEnds.getYear();
 
-                    holiday.setStarts(holiday.getStarts().plusYears(startDate.getYear() - holiday.getStarts().getYear()));
-                    holiday.setEnds(holiday.getEnds().plusYears(startDate.getYear() - holiday.getEnds().getYear()));
+                    for (int year = startDate.getYear(); year <= endDate.getYear(); year++) {
+                        LocalDate newHolidayStarts = holidayStarts.plusYears(year - holidayStartYear);
+                        LocalDate newHolidayEnds = holidayEnds.plusYears(year - holidayEndYear);
+                        Holiday newHoliday = new Holiday();
+                        newHoliday.setName(holiday.getName());
+                        newHoliday.setStarts(newHolidayStarts);
+                        newHoliday.setEnds(newHolidayEnds);
+                        newHolidayList.add(newHoliday);
+                    }
+                } else {
+                    newHolidayList.add(holiday);
                 }
-                newHolidayList.add(holiday);
             }
-            return newHolidayList.stream()
+            List<Holiday> sortedHolidayList = newHolidayList.stream()
+                    .sorted(Comparator.comparing(Holiday::getStarts))
+                    .collect(Collectors.toList());
+
+            return sortedHolidayList.stream()
                     .filter(dateS -> dateS.getStarts().isAfter(startDate)
                             && dateS.getEnds().isBefore(endDate)
                             || dateS.getStarts().isEqual(startDate)
@@ -104,7 +121,7 @@ public class HolidayService {
                     "Date is empty", "End date");
         }
 //        holidaysRepository.findAllByNameIgnoreCase(holiday.getName());
-        if(holidaysRepository.findAllByNameIgnoreCase(holiday.getName(), holiday.getStarts(), holiday.getEnds())){
+        if (holidaysRepository.findAllByNameIgnoreCase(holiday.getName(), holiday.getStarts(), holiday.getEnds())) {
             throw new ScheduleValidationException("Holiday exists", "name",
                     "Holiday exists", holiday.getName());
         }

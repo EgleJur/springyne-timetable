@@ -4,17 +4,18 @@ import Calendar from "../components/Calendar";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
-import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import { FormControl, InputLabel, TextField } from "@mui/material";
 import { DatePicker } from "@mui/x-date-pickers";
 import { Select, MenuItem } from "@mui/material";
 import dayjs from "dayjs";
 import { Alert, Collapse } from "@mui/material";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import FormLabel from "@mui/material/FormLabel";
+import Checkbox from "@mui/material/Checkbox";
 import { apiUrl } from "../App";
 
-
-function PlanSchedulePage() {
+function EditLessonPage() {
   const params = useParams();
   const [schedule, setSchedule] = useState({});
   const [open, setOpen] = useState(false);
@@ -39,8 +40,11 @@ function PlanSchedulePage() {
   const [failure, setFailure] = useState(false);
   const times = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14];
   const [lessons, setLessons] = useState([]);
-  
-  const fetchShedule=()=>{
+
+  const [openEdit, setOpenEdit] = useState(false);
+  const [repeats, setRepeats] = useState(false);
+
+  const fetchShedule = () => {
     fetch(`${apiUrl}/api/v1/schedules/` + params.id)
       .then((response) => response.json())
       .then((jsonResponse) => setSchedule(jsonResponse));
@@ -48,18 +52,12 @@ function PlanSchedulePage() {
   useEffect(fetchShedule, []);
 
   const fetchTeachers = () => {
-    if (selectedSubject === "" || schedule === "") {
-      setTeachers([]);
-    } else {
-      fetch(
-        `${apiUrl}/api/v1/teachers/subject?subjectId=${selectedSubject}&startTime=${schedule?.group?.shift?.starts}&endTime=${schedule?.group?.shift?.ends}`
-      )
-        .then((response) => response.json())
-        .then((jsonResponse) => setTeachers(jsonResponse));
-    }
+    fetch(`${apiUrl}/api/v1/teachers/subject?subjectId=` + selectedSubject)
+      .then((response) => response.json())
+      .then((jsonResponse) => setTeachers(jsonResponse));
   };
 
-  useEffect(fetchTeachers, [selectedSubject, schedule]);
+  useEffect(fetchTeachers, [selectedSubject]);
 
   const prefillRooms = () => {
     if (selectedSubject === "") {
@@ -74,31 +72,16 @@ function PlanSchedulePage() {
     }
   };
 
-  useEffect(prefillRooms, [selectedSubject, schedule]);
+  useEffect(prefillRooms, [selectedSubject]);
 
   const fetchLessons = () => {
     fetch(`${apiUrl}/api/v1/lessons/schedule/` + params.id)
       .then((response) => response.json())
       .then((jsonResponse) => setLessons(jsonResponse));
   };
-  useEffect(fetchLessons, [params]);
+  useEffect(() => fetchLessons, []);
 
-  const handleSubjectSelection = (subjectValue) => {
-    setSelectedSubject(subjectValue);
-    const existingLessons = lessons.filter(
-      (lesson) => lesson.subject.id === subjectValue
-    );
-    if (existingLessons.length > 0) {
-      setSelectedRoom(existingLessons[0].room.id);
-      setSelectedTeacher(existingLessons[0].teacher.id);
-    } else {
-      setSelectedRoom("");
-      setSelectedTeacher("");
-    }
-  };
-
-
-  const createNewLesson = (e) => {
+  const editLesson = (e) => {
     e.preventDefault();
     setStartDateError(false);
     setEndDateError(false);
@@ -110,34 +93,32 @@ function PlanSchedulePage() {
     if (
       selectedSubject === null ||
       selectedRoom === null ||
-      selectedRoom === "" ||
       selectedTeacher === null ||
-      selectedTeacher === "" ||
       startDateValue === null ||
       endDateValue === null ||
       startDateValue > endDateValue ||
       startDateValue < today ||
       startDateValue < schedule?.startDate ||
       endDateValue > schedule?.endDate ||
-      startTime === "" ||
-      endTime === "" ||
+      startTime === null ||
+      endTime === null ||
       endTime < startTime ||
       startTime < schedule?.group?.shift?.starts ||
       endTime > schedule?.group?.shift?.ends
     ) {
-      if (selectedSubject === "" || selectedSubject === null) {
+      if (selectedSubject === "") {
         setSubjectError(true);
       }
-      if (selectedTeacher === "" || selectedTeacher === null) {
+      if (selectedTeacher === "") {
         setTeacherError(true);
       }
-      if (selectedRoom === "" || selectedRoom === null) {
+      if (selectedRoom === "") {
         setRoomError(true);
       }
-      if (startTime === "" || startTime === null || startTime === undefined) {
+      if (startTime === "") {
         setStartTimeError(true);
       }
-      if (endTime === "" || endTime === null || endTime === undefined) {
+      if (endTime === "") {
         setEndTimeError(true);
       }
       if (
@@ -171,10 +152,12 @@ function PlanSchedulePage() {
             endDate,
             startTime,
             endTime,
+            repeats,
           }),
         }
       ).then((result) => {
         if (result.ok) {
+          setRepeats(false);
           setStartDateValue(null);
           setEndDateValue(null);
           setStartTime("");
@@ -191,13 +174,13 @@ function PlanSchedulePage() {
           setRoomError(false);
           setSuccess(true);
           setFailure(false);
-          setOpen(false);
+          setOpenEdit(false);
           fetchLessons();
           setTimeout(() => {
             setSuccess(false);
           }, 5000);
         } else {
-          setOpen(false);
+          setOpenEdit(false);
           setFailure(true);
           setSuccess(false);
           setTimeout(() => {
@@ -205,13 +188,19 @@ function PlanSchedulePage() {
           }, 5000);
         }
       });
+      // .then(setTimeout(() => {
+      //   window.location.reload(false);
+      // }, 6000))
     }
   };
 
-const errorOrSucsess=()=>{
-  return(
-    <div>
-<Collapse in={success}>
+  const handleChange = (event) => {
+    setRepeats(event.target.checked);
+  };
+
+  return (
+    <div className="mx-3">
+      <Collapse in={success}>
         <Alert
           onClose={() => {
             setSuccess(false);
@@ -234,37 +223,27 @@ const errorOrSucsess=()=>{
           Įrašo nepavyko sukurti
         </Alert>
       </Collapse>
-      </div>
-      );
-};
 
-  return (
-    <div className="mx-3">
-      <h2 className="my-5">
-        Planuoti {schedule?.group?.name} grupės tvarkaraštį
-      </h2>
+      {/* <div className="d-flex">
+            <div className="me-auto d-flex">
+              <button
+                className="btn btn-primary mb-4 me-2"
+                onClick={() => setOpenEdit(true)}
+              >
+                Redaguoti pamoką
+              </button>
+            </div>
+          </div> */}
 
-      {errorOrSucsess()}
-
-      <div className="d-flex">
-        <div className="me-auto d-flex">
-          <button
-            className="btn btn-primary mb-4 me-2"
-            onClick={() => setOpen(true)}
-          >
-            Pridėti naują pamoką
-          </button>
-        </div>
-      </div>
-
-      <Dialog open={open} onClose={() => setOpen(false)}>
-        <DialogTitle className="mt-2 mb-2">Pridėti naują pamoką</DialogTitle>
+      <Dialog open={openEdit} onClose={() => setOpenEdit(false)}>
+        <DialogTitle className="mt-2 mb-2">Redaguoti pamoką</DialogTitle>
         <DialogContent>
           <form noValidate>
             <DatePicker
               className="mb-3 mt-2"
               label="Pradžios data"
-              // inputFormat="mmmm-MM-dd"
+              labelId="add-date"
+              fullWidth
               value={startDateValue}
               disablePast
               minDate={schedule?.startDate}
@@ -282,32 +261,8 @@ const errorOrSucsess=()=>{
                 />
               )}
             />
-            <DatePicker
-              className="mb-3"
-              label="Pabaigos data"
-              // inputFormat="yyyy-MM-dd"
-              value={endDateValue}
-              disablePast
-              minDate={
-                startDateValue === null ? schedule?.startDate : startDateValue
-              }
-              maxDate={schedule?.endDate}
-              onChange={(newValue) => {
-                setEndDateValue(newValue);
-              }}
-              onError={() => setEndDateError(true)}
-              renderInput={(params) => (
-                <TextField
-                  fullWidth
-                  size="small"
-                  required
-                  {...params}
-                  error={!!endDateError}
-                />
-              )}
-            />
 
-            <FormControl fullWidth size="small" className="mb-3" required>
+            <FormControl fullWidth size="small" className="mb-3">
               <InputLabel
                 id="select-subject-label"
                 error={!!subjectError}
@@ -323,7 +278,7 @@ const errorOrSucsess=()=>{
                 fullWidth
                 value={selectedSubject}
                 onChange={(e) => {
-                  handleSubjectSelection(e.target.value);
+                  setSelectedSubject(e.target.value);
                 }}
                 required
               >
@@ -339,7 +294,7 @@ const errorOrSucsess=()=>{
               </Select>
             </FormControl>
 
-            <FormControl fullWidth size="small" className="mb-3" required>
+            <FormControl fullWidth size="small" className="mb-3">
               <InputLabel
                 id="select-teacher-label"
                 error={!!teacherError}
@@ -369,7 +324,7 @@ const errorOrSucsess=()=>{
               </Select>
             </FormControl>
 
-            <FormControl fullWidth size="small" className="mb-3" required>
+            <FormControl fullWidth size="small" className="mb-3">
               <InputLabel id="select-room-label" error={!!roomError} required>
                 Pasirinkite kabinetą
               </InputLabel>
@@ -395,90 +350,38 @@ const errorOrSucsess=()=>{
               </Select>
             </FormControl>
 
-            <label htmlFor="select-start-time" className="me-2" required>
-              Pradžios laikas *
-            </label>
-            <Select
-              id="select-start-time"
-              error={startTimeError}
-              value={startTime}
-              size="small"
-              className="me-2"
-              onChange={(e) => setStartTime(e.target.value)}
-            >
-              {times
-                .filter(
-                  (time) =>
-                    time >= schedule?.group?.shift?.starts &&
-                    time <= schedule?.group?.shift?.ends
-                )
-                .map((time) => (
-                  <MenuItem key={time} value={time}>
-                    {time}
-                  </MenuItem>
-                ))}
-            </Select>
+            <div className="mb-3">
+              <FormLabel id="demo-radio-buttons-group-label"></FormLabel>
 
-            <label htmlFor="select-end-time" className="me-2" required>
-              Pabaigos laikas *
-            </label>
-            <Select
-              id="select-end-time"
-              error={!!endTimeError}
-              value={endTime}
-              size="small"
-              className="me-2"
-              onChange={(e) => setEndTime(e.target.value)}
-            >
-              {times
-                .filter(
-                  (time) =>
-                    time >= schedule?.group?.shift?.starts &&
-                    time <= schedule?.group?.shift?.ends
-                )
-                .map((time) => (
-                  <MenuItem key={time} value={time}>
-                    {time}
-                  </MenuItem>
-                ))}
-            </Select>
+              <FormControlLabel
+                value="end"
+                control={
+                  <Checkbox
+                    checked={repeats}
+                    onChange={handleChange}
+                    inputProps={{ "aria-label": "controlled" }}
+                  />
+                }
+                label="Pakeisti visoms šio dalyko pamokoms"
+                labelPlacement="end"
+              />
+            </div>
           </form>
         </DialogContent>
         <DialogActions>
-          <button className="btn btn-primary mb-2" onClick={createNewLesson}>
-            Pridėti
+          <button className="btn btn-primary mb-2" onClick={editLesson}>
+            Redaguoti
           </button>
           <button
             className="btn btn-danger me-3 mb-2"
-            onClick={() => setOpen(false)}
+            onClick={() => setOpenEdit(false)}
           >
             Atšaukti
           </button>
         </DialogActions>
       </Dialog>
-
-      <div className="col-md-8 mb-2">
-        {schedule?.group?.program?.subjects?.map((sub) => (
-          <button
-            type="submit"
-            className="btn btn-light me-2 mb-2"
-            key={sub.subject.id}
-            id={sub.subject.id}
-            onClick={() => {
-              handleSubjectSelection(sub.subject.id);
-              setOpen(true);
-            }}
-          >
-            {sub.subject.name} {sub.hours}
-          </button>
-        ))}
-      </div>
-
-      <Calendar lessons={lessons} schedule={schedule}
-      onLessonEdited={fetchLessons} setSuccess={setSuccess}
-      setFailure={setFailure}/>
     </div>
   );
 }
 
-export default PlanSchedulePage;
+export default EditLessonPage;

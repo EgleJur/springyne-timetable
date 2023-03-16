@@ -272,7 +272,7 @@ function EditShiftPage() {
             <div className="col-md-4 mb-2 mb-md-0 fw-bold">Būsena</div>
             <div className="col-md-8 mb-2">
               {(shift.visible === 1 ? false : true)
-                ? "Pamaina ištrinta"
+                ? "Ištrintas"
                 : "Aktyvus"}
             </div>
           </div>

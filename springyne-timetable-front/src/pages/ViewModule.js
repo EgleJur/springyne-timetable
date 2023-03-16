@@ -88,7 +88,7 @@ function ViewModulePage() {
             </tr>
             <tr>
               <th scope="col">Būsena</th>
-              <td colSpan={4}>{module.deleted ? "Modulis ištrintas" : "Aktyvus"}</td>
+              <td colSpan={4}>{module.deleted ? "Ištrintas" : "Aktyvus"}</td>
             </tr>
             <tr>
               <th scope="col">Paskutinį kartą modifikuotas</th>

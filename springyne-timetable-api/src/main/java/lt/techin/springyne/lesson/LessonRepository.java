@@ -18,4 +18,13 @@ public interface LessonRepository extends JpaRepository<Lesson,Long> {
 
     Lesson findBySubjectIdAndScheduleId(Long subjectId, Long sheduleId);
 
+    List<Lesson> findAllByLessonDateAndSubjectId(LocalDate lessonDate, Long subjectId);
+    Lesson findByLessonDateAndTeacherIdAndLessonTime(LocalDate lessonDate, Long teacherId, Integer lessonTime);
+
+    Lesson findByLessonDateAndRoomIdAndLessonTime(LocalDate lessonDate, Long roomId, Integer lessonTime);
+
+    List<Lesson> findAllByTeacherId(Long teacherId);
+
+    List<Lesson> findByLessonDate(LocalDate lessonDate);
+
 }

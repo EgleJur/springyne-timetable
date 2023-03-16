@@ -19,8 +19,10 @@ import org.springframework.stereotype.Service;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.time.temporal.TemporalAdjusters;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -164,11 +166,20 @@ public class LessonService {
                     "Subject is overbooked", lessonBlock.getStartDate().toString() + " - " + lessonBlock.getEndDate());
         }
 
+        List<Lesson> existingTeacherLessons = lessonRepository.findAllByTeacherId(teacherId);
+        existingTeacherLessons.addAll(lessons);
+        Map<LocalDate,Long> teacherLessonCountPerWeek = existingTeacherLessons.stream().collect(Collectors.groupingBy(lesson -> lesson.getLessonDate()
+                .with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY)), Collectors.counting()));
+        boolean isTeacherWeekOverbooked = teacherLessonCountPerWeek.entrySet().stream().anyMatch(entry -> entry.getValue() > teacher.getHours());
+        if (isTeacherWeekOverbooked) {
+            throw new ScheduleValidationException("Number of lessons per week greater than teacher week working hours", "teacher id",
+                    "Teacher is overbooked", teacherId.toString());
+        }
 
         return lessonRepository.saveAll(lessons);
     }
 
-    public Lesson editSingleLesson(Long lessonId, Long subjectId, Long teacherId, Long roomId) {
+    public List<Lesson> editSingleLesson(Long lessonId, Long subjectId, Long teacherId, Long roomId) {
 
         Lesson existingLesson = lessonRepository.findById(lessonId)
                 .orElseThrow(() -> new ScheduleValidationException("Lesson does not exist",
@@ -177,29 +188,59 @@ public class LessonService {
         Subject subject = subjectRepository.findById(subjectId).orElseThrow(() -> new ScheduleValidationException("Subject does not exist",
                 "subject id", "Subject not found", subjectId.toString()));
 
-        if (teacherId != null) {
-            Teacher teacher = teacherRepository.findById(teacherId)
-                    .orElseThrow(() -> new ScheduleValidationException("Teacher does not exist",
-                            "teacher id", "Teacher not found", teacherId.toString()));
+        List<Lesson> lessonsSameDay = lessonRepository.findAllByLessonDateAndSubjectId(existingLesson.getLessonDate(), subjectId);
 
-            if (!teacher.getSubjects().contains(subject)) {
-                throw new ScheduleValidationException("Teacher does not teach this subject", "teacher id",
-                        "Teacher is invalid", subjectId.toString());
-            }
-            existingLesson.setTeacher(teacher);
-        }
-        if (roomId != null) {
-            Room room = roomRepository.findById(roomId)
-                    .orElseThrow(() -> new ScheduleValidationException("Room does not exist",
-                            "room id", "Room not found", roomId.toString()));
+        //lessonsSameDay.stream().forEach();
+        Teacher teacher = teacherRepository.findById(teacherId)
+                .orElseThrow(() -> new ScheduleValidationException("Teacher does not exist",
+                        "teacher id", "Teacher not found", teacherId.toString()));
 
-            if (!subject.getRooms().contains(room)) {
-                throw new ScheduleValidationException("Subject cannot be taught in this room", "room id",
-                        "Room is invalid", subjectId.toString());
-            }
-            existingLesson.setRoom(room);
+        if (!teacher.getSubjects().contains(subject)) {
+            throw new ScheduleValidationException("Teacher does not teach this subject", "teacher id",
+                    "Teacher is invalid", subjectId.toString());
         }
-        return lessonRepository.save(existingLesson);
+        // existingLesson.setTeacher(teacher);
+        List<Lesson> occupiedTeacher = new ArrayList<>();
+        List<Lesson> occupiedRoom = new ArrayList<>();
+        for (Lesson lesson : lessonsSameDay) {
+            occupiedTeacher.add(lessonRepository.findByLessonDateAndTeacherIdAndLessonTime(lesson.getLessonDate(), teacherId, lesson.getLessonTime()));
+            occupiedRoom.add(lessonRepository.findByLessonDateAndRoomIdAndLessonTime(lesson.getLessonDate(), roomId, lesson.getLessonTime()));
+
+        }
+
+        if (occupiedTeacher.size() > 0) {
+            throw new ScheduleValidationException("Teacher already has lessons this day", "teacher id",
+                    "Teacher has lessons", teacherId.toString());
+        }
+
+        Room room = roomRepository.findById(roomId)
+                .orElseThrow(() -> new ScheduleValidationException("Room does not exist",
+                        "room id", "Room not found", roomId.toString()));
+
+        if (!subject.getRooms().contains(room)) {
+            throw new ScheduleValidationException("Subject cannot be taught in this room", "room id",
+                    "Room is invalid", subjectId.toString());
+        }
+        if (occupiedRoom.size() > 0) {
+            throw new ScheduleValidationException("Room already has lessons this day", "teacher id",
+                    "Room has lessons", roomId.toString());
+        }
+        //  existingLesson.setRoom(room);
+
+       // List<Lesson> lessonsSameDay = lessonRepository.findAllBySubjectIdAndScheduleId(subjectId, scheduleId);
+        for (Lesson lesson : lessonsSameDay) {
+            if (teacherId != null) {
+                lesson.setTeacher(teacher);
+                if (roomId != null) {
+                    lesson.setRoom(room);
+                }
+            } else if (roomId != null) {
+                lesson.setRoom(room);
+            }
+        }
+
+        return lessonRepository.saveAll(lessonsSameDay);
+        //return lessonRepository.save(existingLesson);
     }
 
     public List<Lesson> editMultipleLessons(Long scheduleId, Long subjectId, Long teacherId, Long roomId) {
@@ -251,6 +292,19 @@ public class LessonService {
         }
 
         return lessonRepository.saveAll(lessons);
+    }
+    public boolean deleteLessonsByDateAndId(Long lessonId) {
+        Optional<Lesson> lesson = lessonRepository.findById(lessonId);
+        if (lesson.isPresent()) {
+            LocalDate lessonDate = lesson.get().getLessonDate();
+            List<Lesson> lessonsToDelete = lessonRepository.findByLessonDate(lessonDate);
+            for (Lesson l : lessonsToDelete) {
+                lessonRepository.delete(l);
+            }
+            return true;
+        } else {
+            return false;
+        }
     }
 }
 

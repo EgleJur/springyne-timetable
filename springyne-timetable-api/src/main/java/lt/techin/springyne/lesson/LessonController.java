@@ -45,7 +45,7 @@ public class LessonController {
     }
 
     @PatchMapping("/editSingleLesson/{lessonId}")
-    public ResponseEntity<Lesson> editLesson(@PathVariable Long lessonId,
+    public ResponseEntity<List<Lesson>> editLesson(@PathVariable Long lessonId,
                                              @RequestParam Long subjectId,
                                              @RequestParam Long teacherId,
                                              @RequestParam Long roomId) {
@@ -58,5 +58,15 @@ public class LessonController {
                                                        @RequestParam Long teacherId,
                                                        @RequestParam Long roomId) {
         return ResponseEntity.ok(lessonService.editMultipleLessons(scheduleId, subjectId, teacherId, roomId));
+    }
+
+    @DeleteMapping("/{lessonId}")
+    public ResponseEntity<?> deleteSingleLesson(@PathVariable Long lessonId) {
+        boolean isDeleted = lessonService.deleteLessonsByDateAndId(lessonId);
+        if (isDeleted) {
+            return ResponseEntity.ok().build();
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 }

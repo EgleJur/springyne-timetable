@@ -7,7 +7,7 @@ const HolidayToCalendar = (holidays, currentMonth) => {
 		let ends;
 		let currentM = dayjs(currentMonth).format("MM");
 		let currentD = dayjs(currentMonth).daysInMonth();
-
+console.log(holidays);
 		holidays.forEach((holiday) => {
 			let dayStarts = dayjs(holiday.starts).format("D");
 			let dayEnds = dayjs(holiday.ends).format("D");

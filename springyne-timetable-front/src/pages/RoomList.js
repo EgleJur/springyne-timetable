@@ -131,7 +131,7 @@ function RoomListPage() {
         <div className="mb-4">
           <form className="d-flex" role="search">
           <TextField
-              onChange={(e) => setSearchName(e.target.value)}
+              onChange={(e) => {setSearchName(e.target.value); setPageNumber(0); setPage(1);}}
               value={searchName}
               id="search-name-input"
               label="Ieškoti pagal pavadinimą"
@@ -139,7 +139,7 @@ function RoomListPage() {
               size="small"
             />
             <TextField
-              onChange={(b) => setSearchBuilding(b.target.value)}
+              onChange={(b) => {setSearchBuilding(b.target.value); setPageNumber(0); setPage(1);}}
               value={searchBuinding}
               id="search-name-input"
               label="Ieškoti pagal pastatą"

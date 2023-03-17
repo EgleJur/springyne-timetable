@@ -61,6 +61,15 @@ function PlanSchedulePage() {
 
   useEffect(fetchTeachers, [selectedSubject, schedule]);
 
+   const [holidays, setHolidays] = useState([]);
+
+  const fetchHolidays = () => {
+    fetch(`${apiUrl}/api/v1/holidays/search?name=${""}&from=${""}&to=${""}`)
+      .then((response) => response.json())
+      .then((jsonResponse) => setHolidays(jsonResponse));
+  };
+  useEffect(fetchHolidays, []);
+
   const prefillRooms = () => {
     if (selectedSubject === "") {
       setRooms([]);
@@ -504,7 +513,7 @@ const addErrorOrSucsess=()=>{
         ))}
       </div>
 
-      <Calendar lessons={lessons} schedule={schedule}
+      <Calendar lessons={lessons} schedule={schedule} holidays={holidays}
       onLessonEdited={fetchLessons} setSuccess={setSuccess}
       setFailure={setFailure}/>
     </div>

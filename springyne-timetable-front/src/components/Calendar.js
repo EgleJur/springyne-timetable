@@ -21,15 +21,7 @@ const Calendar = (props) => {
   const onLessonEdited = props.onLessonEdited;
   const setSuccess = props.setSuccess;
   const setFailure = props.setFailure;
-
-  const [holidays, setHolidays] = useState([]);
-
-  const fetchHolidays = () => {
-    fetch(`/api/v1/holidays/search?name=${""}&from=${""}&to=${""}`)
-      .then((response) => response.json())
-      .then((jsonResponse) => setHolidays(jsonResponse));
-  };
-  useEffect(() => fetchHolidays, []);
+  const holidays = props.holidays;
 
   const shift = () => {
     const shift = [];
@@ -76,7 +68,7 @@ const Calendar = (props) => {
 
   const renderHeader = () => {
     const dateFormat = "MMMM YYYY";
-
+console.log(holidays);
     return (
       <div className="header row flex-middle">
         <div className="col col-start">

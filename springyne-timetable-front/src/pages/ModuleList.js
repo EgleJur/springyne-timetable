@@ -128,7 +128,7 @@ function ModuleListPage() {
               <MenuItem value={100}>100</MenuItem>
             </Select> */}
             <TextField
-              onChange={(e) => setSearchName(e.target.value)}
+              onChange={(e) => {setSearchName(e.target.value); setPageNumber(0);setPage(1);}}
               value={searchName}
               id="search-name-input"
               label="Ieškoti pagal pavadinimą"

@@ -27,4 +27,6 @@ public interface LessonRepository extends JpaRepository<Lesson,Long> {
 
     List<Lesson> findByLessonDate(LocalDate lessonDate);
 
+    List<Lesson> findByScheduleIdOrderByLessonDateAscLessonTimeAsc(Long scheduleId);
+
 }

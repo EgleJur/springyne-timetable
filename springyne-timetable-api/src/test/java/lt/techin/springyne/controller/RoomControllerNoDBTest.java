@@ -1,10 +1,6 @@
 package lt.techin.springyne.controller;
 
-import lt.techin.springyne.dto.RoomDto;
-import lt.techin.springyne.dto.mapper.RoomMapper;
-import lt.techin.springyne.model.Room;
-import lt.techin.springyne.repository.RoomRepository;
-import lt.techin.springyne.service.RoomService;
+import lt.techin.springyne.room.*;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,9 +24,9 @@ public class RoomControllerNoDBTest {
 
     @Test
     void addRoomReturnsSavedRoom() {
-        RoomDto testRoomDto = new RoomDto(LocalDateTime.now().toString(), "Test name1", "Test");
+        RoomDto testRoomDto = new RoomDto(LocalDateTime.now().toString(), "Kalvarijų g. 159, LT-08313 Vilnius", "Techin");
         RoomDto testRoomDto1 = new RoomDto(null, null, null);
-        RoomDto testRoomDto2 = new RoomDto("R2", "Test name2", "Test");
+        RoomDto testRoomDto2 = new RoomDto("100", "Kalvarijų g. 159, LT-08313 Vilnius", "Techin");
         Room testRoom = RoomMapper.toRoom(testRoomDto);
         Room testRoom1 = RoomMapper.toRoom(testRoomDto1);
         Room testRoom2 = RoomMapper.toRoom(testRoomDto2);

@@ -2,37 +2,51 @@ import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { Collapse, Alert } from "@mui/material";
+import { apiUrl } from "../App";
 
 function ViewModulePage() {
   const [module, setModule] = useState({});
   const [deleted, setDeleted] = useState(false);
   const [restored, setRestored] = useState(false);
   const params = useParams();
+  const [subjects, setSubjects] = useState([]);
 
   useEffect(() => {
-    fetch("/api/v1/modules/" + params.id)
+    fetch(`${apiUrl}/api/v1/modules/` + params.id)
       .then((response) => response.json())
       .then((jsonResponse) => setModule(jsonResponse));
   }, [params.id]);
 
+  useEffect(() => {
+    fetch(`${apiUrl}/api/v1/modules/subjects/` + params.id)
+      .then((response) => response.json())
+      .then((jsonResponse) => setSubjects(jsonResponse));
+  }, [params.id]);
+
   const handleDelete = () => {
-    fetch(`/api/v1/modules/delete/` + params.id, {
+    fetch(`${apiUrl}/api/v1/modules/delete/` + params.id, {
       method: "PATCH",
     })
       .then((response) => response.json())
       .then((jsonResponse) => setModule(jsonResponse));
     setDeleted(true);
     setRestored(false);
+    setTimeout(() => {
+      setDeleted(false);
+             }, 5000);
   };
 
   const handleRestore = () => {
-    fetch(`/api/v1/modules/restore/` + params.id, {
+    fetch(`${apiUrl}/api/v1/modules/restore/` + params.id, {
       method: "PATCH",
     })
       .then((response) => response.json())
       .then((jsonResponse) => setModule(jsonResponse));
     setRestored(true);
     setDeleted(false);
+    setTimeout(() => {
+      setRestored(false);
+             }, 5000);
   };
 
   return (
@@ -66,23 +80,42 @@ function ViewModulePage() {
           <tbody>
             <tr>
               <th scope="col">Numeris</th>
-              <td>{module.number}</td>
+              <td colSpan={4}>{module.number}</td>
             </tr>
             <tr>
               <th scope="col">Pavadinimas</th>
-              <td>{module.name}</td>
+              <td colSpan={4}>{module.name}</td>
             </tr>
             <tr>
-              <th scope="col">Detalės</th>
-              <td>{module.deleted ? "Modulis ištrintas" : ""}</td>
+              <th scope="col">Būsena</th>
+              <td colSpan={4}>{module.deleted ? "Ištrintas" : "Aktyvus"}</td>
             </tr>
             <tr>
-              <th scope="col">Paskutinį kartą modifikuotas:</th>
-              <td>{module.modifiedDate}</td>
+              <th scope="col">Paskutinį kartą modifikuotas</th>
+              <td colSpan={4}>{module.modifiedDate}</td>
             </tr>
+            {subjects.length > 0 ? (
+              <tr>
+                <th rowSpan="0">Dalykai</th>
+              </tr>
+            ) : (
+              ""
+            )}
+            {subjects?.map((subject) => (
+              <tr
+                className={subject.deleted ? "text-black-50" : ""}
+                key={subject.id}
+              >
+                <td>{subject.name}</td>
+                {/* <td>{subject.description}</td>
+                <td>{subject.last_Updated}</td> */}
+                {subject.deleted ? <td>Dalykas ištrintas</td> : <td></td>}
+              </tr>
+              
+            ))}
           </tbody>
         </table>
-        <button className="btn btn-primary me-2">
+        <button className="btn btn-primary me-2" disabled={module.deleted}>
           <Link to={"/modules/edit/" + params.id} className="nav-link">
             Redaguoti
           </Link>

@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Alert,Collapse } from "@mui/material";
 import { TextField } from "@mui/material";
+import { apiUrl } from "../App";
 
 function CreateModulePage() {
   const [number, setNumber] = useState("");
@@ -22,7 +23,7 @@ function CreateModulePage() {
         setNameError(true);
       }
     } else {
-      fetch("/api/v1/modules/", {
+      fetch(`${apiUrl}/api/v1/modules/`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -37,10 +38,16 @@ function CreateModulePage() {
           setName("");
           setSuccess(true);
           setFailure(false);
+          setTimeout(() => {
+            setSuccess(false);
+                   }, 5000);
         } else {
           setFailure(true);
           setSuccess(false);
           setNumberError(true);
+          setTimeout(() => {
+            setFailure(false);
+                   }, 5000);
         }
       });
     }
@@ -79,7 +86,7 @@ function CreateModulePage() {
           value={number}
           id="create-module-number-with-error"
           label="Numeris"
-          helperText="Numeris turi būti unikalus ir negali būti tuščias"
+          helperText="Numeris turi būti unikalus ir yra privalomas"
           className="form-control mb-3"
           size="small"
           required
@@ -90,7 +97,7 @@ function CreateModulePage() {
           value={name}
           id="create-module-number-with-error"
           label="Pavadinimas"
-          helperText="Pavadinimas negali būti tuščias"
+          helperText="Pavadinimas privalomas"
           className="form-control mb-3"
           size="small"
           required

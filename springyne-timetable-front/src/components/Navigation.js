@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 
 function Navigation() {
+
     return (
       <header className="bg-light">
         <div className="container-xxl">
@@ -34,7 +35,7 @@ function Navigation() {
                   </div>
                   <div className="nav-item">
                     <Link to="/rooms" className="nav-link">
-                      Kambariai
+                      Kabinetai
                     </Link>
                   </div>
                   <div className="nav-item">
@@ -50,6 +51,26 @@ function Navigation() {
                   <div className="nav-item">
                     <Link to="/teachers" className="nav-link">
                       Mokytojai
+                    </Link>
+                  </div>
+                  <div className="nav-item">
+                    <Link to="/programs" className="nav-link">
+                      Programos
+                    </Link>
+                  </div>
+                  <div className="nav-item">
+                    <Link to="/groups" className="nav-link">
+                      Grupės
+                    </Link>
+                  </div>
+                  <div className="nav-item">
+                    <Link to="/holidays" className="nav-link">
+                      Atostogos
+                    </Link>
+                  </div>
+                  <div className="nav-item">
+                    <Link to="/schedules" className="nav-link">
+                      Tvarkaraščiai
                     </Link>
                   </div>
                 </div>

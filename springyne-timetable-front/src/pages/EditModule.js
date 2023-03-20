@@ -2,6 +2,8 @@ import { Collapse, Alert } from "@mui/material";
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { TextField } from "@mui/material";
+import EditModuleSubjects from "../components/EditModuleSubjects";
+import { apiUrl } from "../App";
 
 function EditModulePage() {
   const [module, setModule] = useState({});
@@ -9,13 +11,16 @@ function EditModulePage() {
   const [nameError, setNameError] = useState("");
   const [success, setSuccess] = useState(false);
   const [failure, setFailure] = useState(false);
+  const [changed, setChanged] = useState(false);
   const params = useParams();
 
-  useEffect(() => {
-    fetch("/api/v1/modules/" + params.id)
+  const fetchModule = () => {
+    fetch(`${apiUrl}/api/v1/modules/` + params.id)
       .then((response) => response.json())
       .then((jsonResponse) => setModule(jsonResponse));
-  }, [params.id]);
+  };
+
+  useEffect(fetchModule, []);
 
   const editModule = (e) => {
     e.preventDefault();
@@ -29,7 +34,7 @@ function EditModulePage() {
         setNameError(true);
       }
     } else {
-      fetch("/api/v1/modules/update/" + params.id, {
+      fetch(`${apiUrl}/api/v1/modules/update/` + params.id, {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
@@ -39,10 +44,19 @@ function EditModulePage() {
         if (result.ok) {
           setSuccess(true);
           setFailure(false);
+          setChanged(false);
+          fetchModule();
+          setTimeout(() => {
+            setSuccess(false);
+                   }, 5000);
         } else {
           setFailure(true);
           setSuccess(false);
           setNumberError(true);
+          setNameError(false);
+          setTimeout(() => {
+            setFailure(false);
+                   }, 5000);
         }
       });
     }
@@ -52,6 +66,39 @@ function EditModulePage() {
       ...module,
       [property]: event.target.value,
     });
+    setChanged(true);
+  };
+
+  const handleDelete = () => {
+    fetch(`${apiUrl}/api/v1/modules/delete/` + params.id, {
+      method: "PATCH",
+    })
+      .then((response) => response.json())
+      .then((jsonResponse) => setModule(jsonResponse));
+    setSuccess(true);
+    setFailure(false);
+    setNumberError(false);
+    setNameError(false);
+    setChanged(false);
+    setTimeout(() => {
+      setSuccess(false);
+             }, 5000);
+  };
+
+  const handleRestore = () => {
+    fetch(`${apiUrl}/api/v1/modules/restore/` + params.id, {
+      method: "PATCH",
+    })
+      .then((response) => response.json())
+      .then((jsonResponse) => setModule(jsonResponse));
+    setSuccess(true);
+    setFailure(false);
+    setNumberError(false);
+    setNameError(false);
+    setChanged(false);
+    setTimeout(() => {
+      setSuccess(false);
+             }, 5000);
   };
 
   return (
@@ -79,35 +126,94 @@ function EditModulePage() {
           Įrašo nepavyko atnaujinti
         </Alert>
       </Collapse>
-      <form noValidate>
-        <TextField
-          error={!!numberError}
-          onChange={(e) => updateProperty("number", e)}
-          value={module.number}
-          id="create-module-number-with-error"
-          label="Numeris"
-          helperText="Numeris turi būti unikalus ir negali būti tuščias"
-          className="form-control mb-3"
-          size="small"
-          InputLabelProps={{ shrink: true }}
-          required
-        />
-        <TextField
-          error={!!nameError}
-          onChange={(e) => updateProperty("name", e)}
-          value={module.name}
-          id="create-module-number-with-error"
-          label="Pavadinimas"
-          helperText="Pavadinimas negali būti tuščias"
-          className="form-control mb-3"
-          size="small"
-          InputLabelProps={{ shrink: true }}
-          required
-        />
-        <button type="submit" className="btn btn-primary" onClick={editModule}>
-          Redaguoti
-        </button>
-      </form>
+      <div className="container-fluid shadow p-3 mb-4 mb-md-5 bg-body rounded">
+        <form noValidate>
+          <div className="row">
+            <div className="col-md-4 mb-2 mb-md-0 fw-bold">
+              <label htmlFor="edit-module-number-with-error">Numeris *</label>
+            </div>
+            <div className="col-md-8 mb-2 mb-md-0">
+              <TextField
+                error={!!numberError}
+                onChange={(e) => updateProperty("number", e)}
+                value={module.number}
+                id="edit-module-number-with-error"
+                helperText="Numeris turi būti unikalus ir yra privalomas"
+                className="form-control"
+                size="small"
+                InputLabelProps={{ shrink: true }}
+                disabled={module.deleted}
+                required
+              />
+            </div>
+          </div>
+          <div className="row">
+            <div className="col-md-4 mb-2 mb-md-0 fw-bold">
+              <label htmlFor="edit-module-name-with-error">Pavadinimas *</label>
+            </div>
+            <div className="col-md-8 mb-2">
+              <TextField
+                error={!!nameError}
+                onChange={(e) => updateProperty("name", e)}
+                value={module.name}
+                id="edit-module-name-with-error"
+                helperText="Pavadinimas privalomas"
+                className="form-control"
+                size="small"
+                InputLabelProps={{ shrink: true }}
+                disabled={module.deleted}
+                required
+              />
+            </div>
+          </div>
+        </form>
+        
+        
+        <EditModuleSubjects disabled={module.deleted} />
+        <div className="row mb-md-4">
+          <div className="col-md-4 mb-2 mb-md-0 fw-bold">Būsena</div>
+          <div className="col-md-8 mb-2 mb-md-0">
+            {module.deleted ? "Ištrintas" : "Aktyvus"}
+          </div>
+        </div>
+        <div className="row mb-md-4">
+          <div className="col-md-4 mb-2 mb-md-0 fw-bold">
+            Paskutinį kartą modifikuotas
+          </div>
+          <div className="col-md-8 mb-2 mb-md-0">{module.modifiedDate}</div>
+        </div>
+      </div>
+      
+
+      {module.deleted ? (
+        <div>
+          <button
+            type="submit"
+            className="btn btn-primary me-2"
+            onClick={editModule}
+            disabled
+          >
+            Redaguoti
+          </button>
+          <button className="btn btn-secondary me-2" onClick={handleRestore}>
+            Atstatyti
+          </button>
+        </div>
+      ) : (
+        <div>
+          <button
+            type="submit"
+            className="btn btn-primary me-2"
+            onClick={editModule}
+            // disabled={!changed}
+          >
+            Redaguoti
+          </button>
+          <button className="btn btn-danger me-2" onClick={handleDelete}>
+            Ištrinti
+          </button>
+        </div>
+      )}
     </div>
   );
 }

@@ -1,6 +1,6 @@
 package lt.techin.springyne.stubs;
 
-import lt.techin.springyne.model.Room;
+import lt.techin.springyne.room.Room;
 
 import java.util.HashSet;
 import java.util.Set;

@@ -306,6 +306,12 @@ public class LessonService {
             return false;
         }
     }
+
+    public List<Lesson> listTeacherLessons(Long teacherId, String from, String to){
+        LocalDate startDate = LocalDate.parse(from);
+        LocalDate endDate = LocalDate.parse(to);
+        return lessonRepository.findAllByTeacherIdAndLessonDateBetween(teacherId, startDate, endDate);
+    }
 }
 
 

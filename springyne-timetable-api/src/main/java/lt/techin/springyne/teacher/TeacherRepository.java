@@ -13,6 +13,7 @@ public interface TeacherRepository extends JpaRepository<Teacher,Long> {
 
     List<Teacher> findAllByOrderByDeletedAscIdAsc();
 
+
 //    List<Teacher> findAllByNameLikeOrByShiftIdOrBySubjectId();
 
     Page<Teacher> findAllByNameIgnoreCaseContainingAndShiftIdAndSubjects_Id(String name, Long shiftId, Long SubjectId, Pageable pageable);

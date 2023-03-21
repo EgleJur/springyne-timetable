@@ -1,10 +1,19 @@
 package lt.techin.springyne.lesson;
 
+import com.lowagie.text.DocumentException;
+import lt.techin.springyne.pdfExporter.TeacherLessonPdfExporter;
+import lt.techin.springyne.teacher.Teacher;
+import lt.techin.springyne.teacher.TeacherService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -14,9 +23,12 @@ public class LessonController {
 
     @Autowired
     LessonService lessonService;
+    @Autowired
+    TeacherService teacherService;
 
-    public LessonController(LessonService lessonService) {
+    public LessonController(LessonService lessonService, TeacherService teacherService) {
         this.lessonService = lessonService;
+        this.teacherService = teacherService;
     }
 
     @GetMapping
@@ -68,5 +80,27 @@ public class LessonController {
         } else {
             return ResponseEntity.notFound().build();
         }
+    }
+
+    @GetMapping("/teachers/export/pdf")
+    public void exportTeacherLessonsToPDF(HttpServletResponse response,
+                                          @RequestParam Long teacherId,
+                                          @RequestParam String startDate,
+                                          @RequestParam String endDate)
+            throws DocumentException, IOException {
+        response.setContentType("application/pdf");
+        DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
+        String currentDateTime = dateFormatter.format(new Date());
+        Optional<Teacher> teacher = teacherService.getTeacherById(teacherId);
+        String headerKey = "Content-Disposition";
+        String headerValue = "attachment; filename="+teacher.get().getName()+"_pamokos_" + currentDateTime + ".pdf";
+        response.setHeader(headerKey, headerValue);
+
+        List<Lesson> listTeacherLessons = lessonService.listTeacherLessons(teacherId, startDate, endDate);
+
+
+        TeacherLessonPdfExporter exporter = new TeacherLessonPdfExporter(listTeacherLessons, teacher);
+        exporter.export(response);
+
     }
 }

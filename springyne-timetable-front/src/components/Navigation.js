@@ -25,7 +25,7 @@ function Navigation() {
                 <div className="navbar-nav me-auto mb-2 mb-lg-0">
                   <div className="nav-item">
                     <Link to="/" className="nav-link">
-                      Pagrindinis
+                      Tvarkaraščiai
                     </Link>
                   </div>
                   <div className="nav-item">
@@ -68,11 +68,11 @@ function Navigation() {
                       Atostogos
                     </Link>
                   </div>
-                  <div className="nav-item">
+                  {/* <div className="nav-item">
                     <Link to="/schedules" className="nav-link">
                       Tvarkaraščiai
                     </Link>
-                  </div>
+                  </div> */}
                 </div>
               </div>
             </div>

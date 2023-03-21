@@ -5,23 +5,26 @@ import com.lowagie.text.Font;
 import com.lowagie.text.pdf.BaseFont;
 import com.lowagie.text.pdf.*;
 import lt.techin.springyne.lesson.Lesson;
+import lt.techin.springyne.schedule.Schedule;
 
 import javax.servlet.http.HttpServletResponse;
 import java.awt.*;
 import java.io.IOException;
 import java.util.List;
-import java.util.Locale;
+import java.util.Optional;
 
 public class GroupLessonsPdfExporter {
 
-    private List<Lesson> lessonsBySchedule;
+    private final List<Lesson> lessonsBySchedule;
 
-//    private BaseFont baseFont = BaseFont.createFont("C:/Git/Springyne-timetable/springyne-timetable-api/fonts/LiberationSans-Regular.ttf", BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
-    private BaseFont baseFont = BaseFont.createFont("fonts/LiberationSans-Regular.ttf", BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
+    private final Optional<Schedule> schedule;
 
-    public GroupLessonsPdfExporter(List<Lesson> lessonsBySchedule) throws IOException {
+    private BaseFont baseFont = BaseFont.createFont("C:/Git/Springyne-timetable/springyne-timetable-api/fonts/LiberationSans-Regular.ttf", BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
+//    private BaseFont baseFont = BaseFont.createFont("fonts/LiberationSans-Regular.ttf", BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
+
+    public GroupLessonsPdfExporter(List<Lesson> lessonsBySchedule, Optional<Schedule> schedule) throws IOException {
         this.lessonsBySchedule = lessonsBySchedule;
-    }
+        this.schedule = schedule;}
 
 
     private void writeTableHeader(PdfPTable table) {
@@ -29,10 +32,7 @@ public class GroupLessonsPdfExporter {
         cell.setBackgroundColor(Color.LIGHT_GRAY);
         cell.setPadding(5);
 
-//        com.lowagie.text.Font font = FontFactory.getFont(FontFactory.TIMES_ROMAN);
         Font font = new Font(baseFont, 12);
-//        Font font = FontFactory.getFont(FontFactory.HELVETICA);
-//        font.setColor(Color.BLACK);
 
         cell.setPhrase(new Phrase("Data", font));
         table.addCell(cell);
@@ -71,7 +71,7 @@ public class GroupLessonsPdfExporter {
 
         Font font = new Font(baseFont, 18);
 
-        Paragraph paragraph = new Paragraph("Pamokų sąrašas", font);
+        Paragraph paragraph = new Paragraph(schedule.get().getName(), font);
         paragraph.setAlignment(Paragraph.ALIGN_CENTER);
 
         document.add(paragraph);

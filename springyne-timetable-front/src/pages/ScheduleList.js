@@ -8,6 +8,7 @@ import { Collapse, Alert } from "@mui/material";
 import EditTwoToneIcon from "@mui/icons-material/EditTwoTone";
 import DeleteTwoToneIcon from "@mui/icons-material/DeleteTwoTone";
 import EventTwoToneIcon from "@mui/icons-material/EventTwoTone";
+import PrintTwoToneIcon from '@mui/icons-material/PrintTwoTone';
 import { apiUrl } from "../App";
 
 function ScheduleListPage() {
@@ -210,6 +211,19 @@ function ScheduleListPage() {
                   >
                     <EventTwoToneIcon />
                     {/* <EditTwoToneIcon /> */}
+                  </Link>
+                </button>
+
+                <button
+                  className="btn btn-outline-primary me-1 my-1 btn-link"
+                  title="Eksportuoti grupės tvarkaraštį į PDF"
+                >
+                  <Link
+                    className="nav-link"
+                    
+                    to={"schedule/{scheduleId}/export/pdf" + schedule.id}
+                  >
+                    <PrintTwoToneIcon />
                   </Link>
                 </button>
 

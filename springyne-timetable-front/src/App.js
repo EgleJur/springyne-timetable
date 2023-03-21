@@ -57,7 +57,7 @@ function App() {
           <Navigation />
           <div className="container-xxl">
             <Routes>
-              <Route path="/" element={<HomePage />} />
+              <Route path="/" element={<ScheduleListPage />} />
 
               <Route path="modules" element={<ModuleListPage />} />
               <Route path="rooms" element={<RoomListPage />} />
@@ -89,7 +89,7 @@ function App() {
               <Route path="groups/view/:id" element={<ViewGroupPage />} />
               <Route path="holidays" element={<HolidayListPage />} />
               <Route path="holidays/create" element={<CreateHolidayPage />} />
-              <Route path="schedules" element={<ScheduleListPage />} />
+              {/* <Route path="schedules" element={<ScheduleListPage />} /> */}
               <Route path="schedules/plan/:id" element={<PlanSchedulePage />} />
               <Route path="schedules/create" element={<CreateSchedulePage />} />
               <Route path="calendar" element={<Calendar />} />

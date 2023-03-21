@@ -182,6 +182,7 @@ public class TeacherService {
         return teacherRepository.findBySubjects_IdAndShift_StartsLessThanEqualAndShift_EndsGreaterThanEqual(subjectId, startHours, endHours);
     }
 
+
 //    public List<Teacher> findAvailableTeachers(Long lessonId, Long subjectId, Integer startHours, Integer endHours) {
 //        Lesson existingLesson = lessonRepository.findById(lessonId)
 //                .orElseThrow(() -> new ScheduleValidationException("Lesson does not exist",

@@ -4,6 +4,8 @@ import com.lowagie.text.DocumentException;
 import lt.techin.springyne.pdfExporter.GroupLessonsPdfExporter;
 import com.lowagie.text.DocumentException;
 import lt.techin.springyne.pdfExporter.TeacherLessonPdfExporter;
+import lt.techin.springyne.schedule.Schedule;
+import lt.techin.springyne.schedule.ScheduleService;
 import lt.techin.springyne.teacher.Teacher;
 import lt.techin.springyne.teacher.TeacherService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,9 +30,13 @@ public class LessonController {
     @Autowired
     TeacherService teacherService;
 
-    public LessonController(LessonService lessonService, TeacherService teacherService) {
+    @Autowired
+    ScheduleService scheduleService;
+
+    public LessonController(LessonService lessonService, TeacherService teacherService, ScheduleService scheduleService) {
         this.lessonService = lessonService;
         this.teacherService = teacherService;
+        this.scheduleService = scheduleService;
     }
 
     @GetMapping
@@ -84,19 +90,21 @@ public class LessonController {
         }
     }
 
-    @GetMapping("//schedule/{scheduleId}/export/pdf")
+    @GetMapping("/schedule/{scheduleId}/export/pdf")
     public void exportToPdf(@PathVariable Long scheduleId, HttpServletResponse response) throws DocumentException, IOException {
         response.setContentType("application/pdf");
         DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
         String currentDateTime = dateFormatter.format(new Date());
 
         String headerKey = "Content-Disposition";
-        String headerValue = "attachment; filename=Pamoku_sarasas_" + currentDateTime + ".pdf";
+        Optional<Schedule> schedule = scheduleService.getScheduleById(scheduleId);
+        String headerValue = "attachment; filename="+schedule.get().getGroup().getName()+"_pamoku_sarasas_" + currentDateTime + ".pdf";
+
         response.setHeader(headerKey, headerValue);
 
         List<Lesson> lessonsBySchedule = lessonService.getLessonsBySchedule(scheduleId);
 
-        GroupLessonsPdfExporter exporter = new GroupLessonsPdfExporter(lessonsBySchedule);
+        GroupLessonsPdfExporter exporter = new GroupLessonsPdfExporter(lessonsBySchedule, schedule);
         exporter.export(response);
     }
 

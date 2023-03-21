@@ -43,6 +43,7 @@ public class LessonService {
     @Autowired
     private HolidaysRepository holidaysRepository;
 
+
     public LessonService(LessonRepository lessonRepository, ScheduleRepository scheduleRepository, SubjectRepository subjectRepository,
                          TeacherRepository teacherRepository, RoomRepository roomRepository, HolidaysRepository holidaysRepository) {
         this.lessonRepository = lessonRepository;

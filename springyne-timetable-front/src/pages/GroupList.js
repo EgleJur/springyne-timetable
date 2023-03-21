@@ -116,7 +116,7 @@ function GroupListPage() {
         <div className="mb-4">
           <form className="d-flex" role="search">
             <TextField
-              onChange={(e) => setSearchName(e.target.value)}
+              onChange={(e) => {setSearchName(e.target.value); setPageNumber(0); setPage(1);}}
               value={searchName}
               id="search-name-input"
               label="Ieškoti pagal pavadinimą"
@@ -124,7 +124,7 @@ function GroupListPage() {
               size="small"
             />
             <TextField
-              onChange={(e) => setSearchProgName(e.target.value)}
+              onChange={(e) => {setSearchProgName(e.target.value); setPageNumber(0); setPage(1);}}
               value={searchProgName}
               id="search-program-input"
               label="Ieškoti pagal programą"
@@ -132,7 +132,7 @@ function GroupListPage() {
               size="small"
             />
             <TextField
-              onChange={(e) => setSearchYear(e.target.value)}
+              onChange={(e) => {setSearchYear(e.target.value); setPageNumber(0); setPage(1);}}
               value={searchYear}
               id="search-year-input"
               label="Ieškoti pagal metus"

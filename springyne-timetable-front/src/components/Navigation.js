@@ -1,17 +1,17 @@
 import { Link } from "react-router-dom";
-import TeacherLessonToPdf from "../pages/TeacherLessonToPdf";
+import TeacherLessonToPdf from "../components/TeacherLessonToPdf";
 import { useState } from "react";
 
 function Navigation() {
 
-  const [open, setOpen] = useState(false);
+  const [openTeacher, setOpenTeacher] = useState(false);
 
-  const handleClickOpen = () => {
-    setOpen(true);
+  const handleClickOpenTeacher = () => {
+    setOpenTeacher(true);
   };
 
-  const handleClose = () => {
-    setOpen(false);
+  const handleCloseTeacher = () => {
+    setOpenTeacher(false);
   };
 
   return (
@@ -86,13 +86,12 @@ function Navigation() {
                     Ataskaitos
                   </a>
                   <ul className="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                    <li><a className="dropdown-item" onClick={handleClickOpen}>Eksportuoti mokytojo tvarkaraštį į PDF</a></li>
+                    <li><a className="dropdown-item" onClick={handleClickOpenTeacher}>Eksportuoti mokytojo tvarkaraštį į PDF</a></li>
                     <TeacherLessonToPdf
-                      open={open}
-                      handleClose={handleClose}
+                      open={openTeacher}
+                      handleClose={handleCloseTeacher}
                       title="Eksportuoti mokytojo tvarkaraštį į PDF"
                     >
-                      <p>Dialog content goes here</p>
                     </TeacherLessonToPdf>
                     <li><Link to="#" className="dropdown-item">Eksportuoti kabineto tvarkaraštį į PDF</Link></li>
                   </ul>

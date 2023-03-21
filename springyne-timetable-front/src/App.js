@@ -40,8 +40,8 @@ import PlanSchedulePage from "./pages/PlanSchedule";
 import Calendar from "./components/Calendar";
 
 
-//const apiUrl = process.env.PUBLIC_URL;
- const apiUrl = "http://localhost:8080";
+const apiUrl = process.env.PUBLIC_URL;
+// const apiUrl = "http://localhost:8080";
 
 function App() {
   return (

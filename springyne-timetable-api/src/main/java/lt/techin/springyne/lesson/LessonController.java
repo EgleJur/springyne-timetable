@@ -1,10 +1,17 @@
 package lt.techin.springyne.lesson;
 
+import com.lowagie.text.DocumentException;
+import lt.techin.springyne.pdfExporter.GroupLessonsPdfExporter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -46,9 +53,9 @@ public class LessonController {
 
     @PatchMapping("/editSingleLesson/{lessonId}")
     public ResponseEntity<List<Lesson>> editLesson(@PathVariable Long lessonId,
-                                             @RequestParam Long subjectId,
-                                             @RequestParam Long teacherId,
-                                             @RequestParam Long roomId) {
+                                                   @RequestParam Long subjectId,
+                                                   @RequestParam Long teacherId,
+                                                   @RequestParam Long roomId) {
         return ResponseEntity.ok(lessonService.editSingleLesson(lessonId, subjectId, teacherId, roomId));
     }
 
@@ -68,5 +75,22 @@ public class LessonController {
         } else {
             return ResponseEntity.notFound().build();
         }
+    }
+
+    @GetMapping("//schedule/{scheduleId}/export/pdf")
+    public void exportToPdf(@PathVariable Long scheduleId, HttpServletResponse response) throws DocumentException, IOException {
+        response.setContentType("application/pdf");
+        DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
+        String currentDateTime = dateFormatter.format(new Date());
+
+        String headerKey = "Content-Disposition";
+        String headerValue = "attachment; filename=users_" + currentDateTime + ".pdf";
+        response.setHeader(headerKey, headerValue);
+
+        List<Lesson> lessonsBySchedule = lessonService.getLessonsBySchedule(scheduleId);
+
+        GroupLessonsPdfExporter exporter = new GroupLessonsPdfExporter(lessonsBySchedule);
+        exporter.export(response);
+
     }
 }

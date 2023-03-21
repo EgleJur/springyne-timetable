@@ -42,7 +42,7 @@ public class TeacherLessonPdfExporter {
         cell.setPhrase(new Phrase("Savaitės diena", font));
         table.addCell(cell);
 
-        cell.setPhrase(new Phrase("Pamoka", font));
+        cell.setPhrase(new Phrase("Laikas", font));
         table.addCell(cell);
 
         cell.setPhrase(new Phrase("Dalykas", font));

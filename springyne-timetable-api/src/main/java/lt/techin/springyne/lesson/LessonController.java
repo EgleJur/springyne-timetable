@@ -91,14 +91,13 @@ public class LessonController {
         String currentDateTime = dateFormatter.format(new Date());
 
         String headerKey = "Content-Disposition";
-        String headerValue = "attachment; filename=users_" + currentDateTime + ".pdf";
+        String headerValue = "attachment; filename=Pamoku_sarasas_" + currentDateTime + ".pdf";
         response.setHeader(headerKey, headerValue);
 
         List<Lesson> lessonsBySchedule = lessonService.getLessonsBySchedule(scheduleId);
 
         GroupLessonsPdfExporter exporter = new GroupLessonsPdfExporter(lessonsBySchedule);
         exporter.export(response);
-
     }
 
     @GetMapping("/teachers/export/pdf")

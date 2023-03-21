@@ -16,6 +16,7 @@ public class GroupLessonsPdfExporter {
 
     private List<Lesson> lessonsBySchedule;
 
+//    private BaseFont baseFont = BaseFont.createFont("C:/Git/Springyne-timetable/springyne-timetable-api/fonts/LiberationSans-Regular.ttf", BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
     private BaseFont baseFont = BaseFont.createFont("fonts/LiberationSans-Regular.ttf", BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
 
     public GroupLessonsPdfExporter(List<Lesson> lessonsBySchedule) throws IOException {
@@ -25,7 +26,7 @@ public class GroupLessonsPdfExporter {
 
     private void writeTableHeader(PdfPTable table) {
         PdfPCell cell = new PdfPCell();
-        cell.setBackgroundColor(Color.lightGray);
+        cell.setBackgroundColor(Color.LIGHT_GRAY);
         cell.setPadding(5);
 
 //        com.lowagie.text.Font font = FontFactory.getFont(FontFactory.TIMES_ROMAN);
@@ -51,8 +52,6 @@ public class GroupLessonsPdfExporter {
     }
 
     private void writeTableData(PdfPTable table) {
-        Locale lithuanian = new Locale("lt", "LT");
-//        PdfPCell cell = new PdfPCell();
         Font font = new Font(baseFont, 12);
 
         for (Lesson lesson : lessonsBySchedule) {

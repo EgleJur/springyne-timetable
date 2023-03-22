@@ -104,15 +104,6 @@ function Navigation() {
 
       </div>
     </header>
-    // <div>
-    //   {isDialogOpen && (
-    //   <TeacherLessonToPdf
-    //     title="Dialog title"
-    //     message="Dialog message goes here"
-    //     onClose={() => setIsDialogOpen(false)}
-    //   />
-    // )}
-    // </div>
   );
 }
 

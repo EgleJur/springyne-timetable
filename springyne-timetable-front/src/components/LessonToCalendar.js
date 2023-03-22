@@ -9,8 +9,10 @@ import { styled } from '@mui/material/styles';
 import Tooltip, { tooltipClasses } from '@mui/material/Tooltip';
 
 const LessonToCalendar = (d, shedules, lessons, currentMonth, onLessonEdited, setSuccess, setFailure) => {
-	const colorArray = ["#fff4f4", "#f4ffff",
-		"#fff4fa", "#fffaf4", "#fffff4", "#f4fff4", "#fff4f8", "#fbf4ff", "#fcfff0"];
+	const colorArray = ["#fff0f4", "#fff4f8", "#fffff4", "#fff8f4", "#f4fff8",
+		"#fffaf4", "#fff4fa", "#fffaf0", "#fcfff0", "#fbf4ff",
+		"#f0fffa", "#fff4f4", "#f4fff4", "#f4f8ff", "#f4f4ff",
+		"#f0fff4", "#fff4f0", "#f4ffef", "#f4ffff", "#f8fff4"];
 
 	const LightTooltip = styled(({ className, ...props }) => (
 		<Tooltip {...props} classes={{ popper: className }} />
@@ -50,7 +52,7 @@ const LessonToCalendar = (d, shedules, lessons, currentMonth, onLessonEdited, se
 				)
 			later++;
 		}
-		if (less.subject.id !== result[index-1]?.subject.id) {
+		if (less.subject.id !== result[index - 1]?.subject.id) {
 			const lessonId = less.id;
 			const subjectId = less.subject.id;
 			const teacherId = less.teacher.id;
@@ -59,7 +61,7 @@ const LessonToCalendar = (d, shedules, lessons, currentMonth, onLessonEdited, se
 				<ListItem disablePadding>
 					<LightTooltip title={`${less.teacher.name}\n${less.room.name}`}
 					>
-						<ListItemButton sx={{ height: "40px", p: 1, bgcolor: colorArray[colorId] }}>
+						<ListItemButton sx={{ height: "40px", p: 1, bgcolor: colorArray[colorId % 20] }}>
 							<ListItemText
 								sx={{ fontSize: "0.85rem", m: 0 }}
 								disableTypography
@@ -71,9 +73,9 @@ const LessonToCalendar = (d, shedules, lessons, currentMonth, onLessonEdited, se
 						lesson={less}
 						lessonId={lessonId} subjectId={subjectId}
 						teacherId={teacherId} roomId={roomId}
-						starts={starts} ends={ends} 
+						starts={starts} ends={ends}
 						onLessonEdited={onLessonEdited} setSuccess={setSuccess}
-						setFailure={setFailure}/>
+						setFailure={setFailure} />
 				</ListItem>
 
 			)
@@ -81,11 +83,11 @@ const LessonToCalendar = (d, shedules, lessons, currentMonth, onLessonEdited, se
 			subjectName = less.subject.name;
 			starts++;
 		}
-		else if (less.teacher.name !== teacherName 
-			&& less.subject.id === result[index-1].subject.id) {
+		else if (less.teacher.name !== teacherName
+			&& less.subject.id === result[index - 1].subject.id) {
 			lessonList.push(
 				<ListItem disablePadding>
-					<ListItemButton sx={{ height: "40px", p: 1, bgcolor: colorArray[colorId] }}>
+					<ListItemButton sx={{ height: "40px", p: 1, bgcolor: colorArray[colorId % 20] }}>
 						<ListItemText
 							sx={{ fontSize: "0.85rem", fontWeight: 300, m: 0 }}
 							disableTypography
@@ -93,13 +95,13 @@ const LessonToCalendar = (d, shedules, lessons, currentMonth, onLessonEdited, se
 					</ListItemButton>
 				</ListItem>
 			)
-			teacherName =less.teacher.name;
+			teacherName = less.teacher.name;
 			starts++;
 		}
-		else if (less.room.name !== room && less.subject.id === result[index-1]?.subject.id && less.teacher.id === result[index-1]?.teacher.id) {
+		else if (less.room.name !== room && less.subject.id === result[index - 1]?.subject.id && less.teacher.id === result[index - 1]?.teacher.id) {
 			lessonList.push(
 				<ListItem disablePadding>
-					<ListItemButton sx={{ height: "40px", p: 1, bgcolor: colorArray[colorId] }}>
+					<ListItemButton sx={{ height: "40px", p: 1, bgcolor: colorArray[colorId % 20] }}>
 						<ListItemText
 							sx={{ fontSize: "0.85rem", fontWeight: 300, m: 0 }}
 							disableTypography
@@ -113,7 +115,7 @@ const LessonToCalendar = (d, shedules, lessons, currentMonth, onLessonEdited, se
 		else {
 			lessonList.push(
 				<ListItem disablePadding>
-					<ListItemButton sx={{ height: "40px", p: 0, bgcolor: colorArray[colorId] }}>
+					<ListItemButton sx={{ height: "40px", p: 0, bgcolor: colorArray[colorId % 20] }}>
 						<ListItemText primary="" />
 					</ListItemButton>
 				</ListItem>

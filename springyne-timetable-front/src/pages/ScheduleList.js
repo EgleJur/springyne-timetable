@@ -24,7 +24,7 @@ function ScheduleListPage() {
   const [deleteScheduleId, setDeleteScheduleId] = useState(null);
 
   const formatSearchDate = () => {
-    return searchDate == "" || searchDate == null
+    return searchDate === "" || searchDate === null
       ? ""
       : dayjs(searchDate).format("YYYY-MM-DD");
   };
@@ -240,7 +240,7 @@ function ScheduleListPage() {
         <tfoot className="table-light">
           <tr>
             <td colSpan={5}>
-              {schedules?.totalElements == "0"
+              {schedules?.totalElements === "0"
                 ? "Įrašų nerasta"
                 : `Rasta įrašų: ${schedules?.totalElements}`}
             </td>

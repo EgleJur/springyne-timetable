@@ -29,7 +29,7 @@ public class TeacherLessonPdfExporter {
         this.teacher = teacher;
     }
 
-    private void writeTableHeader(PdfPTable table) {
+    public void writeTableHeader(PdfPTable table) {
         PdfPCell cell = new PdfPCell();
         cell.setBackgroundColor(Color.LIGHT_GRAY);
         cell.setPadding(6);

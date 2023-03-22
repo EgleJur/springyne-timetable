@@ -43,6 +43,7 @@ public class LessonService {
     @Autowired
     private HolidaysRepository holidaysRepository;
 
+
     public LessonService(LessonRepository lessonRepository, ScheduleRepository scheduleRepository, SubjectRepository subjectRepository,
                          TeacherRepository teacherRepository, RoomRepository roomRepository, HolidaysRepository holidaysRepository) {
         this.lessonRepository = lessonRepository;
@@ -305,6 +306,12 @@ public class LessonService {
         } else {
             return false;
         }
+    }
+
+    public List<Lesson> listTeacherLessons(Long teacherId, String from, String to){
+        LocalDate startDate = LocalDate.parse(from);
+        LocalDate endDate = LocalDate.parse(to);
+        return lessonRepository.findAllByTeacherIdAndLessonDateBetween(teacherId, startDate, endDate);
     }
 }
 

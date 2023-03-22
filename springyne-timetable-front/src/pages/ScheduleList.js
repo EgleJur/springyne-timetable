@@ -8,7 +8,9 @@ import { Collapse, Alert } from "@mui/material";
 import EditTwoToneIcon from "@mui/icons-material/EditTwoTone";
 import DeleteTwoToneIcon from "@mui/icons-material/DeleteTwoTone";
 import EventTwoToneIcon from "@mui/icons-material/EventTwoTone";
+import PrintTwoToneIcon from "@mui/icons-material/PrintTwoTone";
 import { apiUrl } from "../App";
+
 
 function ScheduleListPage() {
   const [schedules, setSchedules] = useState({});
@@ -23,7 +25,7 @@ function ScheduleListPage() {
   const [deleteScheduleId, setDeleteScheduleId] = useState(null);
 
   const formatSearchDate = () => {
-    return searchDate == "" || searchDate == null
+    return searchDate === "" || searchDate === null
       ? ""
       : dayjs(searchDate).format("YYYY-MM-DD");
   };
@@ -97,6 +99,25 @@ function ScheduleListPage() {
     setConfirmDelete(false);
   };
 
+
+  const GroupLessonsToPdf = (id) => {
+ 
+      fetch(`${apiUrl}/api/v1/lessons/schedule/${id}/export/pdf`)
+      .then(response => {
+        if (response.ok){
+        return response.blob();
+      }
+      throw new Error('Network response was not ok.');
+    })
+        .then((blob) => {
+          const url = window.URL.createObjectURL(blob);
+          window.open(url);
+        })
+        .catch(error => {
+          console.error('There was a problem with the fetch operation:', error);
+        });
+    };
+
   return (
     <div className="mx-3">
       <h2 className="my-5">Tvarkaraščiai</h2>
@@ -133,7 +154,9 @@ function ScheduleListPage() {
             </>
           }
         >
-          <div style={{ fontSize: '1.2em' }} className="confirmation-message">Ar tikrai norite ištrinti tvarkaraštį?</div>
+          <div style={{ fontSize: "1.2em" }} className="confirmation-message">
+            Ar tikrai norite ištrinti tvarkaraštį?
+          </div>
         </Alert>
       </Collapse>
 
@@ -214,10 +237,19 @@ function ScheduleListPage() {
                 </button>
 
                 <button
+                  className="btn btn-outline-primary me-1 my-1 btn-link"
+                  title="Eksportuoti grupės tvarkaraštį į PDF"
+                    onClick={() => GroupLessonsToPdf(schedule.id)}
+                  >
+                    <PrintTwoToneIcon />
+                  
+                </button>
+
+                <button
                   onClick={() => handleDeleteClick(schedule.id)}
                   className="btn btn-outline-danger me-1 my-1 btn-link"
                 >
-                  <DeleteTwoToneIcon className="red-icon"/>
+                  <DeleteTwoToneIcon className="red-icon" />
                 </button>
               </td>
             </tr>
@@ -226,7 +258,7 @@ function ScheduleListPage() {
         <tfoot className="table-light">
           <tr>
             <td colSpan={5}>
-              {schedules?.totalElements == "0"
+              {schedules?.totalElements === "0"
                 ? "Įrašų nerasta"
                 : `Rasta įrašų: ${schedules?.totalElements}`}
             </td>

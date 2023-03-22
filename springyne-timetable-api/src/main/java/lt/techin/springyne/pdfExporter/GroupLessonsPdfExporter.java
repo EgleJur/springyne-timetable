@@ -27,7 +27,7 @@ public class GroupLessonsPdfExporter {
         this.schedule = schedule;}
 
 
-    private void writeTableHeader(PdfPTable table) {
+    void writeTableHeader(PdfPTable table) {
         PdfPCell cell = new PdfPCell();
         cell.setBackgroundColor(Color.LIGHT_GRAY);
         cell.setPadding(5);
@@ -51,7 +51,7 @@ public class GroupLessonsPdfExporter {
 
     }
 
-    private void writeTableData(PdfPTable table) {
+    void writeTableData(PdfPTable table) {
         Font font = new Font(baseFont, 12);
 
         for (Lesson lesson : lessonsBySchedule) {

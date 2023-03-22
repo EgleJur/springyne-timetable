@@ -18,10 +18,17 @@ import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import java.time.LocalDate;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.when;
+
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.time.LocalDate;
@@ -279,7 +286,29 @@ public class LessonControllerTest {
 
         assertEquals(200, mvcResult1.getResponse().getStatus(), message);
     }
+    
+        @Test
+        public void testDeleteSingleLessonSuccess() {
+            Long lessonId = 1L;
+            when(lessonService.deleteLessonsByDateAndId(lessonId)).thenReturn(true);
 
+            ResponseEntity<?> responseEntity = lessonController.deleteSingleLesson(lessonId);
+
+            assertNotNull(responseEntity);
+            assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+        }
+
+        @Test
+        public void testDeleteSingleLessonFailure() {
+            Long lessonId = 2L;
+            when(lessonService.deleteLessonsByDateAndId(lessonId)).thenReturn(false);
+
+            ResponseEntity<?> responseEntity = lessonController.deleteSingleLesson(lessonId);
+
+            assertNotNull(responseEntity);
+            assertEquals(HttpStatus.NOT_FOUND, responseEntity.getStatusCode());
+        }
+        
 //    @Test
 //    public void testListTeacherLessons() throws Exception {
 //        Long teacherId = 1L;
@@ -316,6 +345,3 @@ public class LessonControllerTest {
 
 //    }
 }
-
-
-

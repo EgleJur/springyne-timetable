@@ -149,7 +149,8 @@ public class ReportService {
                 Cell dataCell = dataRow.createCell(dataCellNumber);
                 dataCell.setCellValue(lesson.getSubject().getId());
                 CellStyle dataCellStyle = workbook.createCellStyle();
-                dataCellStyle.setFillForegroundColor(selectedColors[lesson.getSubject().getId().shortValue()]);
+                short colorIndex = (short) (lesson.getSubject().getId().shortValue() % selectedColors.length);
+                dataCellStyle.setFillForegroundColor(selectedColors[colorIndex]);
                 dataCellStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
                 dataCell.setCellStyle(dataCellStyle);
             }

@@ -22,7 +22,7 @@ public class ReportController {
 
     @GetMapping("/excel/schedule/{scheduleId}")
     public void exportScheduleToExcel(@PathVariable Long scheduleId, HttpServletResponse response) throws IOException {
-        response.setContentType("application/octet-stream");
+//        response.setContentType("application/octet-stream");
         response.setHeader("Content-Disposition", "attachment; filename=schedule.xlsx");
         reportService.exportScheduleToExcel(scheduleId, response);
     }

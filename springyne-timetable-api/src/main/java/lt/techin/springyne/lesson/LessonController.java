@@ -2,7 +2,6 @@ package lt.techin.springyne.lesson;
 
 import com.lowagie.text.DocumentException;
 import lt.techin.springyne.pdfExporter.GroupLessonsPdfExporter;
-import com.lowagie.text.DocumentException;
 import lt.techin.springyne.pdfExporter.TeacherLessonPdfExporter;
 import lt.techin.springyne.schedule.Schedule;
 import lt.techin.springyne.schedule.ScheduleService;

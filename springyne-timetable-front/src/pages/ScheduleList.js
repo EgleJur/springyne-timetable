@@ -9,6 +9,7 @@ import EditTwoToneIcon from "@mui/icons-material/EditTwoTone";
 import DeleteTwoToneIcon from "@mui/icons-material/DeleteTwoTone";
 import EventTwoToneIcon from "@mui/icons-material/EventTwoTone";
 import PrintTwoToneIcon from "@mui/icons-material/PrintTwoTone";
+import TableViewTwoToneIcon from "@mui/icons-material/TableViewTwoTone";
 import { apiUrl } from "../App";
 
 
@@ -115,6 +116,18 @@ function ScheduleListPage() {
         })
         .catch(error => {
           console.error('There was a problem with the fetch operation:', error);
+        });
+    };
+
+    const exportToExcel = (scheduleId) => {
+      fetch(`${apiUrl}/api/v1/reports/excel/schedule/${scheduleId}`)
+        .then((response) => response.blob())
+        .then((blob) => {
+          const url = window.URL.createObjectURL(blob);
+					let link = document.createElement('a');
+					link.href = url;
+					link.download = `schedule.xlsx`;
+					link.click();
         });
     };
 
@@ -239,10 +252,17 @@ function ScheduleListPage() {
                 <button
                   className="btn btn-outline-primary me-1 my-1 btn-link"
                   title="Eksportuoti grupės tvarkaraštį į PDF"
-                    onClick={() => GroupLessonsToPdf(schedule.id)}
-                  >
-                    <PrintTwoToneIcon />
-                  
+                  onClick={() => GroupLessonsToPdf(schedule.id)}
+                >
+                  <PrintTwoToneIcon />
+                </button>
+
+                <button
+                  className="btn btn-outline-primary me-1 my-1 btn-link"
+                  title="Eksportuoti grupės tvarkaraštį į Excel"
+                  onClick={() => exportToExcel(schedule.id)}
+                >
+                  <TableViewTwoToneIcon />
                 </button>
 
                 <button

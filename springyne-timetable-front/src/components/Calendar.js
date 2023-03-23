@@ -68,7 +68,7 @@ const Calendar = (props) => {
 
   const renderHeader = () => {
     const dateFormat = "MMMM YYYY";
-console.log(holidays);
+    // console.log(holidays);
     return (
       <div className="header row flex-middle">
         <div className="col col-start">
@@ -155,14 +155,13 @@ console.log(holidays);
       week.dates.forEach((d, i) => {
         days.push(
           <div
-            className={`col cell ${
-              !d.isCurrentMonth ||
-              HolidayToCalendar(holidays, currentMonth).some(
-                (index) => index.day === d.day
-              )
+            className={`col cell ${!d.isCurrentMonth ||
+                HolidayToCalendar(holidays, currentMonth).some(
+                  (index) => index.day === d.day
+                )
                 ? "disabled"
                 : ""
-            }`}
+              }`}
             key={i}
           >
             <span style={{ zIndex: "5" }} className="number">

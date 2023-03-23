@@ -16,6 +16,7 @@ import java.time.format.TextStyle;
 import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
+import java.util.regex.Matcher;
 
 public class RoomLessonPdfExporter {
     private List<Lesson> listLessons;
@@ -30,7 +31,7 @@ public class RoomLessonPdfExporter {
 
 //    Path path = Paths.get("/src/main/resources/fonts/LiberationSans-Regular.ttf");
 //    Path absolutePath = path.toAbsolutePath().normalize();
-    private BaseFont baseFont = BaseFont.createFont(System.getProperty("user.dir") + "/src/main/resources/fonts/LiberationSans-Regular.ttf", BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
+    private BaseFont baseFont = BaseFont.createFont(Matcher.quoteReplacement(System.getProperty("user.dir")) + "/src/main/resources/fonts/LiberationSans-Regular.ttf", BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
 
     public RoomLessonPdfExporter(List<Lesson> listLessons, Optional<Room> room) throws IOException {
         this.listLessons = listLessons;

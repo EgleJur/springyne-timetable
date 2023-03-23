@@ -103,7 +103,8 @@ public class LessonController {
 
         String headerKey = "Content-Disposition";
         Optional<Schedule> schedule = scheduleService.getScheduleById(scheduleId);
-        String headerValue = "attachment; filename="+schedule.get().getGroup().getName()+"_pamoku_sarasas_" + currentDateTime + ".pdf";
+        String headerValue = "attachment; filename=schedule.pdf";
+//        String headerValue = "attachment; filename="+schedule.get().getGroup().getName()+"_pamoku_sarasas_" + currentDateTime + ".pdf";
 
         response.setHeader(headerKey, headerValue);
 
@@ -124,7 +125,8 @@ public class LessonController {
         String currentDateTime = dateFormatter.format(new Date());
         Optional<Teacher> teacher = teacherService.getTeacherById(teacherId);
         String headerKey = "Content-Disposition";
-        String headerValue = "attachment; filename="+teacher.get().getName()+"_pamokos_" + currentDateTime + ".pdf";
+        String headerValue = "attachment; filename=schedule.pdf";
+//        String headerValue = "attachment; filename="+teacher.get().getName()+"_pamokos_" + currentDateTime + ".pdf";
         response.setHeader(headerKey, headerValue);
 
         List<Lesson> listTeacherLessons = lessonService.listTeacherLessons(teacherId, startDate, endDate);
@@ -152,7 +154,8 @@ public class LessonController {
             throw new IllegalArgumentException("Room with name " + roomName + " not found.");
         }
         String headerKey = "Content-Disposition";
-        String headerValue = "attachment; filename="+room.get().getName()+"_lessons_" + currentDateTime + ".pdf";
+        String headerValue = "attachment; filename=schedule.pdf";
+//        String headerValue = "attachment; filename="+room.get().getName()+"_lessons_" + currentDateTime + ".pdf";
         response.setHeader(headerKey, headerValue);
 
         List<Lesson> listRoomLessons = lessonService.listRoomLessons(room.get().getId(), startDate, endDate);

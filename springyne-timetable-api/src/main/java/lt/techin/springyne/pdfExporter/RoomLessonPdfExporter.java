@@ -2,6 +2,7 @@ package lt.techin.springyne.pdfExporter;
 
 import com.lowagie.text.Font;
 import com.lowagie.text.*;
+import com.lowagie.text.pdf.BaseFont;
 import com.lowagie.text.pdf.PdfPCell;
 import com.lowagie.text.pdf.PdfPTable;
 import com.lowagie.text.pdf.PdfWriter;
@@ -21,7 +22,7 @@ public class RoomLessonPdfExporter {
     private Optional<Room> room;
 
 //    private BaseFont baseFont = BaseFont.createFont("fonts/LiberationSans-Regular.ttf", BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
-//    private BaseFont baseFont = BaseFont.createFont("springyne-timetable-api/fonts/LiberationSans-Regular.ttf", BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
+    private BaseFont baseFont = BaseFont.createFont("springyne-timetable-api/fonts/LiberationSans-Regular.ttf", BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
 
 
     public RoomLessonPdfExporter(List<Lesson> listLessons, Optional<Room> room) throws IOException {
@@ -34,50 +35,50 @@ public class RoomLessonPdfExporter {
         cell.setBackgroundColor(Color.LIGHT_GRAY);
         cell.setPadding(6);
 
-//        Font font = new Font(baseFont, 12);
+        Font font = new Font(baseFont, 12);
 
-        cell.setPhrase(new Phrase("Data"));
-//        cell.setPhrase(new Phrase("Data", font));
+//        cell.setPhrase(new Phrase("Data"));
+        cell.setPhrase(new Phrase("Data", font));
 
         table.addCell(cell);
 
-        cell.setPhrase(new Phrase("Savaitės diena"));
-//        cell.setPhrase(new Phrase("Savaitės diena", font));
+//        cell.setPhrase(new Phrase("Savaitės diena"));
+        cell.setPhrase(new Phrase("Savaitės diena", font));
         table.addCell(cell);
 
-        cell.setPhrase(new Phrase("Laikas"));
-//        cell.setPhrase(new Phrase("Laikas", font));
+//        cell.setPhrase(new Phrase("Laikas"));
+        cell.setPhrase(new Phrase("Laikas", font));
         table.addCell(cell);
 
-        cell.setPhrase(new Phrase("Mokytojas"));
-//        cell.setPhrase(new Phrase("Mokytojas", font));
+//        cell.setPhrase(new Phrase("Mokytojas"));
+        cell.setPhrase(new Phrase("Mokytojas", font));
         table.addCell(cell);
 
-        cell.setPhrase(new Phrase("Grupė"));
-//        cell.setPhrase(new Phrase("Grupė", font));
+//        cell.setPhrase(new Phrase("Grupė"));
+        cell.setPhrase(new Phrase("Grupė", font));
         table.addCell(cell);
     }
 
     private void writeTableData(PdfPTable table) {
         Locale lithuanian = new Locale("lt", "LT");
-//        Font font = new Font(baseFont, 12);
+        Font font = new Font(baseFont, 12);
 
         for (Lesson lesson : listLessons) {
 
-            table.addCell(new PdfPCell(new Phrase(String.valueOf(lesson.getLessonDate()))));
-//            table.addCell(new PdfPCell(new Phrase(String.valueOf(lesson.getLessonDate()), font)));
+//            table.addCell(new PdfPCell(new Phrase(String.valueOf(lesson.getLessonDate()))));
+            table.addCell(new PdfPCell(new Phrase(String.valueOf(lesson.getLessonDate()), font)));
 
-            table.addCell(new PdfPCell(new Phrase(lesson.getLessonDate().getDayOfWeek().getDisplayName(TextStyle.FULL, lithuanian))));
-//            table.addCell(new PdfPCell(new Phrase(lesson.getLessonDate().getDayOfWeek().getDisplayName(TextStyle.FULL, lithuanian), font)));
+//            table.addCell(new PdfPCell(new Phrase(lesson.getLessonDate().getDayOfWeek().getDisplayName(TextStyle.FULL, lithuanian))));
+            table.addCell(new PdfPCell(new Phrase(lesson.getLessonDate().getDayOfWeek().getDisplayName(TextStyle.FULL, lithuanian), font)));
 
-            table.addCell(new PdfPCell(new Phrase(String.valueOf(lesson.getLessonTime()))));
-//            table.addCell(new PdfPCell(new Phrase(String.valueOf(lesson.getLessonTime()), font)));
+//            table.addCell(new PdfPCell(new Phrase(String.valueOf(lesson.getLessonTime()))));
+            table.addCell(new PdfPCell(new Phrase(String.valueOf(lesson.getLessonTime()), font)));
 
-            table.addCell(new PdfPCell(new Phrase(lesson.getTeacher().getName())));
-//            table.addCell(new PdfPCell(new Phrase(lesson.getTeacher().getName(), font)));
+//            table.addCell(new PdfPCell(new Phrase(lesson.getTeacher().getName())));
+            table.addCell(new PdfPCell(new Phrase(lesson.getTeacher().getName(), font)));
 
-            table.addCell(new PdfPCell(new Phrase(lesson.getSchedule().getGroup().getName())));
-//            table.addCell(new PdfPCell(new Phrase(lesson.getSchedule().getGroup().getName(), font)));
+//            table.addCell(new PdfPCell(new Phrase(lesson.getSchedule().getGroup().getName())));
+            table.addCell(new PdfPCell(new Phrase(lesson.getSchedule().getGroup().getName(), font)));
 
         }
     }
@@ -88,8 +89,8 @@ public class RoomLessonPdfExporter {
         PdfWriter.getInstance(document, response.getOutputStream());
 
         document.open();
-        Font font = new Font(18);
-//        Font font = new Font(baseFont, 18);
+//        Font font = new Font(18);
+        Font font = new Font(baseFont, 18);
 
         Paragraph p = new Paragraph(room.get().getName(), font);
         p.setAlignment(Paragraph.ALIGN_CENTER);

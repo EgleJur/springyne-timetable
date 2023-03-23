@@ -131,13 +131,13 @@ function RoomLessonToPdf(props) {
                             error={!!roomError}
                             required
                         >
-                            Pasirinkite kambarį
+                            Pasirinkite kabinetą
                         </InputLabel>
                         <Select
                             error={!!roomError}
-                            labelId="select-teacher-label"
+                            labelId="select-room-label"
                             id="select-room"
-                            label="Pasirinkite kambarį"
+                            label="Pasirinkite kabinetą"
                             fullWidth
                             value={selectedRoom}
                             onChange={(e) => setSelectedRoom(e.target.value)}

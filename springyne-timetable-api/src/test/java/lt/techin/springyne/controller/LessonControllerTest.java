@@ -1,16 +1,12 @@
 package lt.techin.springyne.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import lt.techin.springyne.lesson.Lesson;
-import lt.techin.springyne.lesson.LessonBlock;
-import lt.techin.springyne.lesson.LessonController;
-import lt.techin.springyne.lesson.LessonService;
+import lt.techin.springyne.lesson.*;
 import lt.techin.springyne.room.Room;
 import lt.techin.springyne.schedule.Schedule;
 import lt.techin.springyne.shift.Shift;
 import lt.techin.springyne.subject.Subject;
 import lt.techin.springyne.teacher.Teacher;
-import lt.techin.springyne.teacher.TeacherController;
 import org.junit.Before;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -24,22 +20,21 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+
 import java.time.LocalDate;
+
 import static org.junit.Assert.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
 
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -59,8 +54,6 @@ public class LessonControllerTest {
 
     @Mock
     private LessonService lessonService;
-    @Mock
-    TeacherController teacherService;
 
     @Before
     public void setup() {
@@ -130,16 +123,6 @@ public class LessonControllerTest {
         assertEquals(expectedLessons, actualLessons);
         verify(lessonService).getLessonsBySchedule(scheduleId);
     }
-//    @Test
-//    void addLessonThrowsExceptionWithNullValues() throws Exception {
-//        LessonBlock testLessonBlock = new LessonBlock(null, null, null, null);
-//
-//        String message = "Null values should return bad request status";
-//        MvcResult mvcResult1 = mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/lessons/schedule/2?subjectId=1&teacherId=1&roomId=4")
-//                .contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(testLessonBlock))).andReturn();
-//
-//        assertEquals(400,mvcResult1.getResponse().getStatus(), message);
-//    }
 
     @Test
     void addLessonThrowsExceptionWithInvalidDateValues() throws Exception {
@@ -308,40 +291,5 @@ public class LessonControllerTest {
             assertNotNull(responseEntity);
             assertEquals(HttpStatus.NOT_FOUND, responseEntity.getStatusCode());
         }
-        
-//    @Test
-//    public void testListTeacherLessons() throws Exception {
-//        Long teacherId = 1L;
-//        String from = "2023-09-01";
-//        String to = "2023-09-30";
-//        MockHttpServletResponse response = new MockHttpServletResponse();
-//        List<Lesson> lessons = Arrays.asList(
-//                new Lesson(),
-//                new Lesson()
-//        );
-//        Set<Subject> subjectSet = new HashSet<>();
-//        subjectSet.add(new Subject());
-//
-//        Optional<Teacher> teacher = teacherService.getTeacherById(1L);
-//
-//        TeacherLessonPdfExporter exporter = new TeacherLessonPdfExporter(lessons, teacher);
-//
-//        given(lessonService.listTeacherLessons(teacherId, from, to)).willReturn(lessons);
-//
-//        mockMvc.perform(get("/api/v1/lessons/teachers/export/pdf")
-//                        .param("teacherId", String.valueOf(teacherId))
-//                        .param("startDate", from)
-//                        .param("endDate", to))
-//                .andExpect(status().isOk())
-//                .andExpect(jsonPath("$", hasSize(2)));
-//        // then
-//        verify(lessonService, times(1)).listTeacherLessons(teacherId, from, to);
-//        verifyNoMoreInteractions(lessonService);
-    //        mockMvc.perform(MockMvcRequestBuilders
-//                .get("/api/lessons/teachers/export/pdf/")
-//                .param("from", from)
-//                        .param("to", to))
-//                .content(objectMapper.writeValueAsString(testGroupDto))).andReturn();
 
-//    }
 }

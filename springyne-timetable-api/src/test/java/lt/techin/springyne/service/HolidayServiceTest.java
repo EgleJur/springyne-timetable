@@ -126,7 +126,7 @@ public class HolidayServiceTest {
         allHolidays.add(holiday2);
         allHolidays.add(holiday3);
         allHolidays.add(holiday4);
-        when(holidaysRepository.findAllByNameIgnoreCaseContainingOrderByStartsAsc("Christmas")).thenReturn(allHolidays);
+        when(holidaysRepository.findAllByNameIgnoreCaseContaining("Christmas")).thenReturn(allHolidays);
 
         // Call the method being tested
         List<Holiday> result = holidayService.searchByNameAndDate("Christmas", null, null);
@@ -148,7 +148,7 @@ public class HolidayServiceTest {
         allHolidays.add(holiday2);
         allHolidays.add(holiday3);
         allHolidays.add(holiday4);
-        when(holidaysRepository.findAllHolidaysByDateAndName("Christmas",to, from)).thenReturn(allHolidays);
+        when(holidaysRepository.findAllHolidaysByDateAndName(to, from,"Christmas")).thenReturn(allHolidays);
         List<Holiday> sortedallHolidays = allHolidays.stream()
                 .sorted(Comparator.comparing(Holiday::getStarts))
                 .collect(Collectors.toList());

@@ -167,7 +167,7 @@ class RoomControllerTest {
         ).andExpect(status().isOk()).andReturn();
         RoomDto result = objectMapper.readValue(mvcResult.getResponse().getContentAsString(), new TypeReference<RoomDto>() {
         });
-        Assertions.assertEquals(result.getName(), "101","Get teacher by Id should return teacher with correct name");
+        Assertions.assertEquals(result.getName(), "101","Get room by Id should return room with correct name");
     }
 
     @Test

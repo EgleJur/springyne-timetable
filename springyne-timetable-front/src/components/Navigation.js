@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import TeacherLessonToPdf from "../components/TeacherLessonToPdf";
+import RoomLessonToPdf from "../components/RoomLessonToPdf";
 import { useState } from "react";
 
 function Navigation() {
@@ -12,6 +13,16 @@ function Navigation() {
 
   const handleCloseTeacher = () => {
     setOpenTeacher(false);
+  };
+
+  const [openRoom, setOpenRoom] = useState(false);
+
+  const handleClickOpenRoom = () => {
+    setOpenRoom(true);
+  };
+
+  const handleCloseRoom = () => {
+    setOpenRoom(false);
   };
 
   return (
@@ -93,7 +104,13 @@ function Navigation() {
                       title="Eksportuoti mokytojo tvarkaraštį į PDF"
                     >
                     </TeacherLessonToPdf>
-                    <li><Link to="#" className="dropdown-item">Eksportuoti kabineto tvarkaraštį į PDF</Link></li>
+                    <li><a className="dropdown-item" onClick={handleClickOpenRoom}>Eksportuoti kabineto tvarkaraštį į PDF</a></li>
+                    <RoomLessonToPdf
+                      open={openRoom}
+                      handleClose={handleCloseRoom}
+                      title="Eksportuoti kabineto tvarkaraštį į PDF"
+                    >
+                    </RoomLessonToPdf>
                   </ul>
                 </li>
 

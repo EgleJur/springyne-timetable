@@ -2,7 +2,10 @@ package lt.techin.springyne.lesson;
 
 import com.lowagie.text.DocumentException;
 import lt.techin.springyne.pdfExporter.GroupLessonsPdfExporter;
+import lt.techin.springyne.pdfExporter.RoomLessonPdfExporter;
 import lt.techin.springyne.pdfExporter.TeacherLessonPdfExporter;
+import lt.techin.springyne.room.Room;
+import lt.techin.springyne.room.RoomService;
 import lt.techin.springyne.schedule.Schedule;
 import lt.techin.springyne.schedule.ScheduleService;
 import lt.techin.springyne.teacher.Teacher;
@@ -28,6 +31,9 @@ public class LessonController {
     LessonService lessonService;
     @Autowired
     TeacherService teacherService;
+
+    @Autowired
+    RoomService roomService;
 
     @Autowired
     ScheduleService scheduleService;
@@ -127,5 +133,31 @@ public class LessonController {
         TeacherLessonPdfExporter exporter = new TeacherLessonPdfExporter(listTeacherLessons, teacher);
         exporter.export(response);
 
+    }
+    @GetMapping("/rooms/export/pdf")
+    public void exportRoomLessonsToPDF(HttpServletResponse response,
+                                       @RequestParam String roomName,
+                                       @RequestParam String startDate,
+                                       @RequestParam String endDate)
+            throws DocumentException, IOException {
+
+        response.setContentType("application/pdf");
+        DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
+        String currentDateTime = dateFormatter.format(new Date());
+        Optional<Room> room = roomService.getAllRooms()
+                .stream()
+                .filter(r -> r.getName().equals(roomName))
+                .findFirst();
+        if (room.isEmpty()) {
+            throw new IllegalArgumentException("Room with name " + roomName + " not found.");
+        }
+        String headerKey = "Content-Disposition";
+        String headerValue = "attachment; filename="+room.get().getName()+"_lessons_" + currentDateTime + ".pdf";
+        response.setHeader(headerKey, headerValue);
+
+        List<Lesson> listRoomLessons = lessonService.listRoomLessons(room.get().getId(), startDate, endDate);
+
+        RoomLessonPdfExporter exporter = new RoomLessonPdfExporter(listRoomLessons, room);
+        exporter.export(response);
     }
 }

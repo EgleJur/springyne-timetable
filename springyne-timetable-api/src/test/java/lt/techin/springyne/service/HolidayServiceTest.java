@@ -101,13 +101,17 @@ public class HolidayServiceTest {
         allHolidays.add(holiday2);
         allHolidays.add(holiday3);
         allHolidays.add(holiday4);
-        when(holidaysRepository.findAllHolidaysByDate(from, to)).thenReturn(allHolidays);
+        when(holidaysRepository.findAll()).thenReturn(allHolidays);
         List<Holiday> sortedallHolidays = allHolidays.stream()
                 .sorted(Comparator.comparing(Holiday::getStarts))
                 .collect(Collectors.toList());
+        List<Holiday> allHolidaysS = sortedallHolidays.stream()
+                .filter(dateS -> dateS.getEnds().isAfter(from.minusDays(1))
+                        && dateS.getStarts().isBefore(to.plusDays(1)))
+                .collect(Collectors.toList());
         // Call the method being tested
         List<Holiday> result = holidayService.searchByNameAndDate(null, "2023-01-01", "2023-12-31");
-        assertEquals(sortedallHolidays, result);
+        assertEquals(allHolidaysS, result);
     }
 
     @Test
@@ -118,8 +122,10 @@ public class HolidayServiceTest {
         Holiday holiday3 = new Holiday(3L, "Labor Day", LocalDate.of(2023, 5, 1), LocalDate.of(2023, 5, 1), false);
         Holiday holiday4 = new Holiday(4L, "Easter", LocalDate.of(2023, 4, 16), LocalDate.of(2023, 4, 16), false);
 
-        LocalDate from = LocalDate.parse("2023-01-01");
-        LocalDate to = LocalDate.parse("2023-12-31");
+        LocalDate from =LocalDate.now().plusYears(-1);
+        LocalDate to =LocalDate.now().plusYears(2);
+
+
         // Mock the holidays repository to return the holiday data for testing
         List<Holiday> allHolidays = new ArrayList<>();
         allHolidays.add(holiday1);
@@ -127,10 +133,13 @@ public class HolidayServiceTest {
         allHolidays.add(holiday3);
         allHolidays.add(holiday4);
         when(holidaysRepository.findAllByNameIgnoreCaseContaining("Christmas")).thenReturn(allHolidays);
+        List<Holiday> sortedallHolidays = allHolidays.stream()
+                .sorted(Comparator.comparing(Holiday::getStarts))
+                .collect(Collectors.toList());
 
         // Call the method being tested
-        List<Holiday> result = holidayService.searchByNameAndDate("Christmas", null, null);
-        assertEquals(allHolidays, result);
+        List<Holiday> result = holidayService.searchByNameAndDate("Christmas", from.toString(), to.toString());
+        assertEquals(sortedallHolidays, result);
     }
     @Test
     public void searchByNameAndDate_WhenNameIsSpecifiedAndFromAndToAreSpecified_ReturnsFilteredHolidays() {
@@ -148,9 +157,13 @@ public class HolidayServiceTest {
         allHolidays.add(holiday2);
         allHolidays.add(holiday3);
         allHolidays.add(holiday4);
-        when(holidaysRepository.findAllHolidaysByDateAndName(to, from,"Christmas")).thenReturn(allHolidays);
+        when(holidaysRepository.findAllByNameIgnoreCaseContaining("Christmas")).thenReturn(allHolidays);
         List<Holiday> sortedallHolidays = allHolidays.stream()
                 .sorted(Comparator.comparing(Holiday::getStarts))
+                .collect(Collectors.toList());
+        sortedallHolidays.stream()
+                .filter(dateS -> dateS.getEnds().isAfter(from.minusDays(1))
+                        && dateS.getStarts().isBefore(to.plusDays(1)))
                 .collect(Collectors.toList());
         // Call the method being tested
         List<Holiday> result = holidayService.searchByNameAndDate("Christmas", "2023-01-01", "2023-12-31");

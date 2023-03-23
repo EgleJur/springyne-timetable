@@ -27,7 +27,10 @@ public class RoomLessonPdfExporter {
 //private BaseFont baseFont = BaseFont.createFont(System.getProperty("user.dir") + System.getProperty("file.separator") + "src" + System.getProperty("file.separator") + "main" +
 //                System.getProperty("file.separator") + "resources" + System.getProperty("file.separator") + "fonts" + System.getProperty("file.separator") + "LiberationSans-Regular.ttf",
 //        BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
-private BaseFont baseFont = BaseFont.createFont("src/main/resources/fonts/LiberationSans-Regular.ttf", BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
+
+//    Path path = Paths.get("/src/main/resources/fonts/LiberationSans-Regular.ttf");
+//    Path absolutePath = path.toAbsolutePath().normalize();
+    private BaseFont baseFont = BaseFont.createFont(System.getProperty("user.dir") + "/src/main/resources/fonts/LiberationSans-Regular.ttf", BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
 
     public RoomLessonPdfExporter(List<Lesson> listLessons, Optional<Room> room) throws IOException {
         this.listLessons = listLessons;

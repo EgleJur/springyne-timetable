@@ -18,11 +18,12 @@ import java.time.format.TextStyle;
 import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
+import java.util.regex.Matcher;
 
 public class TeacherLessonPdfExporter {
     private List<Lesson> listLessons;
     private Optional<Teacher> teacher;
-    Path path = Paths.get("/src/main/resources/fonts/LiberationSans-Regular.ttf");
+    Path path = Paths.get(Matcher.quoteReplacement("src/main/resources/fonts/LiberationSans-Regular.ttf"));
     Path absolutePath = path.toAbsolutePath().normalize();
 
 //    private URL font_path = Thread.currentThread().getContextClassLoader().getResource("LiberationSans-Regular.ttf");
@@ -31,7 +32,7 @@ public class TeacherLessonPdfExporter {
 //    private BaseFont baseFont = BaseFont.createFont(System.getProperty("user.dir") + System.getProperty("file.separator") + "src" + System.getProperty("file.separator") + "main" +
 //                System.getProperty("file.separator") + "resources" + System.getProperty("file.separator") + "fonts" + System.getProperty("file.separator") + "LiberationSans-Regular.ttf",
 //        BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
-private BaseFont baseFont = BaseFont.createFont("./src/main/resources/fonts/LiberationSans-Regular.ttf", BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
+private BaseFont baseFont = BaseFont.createFont(absolutePath.toString(), BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
 //private BaseFont baseFont = BaseFont.createFont(Matcher.quoteReplacement(System.getProperty("user.dir")) + "/src/main/resources/fonts/LiberationSans-Regular.ttf", BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
 
     public TeacherLessonPdfExporter(List<Lesson> listLessons, Optional<Teacher> teacher) throws IOException {

@@ -2,7 +2,6 @@ package lt.techin.springyne.pdfExporter;
 
 import com.lowagie.text.Font;
 import com.lowagie.text.*;
-import com.lowagie.text.pdf.BaseFont;
 import com.lowagie.text.pdf.PdfPCell;
 import com.lowagie.text.pdf.PdfPTable;
 import com.lowagie.text.pdf.PdfWriter;
@@ -11,6 +10,7 @@ import lt.techin.springyne.teacher.Teacher;
 
 import javax.servlet.http.HttpServletResponse;
 import java.awt.*;
+import java.io.File;
 import java.io.IOException;
 import java.time.format.TextStyle;
 import java.util.List;
@@ -21,7 +21,7 @@ public class TeacherLessonPdfExporter {
     private List<Lesson> listLessons;
     private Optional<Teacher> teacher;
 
-    private BaseFont baseFont = BaseFont.createFont("src/main/resources/fonts/LiberationSans-Regular.ttf", BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
+//    private BaseFont baseFont = BaseFont.createFont("src/main/resources/fonts/LiberationSans-Regular.ttf", BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
 //    private BaseFont baseFont = BaseFont.createFont("fonts/LiberationSans-Regular.ttf", BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
 //    private BaseFont baseFont = BaseFont.createFont("C:/Git/Springyne-timetable/springyne-timetable-api/fonts/LiberationSans-Regular.ttf", BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
 
@@ -35,7 +35,9 @@ public class TeacherLessonPdfExporter {
         cell.setBackgroundColor(Color.LIGHT_GRAY);
         cell.setPadding(6);
 
-       Font font = new Font(baseFont, 12);
+        FontFactory.register("resources" + File.separator + "fonts" + File.separator + "LiberationSans-Regular.ttf", "springyne_font");
+        Font font = FontFactory.getFont("springyne_font",12);
+//       Font font = new Font(baseFont, 12);
 
         cell.setPhrase(new Phrase("Data", font));
 //        cell.setPhrase(new Phrase("Data"));
@@ -65,7 +67,9 @@ public class TeacherLessonPdfExporter {
 
     private void writeTableData(PdfPTable table) {
         Locale lithuanian = new Locale("lt", "LT");
-        Font font = new Font(baseFont, 12);
+        FontFactory.register("resources" + File.separator + "fonts" + File.separator + "LiberationSans-Regular.ttf", "springyne_font");
+        Font font = FontFactory.getFont("springyne_font",12);
+//        Font font = new Font(baseFont, 12);
 
         for (Lesson lesson : listLessons) {
 
@@ -96,7 +100,9 @@ public class TeacherLessonPdfExporter {
         PdfWriter.getInstance(document, response.getOutputStream());
 
         document.open();
-       Font font = new Font(baseFont, 18);
+        FontFactory.register("resources" + File.separator + "fonts" + File.separator + "LiberationSans-Regular.ttf", "springyne_font");
+        Font font = FontFactory.getFont("springyne_font",18);
+//       Font font = new Font(baseFont, 18);
 
 //        Paragraph p = new Paragraph(teacher.get().getName());
         Paragraph p = new Paragraph(teacher.get().getName(), font);

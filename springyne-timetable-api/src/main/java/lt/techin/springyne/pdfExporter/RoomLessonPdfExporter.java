@@ -8,10 +8,12 @@ import com.lowagie.text.pdf.PdfPTable;
 import com.lowagie.text.pdf.PdfWriter;
 import lt.techin.springyne.lesson.Lesson;
 import lt.techin.springyne.room.Room;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletResponse;
 import java.awt.*;
 import java.io.IOException;
+import java.time.LocalDate;
 import java.time.format.TextStyle;
 import java.util.List;
 import java.util.Locale;
@@ -29,6 +31,8 @@ public class RoomLessonPdfExporter {
         this.room = room;
     }
 
+
+
     public void writeTableHeader(PdfPTable table) {
         PdfPCell cell = new PdfPCell();
         cell.setBackgroundColor(Color.LIGHT_GRAY);
@@ -43,7 +47,7 @@ public class RoomLessonPdfExporter {
         cell.setPhrase(new Phrase("Savaitės diena", font));
         table.addCell(cell);
 
-        cell.setPhrase(new Phrase("Laikas", font));
+        cell.setPhrase(new Phrase("Pamoka", font));
         table.addCell(cell);
 
         cell.setPhrase(new Phrase("Mokytojas", font));
@@ -53,22 +57,29 @@ public class RoomLessonPdfExporter {
         table.addCell(cell);
     }
 
+
     private void writeTableData(PdfPTable table) {
         Locale lithuanian = new Locale("lt", "LT");
         Font font = new Font(baseFont, 12);
 
+        LocalDate previousLessonDate = null;
+
         for (Lesson lesson : listLessons) {
+            LocalDate currentLessonDate = lesson.getLessonDate();
 
-            table.addCell(new PdfPCell(new Phrase(String.valueOf(lesson.getLessonDate()), font)));
+            if (previousLessonDate == null || !previousLessonDate.equals(currentLessonDate)) {
+                table.addCell(new PdfPCell(new Phrase(String.valueOf(currentLessonDate), font)));
+                table.addCell(new PdfPCell(new Phrase(currentLessonDate.getDayOfWeek().getDisplayName(TextStyle.FULL, lithuanian), font)));
+                previousLessonDate = currentLessonDate;
+            } else {
+                table.addCell(new PdfPCell(new Phrase("", font)));
+                table.addCell(new PdfPCell(new Phrase("", font)));
+            }
 
-            table.addCell(new PdfPCell(new Phrase(lesson.getLessonDate().getDayOfWeek().getDisplayName(TextStyle.FULL, lithuanian), font)));
-
+            // add other cell data for the lesson
             table.addCell(new PdfPCell(new Phrase(String.valueOf(lesson.getLessonTime()), font)));
-
             table.addCell(new PdfPCell(new Phrase(lesson.getTeacher().getName(), font)));
-
             table.addCell(new PdfPCell(new Phrase(lesson.getSchedule().getGroup().getName(), font)));
-
         }
     }
 
@@ -87,7 +98,7 @@ public class RoomLessonPdfExporter {
 
         PdfPTable table = new PdfPTable(5);
         table.setWidthPercentage(100f);
-        table.setWidths(new float[] {2.0f, 3.0f, 2.0f, 4.0f, 2.0f});
+        table.setWidths(new float[] {2.0f, 3.0f,2.0f, 4.0f, 2.0f});
         table.setSpacingBefore(10);
 
         writeTableHeader(table);

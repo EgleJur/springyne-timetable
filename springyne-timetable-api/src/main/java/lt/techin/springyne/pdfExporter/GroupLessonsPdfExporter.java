@@ -11,7 +11,6 @@ import lt.techin.springyne.schedule.Schedule;
 import javax.servlet.http.HttpServletResponse;
 import java.awt.*;
 import java.io.IOException;
-import java.net.URL;
 import java.util.List;
 import java.util.Optional;
 
@@ -20,7 +19,7 @@ public class GroupLessonsPdfExporter {
     private final List<Lesson> lessonsBySchedule;
 
     private final Optional<Schedule> schedule;
-    private URL font_path = Thread.currentThread().getContextClassLoader().getResource("LiberationSans-Regular.ttf");
+//    private URL font_path = Thread.currentThread().getContextClassLoader().getResource("LiberationSans-Regular.ttf");
 
 //    private BaseFont baseFont = BaseFont.createFont("C:/Git/Springyne-timetable/springyne-timetable-api/fonts/LiberationSans-Regular.ttf", BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
 //    private BaseFont baseFont = BaseFont.createFont("fonts/LiberationSans-Regular.ttf", BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
@@ -29,7 +28,8 @@ public class GroupLessonsPdfExporter {
     public GroupLessonsPdfExporter(List<Lesson> lessonsBySchedule, Optional<Schedule> schedule) throws IOException {
         this.lessonsBySchedule = lessonsBySchedule;
         this.schedule = schedule;
-        FontFactory.register(font_path.toString(), "springyne_font");
+        FontFactory.register(System.getProperty("file.separator")+"resources"+System.getProperty("file.separator")+
+                "fonts"+System.getProperty("file.separator")+"LiberationSans-Regular.ttf", "springyne_font");
     }
 
 

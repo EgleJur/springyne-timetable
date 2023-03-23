@@ -10,8 +10,8 @@ import lt.techin.springyne.room.Room;
 
 import javax.servlet.http.HttpServletResponse;
 import java.awt.*;
-import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 import java.time.format.TextStyle;
 import java.util.List;
 import java.util.Locale;
@@ -23,11 +23,12 @@ public class RoomLessonPdfExporter {
 
 //    private BaseFont baseFont = BaseFont.createFont("fonts/LiberationSans-Regular.ttf", BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
 //    private BaseFont baseFont = BaseFont.createFont("src/main/resources/fonts/LiberationSans-Regular.ttf", BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
-
+    private URL font_path = Thread.currentThread().getContextClassLoader().getResource("LiberationSans-Regular.ttf");
 
     public RoomLessonPdfExporter(List<Lesson> listLessons, Optional<Room> room) throws IOException {
         this.listLessons = listLessons;
         this.room = room;
+        FontFactory.register(font_path.toString(), "springyne_font");
     }
 
     public void writeTableHeader(PdfPTable table) {
@@ -35,7 +36,7 @@ public class RoomLessonPdfExporter {
         cell.setBackgroundColor(Color.LIGHT_GRAY);
         cell.setPadding(6);
 
-        FontFactory.register("resources" + File.separator + "fonts" + File.separator + "LiberationSans-Regular.ttf", "springyne_font");
+//        FontFactory.register("resources" + File.separator + "fonts" + File.separator + "LiberationSans-Regular.ttf", "springyne_font");
         Font font = FontFactory.getFont("springyne_font",12);
 //        Font font = new Font(baseFont, 12);
 
@@ -63,7 +64,7 @@ public class RoomLessonPdfExporter {
 
     private void writeTableData(PdfPTable table) {
         Locale lithuanian = new Locale("lt", "LT");
-        FontFactory.register("resources" + File.separator + "fonts" + File.separator + "LiberationSans-Regular.ttf", "springyne_font");
+//        FontFactory.register("resources" + File.separator + "fonts" + File.separator + "LiberationSans-Regular.ttf", "springyne_font");
         Font font = FontFactory.getFont("springyne_font",12);
 //        Font font = new Font(baseFont, 12);
 
@@ -94,7 +95,7 @@ public class RoomLessonPdfExporter {
 
         document.open();
 //        Font font = new Font(18);
-        FontFactory.register("resources" + File.separator + "fonts" + File.separator + "LiberationSans-Regular.ttf", "springyne_font");
+//        FontFactory.register("resources" + File.separator + "fonts" + File.separator + "LiberationSans-Regular.ttf", "springyne_font");
         Font font = FontFactory.getFont("springyne_font",18);
 //        Font font = new Font(baseFont, 18);
 

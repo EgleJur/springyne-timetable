@@ -22,7 +22,7 @@ public class RoomLessonPdfExporter {
     private Optional<Room> room;
 
 //    private BaseFont baseFont = BaseFont.createFont("fonts/LiberationSans-Regular.ttf", BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
-    private BaseFont baseFont = BaseFont.createFont("springyne-timetable-api/fonts/LiberationSans-Regular.ttf", BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
+    private BaseFont baseFont = BaseFont.createFont("src/main/resources/fonts/LiberationSans-Regular.ttf", BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
 
 
     public RoomLessonPdfExporter(List<Lesson> listLessons, Optional<Room> room) throws IOException {

@@ -12,6 +12,7 @@ import { Select, MenuItem } from "@mui/material";
 import dayjs from "dayjs";
 import { Alert, Collapse } from "@mui/material";
 import { apiUrl } from "../App";
+import { format, isSameDay, isSaturday, isSunday } from "date-fns";
 
 
 function PlanSchedulePage() {
@@ -39,6 +40,7 @@ function PlanSchedulePage() {
   const [failure, setFailure] = useState(false);
   const times = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14];
   const [lessons, setLessons] = useState([]);
+  const holidayInDatePicker = ([]);
   
   const fetchShedule=()=>{
     fetch(`${apiUrl}/api/v1/schedules/` + params.id)
@@ -277,6 +279,22 @@ const addErrorOrSucsess=()=>{
       );
 };
 
+const shouldDisableDate = (date) => {
+  const dateObj = dayjs(date);
+
+  if (dateObj.day() === 0 || dateObj.day() === 6) {// Sunday is 0, Saturday is 6
+    return true;
+  }
+
+  const isHoliday = holidays.some((holiday) =>
+    dateObj.isBetween(dayjs(holiday.starts).startOf('DD'), dayjs(holiday.ends).startOf('DD'), null, '[]')
+  );
+  if (isHoliday) {
+    return true;
+  }
+  return false;
+}
+
   return (
     <div className="mx-3">
       <h2 className="my-5">
@@ -303,7 +321,7 @@ const addErrorOrSucsess=()=>{
             <DatePicker
               className="mb-3 mt-2"
               label="Pradžios data"
-              // inputFormat="mmmm-MM-dd"
+               //inputFormat="yyyy-MM-dd"
               value={startDateValue}
               disablePast
               minDate={schedule?.startDate}
@@ -311,6 +329,7 @@ const addErrorOrSucsess=()=>{
               onChange={(newValue) => {
                 setStartDateValue(newValue);
               }}
+              shouldDisableDate={shouldDisableDate}
               renderInput={(params) => (
                 <TextField
                   fullWidth
@@ -335,6 +354,7 @@ const addErrorOrSucsess=()=>{
                 setEndDateValue(newValue);
               }}
               onError={() => setEndDateError(true)}
+              shouldDisableDate={shouldDisableDate}
               renderInput={(params) => (
                 <TextField
                   fullWidth

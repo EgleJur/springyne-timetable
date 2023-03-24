@@ -35,9 +35,9 @@ ObjectMapper objectMapper;
 @Test
 void getAllTeachersContainsCorrectDtos() throws Exception {
 
-        TeacherDto testTeacherDto1 = new TeacherDto("Jonas Jonaitis", "JonasJ", "jonas@gmail.com", "822 555 22222", 10, false);
-        TeacherDto testTeacherDto2 = new TeacherDto("Petras Petraitis", "PetrasP", "petras@gmail.com", "822 555 11111", 20, false);
-        TeacherDto testTeacherDto3 = new TeacherDto("Antanas Antanaitis", "AntanasA", "antanas@gmail.com", "822 555 33333", 15, false);
+        TeacherDto testTeacherDto1 = new TeacherDto("Jonas Jonaitis", "JonasJ", "jonas@gmail.com", "822 555 22222", 35, false);
+        TeacherDto testTeacherDto2 = new TeacherDto("Petras Petraitis", "PetrasP", "petras@gmail.com", "822 555 11111", 35, false);
+        TeacherDto testTeacherDto3 = new TeacherDto("Antanas Antanaitis", "AntanasA", "antanas@gmail.com", "822 555 33333", 35, false);
 
         List<TeacherDto> expectedList = new ArrayList<>();
         expectedList.add(testTeacherDto1);

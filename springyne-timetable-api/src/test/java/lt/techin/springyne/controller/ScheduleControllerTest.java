@@ -46,9 +46,9 @@ public class ScheduleControllerTest {
 
     @Test
     void getAllSchedulesContainsCorrectDtos() throws Exception {
-        ScheduleDto testScheduleDto1 = new ScheduleDto("E-22/1 Java programuotojas (-a) Rytinė", LocalDate.of(2023,9,1),LocalDate.of(2023,12,22));
+        ScheduleDto testScheduleDto1 = new ScheduleDto("E-22/1 Java programuotojas (-a) Dieninė", LocalDate.of(2023,3,1),LocalDate.of(2023,6,30));
         ScheduleDto testScheduleDto2 = new ScheduleDto("JP-22/1 Programinės įrangos testuotojas (-a) Rytinė", LocalDate.of(2023,9,1),LocalDate.of(2023,12,22));
-        ScheduleDto testScheduleDto3 = new ScheduleDto("JP-22/2 Programinės įrangos testuotojas (-a) Popietinė",LocalDate.of(2023,9,1),LocalDate.of(2023,12,22));
+        ScheduleDto testScheduleDto3 = new ScheduleDto("JP-22/2 Programinės įrangos testuotojas (-a) Dieninė",LocalDate.of(2023,3,1),LocalDate.of(2023,6,30));
 
         List<ScheduleDto> expectedList = new ArrayList<>();
         expectedList.add(testScheduleDto1);
@@ -158,7 +158,7 @@ public class ScheduleControllerTest {
         ).andExpect(status().isOk()).andReturn();
         ScheduleDto result = objectMapper.readValue(mvcResult.getResponse().getContentAsString(StandardCharsets.UTF_8), new TypeReference<ScheduleDto>() {
         });
-        assertEquals(result.getName(), "E-22/1 Java programuotojas (-a) Rytinė","Get schedule by Id should return schedule with correct name");
+        assertEquals(result.getName(), "E-22/1 Java programuotojas (-a) Dieninė","Get schedule by Id should return schedule with correct name");
     }
 
     @Test

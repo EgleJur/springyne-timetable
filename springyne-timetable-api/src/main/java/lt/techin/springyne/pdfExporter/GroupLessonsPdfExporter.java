@@ -14,6 +14,7 @@ import java.awt.*;
 import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
+import java.util.regex.Matcher;
 
 public class GroupLessonsPdfExporter {
 
@@ -28,8 +29,7 @@ public class GroupLessonsPdfExporter {
 //    private BaseFont baseFont = BaseFont.createFont("src/main/resources/fonts/LiberationSans-Regular.ttf", BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
 //Path path = Paths.get("/src/main/resources/fonts/LiberationSans-Regular.ttf");
 //    Path absolutePath = path.toAbsolutePath().normalize();
-    private BaseFont baseFont = BaseFont.createFont("~/springyne-timetable-api/src/main/resources/fonts/LiberationSans-Regular.ttf", BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
-//    private BaseFont baseFont = BaseFont.createFont(Matcher.quoteReplacement(System.getProperty("user.dir")) + "/src/main/resources/fonts/LiberationSans-Regular.ttf", BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
+private BaseFont baseFont = BaseFont.createFont(Matcher.quoteReplacement("~/springyne-timetable-api/src/main/resources/fonts/LiberationSans-Regular.ttf"), BaseFont.IDENTITY_H, BaseFont.EMBEDDED);//    private BaseFont baseFont = BaseFont.createFont(Matcher.quoteReplacement(System.getProperty("user.dir")) + "/src/main/resources/fonts/LiberationSans-Regular.ttf", BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
 
 //    Path path = Paths.get(Matcher.quoteReplacement("src/main/resources/fonts/LiberationSans-Regular.ttf"));
 //    Path absolutePath = path.toAbsolutePath();

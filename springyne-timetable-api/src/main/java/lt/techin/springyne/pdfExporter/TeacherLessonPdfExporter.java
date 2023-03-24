@@ -16,6 +16,7 @@ import java.time.format.TextStyle;
 import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
+import java.util.regex.Matcher;
 
 public class TeacherLessonPdfExporter {
     private List<Lesson> listLessons;
@@ -25,7 +26,7 @@ public class TeacherLessonPdfExporter {
 
 //    private URL font_path = Thread.currentThread().getContextClassLoader().getResource("LiberationSans-Regular.ttf");
 
-    private BaseFont baseFont = BaseFont.createFont("~/springyne-timetable-api/src/main/resources/fonts/LiberationSans-Regular.ttf", BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
+    private BaseFont baseFont = BaseFont.createFont(Matcher.quoteReplacement("~/springyne-timetable-api/src/main/resources/fonts/LiberationSans-Regular.ttf"), BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
 //    private BaseFont baseFont = BaseFont.createFont(System.getProperty("user.dir") + System.getProperty("file.separator") + "src" + System.getProperty("file.separator") + "main" +
 //                System.getProperty("file.separator") + "resources" + System.getProperty("file.separator") + "fonts" + System.getProperty("file.separator") + "LiberationSans-Regular.ttf",
 //        BaseFont.IDENTITY_H, BaseFont.EMBEDDED);

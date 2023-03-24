@@ -118,17 +118,17 @@ public class ScheduleControllerTest {
         assertEquals(400,mvcResult2.getResponse().getStatus(), "Should not allow saving schedule with end date before start date");
     }
 
-//    @Test
-//    void addScheduleThrowsExceptionWithOverlappingHours() throws Exception {
-//        ScheduleDto testScheduleDto1 = new ScheduleDto("Test Name" + LocalDateTime.now(), LocalDate.of(2023,10,1),
-//                LocalDate.of(2023,11,01));
-//        String message = "Overlapping dates should return bad request status";
-//
-//        MvcResult mvcResult1 = mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/schedules?groupId=1").contentType(MediaType.APPLICATION_JSON).
-//                content(objectMapper.writeValueAsString(testScheduleDto1))).andReturn();
-//
-//        assertEquals(400,mvcResult1.getResponse().getStatus(), message);
-//    }
+    @Test
+    void addScheduleThrowsExceptionWithOverlappingHours() throws Exception {
+        ScheduleDto testScheduleDto1 = new ScheduleDto("JP-22/1 Programinės įrangos testuotojas (-a) Rytinė", LocalDate.of(2023,9,4),
+                LocalDate.of(2023,9,5));
+        String message = "Overlapping dates should return bad request status";
+
+        MvcResult mvcResult1 = mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/schedules?groupId=2").contentType(MediaType.APPLICATION_JSON).
+                content(objectMapper.writeValueAsString(testScheduleDto1))).andReturn();
+
+        assertEquals(400,mvcResult1.getResponse().getStatus(), message);
+    }
 
 
     //deletes from database

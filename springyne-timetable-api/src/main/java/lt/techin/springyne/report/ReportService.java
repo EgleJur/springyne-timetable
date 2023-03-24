@@ -216,7 +216,7 @@ public class ReportService {
             legendCell = legendRow.createCell(legendCellNumber);
             legendCell.setCellValue(entry.getValue().get(0).getSubject().getName());
             CellStyle legendCellStyle = workbook.createCellStyle();
-            legendCellStyle.setFillForegroundColor(selectedColors[entry.getValue().get(0).getSubject().getId().shortValue()]);
+            legendCellStyle.setFillForegroundColor(selectedColors[(short) entry.getValue().get(0).getSubject().getId().shortValue() % selectedColors.length]);
             legendCellStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
             legendCell.setCellStyle(legendCellStyle);
             sheet.addMergedRegion(new CellRangeAddress(legendRowCount,legendRowCount,legendCellNumber,legendCellNumber + 2));

@@ -77,8 +77,8 @@ public class LessonControllerTest {
     @Test
     public void testGetAllLessons() throws Exception {
         List<Lesson> lessons = new ArrayList<>();
-        lessons.add(new Lesson(1L, LocalDate.parse("2023-09-04"), 1, schedule, subject, teacher, room));
-        lessons.add(new Lesson(2L, LocalDate.parse("2023-09-04"), 2, schedule, subject, teacher, room));
+        lessons.add(new Lesson(1L, LocalDate.parse("2023-03-06"), 1, schedule, subject, teacher, room));
+        lessons.add(new Lesson(2L, LocalDate.parse("2023-03-06"), 2, schedule, subject, teacher, room));
         when(lessonService.getAllLessons()).thenReturn(lessons);
 
         List<Lesson> result = lessonController.getAllLessons();
@@ -111,8 +111,8 @@ public class LessonControllerTest {
         // Setup
         Long scheduleId = 1L;
         List<Lesson> expectedLessons = Arrays.asList(
-                new Lesson(1L, LocalDate.parse("2023-09-04"), 1, schedule, subject, teacher, room),
-                new Lesson(2L, LocalDate.parse("2023-09-04"), 1, schedule, subject, teacher, room)
+                new Lesson(1L, LocalDate.parse("2023-03-06"), 1, schedule, subject, teacher, room),
+                new Lesson(2L, LocalDate.parse("2023-03-06"), 1, schedule, subject, teacher, room)
         );
         when(lessonService.getLessonsBySchedule(scheduleId)).thenReturn(expectedLessons);
 
@@ -225,10 +225,10 @@ public class LessonControllerTest {
 
     @Test
     void addLessonThrowsExceptionWithLessonTimeOutsideTeacherWorkingHours() throws Exception {
-        LessonBlock testLessonBlock = new LessonBlock(LocalDate.of(2023,9,1), LocalDate.of(2023,9,1), 9, 12);
+        LessonBlock testLessonBlock = new LessonBlock(LocalDate.of(2023,9,4), LocalDate.of(2023,9,4), 9, 14);
 
         String message = "Adding lesson with time outside of teacher's working hours should return bad request status";
-        MvcResult mvcResult1 = mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/lessons/schedule/4?subjectId=1&teacherId=1&roomId=4")
+        MvcResult mvcResult1 = mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/lessons/schedule/4?subjectId=3&teacherId=3&roomId=3")
                 .contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(testLessonBlock))).andReturn();
 
         assertEquals(400,mvcResult1.getResponse().getStatus(), message);
@@ -253,7 +253,7 @@ public class LessonControllerTest {
 
     @Test
     void editLessonsAllowsSavingWithCorrectValues() throws Exception{
-        Long scheduleId = 2L;
+        Long scheduleId = 1L;
         Long subjectId = 1L;
         Long teacherId = 1L;
         Long roomId = 4L;

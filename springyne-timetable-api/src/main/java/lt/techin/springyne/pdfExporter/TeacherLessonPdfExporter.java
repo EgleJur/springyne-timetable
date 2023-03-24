@@ -12,6 +12,7 @@ import lt.techin.springyne.teacher.Teacher;
 import javax.servlet.http.HttpServletResponse;
 import java.awt.*;
 import java.io.IOException;
+import java.time.LocalDate;
 import java.time.format.TextStyle;
 import java.util.List;
 import java.util.Locale;
@@ -22,7 +23,7 @@ public class TeacherLessonPdfExporter {
     private Optional<Teacher> teacher;
 
     private BaseFont baseFont = BaseFont.createFont("fonts/LiberationSans-Regular.ttf", BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
-//    private BaseFont baseFont = BaseFont.createFont("C:/Git/Springyne-timetable/springyne-timetable-api/fonts/LiberationSans-Regular.ttf", BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
+//    private BaseFont baseFont = BaseFont.createFont("C:/Git/Springyne-timetable/springyne-timetable-api/src/main/resources/fonts/LiberationSans-Regular.ttf", BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
 
     public TeacherLessonPdfExporter(List<Lesson> listLessons, Optional<Teacher> teacher) throws IOException {
         this.listLessons = listLessons;
@@ -60,11 +61,18 @@ public class TeacherLessonPdfExporter {
         Locale lithuanian = new Locale("lt", "LT");
         Font font = new Font(baseFont, 12);
 
+        LocalDate previousDate = null;
         for (Lesson lesson : listLessons) {
+            LocalDate currentDate = lesson.getLessonDate();
+            if (!currentDate.equals(previousDate)) {
+                table.addCell(new PdfPCell(new Phrase(String.valueOf(currentDate), font)));
+                table.addCell(new PdfPCell(new Phrase(currentDate.getDayOfWeek().getDisplayName(TextStyle.FULL, lithuanian), font)));
+                previousDate = currentDate;
+            } else {
+                table.addCell(new PdfPCell());
+                table.addCell(new PdfPCell(new Phrase("", font)));
+            }
 
-            table.addCell(new PdfPCell(new Phrase(String.valueOf(lesson.getLessonDate()), font)));
-
-            table.addCell(new PdfPCell(new Phrase(lesson.getLessonDate().getDayOfWeek().getDisplayName(TextStyle.FULL, lithuanian), font)));
 
             table.addCell(new PdfPCell(new Phrase(String.valueOf(lesson.getLessonTime()), font)));
 
@@ -73,7 +81,6 @@ public class TeacherLessonPdfExporter {
             table.addCell(new PdfPCell(new Phrase(lesson.getSchedule().getGroup().getName(), font)));
 
             table.addCell(new PdfPCell(new Phrase(lesson.getRoom().getName(), font)));
-
         }
     }
 

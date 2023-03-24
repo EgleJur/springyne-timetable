@@ -11,6 +11,6 @@ INSERT INTO SUBJECT_TABLE (NAME, DESCRIPTION, LAST_UPDATED, DELETED, MODULE_ID) 
 ('React', 'Javascript ir ReactJS naudojimas', '2023-02-06 15:46:00.000', FALSE, 5),
 ('Įrankiai', 'Versijų kontrolės sistema Git', '2023-02-06 15:47:00.000', FALSE, 5);
 
-INSERT INTO SUBJECTS_IN_ROOMS VALUES (1,4),(2,5),(3,3),(4,4),(5,4),(6,4),(7,3),(8,3),(9,2),(10,1);
+INSERT INTO SUBJECTS_IN_ROOMS VALUES (1,4),(1,5),(2,3),(2,5),(3,1),(3,3),(4,4),(4,5),(5,6),(5,7),(6,4),(6,5),(7,3),(7,4),(8,9),(8,10),(9,11),(9,12),(10,1),(10,2);
 
 

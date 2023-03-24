@@ -222,7 +222,11 @@ public class ReportService {
             sheet.addMergedRegion(new CellRangeAddress(legendRowCount,legendRowCount,legendCellNumber,legendCellNumber + 2));
             legendCellNumber+=3;
             legendCell = legendRow.createCell(legendCellNumber);
-            legendCell.setCellValue(entry.getValue().get(0).getTeacher().getName());
+            if (entry.getValue().get(0).getTeacher() == null) {
+                legendCell.setCellValue("Mokytojas nepriskirtas");
+            } else {
+                legendCell.setCellValue(entry.getValue().get(0).getTeacher().getName());
+            }
             sheet.addMergedRegion(new CellRangeAddress(legendRowCount,legendRowCount,legendCellNumber,legendCellNumber + 2));
             legendCellNumber+=3;
             legendCell = legendRow.createCell(legendCellNumber);

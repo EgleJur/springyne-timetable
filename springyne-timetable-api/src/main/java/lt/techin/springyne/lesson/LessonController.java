@@ -63,7 +63,7 @@ public class LessonController {
     public ResponseEntity<List<Lesson>> addLesson(@Valid @RequestBody LessonBlock lessonBlock,
                                                   @PathVariable Long scheduleId,
                                                   @RequestParam Long subjectId,
-                                                  @RequestParam Long teacherId,
+                                                  @RequestParam(required = false) Long teacherId,
                                                   @RequestParam Long roomId) {
         return ResponseEntity.ok(lessonService.addLesson(lessonBlock, scheduleId,
                 subjectId, teacherId, roomId));
@@ -72,7 +72,7 @@ public class LessonController {
     @PatchMapping("/editSingleLesson/{lessonId}")
     public ResponseEntity<List<Lesson>> editLesson(@PathVariable Long lessonId,
                                                    @RequestParam Long subjectId,
-                                                   @RequestParam Long teacherId,
+                                                   @RequestParam(required = false) Long teacherId,
                                                    @RequestParam Long roomId) {
         return ResponseEntity.ok(lessonService.editSingleLesson(lessonId, subjectId, teacherId, roomId));
     }
@@ -80,7 +80,7 @@ public class LessonController {
     @PatchMapping("/editMultipleLessons/{scheduleId}")
     public ResponseEntity<List<Lesson>> editLessonList(@PathVariable Long scheduleId,
                                                        @RequestParam Long subjectId,
-                                                       @RequestParam Long teacherId,
+                                                       @RequestParam(required = false) Long teacherId,
                                                        @RequestParam Long roomId) {
         return ResponseEntity.ok(lessonService.editMultipleLessons(scheduleId, subjectId, teacherId, roomId));
     }

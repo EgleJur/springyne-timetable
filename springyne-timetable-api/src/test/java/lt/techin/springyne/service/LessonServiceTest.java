@@ -61,7 +61,7 @@ class LessonServiceTest {
         LocalDate startDate = LocalDate.parse("2022-01-01");
         LocalDate endDate = LocalDate.parse("2022-01-31");
 
-        when(lessonRepository.findAllByTeacherIdAndLessonDateBetween(teacher.getId(), startDate, endDate))
+        when(lessonRepository.findAllByTeacherIdAndLessonDateBetweenOrderByLessonDateAscLessonTimeAsc(teacher.getId(), startDate, endDate))
                 .thenReturn(lessons);
 
         // When

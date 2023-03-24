@@ -9,7 +9,7 @@ import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemText from "@mui/material/ListItemText";
 import List from "@mui/material/List";
-import LessonToCalendar from "./LessonToCalendar";
+import LessonToCalendar from "./LessonToCalendar1";
 import HolidayToCalendar from "./HolidayToCalendar";
 
 const Calendar = (props) => {

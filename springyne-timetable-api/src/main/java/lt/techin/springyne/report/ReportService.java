@@ -18,6 +18,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.time.temporal.TemporalAdjusters;
 import java.util.List;
 import java.util.Map;
@@ -32,6 +33,8 @@ public class ReportService {
 
     @Autowired
     LessonRepository lessonRepository;
+
+    DateTimeFormatter weekNumberDateFormatter = DateTimeFormatter.ofPattern("MM.dd");
 
     public void exportScheduleToExcel(Long scheduleId, HttpServletResponse response) throws IOException {
 
@@ -129,10 +132,7 @@ public class ReportService {
         IndexedColors.LIGHT_ORANGE.getIndex(), IndexedColors.MAROON.getIndex(), IndexedColors.PALE_BLUE.getIndex(),
         IndexedColors.ROYAL_BLUE.getIndex(), IndexedColors.SEA_GREEN.getIndex(), IndexedColors.SKY_BLUE.getIndex(), IndexedColors.TEAL.getIndex()};
 
-        CreationHelper createHelper = workbook.getCreationHelper();
-        short format = createHelper.createDataFormat().getFormat("mm.dd");
         CellStyle weekNumberColumnStyle = workbook.createCellStyle();
-        weekNumberColumnStyle.setDataFormat(format);
         weekNumberColumnStyle.setAlignment(HorizontalAlignment.CENTER);
 
         int dataRowCount = weekdayHeaderRowNumber + 2;
@@ -140,7 +140,7 @@ public class ReportService {
 
             Row dataRow = sheet.createRow(dataRowCount);
             Cell weekNumber = dataRow.createCell(0);
-            weekNumber.setCellValue(entry.getKey());
+            weekNumber.setCellValue(entry.getKey().format(weekNumberDateFormatter) + " - " + entry.getKey().plusDays(4L).format(weekNumberDateFormatter));
             weekNumber.setCellStyle(weekNumberColumnStyle);
 
             for (Lesson lesson : entry.getValue()) {
@@ -156,6 +156,7 @@ public class ReportService {
             }
             dataRowCount++;
         }
+        sheet.autoSizeColumn(0);
 
         CellRangeAddress mondayRegion = new CellRangeAddress(weekdayHeaderRowNumber, dataRowCount-1, 1, lessonsPerDay);
         RegionUtil.setBorderTop(BorderStyle.THIN, mondayRegion, sheet);
@@ -262,8 +263,6 @@ public class ReportService {
         RegionUtil.setBorderBottom(BorderStyle.THIN, timeLegendRegion, sheet);
         RegionUtil.setBorderLeft(BorderStyle.THIN, timeLegendRegion, sheet);
         RegionUtil.setBorderRight(BorderStyle.THIN, timeLegendRegion, sheet);
-
-
 
         ServletOutputStream outputStream = response.getOutputStream();
         workbook.write(outputStream);

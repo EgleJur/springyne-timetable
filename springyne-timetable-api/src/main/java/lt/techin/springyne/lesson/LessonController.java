@@ -157,7 +157,7 @@ public class LessonController {
 
         List<Lesson> listRoomLessons = lessonService.listRoomLessons(room.get().getId(), startDate, endDate);
 
-        RoomLessonPdfExporter exporter = new RoomLessonPdfExporter(listRoomLessons, room);
+        RoomLessonPdfExporter exporter = new RoomLessonPdfExporter(listRoomLessons, room, startDate, endDate);
         exporter.export(response);
     }
 }

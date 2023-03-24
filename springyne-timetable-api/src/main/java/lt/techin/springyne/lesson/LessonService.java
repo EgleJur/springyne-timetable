@@ -177,6 +177,11 @@ public class LessonService {
                     "Teacher is overbooked", teacherId.toString());
         }
 
+        if (lessons.size() == 0) {
+            throw new ScheduleValidationException("No lessons meet validation requirements", "lessonDate",
+                    "No lessons were created", lessonBlock.getStartDate().toString() + " - " + lessonBlock.getEndDate().toString());
+        }
+
         return lessonRepository.saveAll(lessons);
     }
 

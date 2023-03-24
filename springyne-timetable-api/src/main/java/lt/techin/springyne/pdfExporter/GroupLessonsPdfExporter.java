@@ -10,6 +10,7 @@ import lt.techin.springyne.schedule.Schedule;
 import javax.servlet.http.HttpServletResponse;
 import java.awt.*;
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -53,9 +54,18 @@ public class GroupLessonsPdfExporter {
 
     void writeTableData(PdfPTable table) {
         Font font = new Font(baseFont, 12);
+        LocalDate previousDate = null;
 
         for (Lesson lesson : lessonsBySchedule) {
-            table.addCell(new PdfPCell(new Phrase(String.valueOf(lesson.getLessonDate()), font)));
+            LocalDate currentDate = lesson.getLessonDate();
+
+            if (previousDate == null || !currentDate.isEqual(previousDate)) {
+                table.addCell(new PdfPCell(new Phrase(String.valueOf(currentDate), font)));
+                previousDate = currentDate;
+            } else {
+                table.addCell(new PdfPCell(new Phrase("", font))); // add empty cell to maintain table structure
+            }
+
             table.addCell(new PdfPCell(new Phrase(String.valueOf(lesson.getLessonTime()), font)));
             table.addCell(new PdfPCell(new Phrase(String.valueOf(lesson.getSubject().getName()), font)));
             table.addCell(new PdfPCell(new Phrase(String.valueOf(lesson.getTeacher().getName()), font)));

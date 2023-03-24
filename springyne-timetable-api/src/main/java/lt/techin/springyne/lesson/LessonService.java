@@ -195,9 +195,8 @@ public class LessonService {
         Subject subject = subjectRepository.findById(subjectId).orElseThrow(() -> new ScheduleValidationException("Subject does not exist",
                 "subject id", "Subject not found", subjectId.toString()));
 
-        List<Lesson> lessonsSameDay = lessonRepository.findAllByLessonDateAndSubjectId(existingLesson.getLessonDate(), subjectId);
-
-        //lessonsSameDay.stream().forEach();
+        List<Lesson> lessonsSameDay = lessonRepository.findAllByLessonDateAndSubjectIdAndScheduleId(existingLesson.getLessonDate(), subjectId,
+                existingLesson.getSchedule().getId());
 
         Teacher teacher;
 
@@ -210,22 +209,21 @@ public class LessonService {
                 throw new ScheduleValidationException("Teacher does not teach this subject", "teacher id",
                         "Teacher is invalid", subjectId.toString());
             }
+
+            List<Lesson> existingTeacherLessons = lessonRepository.findAllByTeacherIdAndLessonDateAndScheduleIdNot(teacherId,
+                    existingLesson.getLessonDate(), existingLesson.getSchedule().getId());
+            if (!existingTeacherLessons.isEmpty()) {
+                for (Lesson lesson : lessonsSameDay) {
+                    boolean isTeacherBusy = existingTeacherLessons.stream().anyMatch(teacherLesson -> teacherLesson.getLessonTime().equals(lesson.getLessonTime()));
+                    if (isTeacherBusy) {
+                        throw new ScheduleValidationException("Teacher time is already reserved in this period", "teacher id",
+                                "Teacher is busy", teacherId.toString());
+                    }
+                }
+            }
         } else {
             teacher = null;
         }
-        // existingLesson.setTeacher(teacher);
-//        List<Lesson> occupiedTeacher = new ArrayList<>();
-//        List<Lesson> occupiedRoom = new ArrayList<>();
-//        for (Lesson lesson : lessonsSameDay) {
-//            occupiedTeacher.add(lessonRepository.findByLessonDateAndTeacherIdAndLessonTime(lesson.getLessonDate(), teacherId, lesson.getLessonTime()));
-//            occupiedRoom.add(lessonRepository.findByLessonDateAndRoomIdAndLessonTime(lesson.getLessonDate(), roomId, lesson.getLessonTime()));
-//
-//        }
-
-//        if (occupiedTeacher.size() > 0) {
-//            throw new ScheduleValidationException("Teacher already has lessons this day", "teacher id",
-//                    "Teacher has lessons", teacherId.toString());
-//        }
 
         Room room = roomRepository.findById(roomId)
                 .orElseThrow(() -> new ScheduleValidationException("Room does not exist",
@@ -235,28 +233,25 @@ public class LessonService {
             throw new ScheduleValidationException("Subject cannot be taught in this room", "room id",
                     "Room is invalid", subjectId.toString());
         }
-//        if (occupiedRoom.size() > 0) {
-//            throw new ScheduleValidationException("Room already has lessons this day", "teacher id",
-//                    "Room has lessons", roomId.toString());
-//        }
-        //  existingLesson.setRoom(room);
 
-       // List<Lesson> lessonsSameDay = lessonRepository.findAllBySubjectIdAndScheduleId(subjectId, scheduleId);
+        List<Lesson> existingRoomLessons = lessonRepository.findAllByRoomIdAndLessonDateAndScheduleIdNot(roomId, existingLesson.getLessonDate(),
+                existingLesson.getSchedule().getId());
+        if (!existingRoomLessons.isEmpty()) {
+            for (Lesson lesson : lessonsSameDay) {
+                boolean isRoomBusy = existingRoomLessons.stream().anyMatch(roomLesson -> roomLesson.getLessonTime().equals(lesson.getLessonTime()));
+                if (isRoomBusy) {
+                    throw new ScheduleValidationException("Room is already reserved in this period", "room id",
+                            "Room is busy", roomId.toString());
+                }
+            }
+        }
+
         for (Lesson lesson : lessonsSameDay) {
-//            if (teacherId != null) {
-//                lesson.setTeacher(teacher);
-//                if (roomId != null) {
-//                    lesson.setRoom(room);
-//                }
-//            } else if (roomId != null) {
-//                lesson.setRoom(room);
-//            }
             lesson.setTeacher(teacher);
             lesson.setRoom(room);
         }
 
         return lessonRepository.saveAll(lessonsSameDay);
-        //return lessonRepository.save(existingLesson);
     }
 
     public List<Lesson> editMultipleLessons(Long scheduleId, Long subjectId, Long teacherId, Long roomId) {
@@ -270,6 +265,7 @@ public class LessonService {
                         "subject id", "Subject not found", subjectId.toString()));
 
         Shift shift = schedule.getGroup().getShift();
+        List<Lesson> lessons = lessonRepository.findAllBySubjectIdAndScheduleId(subjectId, scheduleId);
 
         Teacher teacher;
 
@@ -285,6 +281,19 @@ public class LessonService {
                 throw new ScheduleValidationException("Teacher does not teach on these hours", "teacher id",
                         "Teacher is invalid", subjectId.toString());
             }
+            List<Lesson> existingTeacherLessons = lessonRepository.findAllByTeacherIdAndScheduleIdNot(teacherId, scheduleId);
+
+            if (!existingTeacherLessons.isEmpty()) {
+                for (Lesson lesson : lessons) {
+                    boolean isTeacherBusy = existingTeacherLessons.stream().anyMatch(teacherLesson -> teacherLesson.getLessonDate()
+                            .equals(lesson.getLessonDate()) && teacherLesson.getLessonTime().equals(lesson.getLessonTime()));
+                    if (isTeacherBusy) {
+                        throw new ScheduleValidationException("Teacher time is already reserved in this period", "teacher id",
+                                "Teacher is busy", teacherId.toString());
+                    }
+                }
+            }
+
         } else {
             teacher = null;
         }
@@ -297,22 +306,26 @@ public class LessonService {
             throw new ScheduleValidationException("Subject cannot be taught in this room", "room id",
                     "Room is invalid", subjectId.toString());
         }
-        List<Lesson> lessons = lessonRepository.findAllBySubjectIdAndScheduleId(subjectId, scheduleId);
+
+        List<Lesson> existingRoomLessons = lessonRepository.findAllByRoomIdAndScheduleIdNot(roomId, scheduleId);
+        if (!existingRoomLessons.isEmpty()) {
+            for (Lesson lesson : lessons) {
+                boolean isRoomBusy = existingRoomLessons.stream().anyMatch(roomLesson -> roomLesson.getLessonDate()
+                                .equals(lesson.getLessonDate()) && roomLesson.getLessonTime().equals(lesson.getLessonTime()));
+                if (isRoomBusy) {
+                    throw new ScheduleValidationException("Room is already reserved in this period", "room id",
+                            "Room is busy", roomId.toString());
+                }
+            }
+        }
         for (Lesson lesson : lessons) {
-//            if (teacherId != null) {
-//                lesson.setTeacher(teacher);
-//                if (roomId != null) {
-//                    lesson.setRoom(room);
-//                }
-//            } else if (roomId != null) {
-//                lesson.setRoom(room);
-//            }
             lesson.setRoom(room);
             lesson.setTeacher(teacher);
         }
 
         return lessonRepository.saveAll(lessons);
     }
+
     public boolean deleteLessonsByDateAndId(Long lessonId) {
         Optional<Lesson> lesson = lessonRepository.findById(lessonId);
         if (lesson.isPresent()) {

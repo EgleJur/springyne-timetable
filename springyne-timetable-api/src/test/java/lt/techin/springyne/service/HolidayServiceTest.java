@@ -79,10 +79,18 @@ public class HolidayServiceTest {
         Holiday holiday2 = new Holiday(2L,"New Year's Day", LocalDate.of(2023, 1, 1), LocalDate.of(2023, 1, 2), false);
         Holiday holiday3 = new Holiday(3L,"Easter", LocalDate.of(2023, 4, 16), LocalDate.of(2023, 4, 17), false);
         List<Holiday> holidays = Arrays.asList(holiday1, holiday2, holiday3);
-        when(holidaysRepository.findAllOrderByStartsAsc()).thenReturn(holidays);
+        int yearNow = LocalDate.now().getYear();
+        when(holidaysRepository.findAll()).thenReturn(holidays);
+
+        List<Holiday> sortedHolidayList = holidays.stream()
+                .sorted(Comparator.comparing(Holiday::getStarts))
+                .collect(Collectors.toList());
+        List<Holiday> holidayList = sortedHolidayList.stream()
+                .filter(holidayDate -> holidayDate.getStarts().getYear() == yearNow || holidayDate.getEnds().getYear() == yearNow)
+                .collect(Collectors.toList());
 
         List<Holiday> result = holidayService.searchByNameAndDate(null, null, null);
-        assertEquals(holidays, result);
+        assertEquals(holidayList, result);
     }
 
     @Test

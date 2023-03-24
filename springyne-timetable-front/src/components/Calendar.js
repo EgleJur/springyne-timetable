@@ -9,7 +9,7 @@ import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemText from "@mui/material/ListItemText";
 import List from "@mui/material/List";
-import LessonToCalendar from "./LessonToCalendar1";
+import LessonToCalendar from "./LessonToCalendar";
 import HolidayToCalendar from "./HolidayToCalendar";
 
 const Calendar = (props) => {
@@ -27,6 +27,7 @@ const Calendar = (props) => {
     const shift = [];
     let starts = schedule?.group?.shift?.starts;
     let ends = schedule?.group?.shift?.ends;
+    // console.log(schedule);
     for (let i = starts; i <= ends; i++) {
       shift.push(
         <ListItem disablePadding>

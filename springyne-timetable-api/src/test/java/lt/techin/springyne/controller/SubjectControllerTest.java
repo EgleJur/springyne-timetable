@@ -214,7 +214,7 @@ class SubjectControllerTest {
     @Test
     void editSubjectThrowsExceptionWithEmptyValues() throws Exception {
         SubjectDto testSubjectDto5 = new SubjectDto("", "HTML, CSS, Bootstrap");
-        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.patch("/api/v1/subjects/edit/4?moduleId=4").contentType(MediaType.APPLICATION_JSON).
+        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.patch("/api/v1/subjects/edit/1?moduleId=1").contentType(MediaType.APPLICATION_JSON).
                 content(objectMapper.writeValueAsString(testSubjectDto5))).andReturn();
 
         assertEquals(400, mvcResult.getResponse().getStatus(),"Empty value name should return bad request status");
@@ -224,7 +224,7 @@ class SubjectControllerTest {
     @Test
     void editSubjectAllowsSavingWithUniqueName() throws Exception {
 
-        SubjectDto testSubjectDto4 = new SubjectDto("Tarnybinės stotys ir operacinės sistemos2","Serveriai, programiniai paketai");
+        SubjectDto testSubjectDto4 = new SubjectDto("Tarnybinės stotys ir operacinės sistemos","Serveriai, programiniai paketai");
         MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders
                 .patch("/api/v1/subjects/edit/4")
                 .contentType(MediaType.APPLICATION_JSON)

@@ -2,10 +2,7 @@ package lt.techin.springyne.controller;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import lt.techin.springyne.schedule.Schedule;
-import lt.techin.springyne.schedule.ScheduleController;
-import lt.techin.springyne.schedule.ScheduleDto;
-import lt.techin.springyne.schedule.ScheduleService;
+import lt.techin.springyne.schedule.*;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -16,6 +13,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
@@ -26,6 +24,10 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+import static org.springframework.test.web.client.match.MockRestRequestMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
@@ -118,15 +120,16 @@ public class ScheduleControllerTest {
 
     @Test
     void addScheduleThrowsExceptionWithOverlappingHours() throws Exception {
-        ScheduleDto testScheduleDto1 = new ScheduleDto("Test Name" + LocalDateTime.now(), LocalDate.of(2023,10,1),
-                LocalDate.of(2023,11,01));
+        ScheduleDto testScheduleDto1 = new ScheduleDto("JP-22/1 Programinės įrangos testuotojas (-a) Rytinė", LocalDate.of(2023,9,4),
+                LocalDate.of(2023,9,5));
         String message = "Overlapping dates should return bad request status";
 
-        MvcResult mvcResult1 = mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/schedules?groupId=1").contentType(MediaType.APPLICATION_JSON).
+        MvcResult mvcResult1 = mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/schedules?groupId=2").contentType(MediaType.APPLICATION_JSON).
                 content(objectMapper.writeValueAsString(testScheduleDto1))).andReturn();
 
         assertEquals(400,mvcResult1.getResponse().getStatus(), message);
     }
+
 
     //deletes from database
 //    @Test

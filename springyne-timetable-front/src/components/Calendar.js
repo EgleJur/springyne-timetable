@@ -27,6 +27,7 @@ const Calendar = (props) => {
     const shift = [];
     let starts = schedule?.group?.shift?.starts;
     let ends = schedule?.group?.shift?.ends;
+    // console.log(schedule);
     for (let i = starts; i <= ends; i++) {
       shift.push(
         <ListItem disablePadding>

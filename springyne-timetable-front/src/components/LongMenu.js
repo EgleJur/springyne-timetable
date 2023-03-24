@@ -124,6 +124,7 @@ const LongMenu = ({ color, lesson, lessonId, subjectId, teacherId, roomId, start
     }
     };
     const deleteLesson = (lessonId, starts, ends) => {
+        
         fetch(
           `${apiUrl}/api/v1/lessons/${lessonId}?startTime=${starts}&endTime=${ends}`,
           {
@@ -136,7 +137,7 @@ const LongMenu = ({ color, lesson, lessonId, subjectId, teacherId, roomId, start
           .then((result) => {
             if (result.ok) {
               // Handle successful deletion
-              console.log("Lesson deleted successfully.");
+              console.log("Lesson deleted successfully." + lessonId);
               //window.location.reload(true);
               onLessonEdited();
             } else {
@@ -196,7 +197,7 @@ const LongMenu = ({ color, lesson, lessonId, subjectId, teacherId, roomId, start
                 <MenuItem key='Redaguoti' selected={'Redaguoti' === 'Pyxis'} onClick={() => setOpenEdit(true)}>
                     Redaguoti
                 </MenuItem>
-                <MenuItem key='Istrinti' selected={'Ištrinti' === 'Pyxis'} onClick={handleDelete}>
+                <MenuItem key='Ištrinti' selected={'Ištrinti' === 'Pyxis'} onClick={handleDelete}>
                     Ištrinti
                 </MenuItem>
             </Menu>

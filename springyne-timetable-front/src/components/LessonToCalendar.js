@@ -26,103 +26,107 @@ const LessonToCalendar = (d, shedules, lessons, currentMonth, onLessonEdited, se
 	}));
 
 	const lessonList = [];
-
+	let start = parseInt(shedules?.group?.shift?.starts);
+	let end = parseInt(shedules?.group?.shift?.ends);
 	const result = lessons.filter((e) =>
 		dayjs(e?.lessonDate).format('YYYY-MM') === currentMonth.format("YYYY-MM")
 		&& parseInt(dayjs(e?.lessonDate).format('D')) === d.day)
 		.sort((a, b) => a.lessonTime > b.lessonTime ? 1 : -1);
-	let subjectName = "";
-	let teacherName = "";
-	let room = "";
-	let later = 0;
 	let starts = shedules?.group?.shift?.starts;
 	let ends = shedules?.group?.shift?.ends;
-	result.forEach((less, index) => {
-		let colorId = less?.subject?.id;
-		//console.log(colorArray[colorId]);
-		if (less?.lessonTime > starts && later === 0) {
-			for (let n = starts; n < less?.lessonTime; n++)
-				lessonList.push(
-					<ListItem disablePadding>
-						<ListItemButton sx={{ height: "40px", p: 0 }}>
-							<ListItemText primary="" />
-						</ListItemButton>
-					</ListItem>
+	// console.log(starts);
+	let teacherName = "";
+	let room = "";
 
-				)
-			later++;
-		}
-		if (less.subject.id !== result[index - 1]?.subject.id) {
-			const lessonId = less.id;
-			const subjectId = less.subject.id;
-			const teacherId = less.teacher.id;
-			const roomId = less.room.id;
+	while (start <= end) {
+		let lessonFound = false;
+		result.forEach((less, index) => {
+			let lessonTime = parseInt(less.lessonTime);
+			let colorId = less.subject.id;
+const lessonId = less.id;
+					const subjectId = less.subject.id;
+					const teacherId = less.teacher.id;
+					const roomId = less.room.id;
+			if (start === lessonTime) {
+				lessonFound = true;
+				if (less.subject.id !== result[index - 1]?.subject.id) {
+					
+					teacherName = "";
+					room = "";
+					lessonList.push(
+						<ListItem disablePadding>
+							<LightTooltip title={`${less.teacher.name}\n${less.room.name}`}
+							>
+								<ListItemButton sx={{ height: "40px", p: 1, bgcolor: colorArray[colorId % 20] }}>
+									<ListItemText
+										sx={{ fontSize: "0.85rem", m: 0 }}
+										disableTypography
+										primary={less.subject.name} />
+								</ListItemButton>
+							</LightTooltip>
+							{/* {console.log(lessonId +" id")} */}
+							<LongMenu color={colorArray[colorId]}
+								lesson={less}
+								lessonId={lessonId} subjectId={subjectId}
+								teacherId={teacherId} roomId={roomId}
+								starts={starts} ends={ends}
+								onLessonEdited={onLessonEdited} setSuccess={setSuccess}
+								setFailure={setFailure} />
+						</ListItem>
+					)
+					starts++;
+				}
+				else if (less.teacher.name !== teacherName
+					&& less.subject.id === result[index - 1].subject.id) {
+					lessonList.push(
+						<ListItem disablePadding>
+							<ListItemButton sx={{ height: "40px", p: 1, bgcolor: colorArray[colorId % 20] }}>
+								<ListItemText
+									sx={{ fontSize: "0.85rem", fontWeight: 300, m: 0 }}
+									disableTypography
+									primary={less.teacher.name} />
+							</ListItemButton>
+						</ListItem>
+					)
+					teacherName = less.teacher.name;
+					starts++;
+				}
+				else if (less.room.name !== room && less.subject.id === result[index - 1]?.subject.id && less.teacher.id === result[index - 1]?.teacher.id) {
+					lessonList.push(
+						<ListItem disablePadding>
+							<ListItemButton sx={{ height: "40px", p: 1, bgcolor: colorArray[colorId % 20] }}>
+								<ListItemText
+									sx={{ fontSize: "0.85rem", fontWeight: 300, m: 0 }}
+									disableTypography
+									primary={less.room.name} />
+							</ListItemButton>
+						</ListItem>
+					)
+					room = less.room.name;
+				}
+				else {
+					lessonList.push(
+						<ListItem disablePadding>
+							<ListItemButton sx={{ height: "40px", p: 0, bgcolor: colorArray[colorId % 20] }}>
+								<ListItemText primary="" />
+							</ListItemButton>
+						</ListItem>
+					)
+				}
+			}
+		});
+
+		if (!lessonFound) {
 			lessonList.push(
-				<ListItem disablePadding>
-					<LightTooltip title={`${less.teacher.name}\n${less.room.name}`}
-					>
-						<ListItemButton sx={{ height: "40px", p: 1, bgcolor: colorArray[colorId % 20] }}>
-							<ListItemText
-								sx={{ fontSize: "0.85rem", m: 0 }}
-								disableTypography
-								primary={less.subject.name} />
-						</ListItemButton>
-					</LightTooltip>
-					{/* {console.log(lessonId +" id")} */}
-					<LongMenu color={colorArray[colorId]}
-						lesson={less}
-						lessonId={lessonId} subjectId={subjectId}
-						teacherId={teacherId} roomId={roomId}
-						starts={starts} ends={ends}
-						onLessonEdited={onLessonEdited} setSuccess={setSuccess}
-						setFailure={setFailure} />
-				</ListItem>
-
-			)
-
-			subjectName = less.subject.name;
-			starts++;
-		}
-		else if (less.teacher.name !== teacherName
-			&& less.subject.id === result[index - 1].subject.id) {
-			lessonList.push(
-				<ListItem disablePadding>
-					<ListItemButton sx={{ height: "40px", p: 1, bgcolor: colorArray[colorId % 20] }}>
-						<ListItemText
-							sx={{ fontSize: "0.85rem", fontWeight: 300, m: 0 }}
-							disableTypography
-							primary={less.teacher.name} />
+				<ListItem key={`${start}-empty`} disablePadding>
+					<ListItemButton sx={{ height: "40px", p: 1 }}>
+						<ListItemText sx={{ fontSize: "0.85rem", m: 0 }} disableTypography primary="" />
 					</ListItemButton>
 				</ListItem>
-			)
-			teacherName = less.teacher.name;
-			starts++;
+			);
 		}
-		else if (less.room.name !== room && less.subject.id === result[index - 1]?.subject.id && less.teacher.id === result[index - 1]?.teacher.id) {
-			lessonList.push(
-				<ListItem disablePadding>
-					<ListItemButton sx={{ height: "40px", p: 1, bgcolor: colorArray[colorId % 20] }}>
-						<ListItemText
-							sx={{ fontSize: "0.85rem", fontWeight: 300, m: 0 }}
-							disableTypography
-							primary={less.room.name} />
-					</ListItemButton>
-				</ListItem>
-			)
-			room = less.room.name;
-		}
-
-		else {
-			lessonList.push(
-				<ListItem disablePadding>
-					<ListItemButton sx={{ height: "40px", p: 0, bgcolor: colorArray[colorId % 20] }}>
-						<ListItemText primary="" />
-					</ListItemButton>
-				</ListItem>
-			)
-		}
-		starts++;
-	});
+		start++;
+	}
 	return <List>{lessonList}</List>
 };
 

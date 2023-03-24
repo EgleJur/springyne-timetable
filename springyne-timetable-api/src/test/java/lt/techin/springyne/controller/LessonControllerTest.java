@@ -1,7 +1,10 @@
 package lt.techin.springyne.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import lt.techin.springyne.lesson.*;
+import lt.techin.springyne.lesson.Lesson;
+import lt.techin.springyne.lesson.LessonBlock;
+import lt.techin.springyne.lesson.LessonController;
+import lt.techin.springyne.lesson.LessonService;
 import lt.techin.springyne.room.Room;
 import lt.techin.springyne.schedule.Schedule;
 import lt.techin.springyne.shift.Shift;
@@ -20,21 +23,18 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-
-import java.time.LocalDate;
-
-import static org.junit.Assert.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.when;
-
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
+import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;

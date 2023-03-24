@@ -217,7 +217,7 @@ public class LessonControllerTest {
         LessonBlock testLessonBlock = new LessonBlock(LocalDate.of(2023,9,1), LocalDate.of(2023,9,1), 1, 4);
 
         String message = "Adding lesson with room not fitting this subject should return bad request status";
-        MvcResult mvcResult1 = mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/lessons/schedule/1?subjectId=3&teacherId=3&roomId=1")
+        MvcResult mvcResult1 = mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/lessons/schedule/1?subjectId=3&teacherId=3&roomId=6")
                 .contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(testLessonBlock))).andReturn();
 
         assertEquals(400,mvcResult1.getResponse().getStatus(), message);
@@ -228,7 +228,7 @@ public class LessonControllerTest {
         LessonBlock testLessonBlock = new LessonBlock(LocalDate.of(2023,9,4), LocalDate.of(2023,9,4), 9, 14);
 
         String message = "Adding lesson with time outside of teacher's working hours should return bad request status";
-        MvcResult mvcResult1 = mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/lessons/schedule/4?subjectId=3&teacherId=3&roomId=3")
+        MvcResult mvcResult1 = mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/lessons/schedule/4?subjectId=1&teacherId=6&roomId=4")
                 .contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(testLessonBlock))).andReturn();
 
         assertEquals(400,mvcResult1.getResponse().getStatus(), message);

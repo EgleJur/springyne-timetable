@@ -19,6 +19,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import static java.lang.Boolean.FALSE;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -109,14 +110,12 @@ class ModuleControllerTest {
     }
     @Test
     void editModuleAllowsSavingWithUniqueNumber() throws Exception {
-        ModuleDto testModuleDto4 = new ModuleDto(LocalDateTime.now().toString(), "Įvadinis modulis");
+        ModuleDto testModuleDto4 = new ModuleDto("004", "Įvadinis modulis", FALSE);
         MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.patch("/api/v1/modules/update/4").contentType(MediaType.APPLICATION_JSON).
                 content(objectMapper.writeValueAsString(testModuleDto4))).andReturn();
 
         assertEquals(200, mvcResult.getResponse().getStatus(),"Unique value number and non empty name should return ok status");
     }
-
-
 
     public MvcResult performModulePostBadRequest(ModuleDto moduleDto) throws Exception {
 

@@ -134,8 +134,8 @@ void getAllTeachersContainsCorrectDtos() throws Exception {
     }
     @Test
     void editTeacherAllowsSavingWithCorrectValues() throws Exception {
-        TeacherDto testTeacherDto2 = new TeacherDto("Alma Almaitė" + LocalDateTime.now().toString(), "AlmaA", "almaA@gmail.com", "822 555 44445", 40, false);
-        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.patch("/api/v1/teachers/update/4?shiftId=1&subjectId=1").contentType(MediaType.APPLICATION_JSON).
+        TeacherDto testTeacherDto2 = new TeacherDto("Alma Almaitė", "AlmaA", "almaA@gmail.com", "822 555 44444", 35, false);
+        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.patch("/api/v1/teachers/update/4?shiftId=5&subjectId=5").contentType(MediaType.APPLICATION_JSON).
                 content(objectMapper.writeValueAsString(testTeacherDto2))).andReturn();
 
         Teacher resultTeacher = objectMapper.readValue(mvcResult.getResponse().getContentAsString(), new TypeReference<Teacher>() {});
@@ -143,13 +143,13 @@ void getAllTeachersContainsCorrectDtos() throws Exception {
         assertEquals(200, mvcResult.getResponse().getStatus(),"Unique non empty name should return ok status");
         assertEquals("AlmaA", resultTeacher.getTeamsEmail(), "Should allow editing teams email");
         assertEquals("almaA@gmail.com", resultTeacher.getEmail(), "Should allow editing email");
-        assertEquals("822 555 44445", resultTeacher.getPhone(), "Should allow editing phone");
-        assertEquals(40, resultTeacher.getHours(), "Should allow editing hours");
+        assertEquals("822 555 44444", resultTeacher.getPhone(), "Should allow editing phone");
+        assertEquals(35, resultTeacher.getHours(), "Should allow editing hours");
 
     }
     @Test
     void editTeacherThrowsExceptionWithInvalidShiftValue() throws Exception {
-        TeacherDto testTeacherDto = new TeacherDto("Jonė Jonienė", "JoneJ", "jone@gmail.com", "822 555 55555", 5, false);
+        TeacherDto testTeacherDto = new TeacherDto("Jonė Jonienė", "JoneJ", "jone@gmail.com", "822 555 55555", 35, false);
         MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.patch("/api/v1/teachers/update/5?shiftId=0").contentType(MediaType.APPLICATION_JSON).
                 content(objectMapper.writeValueAsString(testTeacherDto))).andReturn();
         assertEquals(400,mvcResult.getResponse().getStatus(),
@@ -157,8 +157,8 @@ void getAllTeachersContainsCorrectDtos() throws Exception {
     }
     @Test
     void editTeacherThrowsExceptionWithInvalidSubjectValue() throws Exception {
-        TeacherDto testTeacherDto = new TeacherDto("Jonė Jonienė", "JoneJ", "jone@gmail.com", "822 555 55555", 5, false);
-        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.patch("/api/v1/teachers/update/5?shiftId=3&subjectId=0").contentType(MediaType.APPLICATION_JSON).
+        TeacherDto testTeacherDto = new TeacherDto("Jonė Jonienė", "JoneJ", "jone@gmail.com", "822 555 55555", 35, false);
+        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.patch("/api/v1/teachers/update/5?shiftId=5&subjectId=0").contentType(MediaType.APPLICATION_JSON).
                 content(objectMapper.writeValueAsString(testTeacherDto))).andReturn();
         assertEquals(400,mvcResult.getResponse().getStatus(),
                 "Non existing subject id should return bad request status");

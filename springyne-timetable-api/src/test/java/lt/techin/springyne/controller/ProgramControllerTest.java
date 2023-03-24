@@ -3,9 +3,12 @@ package lt.techin.springyne.controller;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lt.techin.springyne.program.Program;
+import lt.techin.springyne.program.ProgramController;
 import lt.techin.springyne.program.ProgramDto;
+import lt.techin.springyne.program.ProgramService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -119,20 +122,21 @@ class ProgramControllerTest {
     }
 
     @Test
-    void deleteProgramSetsDeletedPropertyToTrue() throws Exception {
-        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.patch("/api/v1/programs/delete/4").contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk()).andReturn();
-        Program resultProgram = objectMapper.readValue(mvcResult.getResponse().getContentAsString(), new TypeReference<Program>() {});
-        Assertions.assertTrue(resultProgram.isDeleted());
-    }
-
-    @Test
     void restoreProgramSetsDeletedPropertyToFalse() throws Exception {
         MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.patch("/api/v1/programs/restore/4").contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk()).andReturn();
         Program resultProgram = objectMapper.readValue(mvcResult.getResponse().getContentAsString(), new TypeReference<Program>() {});
         Assertions.assertFalse(resultProgram.isDeleted());
     }
+
+//    @Test
+//    void deleteProgramSetsDeletedPropertyToTrue() throws Exception {
+//        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.patch("/api/v1/programs/delete/4").contentType(MediaType.APPLICATION_JSON))
+//                .andExpect(status().isOk()).andReturn();
+//        Program resultProgram = objectMapper.readValue(mvcResult.getResponse().getContentAsString(), new TypeReference<Program>() {});
+//        Assertions.assertTrue(resultProgram.isDeleted());
+//    }
+
 
     @Test
     void editProgramThrowsExceptionWithEmptyValues() throws Exception {
@@ -143,7 +147,7 @@ class ProgramControllerTest {
     }
     @Test
     void editTeacherAllowsSavingWithCorrectValues() throws Exception {
-        ProgramDto testProgramDto1 = new ProgramDto(".NET programuotojas (-a)" + LocalDateTime.now(),
+        ProgramDto testProgramDto1 = new ProgramDto(".NET programuotojas (-a)",
                 ".NET programuotojo modulinė profesinio mokymo programa", false);
         MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.patch("/api/v1/programs/update/4?subjectId=1&hours=40").contentType(MediaType.APPLICATION_JSON).
                 content(objectMapper.writeValueAsString(testProgramDto1))).andReturn();

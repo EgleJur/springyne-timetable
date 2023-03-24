@@ -19,11 +19,13 @@ public interface LessonRepository extends JpaRepository<Lesson,Long> {
     Lesson findBySubjectIdAndScheduleId(Long subjectId, Long sheduleId);
 
     List<Lesson> findAllByLessonDateAndSubjectId(LocalDate lessonDate, Long subjectId);
+    List<Lesson> findAllByLessonDateAndSubjectIdAndScheduleId(LocalDate lessonDate, Long subjectId, Long scheduleId);
     Lesson findByLessonDateAndTeacherIdAndLessonTime(LocalDate lessonDate, Long teacherId, Integer lessonTime);
 
     Lesson findByLessonDateAndRoomIdAndLessonTime(LocalDate lessonDate, Long roomId, Integer lessonTime);
 
     List<Lesson> findAllByTeacherId(Long teacherId);
+    List<Lesson> findAllByTeacherIdAndLessonDate(Long teacherId, LocalDate lessonDate);
     List<Lesson> findAllByTeacherIdAndLessonDateBetweenOrderByLessonDateAscLessonTimeAsc(Long teacherId, LocalDate startDate, LocalDate endDate);
 
     List<Lesson> findAllByRoomIdAndLessonDateBetweenOrderByLessonDateAscLessonTimeAsc(Long roomId, LocalDate startDate, LocalDate endDate);
@@ -31,4 +33,11 @@ public interface LessonRepository extends JpaRepository<Lesson,Long> {
 
     List<Lesson> findByScheduleIdOrderByLessonDateAscLessonTimeAsc(Long scheduleId);
 
+    List<Lesson> findAllByRoomIdAndLessonDate(Long roomId, LocalDate lessonDate);
+
+    List<Lesson> findAllByTeacherIdAndLessonDateAndScheduleIdNot(Long teacherId, LocalDate lessonDate, Long ScheduleId);
+    List<Lesson> findAllByTeacherIdAndScheduleIdNot(Long teacherId, Long ScheduleId);
+
+    List<Lesson> findAllByRoomIdAndLessonDateAndScheduleIdNot(Long roomId, LocalDate lessonDate, Long scheduleId);
+    List<Lesson> findAllByRoomIdAndScheduleIdNot(Long roomId, Long scheduleId);
 }

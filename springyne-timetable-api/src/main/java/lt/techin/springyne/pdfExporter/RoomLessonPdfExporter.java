@@ -91,7 +91,11 @@ public class RoomLessonPdfExporter {
                         table.addCell(new PdfPCell(new Phrase("", font)));
                     }
                     table.addCell(new PdfPCell(new Phrase(String.valueOf(lesson.getLessonTime()), font)));
-                    table.addCell(new PdfPCell(new Phrase(lesson.getTeacher().getName(), font)));
+                    if (lesson.getTeacher() == null) {
+                        table.addCell(new PdfPCell(new Phrase("Mokytojas nepriskirtas", font)));
+                    } else {
+                        table.addCell(new PdfPCell(new Phrase(lesson.getTeacher().getName(), font)));
+                    }
                     table.addCell(new PdfPCell(new Phrase(lesson.getSchedule().getGroup().getName(), font)));
                     previousLessonDate = currentDate;
                 }

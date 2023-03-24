@@ -14,7 +14,6 @@ import { Alert, Collapse } from "@mui/material";
 import { apiUrl } from "../App";
 import { format, isSameDay, isSaturday, isSunday } from "date-fns";
 
-
 function PlanSchedulePage() {
   const params = useParams();
   const [schedule, setSchedule] = useState({});
@@ -28,7 +27,7 @@ function PlanSchedulePage() {
   const [startTimeError, setStartTimeError] = useState(false);
   const [endTimeError, setEndTimeError] = useState(false);
   const [subjectError, setSubjectError] = useState("");
-  const [teacherError, setTeacherError] = useState("");
+  // const [teacherError, setTeacherError] = useState("");
   const [roomError, setRoomError] = useState("");
   const [selectedSubject, setSelectedSubject] = useState("");
   const [selectedTeacher, setSelectedTeacher] = useState("");
@@ -40,9 +39,10 @@ function PlanSchedulePage() {
   const [failure, setFailure] = useState(false);
   const times = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14];
   const [lessons, setLessons] = useState([]);
-  const holidayInDatePicker = ([]);
-  
-  const fetchShedule=()=>{
+  const holidayInDatePicker = [];
+  const [emptyTeacherWarning, setEmptyTeacherWarning] = useState(false);
+
+  const fetchShedule = () => {
     fetch(`${apiUrl}/api/v1/schedules/` + params.id)
       .then((response) => response.json())
       .then((jsonResponse) => setSchedule(jsonResponse));
@@ -63,7 +63,7 @@ function PlanSchedulePage() {
 
   useEffect(fetchTeachers, [selectedSubject, schedule]);
 
-   const [holidays, setHolidays] = useState([]);
+  const [holidays, setHolidays] = useState([]);
 
   const fetchHolidays = () => {
     fetch(`${apiUrl}/api/v1/holidays/search?name=${""}&from=${""}&to=${""}`)
@@ -94,6 +94,13 @@ function PlanSchedulePage() {
   };
   useEffect(fetchLessons, [params]);
 
+  const validateSchedule = () => {
+    if (lessons.some(lesson => lesson.teacher === undefined || lesson.teacher === null || lesson.teacher === "")) {
+      setEmptyTeacherWarning(true);
+    }
+  }
+  useEffect(validateSchedule,[lessons])
+
   const handleSubjectSelection = (subjectValue) => {
     setSelectedSubject(subjectValue);
     const existingLessons = lessons.filter(
@@ -101,20 +108,25 @@ function PlanSchedulePage() {
     );
     if (existingLessons.length > 0) {
       setSelectedRoom(existingLessons[0].room.id);
-      setSelectedTeacher(existingLessons[0].teacher.id);
+      setSelectedTeacher(
+        existingLessons[0].teacher === null ||
+          existingLessons[0].teacher === undefined ||
+          existingLessons[0].teacher === ""
+          ? ""
+          : existingLessons[0].teacher.id
+      );
     } else {
       setSelectedRoom("");
       setSelectedTeacher("");
     }
   };
 
-
   const createNewLesson = (e) => {
     e.preventDefault();
     setStartDateError(false);
     setEndDateError(false);
     setSubjectError(false);
-    setTeacherError(false);
+    // setTeacherError(false);
     setRoomError(false);
     setStartTimeError(false);
     setEndTimeError(false);
@@ -122,8 +134,8 @@ function PlanSchedulePage() {
       selectedSubject === null ||
       selectedRoom === null ||
       selectedRoom === "" ||
-      selectedTeacher === null ||
-      selectedTeacher === "" ||
+      // selectedTeacher === null ||
+      // selectedTeacher === "" ||
       startDateValue === null ||
       endDateValue === null ||
       startDateValue > endDateValue ||
@@ -139,9 +151,9 @@ function PlanSchedulePage() {
       if (selectedSubject === "" || selectedSubject === null) {
         setSubjectError(true);
       }
-      if (selectedTeacher === "" || selectedTeacher === null) {
-        setTeacherError(true);
-      }
+      // if (selectedTeacher === "" || selectedTeacher === null) {
+      //   setTeacherError(true);
+      // }
       if (selectedRoom === "" || selectedRoom === null) {
         setRoomError(true);
       }
@@ -198,7 +210,7 @@ function PlanSchedulePage() {
           setStartTimeError(false);
           setEndTimeError(false);
           setSubjectError(false);
-          setTeacherError(false);
+          // setTeacherError(false);
           setRoomError(false);
           setSuccess(true);
           setFailure(false);
@@ -219,87 +231,106 @@ function PlanSchedulePage() {
     }
   };
 
-const errorOrSucsess=()=>{
-  return(
-    <div>
-<Collapse in={success}>
-        <Alert
-          onClose={() => {
-            setSuccess(false);
-          }}
-          severity="success"
-          className="mb-3"
-        >
-          Įrašas sėkmingai atnaujintas
-        </Alert>
-      </Collapse>
+  const errorOrSucsess = () => {
+    return (
+      <div>
 
-      <Collapse in={failure}>
-        <Alert
-          onClose={() => {
-            setFailure(false);
-          }}
-          severity="error"
-          className="mb-3"
-        >
-          Įrašo nepavyko atnaujinti
-        </Alert>
-      </Collapse>
+        <Collapse in={success}>
+          <Alert
+            onClose={() => {
+              setSuccess(false);
+            }}
+            severity="success"
+            className="mb-3"
+          >
+            Įrašas sėkmingai atnaujintas
+          </Alert>
+        </Collapse>
+
+        <Collapse in={failure}>
+          <Alert
+            onClose={() => {
+              setFailure(false);
+            }}
+            severity="error"
+            className="mb-3"
+          >
+            Įrašo nepavyko atnaujinti
+          </Alert>
+        </Collapse>
       </div>
-      );
-};
+    );
+  };
 
-const addErrorOrSucsess=()=>{
-  return(
-    <div>
-<Collapse in={success}>
-        <Alert
-          onClose={() => {
-            setSuccess(false);
-          }}
-          severity="success"
-          className="mb-3"
-        >
-          Įrašas sėkmingai sukurtas
-        </Alert>
-      </Collapse>
+  const addErrorOrSucsess = () => {
+    return (
+      <div>
+        <Collapse in={success}>
+          <Alert
+            onClose={() => {
+              setSuccess(false);
+            }}
+            severity="success"
+            className="mb-3"
+          >
+            Įrašas sėkmingai sukurtas
+          </Alert>
+        </Collapse>
 
-      <Collapse in={failure}>
-        <Alert
-          onClose={() => {
-            setFailure(false);
-          }}
-          severity="error"
-          className="mb-3"
-        >
-          Įrašo nepavyko sukurti
-        </Alert>
-      </Collapse>
+        <Collapse in={failure}>
+          <Alert
+            onClose={() => {
+              setFailure(false);
+            }}
+            severity="error"
+            className="mb-3"
+          >
+            Įrašo nepavyko sukurti
+          </Alert>
+        </Collapse>
       </div>
-      );
-};
+    );
+  };
 
-const shouldDisableDate = (date) => {
-  const dateObj = dayjs(date);
+  const shouldDisableDate = (date) => {
+    const dateObj = dayjs(date);
 
-  if (dateObj.day() === 0 || dateObj.day() === 6) {// Sunday is 0, Saturday is 6
-    return true;
-  }
+    if (dateObj.day() === 0 || dateObj.day() === 6) {
+      // Sunday is 0, Saturday is 6
+      return true;
+    }
 
-  const isHoliday = holidays.some((holiday) =>
-    dateObj.isBetween(dayjs(holiday.starts).startOf('DD'), dayjs(holiday.ends).startOf('DD'), null, '[]')
-  );
-  if (isHoliday) {
-    return true;
-  }
-  return false;
-}
+    const isHoliday = holidays.some((holiday) =>
+      dateObj.isBetween(
+        dayjs(holiday.starts).startOf("DD"),
+        dayjs(holiday.ends).startOf("DD"),
+        null,
+        "[]"
+      )
+    );
+    if (isHoliday) {
+      return true;
+    }
+    return false;
+  };
 
   return (
     <div className="mx-3">
       <h2 className="my-5">
         Planuoti {schedule?.group?.name} grupės tvarkaraštį
       </h2>
+
+      <Collapse in={emptyTeacherWarning}>
+        <Alert
+          // onClose={() => {
+          //   setEmptyTeacherWarning(false);
+          // }}
+          severity="error"
+          className="mb-3"
+        >
+          Tvarkaraštyje yra nepriskirtų mokytojų
+        </Alert>
+      </Collapse>
 
       {addErrorOrSucsess()}
 
@@ -321,7 +352,7 @@ const shouldDisableDate = (date) => {
             <DatePicker
               className="mb-3 mt-2"
               label="Pradžios data"
-               //inputFormat="yyyy-MM-dd"
+              //inputFormat="yyyy-MM-dd"
               value={startDateValue}
               disablePast
               minDate={schedule?.startDate}
@@ -401,13 +432,13 @@ const shouldDisableDate = (date) => {
             <FormControl fullWidth size="small" className="mb-3" required>
               <InputLabel
                 id="select-teacher-label"
-                error={!!teacherError}
+                // error={!!teacherError}
                 required
               >
                 Pasirinkite mokytoją
               </InputLabel>
               <Select
-                error={!!teacherError}
+                // error={!!teacherError}
                 labelId="select-teacher-label"
                 id="select-teacher"
                 label="Pasirinkite mokytoją"
@@ -416,6 +447,7 @@ const shouldDisableDate = (date) => {
                 onChange={(e) => setSelectedTeacher(e.target.value)}
                 required
               >
+                <MenuItem value={""}>Be mokytojo</MenuItem>
                 {teachers?.map((teacher) => (
                   <MenuItem
                     value={teacher.id}
@@ -533,9 +565,14 @@ const shouldDisableDate = (date) => {
         ))}
       </div>
 
-      <Calendar lessons={lessons} schedule={schedule} holidays={holidays}
-      onLessonEdited={fetchLessons} setSuccess={setSuccess}
-      setFailure={setFailure}/>
+      <Calendar
+        lessons={lessons}
+        schedule={schedule}
+        holidays={holidays}
+        onLessonEdited={fetchLessons}
+        setSuccess={setSuccess}
+        setFailure={setFailure}
+      />
     </div>
   );
 }

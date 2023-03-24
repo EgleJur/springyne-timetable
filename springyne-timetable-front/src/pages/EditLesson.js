@@ -28,7 +28,7 @@ function EditLessonPage() {
   const [startTimeError, setStartTimeError] = useState(false);
   const [endTimeError, setEndTimeError] = useState(false);
   const [subjectError, setSubjectError] = useState("");
-  const [teacherError, setTeacherError] = useState("");
+  // const [teacherError, setTeacherError] = useState("");
   const [roomError, setRoomError] = useState("");
   const [selectedSubject, setSelectedSubject] = useState("");
   const [selectedTeacher, setSelectedTeacher] = useState("");
@@ -86,14 +86,14 @@ function EditLessonPage() {
     setStartDateError(false);
     setEndDateError(false);
     setSubjectError(false);
-    setTeacherError(false);
+    // setTeacherError(false);
     setRoomError(false);
     setStartTimeError(false);
     setEndTimeError(false);
     if (
       selectedSubject === null ||
       selectedRoom === null ||
-      selectedTeacher === null ||
+      // selectedTeacher === null ||
       startDateValue === null ||
       endDateValue === null ||
       startDateValue > endDateValue ||
@@ -109,9 +109,9 @@ function EditLessonPage() {
       if (selectedSubject === "") {
         setSubjectError(true);
       }
-      if (selectedTeacher === "") {
-        setTeacherError(true);
-      }
+      // if (selectedTeacher === "") {
+      //   setTeacherError(true);
+      // }
       if (selectedRoom === "") {
         setRoomError(true);
       }
@@ -170,7 +170,7 @@ function EditLessonPage() {
           setStartTimeError(false);
           setEndTimeError(false);
           setSubjectError(false);
-          setTeacherError(false);
+          // setTeacherError(false);
           setRoomError(false);
           setSuccess(true);
           setFailure(false);
@@ -297,13 +297,13 @@ function EditLessonPage() {
             <FormControl fullWidth size="small" className="mb-3">
               <InputLabel
                 id="select-teacher-label"
-                error={!!teacherError}
+                // error={!!teacherError}
                 required
               >
                 Pasirinkite mokytoją
               </InputLabel>
               <Select
-                error={!!teacherError}
+                // error={!!teacherError}
                 labelId="select-teacher-label"
                 id="select-teacher"
                 label="Pasirinkite mokytoją"
@@ -312,6 +312,7 @@ function EditLessonPage() {
                 onChange={(e) => setSelectedTeacher(e.target.value)}
                 required
               >
+                <MenuItem value={""}>Be mokytojo</MenuItem>
                 {teachers?.map((teacher) => (
                   <MenuItem
                     value={teacher.id}

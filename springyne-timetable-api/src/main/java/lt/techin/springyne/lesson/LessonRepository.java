@@ -24,9 +24,9 @@ public interface LessonRepository extends JpaRepository<Lesson,Long> {
     Lesson findByLessonDateAndRoomIdAndLessonTime(LocalDate lessonDate, Long roomId, Integer lessonTime);
 
     List<Lesson> findAllByTeacherId(Long teacherId);
-    List<Lesson> findAllByTeacherIdAndLessonDateBetween(Long teacherId, LocalDate startDate, LocalDate endDate);
+    List<Lesson> findAllByTeacherIdAndLessonDateBetweenOrderByLessonDateAscLessonTimeAsc(Long teacherId, LocalDate startDate, LocalDate endDate);
 
-    List<Lesson> findAllByRoomIdAndLessonDateBetween(Long roomId, LocalDate startDate, LocalDate endDate);
+    List<Lesson> findAllByRoomIdAndLessonDateBetweenOrderByLessonDateAscLessonTimeAsc(Long roomId, LocalDate startDate, LocalDate endDate);
     List<Lesson> findByLessonDate(LocalDate lessonDate);
 
     List<Lesson> findByScheduleIdOrderByLessonDateAscLessonTimeAsc(Long scheduleId);

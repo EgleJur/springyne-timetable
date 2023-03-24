@@ -25,6 +25,8 @@ public interface TeacherRepository extends JpaRepository<Teacher,Long> {
     List<Teacher> findBySubjects_IdAndShift_StartsLessThanEqualAndShift_EndsGreaterThanEqual(Long subjectId, Integer startTime,
                                                                                              Integer endTime);
 
+//    List<Teacher> findBySubjects_Id(Long subjectId);
+
    // List<Teacher> findBySubjectIdAndShiftStartsLessThanEqualAndShiftEndsGreaterThanEqual(Long subjectId, Integer startHours, Integer endHours);
 
     List<Teacher> findAllBySubjectsAndShift_StartsLessThanEqualAndShift_EndsGreaterThanEqualAndIdNotIn(Subject subject, Integer startHours, Integer endHours, List<Long> teacherIds);

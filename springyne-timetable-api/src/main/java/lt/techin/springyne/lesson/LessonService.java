@@ -296,9 +296,10 @@ public class LessonService {
     }
     public boolean deleteLessonsByDateAndId(Long lessonId) {
         Optional<Lesson> lesson = lessonRepository.findById(lessonId);
+        long subjectId = lesson.get().getSubject().getId();
         if (lesson.isPresent()) {
             LocalDate lessonDate = lesson.get().getLessonDate();
-            List<Lesson> lessonsToDelete = lessonRepository.findByLessonDate(lessonDate);
+            List<Lesson> lessonsToDelete = lessonRepository.findAllByLessonDateAndSubjectId(lessonDate, subjectId);
             for (Lesson l : lessonsToDelete) {
                 lessonRepository.delete(l);
             }

@@ -69,7 +69,7 @@ function ViewRoomPage() {
         </Alert>
       </Collapse>
       <div className="">
-      <table className="table table-hover shadow p-3 mb-5 bg-body rounded align-middle">
+        <table className="table table-hover shadow p-3 mb-5 bg-body rounded align-middle">
           <tbody>
             <tr>
               <th scope="col">Pavadinimas</th>
@@ -93,17 +93,20 @@ function ViewRoomPage() {
             </tr>
           </tbody>
         </table>
-        <button className="btn btn-primary me-2">
+        <button className="btn btn-primary me-2 mb-5">
           <Link to={"/rooms/edit/" + params.id} className="nav-link">
             Redaguoti
           </Link>
         </button>
         {room.deleted ? (
-          <button className="btn btn-secondary me-2" onClick={handleRestore}>
+          <button
+            className="btn btn-secondary me-2 mb-5"
+            onClick={handleRestore}
+          >
             Atstatyti
           </button>
         ) : (
-          <button className="btn btn-danger me-2" onClick={handleDelete}>
+          <button className="btn btn-danger me-2 mb-5" onClick={handleDelete}>
             Ištrinti
           </button>
         )}

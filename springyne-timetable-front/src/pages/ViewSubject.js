@@ -71,7 +71,6 @@ function ViewSubjectPage() {
       <div className="">
         <table className="table table-hover shadow p-3 mb-5 bg-body rounded align-middle">
           <tbody>
-
             <tr>
               <th scope="col">Pavadinimas</th>
               <td>{subject.name}</td>
@@ -86,9 +85,13 @@ function ViewSubjectPage() {
             </tr>
             <tr>
               <th scope="col">Kabinetai</th>
-              <td>{subject.rooms?.map((room) => (
-                <p key={room.id} id={room.id}>{room.name}</p>
-              ))}</td>
+              <td>
+                {subject.rooms?.map((room) => (
+                  <p key={room.id} id={room.id}>
+                    {room.name}
+                  </p>
+                ))}
+              </td>
             </tr>
             <tr>
               <th scope="col">Būsena</th>
@@ -101,19 +104,24 @@ function ViewSubjectPage() {
           </tbody>
         </table>
 
-          <button
-            className="btn btn-primary me-2" disabled={subject.deleted}>
-            <Link className="nav-link" to={"/subjects/edit/" + subject.id}>
-              Redaguoti
-            </Link>
-          </button>
+        <button
+          className="btn btn-primary me-2 mb-5"
+          disabled={subject.deleted}
+        >
+          <Link className="nav-link" to={"/subjects/edit/" + subject.id}>
+            Redaguoti
+          </Link>
+        </button>
 
         {subject.deleted ? (
-          <button className="btn btn-secondary me-2" onClick={handleRestore}>
+          <button
+            className="btn btn-secondary me-2 mb-5"
+            onClick={handleRestore}
+          >
             Atstatyti
           </button>
         ) : (
-          <button className="btn btn-danger me-2" onClick={handleDelete}>
+          <button className="btn btn-danger me-2 mb-5" onClick={handleDelete}>
             Ištrinti
           </button>
         )}

@@ -163,9 +163,7 @@ function EditSubjectPage() {
         <form noValidate>
           <div className="row">
             <div className="col-md-4 mb-2 mb-md-0 fw-bold">
-              <label htmlFor="subject-name">
-                Pavadinimas *
-              </label>
+              <label htmlFor="subject-name">Pavadinimas *</label>
             </div>
             <div className="col-md-8 mb-2 mb-md-0">
               <TextField
@@ -185,9 +183,7 @@ function EditSubjectPage() {
           </div>
           <div className="row">
             <div className="col-md-4 mb-2 mb-md-0 fw-bold">
-              <label htmlFor="subject-description">
-                Aprašymas *
-              </label>
+              <label htmlFor="subject-description">Aprašymas *</label>
             </div>
             <div className="col-md-8 mb-2">
               <TextField
@@ -265,14 +261,14 @@ function EditSubjectPage() {
                   id={room.id}
                 >
                   {room.name}{" "}
-                  <ClearIcon 
-          color="disabled" 
-          sx={{ fontSize: 12 }} 
-          value={room.id}
-          onClick={(e) => deleteRoom(room.id)}
-          key={`clearIcon-${room.id}`}
-          id={`clearIcon-${room.id}`}
-        />
+                  <ClearIcon
+                    color="disabled"
+                    sx={{ fontSize: 12 }}
+                    value={room.id}
+                    onClick={(e) => deleteRoom(room.id)}
+                    key={`clearIcon-${room.id}`}
+                    id={`clearIcon-${room.id}`}
+                  />
                 </button>
               ))}
             </div>
@@ -326,18 +322,21 @@ function EditSubjectPage() {
       <div>
         <button
           type="submit"
-          className="btn btn-primary me-2"
+          className="btn btn-primary me-2 mb-5"
           onClick={editsubject}
           // disabled={!changed}
         >
           Redaguoti
         </button>
         {subject.deleted ? (
-          <button className="btn btn-secondary me-2" onClick={handleRestore}>
+          <button
+            className="btn btn-secondary me-2 mb-5"
+            onClick={handleRestore}
+          >
             Atstatyti
           </button>
         ) : (
-          <button className="btn btn-danger me-2" onClick={handleDelete}>
+          <button className="btn btn-danger me-2 mb-5" onClick={handleDelete}>
             Ištrinti
           </button>
         )}

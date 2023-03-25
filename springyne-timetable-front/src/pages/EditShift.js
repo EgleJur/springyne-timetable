@@ -271,9 +271,7 @@ function EditShiftPage() {
           <div className="row mb-md-4">
             <div className="col-md-4 mb-2 mb-md-0 fw-bold">Būsena</div>
             <div className="col-md-8 mb-2">
-              {(shift.visible === 1 ? false : true)
-                ? "Ištrintas"
-                : "Aktyvus"}
+              {(shift.visible === 1 ? false : true) ? "Ištrintas" : "Aktyvus"}
             </div>
           </div>
           <div className="row mb-md-4">
@@ -286,7 +284,7 @@ function EditShiftPage() {
       </div>
       <button
         type="submit"
-        className="btn btn-primary"
+        className="btn btn-primary mb-5"
         onClick={editShift}
         disabled={shift.visible === 0}
       >
@@ -295,14 +293,14 @@ function EditShiftPage() {
       &nbsp;
       {(shift.visible === 1 ? false : true) ? (
         <button
-          className="btn btn-secondary me-2"
+          className="btn btn-secondary me-2 mb-5"
           onClick={() => restoreShift(shift)}
         >
           Atstatyti
         </button>
       ) : (
         <button
-          className="btn btn-danger me-2"
+          className="btn btn-danger me-2 mb-5"
           onClick={() => deleteShift(shift)}
         >
           Ištrinti

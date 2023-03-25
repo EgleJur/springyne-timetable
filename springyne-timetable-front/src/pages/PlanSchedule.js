@@ -97,6 +97,8 @@ function PlanSchedulePage() {
   const validateSchedule = () => {
     if (lessons.some(lesson => lesson.teacher === undefined || lesson.teacher === null || lesson.teacher === "")) {
       setEmptyTeacherWarning(true);
+    } else {
+      setEmptyTeacherWarning(false);
     }
   }
   useEffect(validateSchedule,[lessons])

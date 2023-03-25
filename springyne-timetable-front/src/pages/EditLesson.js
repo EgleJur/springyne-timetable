@@ -49,7 +49,7 @@ function EditLessonPage() {
       .then((response) => response.json())
       .then((jsonResponse) => setSchedule(jsonResponse));
   };
-  useEffect(fetchShedule, []);
+  useEffect(fetchShedule, [params]);
 
   const fetchTeachers = () => {
     fetch(`${apiUrl}/api/v1/teachers/subject?subjectId=` + selectedSubject)
@@ -72,14 +72,14 @@ function EditLessonPage() {
     }
   };
 
-  useEffect(prefillRooms, [selectedSubject]);
+  useEffect(prefillRooms, [selectedSubject, schedule]);
 
   const fetchLessons = () => {
     fetch(`${apiUrl}/api/v1/lessons/schedule/` + params.id)
       .then((response) => response.json())
       .then((jsonResponse) => setLessons(jsonResponse));
   };
-  useEffect(() => fetchLessons, []);
+  useEffect(fetchLessons, [params]);
 
   const editLesson = (e) => {
     e.preventDefault();

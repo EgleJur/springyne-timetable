@@ -1,5 +1,6 @@
 package lt.techin.springyne.controller;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lt.techin.springyne.lesson.Lesson;
 import lt.techin.springyne.lesson.LessonBlock;
@@ -25,6 +26,7 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -33,6 +35,7 @@ import java.util.Optional;
 
 import static org.junit.Assert.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -291,5 +294,66 @@ public class LessonControllerTest {
             assertNotNull(responseEntity);
             assertEquals(HttpStatus.NOT_FOUND, responseEntity.getStatusCode());
         }
+
+        @Test
+        public void testEditSingleLessonAllowsSavingWithNullTeacher() throws Exception {
+            Long lessonId = 1L;
+            Long subjectId = 1L;
+            Long teacherId = 1L;
+            Long roomId = 4L;
+
+            MvcResult mvcResult1 = mockMvc.perform(MockMvcRequestBuilders.patch("/api/v1/lessons/editSingleLesson/1")
+                    .param("subjectId", subjectId.toString())
+                    .param("roomId", roomId.toString()))
+                .andReturn();
+
+            assertEquals(200,mvcResult1.getResponse().getStatus(), "Edit single lesson should allow saving with null teacher");
+            List<Lesson> resultList1 = objectMapper.readValue(mvcResult1.getResponse().getContentAsString(StandardCharsets.UTF_8),
+                    new TypeReference<List<Lesson>>() {});
+            boolean isTeacherNull = resultList1.stream().allMatch(resultLesson -> resultLesson.getTeacher() == null);
+            assertTrue(isTeacherNull);
+
+            MvcResult mvcResult2 = mockMvc.perform(MockMvcRequestBuilders.patch("/api/v1/lessons/editSingleLesson/1")
+                            .param("subjectId", subjectId.toString())
+                            .param("teacherId", teacherId.toString())
+                            .param("roomId", roomId.toString()))
+                    .andReturn();
+            assertEquals(200,mvcResult2.getResponse().getStatus(), "Edit single lesson should allow restoring " +
+                    "teacher to previous id");
+            List<Lesson> resultList2 = objectMapper.readValue(mvcResult2.getResponse().getContentAsString(StandardCharsets.UTF_8),
+                    new TypeReference<List<Lesson>>() {});
+            boolean isTeacherRestored = resultList2.stream().allMatch(resultLesson -> resultLesson.getTeacher().getId().equals(teacherId));
+            assertTrue(isTeacherRestored);
+        }
+    @Test
+    public void testEditMultipleLessonsAllowsSavingWithNullTeacher() throws Exception {
+        Long scheduleId = 1L;
+        Long subjectId = 1L;
+        Long teacherId = 1L;
+        Long roomId = 4L;
+
+        MvcResult mvcResult1 = mockMvc.perform(MockMvcRequestBuilders.patch("/api/v1/lessons/editMultipleLessons/1")
+                        .param("subjectId", subjectId.toString())
+                        .param("roomId", roomId.toString()))
+                .andReturn();
+
+        assertEquals(200,mvcResult1.getResponse().getStatus(), "Edit multiple lessons should allow saving with null teacher");
+        List<Lesson> resultList1 = objectMapper.readValue(mvcResult1.getResponse().getContentAsString(StandardCharsets.UTF_8),
+                new TypeReference<List<Lesson>>() {});
+        boolean isTeacherNull = resultList1.stream().allMatch(resultLesson -> resultLesson.getTeacher() == null);
+        assertTrue(isTeacherNull);
+
+        MvcResult mvcResult2 = mockMvc.perform(MockMvcRequestBuilders.patch("/api/v1/lessons/editMultipleLessons/1")
+                        .param("subjectId", subjectId.toString())
+                        .param("teacherId", teacherId.toString())
+                        .param("roomId", roomId.toString()))
+                .andReturn();
+        assertEquals(200,mvcResult2.getResponse().getStatus(), "Edit multiple lessons should allow restoring " +
+                "teacher to previous id");
+        List<Lesson> resultList2 = objectMapper.readValue(mvcResult2.getResponse().getContentAsString(StandardCharsets.UTF_8),
+                new TypeReference<List<Lesson>>() {});
+        boolean isTeacherRestored = resultList2.stream().allMatch(resultLesson -> resultLesson.getTeacher().getId().equals(teacherId));
+        assertTrue(isTeacherRestored);
+    }
 
 }

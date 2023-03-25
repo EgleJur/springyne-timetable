@@ -99,26 +99,28 @@ function ViewProgramPage() {
               >
                 <td>{subject.subject.name}</td>
                 <td>{subject.hours} valandų</td>
-                {subject.subject.deleted ? (
-                  <td>Ištrintas</td>
-                ) : (
-                  <td></td>
-                )}
+                {subject.subject.deleted ? <td>Ištrintas</td> : <td></td>}
               </tr>
             ))}
           </tbody>
         </table>
-        <button className="btn btn-primary me-2" disabled={program.deleted}>
+        <button
+          className="btn btn-primary me-2 mb-5"
+          disabled={program.deleted}
+        >
           <Link to={"/programs/edit/" + params.id} className="nav-link">
             Redaguoti
           </Link>
         </button>
         {program.deleted ? (
-          <button className="btn btn-secondary me-2" onClick={handleRestore}>
+          <button
+            className="btn btn-secondary me-2 mb-5"
+            onClick={handleRestore}
+          >
             Atstatyti
           </button>
         ) : (
-          <button className="btn btn-danger me-2" onClick={handleDelete}>
+          <button className="btn btn-danger me-2 mb-5" onClick={handleDelete}>
             Ištrinti
           </button>
         )}

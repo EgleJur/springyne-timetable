@@ -190,7 +190,7 @@ function EditRoomPage() {
                 size="small"
                 InputLabelProps={{ shrink: true }}
                 disabled={room.deleted}
-              // required
+                // required
               />
             </div>
           </div>
@@ -212,30 +212,30 @@ function EditRoomPage() {
         <div>
           <button
             type="submit"
-            className="btn btn-primary me-2"
+            className="btn btn-primary me-2 mb-5"
             onClick={editRoom}
             disabled
           >
             Redaguoti
           </button>
 
-
-          <button className="btn btn-secondary me-2" 
-          onClick={handleRestore}>
+          <button
+            className="btn btn-secondary me-2 mb-5"
+            onClick={handleRestore}
+          >
             Atstatyti
           </button>
-          </div>
+        </div>
       ) : (
         <div>
           <button
             type="submit"
-            className="btn btn-primary me-2"
-            onClick={editRoom}>
+            className="btn btn-primary me-2 mb-5"
+            onClick={editRoom}
+          >
             Redaguoti
           </button>
-          <button 
-          className="btn btn-danger me-2" 
-          onClick={handleDelete}>
+          <button className="btn btn-danger me-2 mb-5" onClick={handleDelete}>
             Ištrinti
           </button>
         </div>

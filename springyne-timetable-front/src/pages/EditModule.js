@@ -167,8 +167,7 @@ function EditModulePage() {
             </div>
           </div>
         </form>
-        
-        
+
         <EditModuleSubjects disabled={module.deleted} />
         <div className="row mb-md-4">
           <div className="col-md-4 mb-2 mb-md-0 fw-bold">Būsena</div>
@@ -183,19 +182,21 @@ function EditModulePage() {
           <div className="col-md-8 mb-2 mb-md-0">{module.modifiedDate}</div>
         </div>
       </div>
-      
 
       {module.deleted ? (
         <div>
           <button
             type="submit"
-            className="btn btn-primary me-2"
+            className="btn btn-primary me-2 mb-5"
             onClick={editModule}
             disabled
           >
             Redaguoti
           </button>
-          <button className="btn btn-secondary me-2" onClick={handleRestore}>
+          <button
+            className="btn btn-secondary me-2 mb-5"
+            onClick={handleRestore}
+          >
             Atstatyti
           </button>
         </div>
@@ -203,13 +204,13 @@ function EditModulePage() {
         <div>
           <button
             type="submit"
-            className="btn btn-primary me-2"
+            className="btn btn-primary me-2 mb-5"
             onClick={editModule}
             // disabled={!changed}
           >
             Redaguoti
           </button>
-          <button className="btn btn-danger me-2" onClick={handleDelete}>
+          <button className="btn btn-danger me-2 mb-5" onClick={handleDelete}>
             Ištrinti
           </button>
         </div>

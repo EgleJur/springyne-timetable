@@ -169,9 +169,9 @@ const Calendar = (props) => {
               {d.day}
             </span>
             {d.isCurrentMonth && found(d) && (
-              <div class="mx-3 text-center">
+              <div className="mx-3 text-center">
                 {found(d).map((name) => (
-                  <div class="my-3">{name}</div>
+                  <div className="my-3">{name}</div>
                 ))}
               </div>
             )}

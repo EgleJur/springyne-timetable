@@ -16,8 +16,6 @@ function EditSubjectPage() {
   const [subject, setSubject] = useState({});
   const [nameError, setNameError] = useState("");
   const [descriptionError, setDescriptionError] = useState(false);
-  const [module, setModule] = useState({});
-  const [room, setRoom] = useState("");
   const [success, setSuccess] = useState(false);
   const [failure, setFailure] = useState(false);
   const [changed, setChanged] = useState(false);
@@ -26,7 +24,6 @@ function EditSubjectPage() {
   const [selectedRoom, setSelectedRoom] = useState("");
   const [selectedModule, setSelectedModule] = useState('');
   const [modules, setModules] = useState([]);
-  const [moduleError, setModuleError] = useState(false);
   const [showModuleMenuItem, setShowModuleMenuItem] = useState(true);
 
   const fetchSubject = () => {

@@ -4,7 +4,6 @@ import Calendar from "../components/Calendar";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
-import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import { FormControl, InputLabel, TextField } from "@mui/material";
 import { DatePicker } from "@mui/x-date-pickers";
@@ -12,7 +11,6 @@ import { Select, MenuItem } from "@mui/material";
 import dayjs from "dayjs";
 import { Alert, Collapse } from "@mui/material";
 import { apiUrl } from "../App";
-import { format, isSameDay, isSaturday, isSunday } from "date-fns";
 
 function PlanSchedulePage() {
   const params = useParams();
@@ -27,7 +25,6 @@ function PlanSchedulePage() {
   const [startTimeError, setStartTimeError] = useState(false);
   const [endTimeError, setEndTimeError] = useState(false);
   const [subjectError, setSubjectError] = useState("");
-  // const [teacherError, setTeacherError] = useState("");
   const [roomError, setRoomError] = useState("");
   const [selectedSubject, setSelectedSubject] = useState("");
   const [selectedTeacher, setSelectedTeacher] = useState("");
@@ -39,7 +36,6 @@ function PlanSchedulePage() {
   const [failure, setFailure] = useState(false);
   const times = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14];
   const [lessons, setLessons] = useState([]);
-  const holidayInDatePicker = [];
   const [emptyTeacherWarning, setEmptyTeacherWarning] = useState(false);
 
   const fetchShedule = () => {
@@ -212,7 +208,6 @@ function PlanSchedulePage() {
           setStartTimeError(false);
           setEndTimeError(false);
           setSubjectError(false);
-          // setTeacherError(false);
           setRoomError(false);
           setSuccess(true);
           setFailure(false);
@@ -233,6 +228,7 @@ function PlanSchedulePage() {
     }
   };
 
+  //used in edit lesson in LessonToCalendar.js
   const errorOrSucsess = () => {
     return (
       <div>

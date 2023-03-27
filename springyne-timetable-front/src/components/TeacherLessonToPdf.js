@@ -35,55 +35,59 @@ function TeacherLessonToPdf(props) {
 
     const lessonstoPdf = (e) => {
         e.preventDefault();
-    setStartDateError(false);
-    setEndDateError(false);
-    setTeacherError(false);
+        setStartDateError(false);
+        setEndDateError(false);
+        setTeacherError(false);
         const starts = dayjs(startDateValue).format("YYYY-MM-DD");
-      const ends = dayjs(endDateValue).format("YYYY-MM-DD");
-      if(selectedTeacher === null ||
-        selectedTeacher === "" ||
-        startDateValue === null ||
-        endDateValue === null ||
-        startDateValue > endDateValue){
+        const ends = dayjs(endDateValue).format("YYYY-MM-DD");
+        if (selectedTeacher === null ||
+            selectedTeacher === "" ||
+            startDateValue === null ||
+            endDateValue === null ||
+            startDateValue > endDateValue) {
             if (selectedTeacher === "" || selectedTeacher === null) {
                 setTeacherError(true);
-              }
-              if (
+            }
+            if (
                 startDateValue === null ||
                 (startDateValue > endDateValue && endDateValue !== null)
-              ) {
+            ) {
                 setStartDateError(true);
-              }
-              if (
+            }
+            if (
                 endDateValue === null ||
                 endDateValue < startDateValue
-              ) {
+            ) {
                 setEndDateError(true);
-              }
-            } else {
-        
-        fetch(`${apiUrl}/api/v1/lessons/teachers/export/pdf?teacherId=${selectedTeacher}&startDate=${starts}&endDate=${ends}`)
-        .then(response => {
-          if (response.ok) {
-        setStartDateValue(null);
-          setEndDateValue(null);
-          setSelectedTeacher("");
-          setStartDateError(false);
-          setEndDateError(false);
-          setTeacherError(false);
-          handleClose();
-            return response.blob();
-          }
-          throw new Error('Network response was not ok.');
-        })
-        .then(blob => {
-          const url = window.URL.createObjectURL(blob);
-          window.open(url);
-        })
-        .catch(error => {
-          console.error('There was a problem with the fetch operation:', error);
-        });
-    }
+            }
+        } else {
+
+            fetch(`${apiUrl}/api/v1/lessons/teachers/export/pdf?teacherId=${selectedTeacher}&startDate=${starts}&endDate=${ends}`)
+                .then(response => {
+                    if (response.ok) {
+                        setStartDateValue(null);
+                        setEndDateValue(null);
+                        setSelectedTeacher("");
+                        setStartDateError(false);
+                        setEndDateError(false);
+                        setTeacherError(false);
+                        handleClose();
+                        return response.blob();
+                    }
+                    throw new Error('Network response was not ok.');
+                })
+                .then(blob => {
+                    const url = window.URL.createObjectURL(blob);
+                    window.open(url);
+                    let link = document.createElement('a');
+                    link.href = url;
+                    link.download = `TeacherPDF`;
+                    link.click();
+                })
+                .catch(error => {
+                    console.error('There was a problem with the fetch operation:', error);
+                });
+        }
     };
 
     return (
@@ -94,7 +98,7 @@ function TeacherLessonToPdf(props) {
                     <DatePicker
                         className="mb-3 mt-2"
                         label="Pradžios data"
-                         inputFormat="yyyy-MM-dd"
+                        inputFormat="yyyy-MM-dd"
                         value={startDateValue}
                         onChange={(newValue) => {
                             setStartDateValue(newValue);
@@ -112,7 +116,7 @@ function TeacherLessonToPdf(props) {
                     <DatePicker
                         className="mb-3"
                         label="Pabaigos data"
-                         inputFormat="yyyy-MM-dd"
+                        inputFormat="yyyy-MM-dd"
                         value={endDateValue}
                         minDate={
                             startDateValue !== null ? startDateValue : ""
@@ -180,7 +184,7 @@ function TeacherLessonToPdf(props) {
                         setStartDateError(false);
                         setEndDateError(false);
                         setTeacherError(false);
-                      }}
+                    }}
                 >
                     Atšaukti
                 </button>

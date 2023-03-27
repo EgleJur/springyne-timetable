@@ -115,7 +115,7 @@ function ScheduleListPage() {
           // window.open(url);
           let link = document.createElement('a');
 					link.href = url;
-					link.download = `GroupLessonsToPdf`;
+					link.download = `GroupPDF`;
 					link.click();
         })
         .catch(error => {

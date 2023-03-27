@@ -27,7 +27,6 @@ function PlanSchedulePage() {
   const [startTimeError, setStartTimeError] = useState(false);
   const [endTimeError, setEndTimeError] = useState(false);
   const [subjectError, setSubjectError] = useState("");
-  // const [teacherError, setTeacherError] = useState("");
   const [roomError, setRoomError] = useState("");
   const [selectedSubject, setSelectedSubject] = useState("");
   const [selectedTeacher, setSelectedTeacher] = useState("");
@@ -39,7 +38,6 @@ function PlanSchedulePage() {
   const [failure, setFailure] = useState(false);
   const times = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14];
   const [lessons, setLessons] = useState([]);
-  const holidayInDatePicker = [];
   const [emptyTeacherWarning, setEmptyTeacherWarning] = useState(false);
 
   const fetchShedule = () => {
@@ -212,7 +210,6 @@ function PlanSchedulePage() {
           setStartTimeError(false);
           setEndTimeError(false);
           setSubjectError(false);
-          // setTeacherError(false);
           setRoomError(false);
           setSuccess(true);
           setFailure(false);
@@ -233,6 +230,7 @@ function PlanSchedulePage() {
     }
   };
 
+  //used in edit lesson in LessonToCalendar.js
   const errorOrSucsess = () => {
     return (
       <div>

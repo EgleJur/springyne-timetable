@@ -27,7 +27,6 @@ const Calendar = (props) => {
     const shift = [];
     let starts = schedule?.group?.shift?.starts;
     let ends = schedule?.group?.shift?.ends;
-    // console.log(schedule);
     for (let i = starts; i <= ends; i++) {
       shift.push(
         <ListItem disablePadding>
@@ -69,7 +68,6 @@ const Calendar = (props) => {
 
   const renderHeader = () => {
     const dateFormat = "MMMM YYYY";
-    // console.log(holidays);
     return (
       <div className="header row flex-middle">
         <div className="col col-start">

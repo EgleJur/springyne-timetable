@@ -15,10 +15,9 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.transaction.annotation.Transactional;
 
-import javax.transaction.Transactional;
 import java.nio.charset.StandardCharsets;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -105,7 +104,7 @@ class ModuleControllerTest {
     void editModuleThrowsExceptionWithNonUniqueNumberValue() throws Exception {
         ModuleDto testModuleDto5 = new ModuleDto("001", "Informacinių sistemų projektavimas");
         MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.patch("/api/v1/modules/update/5").contentType(MediaType.APPLICATION_JSON).
-                        content(objectMapper.writeValueAsString(testModuleDto5))).andReturn();
+                content(objectMapper.writeValueAsString(testModuleDto5))).andReturn();
 
         assertEquals(400, mvcResult.getResponse().getStatus(),"Non unique Module number should return bad request status");
     }

@@ -28,7 +28,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
-@Transactional
+
 class ModuleControllerTest {
 
     @Autowired
@@ -82,6 +82,7 @@ class ModuleControllerTest {
 
     @Test
     @Order(1)
+    @Transactional
     void deleteModuleSetsDeletedPropertyToTrue() throws Exception {
         MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.patch("/api/v1/modules/delete/4").contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk()).andReturn();
@@ -91,6 +92,7 @@ class ModuleControllerTest {
 
     @Test
     @Order(2)
+    @Transactional
     @DependsOn("deleteModuleSetsDeletedPropertyToTrue")
     void restoreModuleSetsDeletedPropertyToFalse() throws Exception {
         MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.patch("/api/v1/modules/restore/4").contentType(MediaType.APPLICATION_JSON))

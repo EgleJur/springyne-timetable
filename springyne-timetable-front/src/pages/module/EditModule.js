@@ -10,7 +10,6 @@ function EditModulePage() {
   const [nameError, setNameError] = useState("");
   const [success, setSuccess] = useState(false);
   const [failure, setFailure] = useState(false);
-  const [changed, setChanged] = useState(false);
   const params = useParams();
 
   const fetchModule = () => {
@@ -19,7 +18,7 @@ function EditModulePage() {
       .then((jsonResponse) => setModule(jsonResponse));
   };
 
-  useEffect(fetchModule, []);
+  useEffect(fetchModule, [params]);
 
   const editModule = (e) => {
     e.preventDefault();
@@ -43,7 +42,6 @@ function EditModulePage() {
         if (result.ok) {
           setSuccess(true);
           setFailure(false);
-          setChanged(false);
           fetchModule();
           setTimeout(() => {
             setSuccess(false);
@@ -65,7 +63,6 @@ function EditModulePage() {
       ...module,
       [property]: event.target.value,
     });
-    setChanged(true);
   };
 
   const handleDelete = () => {
@@ -78,7 +75,6 @@ function EditModulePage() {
     setFailure(false);
     setNumberError(false);
     setNameError(false);
-    setChanged(false);
     setTimeout(() => {
       setSuccess(false);
     }, 5000);
@@ -94,7 +90,6 @@ function EditModulePage() {
     setFailure(false);
     setNumberError(false);
     setNameError(false);
-    setChanged(false);
     setTimeout(() => {
       setSuccess(false);
     }, 5000);

@@ -153,7 +153,7 @@ const Calendar = (props) => {
     arrayOfDays.forEach((week, index) => {
       week.dates.forEach((d, i) => {
         days.push(
-          <div
+          <div 
             className={`col cell ${!d.isCurrentMonth ||
               HolidayToCalendar(holidays, currentMonth).some(
                 (index) => index.day === d.day
@@ -174,7 +174,7 @@ const Calendar = (props) => {
               </div>
             )}
 
-            {d.isCurrentMonth &&
+            {d.isCurrentMonth && !found(d) &&
               LessonToCalendar(
                 d,
                 schedule,

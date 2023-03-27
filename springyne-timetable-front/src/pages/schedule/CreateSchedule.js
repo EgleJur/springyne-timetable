@@ -1,7 +1,5 @@
 import { useState, useEffect } from "react";
-import { Alert, Collapse } from "@mui/material";
-import { TextField } from "@mui/material";
-import { FormControl, MenuItem, Select, InputLabel } from "@mui/material";
+import { Alert, Collapse, TextField, FormControl, MenuItem, Select, InputLabel } from "@mui/material";
 import { DatePicker } from "@mui/x-date-pickers";
 import dayjs from "dayjs";
 import { apiUrl } from "../../App";
@@ -164,7 +162,6 @@ function CreateSchedulePage() {
         <DatePicker
           className="mb-3"
           label="Pradžios data"
-          // inputFormat="mmmm-MM-dd"
           value={startDateValue}
           disablePast
           maxDate={endDateValue}
@@ -185,7 +182,6 @@ function CreateSchedulePage() {
         <DatePicker
           className="mb-3"
           label="Pabaigos data"
-          // inputFormat="yyyy-MM-dd"
           value={endDateValue}
           disablePast
           minDate={startDateValue}

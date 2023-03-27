@@ -1,6 +1,5 @@
 import { HashRouter, Route, Routes } from "react-router-dom";
 import "./App.css";
-import HomePage from "./pages/Home";
 import Navigation from "./components/Navigation";
 import ModuleListPage from "./pages/module/ModuleList";
 import RoomListPage from "./pages/room/RoomList";
@@ -37,7 +36,7 @@ import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { lt } from "date-fns/locale";
 import PlanSchedulePage from "./pages/schedule/PlanSchedule";
-import Calendar from "./components/Calendar";
+import Calendar from "./calendar/Calendar";
 
 
 const apiUrl = process.env.PUBLIC_URL; 
@@ -90,7 +89,6 @@ function App() {
               <Route path="groups/view/:id" element={<ViewGroupPage />} />
               <Route path="holidays" element={<HolidayListPage />} />
               <Route path="holidays/create" element={<CreateHolidayPage />} />
-              {/* <Route path="schedules" element={<ScheduleListPage />} /> */}
               <Route path="schedules/plan/:id" element={<PlanSchedulePage />} />
               <Route path="schedules/create" element={<CreateSchedulePage />} />
               <Route path="calendar" element={<Calendar />} />

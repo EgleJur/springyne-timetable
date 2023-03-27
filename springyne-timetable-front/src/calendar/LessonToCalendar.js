@@ -7,7 +7,6 @@ import List from "@mui/material/List";
 import LongMenu from "./LongMenu";
 import { styled } from "@mui/material/styles";
 import Tooltip, { tooltipClasses } from "@mui/material/Tooltip";
-import WarningAmberIcon from '@mui/icons-material/WarningAmber';
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 
 const LessonToCalendar = (
@@ -141,7 +140,7 @@ const LessonToCalendar = (
 										less.teacher === null || less.teacher === undefined
 											? (
 												<>
-													
+
 													<ErrorOutlineIcon sx={{ mr: 2, color: "#d32f2f" }} />
 												</>
 											)

@@ -4,13 +4,13 @@ import "dayjs/locale/lt";
 import weekdayPlugin from "dayjs/plugin/weekday";
 import objectPlugin from "dayjs/plugin/toObject";
 import isTodayPlugin from "dayjs/plugin/isToday";
-import "./Calendar.css";
 import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemText from "@mui/material/ListItemText";
 import List from "@mui/material/List";
 import LessonToCalendar from "./LessonToCalendar";
 import HolidayToCalendar from "./HolidayToCalendar";
+import "./Calendar.css";
 
 const Calendar = (props) => {
   const now = dayjs().locale("lt");
@@ -155,11 +155,11 @@ const Calendar = (props) => {
         days.push(
           <div
             className={`col cell ${!d.isCurrentMonth ||
-                HolidayToCalendar(holidays, currentMonth).some(
-                  (index) => index.day === d.day
-                )
-                ? "disabled"
-                : ""
+              HolidayToCalendar(holidays, currentMonth).some(
+                (index) => index.day === d.day
+              )
+              ? "disabled"
+              : ""
               }`}
             key={i}
           >

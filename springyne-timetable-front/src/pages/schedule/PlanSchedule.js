@@ -1,18 +1,14 @@
 import { useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
-import Calendar from "../../components/Calendar";
+import Calendar from "../../calendar/Calendar";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
-import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
-import { FormControl, InputLabel, TextField } from "@mui/material";
+import { FormControl, InputLabel, TextField,Select, MenuItem, Alert, Collapse } from "@mui/material";
 import { DatePicker } from "@mui/x-date-pickers";
-import { Select, MenuItem } from "@mui/material";
 import dayjs from "dayjs";
-import { Alert, Collapse } from "@mui/material";
 import { apiUrl } from "../../App";
-import { format, isSameDay, isSaturday, isSunday } from "date-fns";
 
 function PlanSchedulePage() {
   const params = useParams();
@@ -126,7 +122,6 @@ function PlanSchedulePage() {
     setStartDateError(false);
     setEndDateError(false);
     setSubjectError(false);
-    // setTeacherError(false);
     setRoomError(false);
     setStartTimeError(false);
     setEndTimeError(false);
@@ -134,8 +129,6 @@ function PlanSchedulePage() {
       selectedSubject === null ||
       selectedRoom === null ||
       selectedRoom === "" ||
-      // selectedTeacher === null ||
-      // selectedTeacher === "" ||
       startDateValue === null ||
       endDateValue === null ||
       startDateValue > endDateValue ||
@@ -151,9 +144,6 @@ function PlanSchedulePage() {
       if (selectedSubject === "" || selectedSubject === null) {
         setSubjectError(true);
       }
-      // if (selectedTeacher === "" || selectedTeacher === null) {
-      //   setTeacherError(true);
-      // }
       if (selectedRoom === "" || selectedRoom === null) {
         setRoomError(true);
       }
@@ -322,9 +312,6 @@ function PlanSchedulePage() {
 
       <Collapse in={emptyTeacherWarning}>
         <Alert
-          // onClose={() => {
-          //   setEmptyTeacherWarning(false);
-          // }}
           severity="error"
           className="mb-3"
         >
@@ -352,7 +339,6 @@ function PlanSchedulePage() {
             <DatePicker
               className="mb-3 mt-2"
               label="Pradžios data"
-              //inputFormat="yyyy-MM-dd"
               value={startDateValue}
               disablePast
               minDate={schedule?.startDate}
@@ -374,7 +360,6 @@ function PlanSchedulePage() {
             <DatePicker
               className="mb-3"
               label="Pabaigos data"
-              // inputFormat="yyyy-MM-dd"
               value={endDateValue}
               disablePast
               minDate={
@@ -438,7 +423,6 @@ function PlanSchedulePage() {
                 Pasirinkite mokytoją
               </InputLabel>
               <Select
-                // error={!!teacherError}
                 labelId="select-teacher-label"
                 id="select-teacher"
                 label="Pasirinkite mokytoją"

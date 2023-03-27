@@ -1,9 +1,6 @@
 import { useState, useEffect } from "react";
-import { Alert, Collapse } from "@mui/material";
-import { TextField, FormControl, MenuItem, Select, InputLabel } from "@mui/material";
-import { useParams } from "react-router-dom";
+import { TextField, FormControl, MenuItem, Select, InputLabel,Alert, Collapse  } from "@mui/material";
 import { apiUrl } from "../../App";
-
 
 function CreateGroupPage() {
   const [groupYear, setYear] = useState("");
@@ -16,7 +13,6 @@ function CreateGroupPage() {
   const [shiftError, setShiftError] = useState(false);
   const [success, setSuccess] = useState(false);
   const [failure, setFailure] = useState(false);
-  const params = useParams();
   const [programs, setPrograms] = useState([]);
   const [selectedProgram, setSelectedProgram] = useState("");
   const [shifts, setShifts] = useState([]);
@@ -45,9 +41,9 @@ function CreateGroupPage() {
     setProgramError(false);
     setShiftError(false);
 
-    if (name === "" || students === "" 
-    || groupYear === "" || selectedProgram==="" 
-    || selectedShift === "") {
+    if (name === "" || students === ""
+      || groupYear === "" || selectedProgram === ""
+      || selectedShift === "") {
       if (name === "") { setNameError(true); }
       if (students === "") { setStudentsError(true); }
       if (groupYear === "") { setYearError(true); }
@@ -161,7 +157,7 @@ function CreateGroupPage() {
           <Select
             error={programError}
             labelId="select-program-label"
-          //  InputLabelProps={{ shrink: true }}
+            //  InputLabelProps={{ shrink: true }}
             id="add-select-program"
             label="Pasirinkite programą"
             fullWidth
@@ -171,14 +167,14 @@ function CreateGroupPage() {
             required>
             {
               programs?.map(
-                (prog) =>(
-                <MenuItem
-                key={prog.id}
-                value={prog.id}
-                disabled={prog.deleted}>
-                  {prog.name}
-                </MenuItem>
-              ))}
+                (prog) => (
+                  <MenuItem
+                    key={prog.id}
+                    value={prog.id}
+                    disabled={prog.deleted}>
+                    {prog.name}
+                  </MenuItem>
+                ))}
           </Select>
         </FormControl>
 
@@ -189,22 +185,20 @@ function CreateGroupPage() {
           <Select
             error={shiftError}
             labelId="select-shift-label"
-            //InputLabelProps={{ shrink: true }}
             id="add-select-shift"
             label="Pasirinkite pamainą"
             fullWidth
             value={selectedShift}
-            // defaultValue={"default"}
             onChange={(e) => setSelectedShift(e.target.value)}
             required>
             {
               shifts.map(
-                (shift) =>(
-                <MenuItem
-                key={shift.id}
-                value={shift.id}>{shift.name}
-                </MenuItem>
-              ))}
+                (shift) => (
+                  <MenuItem
+                    key={shift.id}
+                    value={shift.id}>{shift.name}
+                  </MenuItem>
+                ))}
           </Select>
         </FormControl>
 

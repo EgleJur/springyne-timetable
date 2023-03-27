@@ -65,16 +65,6 @@ public class ScheduleControllerTest {
         assertTrue(resultList.containsAll(expectedList));
     }
 
-    //            creates test data in database
-//        @Test
-//        void addScheduleAllowsSavingWithCorrectValues() throws Exception {
-//            ScheduleDto testScheduleDto = new ScheduleDto("PT-22/1 Javascript programuotojas (-a) Vakarinė", LocalDate.now().
-//                    plusDays(1),LocalDate.now().plusDays(2));
-//            MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/schedules?groupId=4").contentType(MediaType.APPLICATION_JSON).
-//                            content(objectMapper.writeValueAsString(testScheduleDto)))
-//                    .andExpect(status().isOk()).andReturn();
-//            assertEquals(200, mvcResult.getResponse().getStatus(), "Correct values should allow creating a new schedule");
-//        }
     @Test
     void addScheduleThrowsExceptionWithNullOrEmptyValues() throws Exception {
         ScheduleDto testScheduleDto1 = new ScheduleDto("",null,null);
@@ -153,7 +143,6 @@ public class ScheduleControllerTest {
         String message = "Invalid schedule id should return bad request status";
         assertEquals(400,mvcResult.getResponse().getStatus(), message);
     }
-
 
     @Test
     void getScheduleByIdReturnsCorrectDto() throws Exception {

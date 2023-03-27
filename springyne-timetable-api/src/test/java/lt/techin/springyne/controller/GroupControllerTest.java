@@ -9,6 +9,7 @@ import lt.techin.springyne.group.GroupService;
 import lt.techin.springyne.program.Program;
 import lt.techin.springyne.shift.Shift;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -17,11 +18,13 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.DependsOn;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
+import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -34,6 +37,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @AutoConfigureMockMvc
 @ExtendWith(MockitoExtension.class)
+@Transactional
 class GroupControllerTest {
     @Autowired
     MockMvc mockMvc;
@@ -54,27 +58,21 @@ class GroupControllerTest {
 
     @Mock
     Group group;
-//    @BeforeEach
-//    public void setup() {
-//        mockMvc = standaloneSetup(new GroupController(groupService)).build();
-//    }
 
     private static final long Id = 1;
 
     @Test
     public void testGetAllGroups() {
         LocalDateTime now = LocalDateTime.now().now();
-        // Given
+
         Group group1 = new Group(1L, "22/1", "2022-2023", 15, now, false, program, shift);
         Group group2 = new  Group(2L, "22/2", "2022-2023", 15, now, false, program, shift);
         List<Group> groups = Arrays.asList(group1, group2);
 
         when(groupService.getAllGroups()).thenReturn(groups);
 
-        // When
         List<Group> result = groupController.getAllGroups();
 
-        // Then
         assertEquals(groups.size(), result.size());
         assertEquals(groups.get(0).getName(), result.get(0).getName());
         assertEquals(groups.get(1).getName(), result.get(1).getName());
@@ -165,6 +163,7 @@ class GroupControllerTest {
                 .andExpect(status().isBadRequest()).andReturn();
     }
     @Test
+    @Order(1)
     void deleteGroupSetsDeletedPropertyToTrue() throws Exception {
         MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.patch("/api/v1/groups/delete/1").contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk()).andReturn();
@@ -173,6 +172,8 @@ class GroupControllerTest {
     }
 
     @Test
+    @Order(2)
+    @DependsOn("deleteGroupSetsDeletedPropertyToTrue")
     void restoreGroupSetsDeletedPropertyToFalse() throws Exception {
         MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.patch("/api/v1/groups/restore/1").contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk()).andReturn();
@@ -213,7 +214,6 @@ class GroupControllerTest {
 
         assertEquals(200, mvcResult.getResponse().getStatus(),"Unique value non empty name should return ok status");
     }
-
 }
 
 

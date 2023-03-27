@@ -5,15 +5,18 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lt.techin.springyne.module.ModuleDto;
 import lt.techin.springyne.module.Module;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.DependsOn;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
+import javax.transaction.Transactional;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -25,6 +28,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
+@Transactional
 class ModuleControllerTest {
 
     @Autowired
@@ -77,6 +81,7 @@ class ModuleControllerTest {
     }
 
     @Test
+    @Order(1)
     void deleteModuleSetsDeletedPropertyToTrue() throws Exception {
         MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.patch("/api/v1/modules/delete/4").contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk()).andReturn();
@@ -85,6 +90,8 @@ class ModuleControllerTest {
     }
 
     @Test
+    @Order(2)
+    @DependsOn("deleteModuleSetsDeletedPropertyToTrue")
     void restoreModuleSetsDeletedPropertyToFalse() throws Exception {
         MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.patch("/api/v1/modules/restore/4").contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk()).andReturn();

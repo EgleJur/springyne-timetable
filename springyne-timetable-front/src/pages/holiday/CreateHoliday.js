@@ -1,6 +1,5 @@
-import { useEffect, useState } from "react";
-import { Alert, Collapse } from "@mui/material";
-import { TextField } from "@mui/material";
+import { useState } from "react";
+import { Alert, Collapse, TextField } from "@mui/material";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import FormLabel from "@mui/material/FormLabel";
 import Checkbox from "@mui/material/Checkbox";
@@ -143,7 +142,6 @@ function CreateHolidayPage() {
         <DatePicker
           className="mb-3"
           label="Pabaigos data"
-          // inputFormat="yyyy-MM-dd"
           value={endDateValue}
           minDate={startDateValue}
           onChange={(newValue) => {

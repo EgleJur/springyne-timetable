@@ -1,7 +1,5 @@
 import { useState, useEffect } from "react";
-import { Alert, Collapse } from "@mui/material";
-import { TextField } from "@mui/material";
-import { Select, MenuItem, FormControl, OutlinedInput, InputLabel } from "@mui/material";
+import { Alert, Collapse, TextField, Select, MenuItem, FormControl, InputLabel } from "@mui/material";
 import { apiUrl } from "../../App";
 
 function CreateTeacherPage() {
@@ -154,7 +152,6 @@ function CreateTeacherPage() {
           required
         />
         <TextField
-          // error={!!emailError}
           onChange={(e) => setEmail(e.target.value)}
           value={email}
           id="create-teacher-email-with-error"

@@ -1,8 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { TextField } from "@mui/material";
-import { Select, MenuItem, Pagination } from "@mui/material";
-import { Collapse, Alert } from "@mui/material";
+import { Select, MenuItem, Pagination, TextField, Collapse, Alert } from "@mui/material";
 import EditTwoToneIcon from '@mui/icons-material/EditTwoTone';
 import DeleteTwoToneIcon from '@mui/icons-material/DeleteTwoTone';
 import RestoreTwoToneIcon from '@mui/icons-material/RestoreTwoTone';
@@ -32,7 +30,7 @@ function ShiftListPage() {
 
   useEffect(() => {
     fetchShifts();
-}, []);
+  }, []);
 
   const handlePageChange = (e, value) => {
     setPage(value);
@@ -49,22 +47,22 @@ function ShiftListPage() {
     fetch(`${apiUrl}/api/v1/shifts/` + shift.id, {
       method: 'PATCH',
       headers: {
-          'Content-Type': 'application/json'
+        'Content-Type': 'application/json'
       },
       body: JSON.stringify(shift)
-  }).then(fetchShifts);
+    }).then(fetchShifts);
     setDeleted(true);
     setRestored(false);
     setTimeout(() => {
       setDeleted(false);
-             }, 5000);
+    }, 5000);
   };
   const restoreShift = (shift) => {
     shift.visible = 1;
     fetch(`${apiUrl}/api/v1/shifts/` + shift.id, {
       method: 'PATCH',
       headers: {
-          'Content-Type': 'application/json'
+        'Content-Type': 'application/json'
       },
       body: JSON.stringify(shift)
     }).then(fetchShifts);
@@ -72,7 +70,7 @@ function ShiftListPage() {
     setRestored(true);
     setTimeout(() => {
       setRestored(false);
-             }, 5000);
+    }, 5000);
   };
 
   return (
@@ -102,14 +100,14 @@ function ShiftListPage() {
         </Alert>
       </Collapse>
 
-    <div className="d-flex justify-content-end">
-      <div className="me-auto d-flex">
-        <button className="btn btn-primary mb-5 me-2">
-          <Link to="/shifts/create" className="nav-link">
-            Pridėti naują pamainą
-          </Link>
-        </button>
-      </div>
+      <div className="d-flex justify-content-end">
+        <div className="me-auto d-flex">
+          <button className="btn btn-primary mb-5 me-2">
+            <Link to="/shifts/create" className="nav-link">
+              Pridėti naują pamainą
+            </Link>
+          </button>
+        </div>
         <div className="mb-5">
           <form className="d-flex" role="search">
             <TextField
@@ -142,8 +140,8 @@ function ShiftListPage() {
             <th></th>
           </tr>
         </thead>
-        <tbody> 
-          {shifts.sort((o1,o2) => o2.visible - o1.visible).slice(((page - 1) * pageSize), page * pageSize).map((shift) => (
+        <tbody>
+          {shifts.sort((o1, o2) => o2.visible - o1.visible).slice(((page - 1) * pageSize), page * pageSize).map((shift) => (
             <tr
               key={shift.id}
               id={shift.id}
@@ -155,23 +153,23 @@ function ShiftListPage() {
               <td>{shift.lastUpdated}</td>
               <td>{((shift.visible === 1) ? false : true) ? "Ištrintas" : ""}</td>
               <td className="text-end">
-                <button className="btn btn-outline-primary me-1 my-1 btn-link" title="Redaguoti" 
-                disabled={(shift.visible === 0) ? true : false}>
+                <button className="btn btn-outline-primary me-1 my-1 btn-link" title="Redaguoti"
+                  disabled={(shift.visible === 0) ? true : false}>
                   <Link className="nav-link" to={"/shifts/edit/" + shift.id}>
-                  <EditTwoToneIcon/>
+                    <EditTwoToneIcon />
                   </Link>
                 </button>
                 {((shift.visible === 1) ? false : true) ? (
                   <button
-                  className="btn btn-outline-secondary me-1 my-1 btn-link" title="Atstatyti"
+                    className="btn btn-outline-secondary me-1 my-1 btn-link" title="Atstatyti"
                     onClick={() => restoreShift(shift)}
                   >
-                    <RestoreTwoToneIcon/>
+                    <RestoreTwoToneIcon />
                   </button>
                 ) : (
                   <button
-                  className="btn btn-danger me-2 my-1 btn-link" title="Ištrinti"
-                    onClick={() =>{ deleteShift(shift)}}
+                    className="btn btn-danger me-2 my-1 btn-link" title="Ištrinti"
+                    onClick={() => { deleteShift(shift) }}
                   >
                     <DeleteTwoToneIcon className="red-icon" />
                   </button>
@@ -217,7 +215,7 @@ function ShiftListPage() {
         </div>
         <div>
           <Pagination
-            count={Math.floor(shifts.length / pageSize) + 1} 
+            count={Math.floor(shifts.length / pageSize) + 1}
             defaultPage={1}
             siblingCount={0}
             onChange={handlePageChange}

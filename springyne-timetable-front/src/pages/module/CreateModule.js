@@ -1,6 +1,5 @@
 import { useState } from "react";
-import { Alert,Collapse } from "@mui/material";
-import { TextField } from "@mui/material";
+import { Alert, Collapse, TextField } from "@mui/material";
 import { apiUrl } from "../../App";
 
 function CreateModulePage() {
@@ -40,14 +39,14 @@ function CreateModulePage() {
           setFailure(false);
           setTimeout(() => {
             setSuccess(false);
-                   }, 5000);
+          }, 5000);
         } else {
           setFailure(true);
           setSuccess(false);
           setNumberError(true);
           setTimeout(() => {
             setFailure(false);
-                   }, 5000);
+          }, 5000);
         }
       });
     }

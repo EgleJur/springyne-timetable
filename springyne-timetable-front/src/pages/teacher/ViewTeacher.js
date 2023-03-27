@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
-import { Link } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import { Collapse, Alert } from "@mui/material";
 import { apiUrl } from "../../App";
 
@@ -26,7 +25,7 @@ function ViewTeacherPage() {
     setRestored(false);
     setTimeout(() => {
       setDeleted(false);
-             }, 5000);
+    }, 5000);
   };
 
   const handleRestore = () => {
@@ -39,7 +38,7 @@ function ViewTeacherPage() {
     setDeleted(false);
     setTimeout(() => {
       setRestored(false);
-             }, 5000);
+    }, 5000);
   };
 
   return (

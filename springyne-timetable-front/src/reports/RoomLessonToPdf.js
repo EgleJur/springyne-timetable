@@ -3,9 +3,8 @@ import Dialog from "@mui/material/Dialog";
 import DialogTitle from "@mui/material/DialogTitle";
 import DialogContent from "@mui/material/DialogContent";
 import DialogActions from "@mui/material/DialogActions";
-import { FormControl, InputLabel, TextField } from "@mui/material";
+import { FormControl, InputLabel, TextField, Select, MenuItem } from "@mui/material";
 import { DatePicker } from "@mui/x-date-pickers";
-import { Select, MenuItem } from "@mui/material";
 import dayjs from "dayjs";
 import { apiUrl } from "../App";
 
@@ -74,9 +73,9 @@ function RoomLessonToPdf(props) {
           const url = window.URL.createObjectURL(blob);
           window.open(url);
           let link = document.createElement('a');
-					link.href = url;
-					link.download = `RoomPDF`;
-					link.click();
+          link.href = url;
+          link.download = `RoomPDF`;
+          link.click();
         })
         .catch((error) => {
           console.error("There was a problem with the fetch operation:", error);
@@ -108,83 +107,83 @@ function RoomLessonToPdf(props) {
             )}
           />
           <DatePicker
-                        className="mb-3"
-                        label="Pabaigos data"
-                         inputFormat="yyyy-MM-dd"
-                        value={endDateValue}
-                        minDate={
-                            startDateValue !== null ? startDateValue : ""
-                        }
-                        onChange={(newValue) => {
-                            setEndDateValue(newValue);
-                        }}
-                        onError={() => setEndDateError(true)}
-                        renderInput={(params) => (
-                            <TextField
-                                fullWidth
-                                size="small"
-                                required
-                                {...params}
-                                error={!!endDateError}
-                            />
-                        )}
-                    />
-                    <FormControl fullWidth size="small" className="mb-3" required>
-                        <InputLabel
-                            id="select-teacher-label"
-                            error={!!roomError}
-                            required
-                        >
-                            Pasirinkite kabinetą
-                        </InputLabel>
-                        <Select
-                            error={!!roomError}
-                            labelId="select-room-label"
-                            id="select-room"
-                            label="Pasirinkite kabinetą"
-                            fullWidth
-                            value={selectedRoom}
-                            onChange={(e) => setSelectedRoom(e.target.value)}
-                            required
-                        >
-                            {rooms?.map((room) => (
-                                <MenuItem
-                                    value={room.name}
-                                    key={room.name}
-                                    disabled={room.deleted}
-                                >
-                                    {room.name}
-                                </MenuItem>
-                            ))}
-                        </Select>
-                    </FormControl>
-
-                </form>
-            </DialogContent>
-            <DialogActions>
-                <button
-                    className="btn btn-primary me-3 mb-2"
-                    onClick={roomsToPdf}
+            className="mb-3"
+            label="Pabaigos data"
+            inputFormat="yyyy-MM-dd"
+            value={endDateValue}
+            minDate={
+              startDateValue !== null ? startDateValue : ""
+            }
+            onChange={(newValue) => {
+              setEndDateValue(newValue);
+            }}
+            onError={() => setEndDateError(true)}
+            renderInput={(params) => (
+              <TextField
+                fullWidth
+                size="small"
+                required
+                {...params}
+                error={!!endDateError}
+              />
+            )}
+          />
+          <FormControl fullWidth size="small" className="mb-3" required>
+            <InputLabel
+              id="select-teacher-label"
+              error={!!roomError}
+              required
+            >
+              Pasirinkite kabinetą
+            </InputLabel>
+            <Select
+              error={!!roomError}
+              labelId="select-room-label"
+              id="select-room"
+              label="Pasirinkite kabinetą"
+              fullWidth
+              value={selectedRoom}
+              onChange={(e) => setSelectedRoom(e.target.value)}
+              required
+            >
+              {rooms?.map((room) => (
+                <MenuItem
+                  value={room.name}
+                  key={room.name}
+                  disabled={room.deleted}
                 >
-                    Spausdinti
-                </button>
-                <button
-                    className="btn btn-danger me-3 mb-2"
-                    onClick={() => {
-                        handleClose();
-                        setStartDateValue(null);
-                        setEndDateValue(null);
-                        setSelectedRoom("");
-                        setStartDateError(false);
-                        setEndDateError(false);
-                        setRoomError(false);
-                      }}
-                >
-                    Atšaukti
-                </button>
-            </DialogActions>
+                  {room.name}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
 
-        </Dialog>
-    );
+        </form>
+      </DialogContent>
+      <DialogActions>
+        <button
+          className="btn btn-primary me-3 mb-2"
+          onClick={roomsToPdf}
+        >
+          Spausdinti
+        </button>
+        <button
+          className="btn btn-danger me-3 mb-2"
+          onClick={() => {
+            handleClose();
+            setStartDateValue(null);
+            setEndDateValue(null);
+            setSelectedRoom("");
+            setStartDateError(false);
+            setEndDateError(false);
+            setRoomError(false);
+          }}
+        >
+          Atšaukti
+        </button>
+      </DialogActions>
+
+    </Dialog>
+  );
 }
 export default RoomLessonToPdf;

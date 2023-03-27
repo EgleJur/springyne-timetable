@@ -1,7 +1,6 @@
-import { Collapse, Alert } from "@mui/material";
+import { Collapse, Alert, TextField, Select, MenuItem } from "@mui/material";
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import { TextField, Select, MenuItem } from "@mui/material";
 import ClearIcon from "@mui/icons-material/Clear";
 import { apiUrl } from "../../App";
 
@@ -114,7 +113,7 @@ function EditProgramPage() {
     setHoursError(false);
     setTimeout(() => {
       setSuccess(false);
-             }, 5000);
+    }, 5000);
   };
   const handleRestore = () => {
     fetch(`${apiUrl}/api/v1/programs/restore/` + params.id, {
@@ -129,7 +128,7 @@ function EditProgramPage() {
     setHoursError(false);
     setTimeout(() => {
       setSuccess(false);
-             }, 5000);
+    }, 5000);
   };
 
   return (
@@ -223,14 +222,14 @@ function EditProgramPage() {
                   disabled={program.deleted}
                 >
                   {subject.subject.name} {subject.hours} valandų{" "}
-                  <ClearIcon 
-          color="disabled" 
-          sx={{ fontSize: 12 }} 
-          value={subject.subject.id}
-          onClick={(e) => deleteSubject(subject.subject.id)}
-          key={`clearIcon-${subject.subject.id}`}
-          id={`clearIcon-${subject.subject.id}`}
-        />
+                  <ClearIcon
+                    color="disabled"
+                    sx={{ fontSize: 12 }}
+                    value={subject.subject.id}
+                    onClick={(e) => deleteSubject(subject.subject.id)}
+                    key={`clearIcon-${subject.subject.id}`}
+                    id={`clearIcon-${subject.subject.id}`}
+                  />
                 </button>
               ))}
             </div>
@@ -240,18 +239,11 @@ function EditProgramPage() {
               <label htmlFor="add-subject-select">Pridėti dalyką</label>
             </div>
             <div className="col-md-8 mb-2">
-              {/* <FormControl fullWidth size="small"> */}
-              {/* <InputLabel id="select-subject-label" error={!!subjectError}>
-                  Pridėti dalyką
-                </InputLabel> */}
               <Select
                 error={!!subjectError}
                 disabled={program.deleted}
                 size="small"
-                // labelId="select-subject-label"
-                // InputLabelProps={{ shrink: true }}
                 id="add-subject-select"
-                // label="Pridėti dalyką"
                 fullWidth
                 value={selectedSubject}
                 onChange={(e) => setSelectedSubject(e.target.value)}
@@ -280,7 +272,6 @@ function EditProgramPage() {
                 onChange={(e) => setHours(e.target.value)}
                 value={hours}
                 id="hours-with-error"
-                // label="Valandų skaičius"
                 className="form-control mb-3"
                 size="small"
                 disabled={program.deleted}

@@ -1,4 +1,4 @@
-import { Collapse, Alert } from "@mui/material";
+
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import {
@@ -6,7 +6,7 @@ import {
   FormControl,
   Select,
   MenuItem,
-  InputLabel,
+  Collapse, Alert,
   OutlinedInput,
 } from "@mui/material";
 import { apiUrl } from "../../App";
@@ -107,7 +107,7 @@ function EditGroupPage() {
     setNameError(false);
     setTimeout(() => {
       setSuccess(false);
-             }, 5000);
+    }, 5000);
   };
   const handleRestore = () => {
     fetch(`${apiUrl}/api/v1/groups/restore/` + params.id, {
@@ -120,7 +120,7 @@ function EditGroupPage() {
     setNameError(false);
     setTimeout(() => {
       setSuccess(false);
-             }, 5000);
+    }, 5000);
   };
 
   return (
@@ -218,9 +218,6 @@ function EditGroupPage() {
             </div>
             <div className="col-md-8 mb-2">
               <FormControl fullWidth size="small" className="mb-3">
-                {/* <InputLabel id="select-module-label">
-                  {group.program?.name}
-                </InputLabel> */}
                 <Select
                   labelId="select-program-label"
                   id="select-program"
@@ -262,9 +259,6 @@ function EditGroupPage() {
             </div>
             <div className="col-md-8 mb-2">
               <FormControl fullWidth size="small" className="mb-3">
-                {/* <InputLabel id="select-module-label">
-                  {group.shift?.name}
-                </InputLabel> */}
                 <Select
                   disabled={group.deleted}
                   labelId="select-shift-label"
@@ -312,42 +306,42 @@ function EditGroupPage() {
         </form>
       </div>
 
-{group.deleted ? (
-      <div>
-        <button
-          type="submit"
-          className="btn btn-primary me-2 mt-2 mb-5"
-          onClick={editGroup}
-          disabled
-        >
-          Redaguoti
-        </button>
-         
+      {group.deleted ? (
+        <div>
+          <button
+            type="submit"
+            className="btn btn-primary me-2 mt-2 mb-5"
+            onClick={editGroup}
+            disabled
+          >
+            Redaguoti
+          </button>
+
           <button
             className="btn btn-secondary me-2 mt-2 mb-5"
             onClick={handleRestore}
           >
             Atstatyti
           </button>
-          </div>
-        ) : (
-          <div>
+        </div>
+      ) : (
+        <div>
           <button
-          type="submit"
-          className="btn btn-primary me-2 mt-2 mb-5"
-          onClick={editGroup}
-          
-        >
-          Redaguoti
-        </button>
+            type="submit"
+            className="btn btn-primary me-2 mt-2 mb-5"
+            onClick={editGroup}
+
+          >
+            Redaguoti
+          </button>
           <button
             className="btn btn-danger me-2 mt-2 mb-5"
             onClick={handleDelete}
           >
             Ištrinti
           </button> </div>
-        )}
-     
+      )}
+
     </div>
   );
 }

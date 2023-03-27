@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
-import { Link } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import { Collapse, Alert } from "@mui/material";
 import { apiUrl } from "../../App";
 
@@ -33,7 +32,7 @@ function ViewModulePage() {
     setRestored(false);
     setTimeout(() => {
       setDeleted(false);
-             }, 5000);
+    }, 5000);
   };
 
   const handleRestore = () => {
@@ -46,7 +45,7 @@ function ViewModulePage() {
     setDeleted(false);
     setTimeout(() => {
       setRestored(false);
-             }, 5000);
+    }, 5000);
   };
 
   return (
@@ -107,8 +106,6 @@ function ViewModulePage() {
                 key={subject.id}
               >
                 <td>{subject.name}</td>
-                {/* <td>{subject.description}</td>
-                <td>{subject.last_Updated}</td> */}
                 {subject.deleted ? <td>Dalykas ištrintas</td> : <td></td>}
               </tr>
             ))}

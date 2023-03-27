@@ -1,7 +1,5 @@
 import { useState, useEffect } from "react";
-import { Alert, Collapse } from "@mui/material";
-import { FormControl, MenuItem, Select, InputLabel } from "@mui/material";
-import { TextField } from "@mui/material";
+import { FormControl, MenuItem, Select, InputLabel, Alert, Collapse, TextField } from "@mui/material";
 import { useParams } from "react-router-dom";
 import { apiUrl } from "../../App";
 
@@ -9,13 +7,11 @@ import { apiUrl } from "../../App";
 function CreateSubjectPage() {
   const [description, setDescription] = useState("");
   const [name, setName] = useState("");
-  const [room, setRoom] = useState("");
   const [nameError, setNameError] = useState(false);
   const [moduleError, setModuleError] = useState(false);
   const [roomError, setRoomError] = useState(false);
   const [success, setSuccess] = useState(false);
   const [failure, setFailure] = useState(false);
-  const params = useParams();
   const [modules, setModules] = useState([]);
   const [selectedModule, setSelectedModule] = useState("");
   const [descriptionError, setDescriptionError] = useState(false);
@@ -36,7 +32,6 @@ function CreateSubjectPage() {
 
   }, []);
 
-
   const createNewSubject = (e) => {
     e.preventDefault();
     setNameError(false);
@@ -48,7 +43,7 @@ function CreateSubjectPage() {
       if (name === "") { setNameError(true); }
       if (selectedRoom === "") { setRoomError(true); }
       if (selectedModule === "") { setModuleError(true); }
-      if (description === "") { setDescriptionError(true);}
+      if (description === "") { setDescriptionError(true); }
     } else {
       fetch(
         `${apiUrl}/api/v1/subjects/createSubject?moduleId=${selectedModule}&roomId=${selectedRoom}`,
@@ -125,7 +120,7 @@ function CreateSubjectPage() {
         />
 
         <TextField
-        error={!!descriptionError}
+          error={!!descriptionError}
           onChange={(e) => setDescription(e.target.value)}
           value={description}
           id="create-subject-description-with-error"
@@ -143,12 +138,10 @@ function CreateSubjectPage() {
           <Select
             error={moduleError}
             labelId="select-module-label"
-            //nputLabelProps={{ shrink: true }}
             id="add-select-module"
             label="Pasirinkite modulį"
             fullWidth
             value={selectedModule}
-            // defaultValue={"default"}
             onChange={(e) => setSelectedModule(e.target.value)}
             required>
             {

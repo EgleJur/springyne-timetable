@@ -1,8 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { TextField } from "@mui/material";
-import { Select, MenuItem, Pagination } from "@mui/material";
-import { Collapse, Alert } from "@mui/material";
+import { Select, MenuItem, Pagination, TextField, Collapse, Alert } from "@mui/material";
 import EditTwoToneIcon from '@mui/icons-material/EditTwoTone';
 import DeleteTwoToneIcon from '@mui/icons-material/DeleteTwoTone';
 import RestoreTwoToneIcon from '@mui/icons-material/RestoreTwoTone';
@@ -39,8 +37,7 @@ function SubjectListPage() {
     setPage(value);
     setPageNumber(value - 1);
     fetch(
-      `${apiUrl}/api/v1/subjects/search?name=${searchName}&moduleName=${searchModName}&page=${
-        value - 1
+      `${apiUrl}/api/v1/subjects/search?name=${searchName}&moduleName=${searchModName}&page=${value - 1
       }&pageSize=${pageSize}`
     )
       .then((response) => response.json())
@@ -52,8 +49,7 @@ function SubjectListPage() {
     setPage(1);
     setPageNumber(0);
     fetch(
-      `${apiUrl}/api/v1/subjects/search?name=${searchName}&moduleName=${searchModName}&page=${0}&pageSize=${
-        e.target.value
+      `${apiUrl}/api/v1/subjects/search?name=${searchName}&moduleName=${searchModName}&page=${0}&pageSize=${e.target.value
       }`
     )
       .then((response) => response.json())
@@ -69,7 +65,7 @@ function SubjectListPage() {
     setRestored(false);
     setTimeout(() => {
       setDeleted(false);
-             }, 5000);
+    }, 5000);
   };
 
   const restoreSubject = (id) => {
@@ -81,7 +77,7 @@ function SubjectListPage() {
     setRestored(true);
     setTimeout(() => {
       setRestored(false);
-             }, 5000);
+    }, 5000);
   };
 
   return (
@@ -121,7 +117,7 @@ function SubjectListPage() {
         <div className="mb-4">
           <form className="d-flex" role="search">
             <TextField
-              onChange={(e) => {setSearchName(e.target.value); setPageNumber(0);setPage(1);}}
+              onChange={(e) => { setSearchName(e.target.value); setPageNumber(0); setPage(1); }}
               value={searchName}
               id="search-name-input"
               label="Ieškoti pagal pavadinimą"
@@ -129,7 +125,7 @@ function SubjectListPage() {
               size="small"
             />
             <TextField
-              onChange={(e) => {setSearchModName(e.target.value); setPageNumber(0);setPage(1);}}
+              onChange={(e) => { setSearchModName(e.target.value); setPageNumber(0); setPage(1); }}
               value={searchModName}
               id="search-module-input"
               label="Ieškoti pagal modulį"
@@ -145,7 +141,7 @@ function SubjectListPage() {
             </button>
           </form>
         </div>
-      </div>      
+      </div>
 
       <table className="table table-hover shadow p-3 mb-5 bg-body rounded align-middle">
         <thead className="table-light">
@@ -158,8 +154,8 @@ function SubjectListPage() {
         </thead>
         <tbody>
           {subjects.content?.map((subject) => (
-            <tr key={subject.id} 
-            id={subject.id}
+            <tr key={subject.id}
+              id={subject.id}
               className={subject.deleted ? "text-black-50" : ""}>
               <td>{subject.name}</td>
               <td>{subject.module?.name}</td>
@@ -170,7 +166,7 @@ function SubjectListPage() {
                     className="nav-link"
                     to={"/subjects/view/" + subject.id}
                   >
-                    <VisibilityTwoToneIcon/>
+                    <VisibilityTwoToneIcon />
                   </Link>
                 </button>
 
@@ -182,20 +178,20 @@ function SubjectListPage() {
                     className="nav-link"
                     to={"/subjects/edit/" + subject.id}
                   >
-                    <EditTwoToneIcon/>
+                    <EditTwoToneIcon />
                   </Link>
                 </button>
 
                 {subject.deleted ? (
                   <button
-                  className="btn btn-outline-secondary me-1 my-1 btn-link" title="Atstatyti"
+                    className="btn btn-outline-secondary me-1 my-1 btn-link" title="Atstatyti"
                     onClick={() => restoreSubject(subject.id)}
                   >
-                    <RestoreTwoToneIcon/>
+                    <RestoreTwoToneIcon />
                   </button>
                 ) : (
                   <button
-                  className="btn btn-danger me-2 my-1 btn-link" title="Ištrinti"
+                    className="btn btn-danger me-2 my-1 btn-link" title="Ištrinti"
                     onClick={() => deleteSubject(subject.id)}
                   >
                     <DeleteTwoToneIcon className="red-icon" />
@@ -246,7 +242,7 @@ function SubjectListPage() {
         </div>
       </div>
     </div>
-    
+
   );
 }
 

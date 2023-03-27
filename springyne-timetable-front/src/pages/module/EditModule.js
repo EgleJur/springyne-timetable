@@ -1,7 +1,6 @@
-import { Collapse, Alert } from "@mui/material";
+import { Collapse, Alert, TextField } from "@mui/material";
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import { TextField } from "@mui/material";
 import EditModuleSubjects from "../../components/EditModuleSubjects";
 import { apiUrl } from "../../App";
 
@@ -48,7 +47,7 @@ function EditModulePage() {
           fetchModule();
           setTimeout(() => {
             setSuccess(false);
-                   }, 5000);
+          }, 5000);
         } else {
           setFailure(true);
           setSuccess(false);
@@ -56,7 +55,7 @@ function EditModulePage() {
           setNameError(false);
           setTimeout(() => {
             setFailure(false);
-                   }, 5000);
+          }, 5000);
         }
       });
     }
@@ -82,7 +81,7 @@ function EditModulePage() {
     setChanged(false);
     setTimeout(() => {
       setSuccess(false);
-             }, 5000);
+    }, 5000);
   };
 
   const handleRestore = () => {
@@ -98,7 +97,7 @@ function EditModulePage() {
     setChanged(false);
     setTimeout(() => {
       setSuccess(false);
-             }, 5000);
+    }, 5000);
   };
 
   return (
@@ -206,7 +205,6 @@ function EditModulePage() {
             type="submit"
             className="btn btn-primary me-2 mb-5"
             onClick={editModule}
-            // disabled={!changed}
           >
             Redaguoti
           </button>

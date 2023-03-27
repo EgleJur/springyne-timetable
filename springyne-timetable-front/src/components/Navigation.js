@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
-import TeacherLessonToPdf from "../components/TeacherLessonToPdf";
-import RoomLessonToPdf from "../components/RoomLessonToPdf";
+import TeacherLessonToPdf from "../reports/TeacherLessonToPdf";
+import RoomLessonToPdf from "../reports/RoomLessonToPdf";
 import { useState } from "react";
 
 function Navigation() {

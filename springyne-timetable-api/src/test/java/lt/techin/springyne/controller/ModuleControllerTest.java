@@ -2,8 +2,8 @@ package lt.techin.springyne.controller;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import lt.techin.springyne.module.Module;
 import lt.techin.springyne.module.ModuleDto;
+import lt.techin.springyne.module.Module;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
@@ -27,6 +27,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
+
 class ModuleControllerTest {
 
     @Autowired
@@ -48,7 +49,7 @@ class ModuleControllerTest {
         expectedList.add(testModuleDto3);
 
         MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/modules")
-        ).andExpect(status().isOk()).andReturn();
+                ).andExpect(status().isOk()).andReturn();
 
         List<ModuleDto> resultList = objectMapper.readValue(mvcResult.getResponse().getContentAsString(StandardCharsets.UTF_8), new TypeReference<List<ModuleDto>>() {
         });
@@ -65,16 +66,16 @@ class ModuleControllerTest {
 
         String message = "Null or empty values should return bad request status";
 
-        assertEquals(400, performModulePostBadRequest(testModuleDto4).getResponse().getStatus(), message);
-        assertEquals(400, performModulePostBadRequest(testModuleDto5).getResponse().getStatus(), message);
-        assertEquals(400, performModulePostBadRequest(testModuleDto6).getResponse().getStatus(), message);
-        assertEquals(400, performModulePostBadRequest(testModuleDto7).getResponse().getStatus(), message);
+        assertEquals(400,performModulePostBadRequest(testModuleDto4).getResponse().getStatus(), message);
+        assertEquals(400,performModulePostBadRequest(testModuleDto5).getResponse().getStatus(), message);
+        assertEquals(400,performModulePostBadRequest(testModuleDto6).getResponse().getStatus(), message);
+        assertEquals(400,performModulePostBadRequest(testModuleDto7).getResponse().getStatus(), message);
     }
 
     @Test
     void addModuleThrowsExceptionWithNonUniqueNumberValue() throws Exception {
         ModuleDto testModuleDto1 = new ModuleDto("001", "Informacinių sistemų projektavimas");
-        assertEquals(400, performModulePostBadRequest(testModuleDto1).getResponse().getStatus(),
+        assertEquals(400,performModulePostBadRequest(testModuleDto1).getResponse().getStatus(),
                 "Non unique Module number should return bad request status");
     }
 
@@ -84,8 +85,7 @@ class ModuleControllerTest {
     void deleteModuleSetsDeletedPropertyToTrue() throws Exception {
         MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.patch("/api/v1/modules/delete/4").contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk()).andReturn();
-        Module resultModule = objectMapper.readValue(mvcResult.getResponse().getContentAsString(), new TypeReference<Module>() {
-        });
+        Module resultModule = objectMapper.readValue(mvcResult.getResponse().getContentAsString(), new TypeReference<Module>() {});
         Assertions.assertTrue(resultModule.isDeleted());
     }
 
@@ -96,8 +96,7 @@ class ModuleControllerTest {
     void restoreModuleSetsDeletedPropertyToFalse() throws Exception {
         MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.patch("/api/v1/modules/restore/4").contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk()).andReturn();
-        Module resultModule = objectMapper.readValue(mvcResult.getResponse().getContentAsString(), new TypeReference<Module>() {
-        });
+        Module resultModule = objectMapper.readValue(mvcResult.getResponse().getContentAsString(), new TypeReference<Module>() {});
         Assertions.assertFalse(resultModule.isDeleted());
     }
 
@@ -107,25 +106,23 @@ class ModuleControllerTest {
         MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.patch("/api/v1/modules/update/5").contentType(MediaType.APPLICATION_JSON).
                 content(objectMapper.writeValueAsString(testModuleDto5))).andReturn();
 
-        assertEquals(400, mvcResult.getResponse().getStatus(), "Non unique Module number should return bad request status");
+        assertEquals(400, mvcResult.getResponse().getStatus(),"Non unique Module number should return bad request status");
     }
-
     @Test
     void editModuleThrowsExceptionWithEmptyValues() throws Exception {
         ModuleDto testModuleDto5 = new ModuleDto("", "");
         MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.patch("/api/v1/modules/update/5").contentType(MediaType.APPLICATION_JSON).
                 content(objectMapper.writeValueAsString(testModuleDto5))).andReturn();
 
-        assertEquals(400, mvcResult.getResponse().getStatus(), "Empty value number and name should return bad request status");
+        assertEquals(400, mvcResult.getResponse().getStatus(),"Empty value number and name should return bad request status");
     }
-
     @Test
     void editModuleAllowsSavingWithUniqueNumber() throws Exception {
         ModuleDto testModuleDto4 = new ModuleDto("004", "Įvadinis modulis", FALSE);
         MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.patch("/api/v1/modules/update/4").contentType(MediaType.APPLICATION_JSON).
                 content(objectMapper.writeValueAsString(testModuleDto4))).andReturn();
 
-        assertEquals(200, mvcResult.getResponse().getStatus(), "Unique value number and non empty name should return ok status");
+        assertEquals(200, mvcResult.getResponse().getStatus(),"Unique value number and non empty name should return ok status");
     }
 
     public MvcResult performModulePostBadRequest(ModuleDto moduleDto) throws Exception {

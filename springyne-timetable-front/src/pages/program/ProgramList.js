@@ -1,8 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { FormControl, TextField } from "@mui/material";
-import { Select, MenuItem, Pagination, InputLabel } from "@mui/material";
-import { Collapse, Alert } from "@mui/material";
+import { Select, MenuItem, Pagination, TextField, Collapse, Alert } from "@mui/material";
 import EditTwoToneIcon from '@mui/icons-material/EditTwoTone';
 import DeleteTwoToneIcon from '@mui/icons-material/DeleteTwoTone';
 import RestoreTwoToneIcon from '@mui/icons-material/RestoreTwoTone';
@@ -32,8 +30,7 @@ function ProgramListPage() {
     setPage(value);
     setPageNumber(value - 1);
     fetch(
-      `${apiUrl}/api/v1/programs/search?name=${searchName}&page=${
-        value - 1
+      `${apiUrl}/api/v1/programs/search?name=${searchName}&page=${value - 1
       }&pageSize=${pageSize}`
     )
       .then((response) => response.json())
@@ -45,8 +42,7 @@ function ProgramListPage() {
     setPage(1);
     setPageNumber(0);
     fetch(
-      `${apiUrl}/api/v1/programs/search?name=${searchName}&page=${0}&pageSize=${
-        e.target.value
+      `${apiUrl}/api/v1/programs/search?name=${searchName}&page=${0}&pageSize=${e.target.value
       }`
     )
       .then((response) => response.json())
@@ -71,7 +67,7 @@ function ProgramListPage() {
     setRestored(false);
     setTimeout(() => {
       setDeleted(false);
-             }, 5000);
+    }, 5000);
   };
   const restoreProgram = (id) => {
     fetch(`${apiUrl}/api/v1/programs/restore/` + id, {
@@ -81,7 +77,7 @@ function ProgramListPage() {
     setRestored(true);
     setTimeout(() => {
       setRestored(false);
-             }, 5000);
+    }, 5000);
   };
 
   return (
@@ -167,7 +163,7 @@ function ProgramListPage() {
                     className="nav-link"
                     to={"/programs/view/" + program.id}
                   >
-                    <VisibilityTwoToneIcon/>
+                    <VisibilityTwoToneIcon />
                   </Link>
                 </button>
                 <button
@@ -178,19 +174,19 @@ function ProgramListPage() {
                     className="nav-link"
                     to={"/programs/edit/" + program.id}
                   >
-                    <EditTwoToneIcon/>
+                    <EditTwoToneIcon />
                   </Link>
                 </button>
                 {program.deleted ? (
                   <button
-                  className="btn btn-outline-secondary me-1 my-1 btn-link" title="Atstatyti"
+                    className="btn btn-outline-secondary me-1 my-1 btn-link" title="Atstatyti"
                     onClick={() => restoreProgram(program.id)}
                   >
-                    <RestoreTwoToneIcon/>
+                    <RestoreTwoToneIcon />
                   </button>
                 ) : (
                   <button
-                  className="btn btn-danger me-2 my-1 btn-link" title="Ištrinti"
+                    className="btn btn-danger me-2 my-1 btn-link" title="Ištrinti"
                     onClick={() => deleteProgram(program.id)}
                   >
                     <DeleteTwoToneIcon className="red-icon" />

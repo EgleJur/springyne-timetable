@@ -1,8 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { TextField } from "@mui/material";
-import { Select, MenuItem, Pagination } from "@mui/material";
-import { Collapse, Alert } from "@mui/material";
+import { Select, MenuItem, Pagination, TextField, Collapse, Alert } from "@mui/material";
 import EditTwoToneIcon from '@mui/icons-material/EditTwoTone';
 import DeleteTwoToneIcon from '@mui/icons-material/DeleteTwoTone';
 import RestoreTwoToneIcon from '@mui/icons-material/RestoreTwoTone';
@@ -64,7 +62,7 @@ function GroupListPage() {
     setRestored(false);
     setTimeout(() => {
       setDeleted(false);
-             }, 5000);
+    }, 5000);
   };
 
   const restoreGroup = (id) => {
@@ -76,7 +74,7 @@ function GroupListPage() {
     setRestored(true);
     setTimeout(() => {
       setRestored(false);
-             }, 5000);
+    }, 5000);
   };
 
   return (
@@ -116,7 +114,7 @@ function GroupListPage() {
         <div className="mb-4">
           <form className="d-flex" role="search">
             <TextField
-              onChange={(e) => {setSearchName(e.target.value); setPageNumber(0); setPage(1);}}
+              onChange={(e) => { setSearchName(e.target.value); setPageNumber(0); setPage(1); }}
               value={searchName}
               id="search-name-input"
               label="Ieškoti pagal pavadinimą"
@@ -124,7 +122,7 @@ function GroupListPage() {
               size="small"
             />
             <TextField
-              onChange={(e) => {setSearchProgName(e.target.value); setPageNumber(0); setPage(1);}}
+              onChange={(e) => { setSearchProgName(e.target.value); setPageNumber(0); setPage(1); }}
               value={searchProgName}
               id="search-program-input"
               label="Ieškoti pagal programą"
@@ -132,7 +130,7 @@ function GroupListPage() {
               size="small"
             />
             <TextField
-              onChange={(e) => {setSearchYear(e.target.value); setPageNumber(0); setPage(1);}}
+              onChange={(e) => { setSearchYear(e.target.value); setPageNumber(0); setPage(1); }}
               value={searchYear}
               id="search-year-input"
               label="Ieškoti pagal metus"
@@ -148,7 +146,7 @@ function GroupListPage() {
             </button>
           </form>
         </div>
-      </div>      
+      </div>
 
       <table className="table table-hover shadow p-3 mb-5 bg-body rounded align-middle">
         <thead className="table-light">
@@ -163,8 +161,8 @@ function GroupListPage() {
         </thead>
         <tbody>
           {groups.content?.map((group) => (
-            <tr key={group.id} 
-            id={group.id}
+            <tr key={group.id}
+              id={group.id}
               className={group.deleted ? "text-black-50" : ""}>
               <td>{group.name}</td>
               <td>{group.program?.name}</td>
@@ -177,7 +175,7 @@ function GroupListPage() {
                     className="nav-link"
                     to={"/groups/view/" + group.id}
                   >
-                    <VisibilityTwoToneIcon/>
+                    <VisibilityTwoToneIcon />
                   </Link>
                 </button>
 
@@ -189,16 +187,16 @@ function GroupListPage() {
                     className="nav-link"
                     to={"/groups/edit/" + group.id}
                   >
-                    <EditTwoToneIcon/>
+                    <EditTwoToneIcon />
                   </Link>
                 </button>
 
                 {group.deleted ? (
                   <button
-                  className="btn btn-outline-secondary me-1 my-1 btn-link" title="Atstatyti"
+                    className="btn btn-outline-secondary me-1 my-1 btn-link" title="Atstatyti"
                     onClick={() => restoreGroup(group.id)}
                   >
-                    <RestoreTwoToneIcon/>
+                    <RestoreTwoToneIcon />
                   </button>
                 ) : (
                   <button
@@ -253,7 +251,7 @@ function GroupListPage() {
         </div>
       </div>
     </div>
-    
+
   );
 }
 

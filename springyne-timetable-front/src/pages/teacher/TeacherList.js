@@ -1,8 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { TextField } from "@mui/material";
-import { Select, MenuItem, Pagination } from "@mui/material";
-import { Collapse, Alert } from "@mui/material";
+import { Select, MenuItem, Pagination, TextField, Collapse, Alert } from "@mui/material";
 import EditTwoToneIcon from '@mui/icons-material/EditTwoTone';
 import DeleteTwoToneIcon from '@mui/icons-material/DeleteTwoTone';
 import RestoreTwoToneIcon from '@mui/icons-material/RestoreTwoTone';
@@ -49,8 +47,7 @@ function TeacherListPage() {
     setPage(value);
     setPageNumber(value - 1);
     fetch(
-      `${apiUrl}/api/v1/teachers/search?name=${searchName}&shiftId=${searchShift}&subjectId=${searchSubject}&page=${
-        value - 1
+      `${apiUrl}/api/v1/teachers/search?name=${searchName}&shiftId=${searchShift}&subjectId=${searchSubject}&page=${value - 1
       }&pageSize=${pageSize}`
     )
       .then((response) => response.json())
@@ -62,8 +59,7 @@ function TeacherListPage() {
     setPage(1);
     setPageNumber(0);
     fetch(
-      `${apiUrl}/api/v1/teachers/search?name=${searchName}&shiftId=${searchShift}&subjectId=${searchSubject}&page=${0}&pageSize=${
-        e.target.value
+      `${apiUrl}/api/v1/teachers/search?name=${searchName}&shiftId=${searchShift}&subjectId=${searchSubject}&page=${0}&pageSize=${e.target.value
       }`
     )
       .then((response) => response.json())
@@ -88,7 +84,7 @@ function TeacherListPage() {
     setRestored(false);
     setTimeout(() => {
       setDeleted(false);
-             }, 5000);
+    }, 5000);
   };
   const restoreTeacher = (id) => {
     fetch(`${apiUrl}/api/v1/teachers/restore/` + id, {
@@ -98,7 +94,7 @@ function TeacherListPage() {
     setRestored(true);
     setTimeout(() => {
       setRestored(false);
-             }, 5000);
+    }, 5000);
   };
 
   return (
@@ -128,15 +124,15 @@ function TeacherListPage() {
         </Alert>
       </Collapse>
       <div className="d-flex justify-content-end">
-      <div className="me-auto d-flex">
-        <button className="btn btn-primary mb-5 me-2">
-          <Link to="/teachers/create" className="nav-link">
-            Pridėti naują mokytoją
-          </Link>
-        </button>
-      </div>
+        <div className="me-auto d-flex">
+          <button className="btn btn-primary mb-5 me-2">
+            <Link to="/teachers/create" className="nav-link">
+              Pridėti naują mokytoją
+            </Link>
+          </button>
+        </div>
 
-      
+
         <div className="mb-4">
           <form className="d-flex" role="search">
             <label htmlFor="select-subject" className="me-2">
@@ -178,7 +174,7 @@ function TeacherListPage() {
                 </MenuItem>
               ))}
             </Select>
-                
+
             <TextField
               onChange={(e) => setSearchName(e.target.value)}
               value={searchName}
@@ -197,15 +193,6 @@ function TeacherListPage() {
             </button>
           </form>
         </div>
-        {/* <div>
-          <Pagination
-            count={teachers.totalPages}
-            defaultPage={1}
-            siblingCount={0}
-            onChange={handlePageChange}
-            value={page}
-          />
-        </div> */}
       </div>
 
       <table className="table table-hover shadow p-3 mb-5 bg-body rounded align-middle">
@@ -236,46 +223,42 @@ function TeacherListPage() {
               <td>{teacher.shift.name}</td>
               <td>{teacher.deleted ? "Ištrintas" : ""}</td>
               <td className="text-end">
-  <div className="ms-5">
-    <button className="btn btn-outline-primary me-1 my-1 btn-link" title="Žiūrėti">
-      <Link
-        className="nav-link"
-        to={"/teachers/view/" + teacher.id}
-      >
-        <VisibilityTwoToneIcon/>
-      </Link>
-    </button>
-    <button
-      className="btn btn-outline-primary me-1 my-1 btn-link" title="Redaguoti"
-      disabled={teacher.deleted}
-    >
-      <Link
-        className="nav-link"
-        to={"/teachers/edit/" + teacher.id}
-      >
-        <EditTwoToneIcon/>
-      </Link>
-    </button>
-    {teacher.deleted ? (
-      <button
-      className="btn btn-outline-secondary me-1 my-1 btn-link" title="Atstatyti"
-        onClick={() => restoreTeacher(teacher.id)}
-      >
-        <RestoreTwoToneIcon/>
-      </button>
-    ) : (
-      <button
-      className="btn btn-danger me-2 my-1 btn-link" title="Ištrinti"
-        onClick={() => deleteTeacher(teacher.id)}
-      >
-        <DeleteTwoToneIcon className="red-icon" />
-      </button>
-    )}
-  </div>
-
-
-
-
+                <div className="ms-5">
+                  <button className="btn btn-outline-primary me-1 my-1 btn-link" title="Žiūrėti">
+                    <Link
+                      className="nav-link"
+                      to={"/teachers/view/" + teacher.id}
+                    >
+                      <VisibilityTwoToneIcon />
+                    </Link>
+                  </button>
+                  <button
+                    className="btn btn-outline-primary me-1 my-1 btn-link" title="Redaguoti"
+                    disabled={teacher.deleted}
+                  >
+                    <Link
+                      className="nav-link"
+                      to={"/teachers/edit/" + teacher.id}
+                    >
+                      <EditTwoToneIcon />
+                    </Link>
+                  </button>
+                  {teacher.deleted ? (
+                    <button
+                      className="btn btn-outline-secondary me-1 my-1 btn-link" title="Atstatyti"
+                      onClick={() => restoreTeacher(teacher.id)}
+                    >
+                      <RestoreTwoToneIcon />
+                    </button>
+                  ) : (
+                    <button
+                      className="btn btn-danger me-2 my-1 btn-link" title="Ištrinti"
+                      onClick={() => deleteTeacher(teacher.id)}
+                    >
+                      <DeleteTwoToneIcon className="red-icon" />
+                    </button>
+                  )}
+                </div>
               </td>
             </tr>
           ))}

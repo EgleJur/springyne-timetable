@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { TextField, FormControl, MenuItem, Select, InputLabel,Alert, Collapse  } from "@mui/material";
+import { TextField, FormControl, MenuItem, Select, InputLabel, Alert, Collapse } from "@mui/material";
 import { apiUrl } from "../../App";
 
 function CreateGroupPage() {

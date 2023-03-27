@@ -1,4 +1,4 @@
-import { Collapse, Alert } from "@mui/material";
+
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import {
@@ -6,8 +6,7 @@ import {
   FormControl,
   Select,
   MenuItem,
-  InputLabel,
-  OutlinedInput,
+  Collapse, Alert
 } from "@mui/material";
 import ClearIcon from "@mui/icons-material/Clear";
 import { apiUrl } from "../../App";
@@ -114,7 +113,7 @@ function EditSubjectPage() {
     setChanged(false);
     setTimeout(() => {
       setSuccess(false);
-             }, 5000);
+    }, 5000);
   };
   const handleRestore = () => {
     fetch(`${apiUrl}/api/v1/subjects/restore/` + params.id, {
@@ -128,7 +127,7 @@ function EditSubjectPage() {
     setChanged(false);
     setTimeout(() => {
       setSuccess(false);
-             }, 5000);
+    }, 5000);
   };
   return (
     <div className="mx-3">
@@ -240,7 +239,6 @@ function EditSubjectPage() {
             </div>
           </div>
 
-          {/* ///////////// */}
           <div className="row">
             <div className="col-md-4 mb-2 mb-md-0 fw-bold">
               {subject.rooms?.length === 0 ? "" : <div>Pašalinti kabinetą</div>}
@@ -251,7 +249,6 @@ function EditSubjectPage() {
                   type="submit"
                   className="btn btn-light me-2 mb-2"
                   value={room.id}
-                  // onChange={(e) => updateProperty(e.target.value)}
                   disabled={subject.deleted}
                   onClick={(e) => deleteRoom(e.target.value)}
                   key={room.id}
@@ -277,13 +274,11 @@ function EditSubjectPage() {
             </div>
             <div className="col-md-8 mb-2">
               <FormControl fullWidth size="small" className="mb-3">
-                {/* <InputLabel id="select-room-label">Pridėti kabinetą</InputLabel> */}
                 <Select
                   disabled={subject.deleted}
                   labelId="select-room-label"
                   InputLabelProps={{ shrink: true }}
                   id="add-select-room"
-                  // label="Pridėti dalyką"
                   fullWidth
                   value={selectedRoom}
                   onChange={(e) => setSelectedRoom(e.target.value)}
@@ -321,7 +316,6 @@ function EditSubjectPage() {
           type="submit"
           className="btn btn-primary me-2 mb-5"
           onClick={editsubject}
-          // disabled={!changed}
         >
           Redaguoti
         </button>

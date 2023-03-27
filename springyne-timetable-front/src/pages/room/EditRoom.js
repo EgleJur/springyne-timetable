@@ -1,7 +1,6 @@
-import { Collapse, Alert } from "@mui/material";
+import { Collapse, Alert, TextField } from "@mui/material";
 import { useState, useEffect } from "react";
-import { Link, useParams } from "react-router-dom";
-import { TextField } from "@mui/material";
+import { useParams } from "react-router-dom";
 import { apiUrl } from "../../App";
 
 
@@ -21,12 +20,6 @@ function EditRoomPage() {
   };
 
   useEffect(fetchRoom, []);
-
-  // useEffect(() => {
-  //   fetch("/api/v1/rooms/" + params.id)
-  //     .then((response) => response.json())
-  //     .then((jsonResponse) => setRoom(jsonResponse));
-  // }, [params.id]);
 
   const editRoom = (e) => {
     e.preventDefault();
@@ -144,7 +137,6 @@ function EditRoomPage() {
                 onChange={(e) => updateProperty("name", e)}
                 value={room.name}
                 id="edit-room-name-with-error"
-                // label="Pavadinimas"
                 helperText="Pavadinimas privalomas"
                 className="form-control"
                 size="small"
@@ -164,7 +156,6 @@ function EditRoomPage() {
                 onChange={(e) => updateProperty("building", e)}
                 value={room.building}
                 id="edit-room-building-with-error"
-                // label="Pastatas"
                 helperText="Pastatas privalomas"
                 className="form-control"
                 size="small"
@@ -180,17 +171,14 @@ function EditRoomPage() {
             </div>
             <div className="col-md-8 mb-2">
               <TextField
-                // error={!!buildingError}
                 onChange={(e) => updateProperty("description", e)}
                 value={room.description}
                 id="edit-room-description"
-                // label="Aprašymas"
                 helperText=""
                 className="form-control"
                 size="small"
                 InputLabelProps={{ shrink: true }}
                 disabled={room.deleted}
-                // required
               />
             </div>
           </div>

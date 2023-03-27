@@ -1,7 +1,5 @@
 import { useState } from "react";
-import { Alert, Collapse } from "@mui/material";
-import { TextField } from "@mui/material";
-import { Select, MenuItem} from "@mui/material";
+import { Alert, Collapse, TextField, Select, MenuItem } from "@mui/material";
 import { apiUrl } from "../../App";
 
 function CreateShiftPage() {
@@ -9,8 +7,8 @@ function CreateShiftPage() {
   const [starts, setStarts] = useState(1);
   const [ends, setEnds] = useState(14);
   const [nameError, setNameError] = useState("");
-  const [startError, setStartError] = useState(false); // added state for start error
-  const [endError, setEndError] = useState(false); // added state for end error
+  const [startError, setStartError] = useState(false);
+  const [endError, setEndError] = useState(false);
   const [success, setSuccess] = useState(false);
   const [failure, setFailure] = useState(false);
 
@@ -50,13 +48,13 @@ function CreateShiftPage() {
           setFailure(false);
           setTimeout(() => {
             setSuccess(false);
-                   }, 5000);
+          }, 5000);
         } else {
           setFailure(true);
           setSuccess(false);
           setTimeout(() => {
             setFailure(false);
-                   }, 5000);
+          }, 5000);
           setNameError("Įrašo nepavyko sukurti");
         }
       });
@@ -113,8 +111,8 @@ function CreateShiftPage() {
           onChange={(e) => setStarts(parseInt(e.target.value))}
         >
           {Array.from(Array(14)).map((_, i) => (
-            <MenuItem key={i+1} value={i+1}>
-              {i+1}
+            <MenuItem key={i + 1} value={i + 1}>
+              {i + 1}
             </MenuItem>
           ))}
         </Select>

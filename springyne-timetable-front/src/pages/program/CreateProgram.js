@@ -1,7 +1,5 @@
 import { useState, useEffect } from "react";
-import { Alert, Collapse } from "@mui/material";
-import { TextField } from "@mui/material";
-import { FormControl, MenuItem, Select, InputLabel } from "@mui/material";
+import { Alert, Collapse, TextField, FormControl, MenuItem, Select, InputLabel } from "@mui/material";
 import { apiUrl } from "../../App";
 
 function CreateProgramPage() {
@@ -31,16 +29,16 @@ function CreateProgramPage() {
     setSubjectError(false);
     if (
       name === "" ||
-       description === "" ||
+      description === "" ||
       hours === "" ||
       selectedSubject === ""
     ) {
       if (name === "") {
         setNameError(true);
       }
-       if (description === "") {
-         setDescriptionError(true);
-       }
+      if (description === "") {
+        setDescriptionError(true);
+      }
       if (hours === "") {
         setHoursError(true);
       }

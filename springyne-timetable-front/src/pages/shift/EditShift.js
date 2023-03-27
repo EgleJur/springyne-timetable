@@ -1,16 +1,15 @@
-import { Collapse, Alert, Select, MenuItem } from "@mui/material";
+import { Collapse, Alert, Select, MenuItem, TextField } from "@mui/material";
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import { TextField } from "@mui/material";
 import { apiUrl } from "../../App";
 
 function EditShiftPage() {
-    const [shift, setShift] = useState({
-        name: '',
-        starts: '',
-        ends: '',
-        lastUpdated: ''
-    });
+  const [shift, setShift] = useState({
+    name: '',
+    starts: '',
+    ends: '',
+    lastUpdated: ''
+  });
   const [numberError, setNumberError] = useState("");
   const [nameError, setNameError] = useState("");
   const [success, setSuccess] = useState(false);
@@ -34,20 +33,20 @@ function EditShiftPage() {
     setNameError(false);
 
     if (shift.name === "" || shift.starts > shift.ends) {
-      if (shift.name === ""){
+      if (shift.name === "") {
         setNameError(true);
       }
-      if(shift.starts > shift.ends){
+      if (shift.starts > shift.ends) {
         setNumberError(true);
       }
-      } else {
-        fetch(`${apiUrl}/api/v1/shifts/` + params.id, {
-            method: 'PATCH',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(shift)
-        }).then((result) => {
+    } else {
+      fetch(`${apiUrl}/api/v1/shifts/` + params.id, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(shift)
+      }).then((result) => {
         if (result.ok) {
           setSuccess(true);
           setFailure(false);
@@ -55,14 +54,14 @@ function EditShiftPage() {
           setNameError(false);
           setTimeout(() => {
             setSuccess(false);
-                   }, 5000);
+          }, 5000);
         } else {
           setNameError(true);
           setFailure(true);
           setSuccess(false);
           setTimeout(() => {
             setFailure(false);
-                   }, 5000);
+          }, 5000);
         }
       }).then(fetchShift);
     }
@@ -78,22 +77,7 @@ function EditShiftPage() {
     fetch(`${apiUrl}/api/v1/shifts/` + shift.id, {
       method: 'PATCH',
       headers: {
-          'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(shift)
-  }).then(fetchShift);
-  setSuccess(true);
-    setFailure(false);
-    setTimeout(() => {
-      setSuccess(false);
-             }, 5000);
-  };
-  const restoreShift = (shift) => {
-    shift.visible = 1;
-    fetch(`${apiUrl}/api/v1/shifts/` + shift.id, {
-      method: 'PATCH',
-      headers: {
-          'Content-Type': 'application/json'
+        'Content-Type': 'application/json'
       },
       body: JSON.stringify(shift)
     }).then(fetchShift);
@@ -101,7 +85,22 @@ function EditShiftPage() {
     setFailure(false);
     setTimeout(() => {
       setSuccess(false);
-             }, 5000);
+    }, 5000);
+  };
+  const restoreShift = (shift) => {
+    shift.visible = 1;
+    fetch(`${apiUrl}/api/v1/shifts/` + shift.id, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(shift)
+    }).then(fetchShift);
+    setSuccess(true);
+    setFailure(false);
+    setTimeout(() => {
+      setSuccess(false);
+    }, 5000);
   };
   return (
     <div className="mx-3">
@@ -234,39 +233,6 @@ function EditShiftPage() {
               </Select>
             </div>
           </div>
-          {/* <div className="row">
-            <div className="col-md-4 mb-2 mb-md-0 fw-bold">
-        <label htmlFor="starts-select" className="me-2">
-          Pabaiga:
-        </label>
-        </div>
-            <div className="col-md-8 mb-2">
-        <Select
-          id="ends-select"
-          error={!!numberError}
-          value={shift.ends}
-          size="small"
-          className="me-2"
-          disabled={shift.visible === 0}
-          onChange={(e) => updateProperty("ends", e)}
-        >
-          <MenuItem value="1">1</MenuItem>
-          <MenuItem value="2">2</MenuItem>
-          <MenuItem value="3">3</MenuItem>
-          <MenuItem value="4">4</MenuItem>
-          <MenuItem value="5">5</MenuItem>
-          <MenuItem value="6">6</MenuItem>
-          <MenuItem value="7">7</MenuItem>
-          <MenuItem value="8">8</MenuItem>
-          <MenuItem value="9">9</MenuItem>
-          <MenuItem value="10">10</MenuItem>
-          <MenuItem value="11">11</MenuItem>
-          <MenuItem value="12">12</MenuItem>
-          <MenuItem value="13">13</MenuItem>
-          <MenuItem value="14">14</MenuItem>
-        </Select>
-        </div>
-          </div> */}
 
           <div className="row mb-md-4">
             <div className="col-md-4 mb-2 mb-md-0 fw-bold">Būsena</div>
@@ -308,7 +274,7 @@ function EditShiftPage() {
       )}
     </div>
   );
-  
+
 }
 
 export default EditShiftPage;

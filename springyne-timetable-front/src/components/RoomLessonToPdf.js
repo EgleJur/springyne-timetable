@@ -73,6 +73,10 @@ function RoomLessonToPdf(props) {
         .then((blob) => {
           const url = window.URL.createObjectURL(blob);
           window.open(url);
+          let link = document.createElement('a');
+					link.href = url;
+					link.download = `RoomPDF`;
+					link.click();
         })
         .catch((error) => {
           console.error("There was a problem with the fetch operation:", error);

@@ -72,35 +72,6 @@ class ShiftControllerTest {
         assertEquals(400,performShiftPostBadRequest(testShiftDto1).getResponse().getStatus(), message);
     }
 
-//            creates test data in database
-//        @Test
-//        void addShiftAllowsSavingWithCorrectValues() throws Exception {
-//            ShiftDto testShiftDto = new ShiftDto("Test Name" + LocalDateTime.now(),1,4,1);
-//            MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/shifts").contentType(MediaType.APPLICATION_JSON).
-//                            content(objectMapper.writeValueAsString(testShiftDto)))
-//                    .andReturn();
-//            assertEquals(200, mvcResult.getResponse().getStatus(), "Correct values should allow creating new shift");
-//        }
-
-
-//status is 500 instead
-//    @Test
-//    void editShiftThrowsExceptionWithNullOrEmptyValues() throws Exception{
-//        ShiftDto testShiftDto1 = new ShiftDto("",1,4,1);
-//        ShiftDto testShiftDto2 = new ShiftDto(null,1,4,1);
-//        String message = "Null or empty values should return bad request status";
-//
-//
-//        MvcResult mvcResult1 = mockMvc.perform(MockMvcRequestBuilders.patch("/api/v1/shifts/5").contentType(MediaType.APPLICATION_JSON).
-//                content(objectMapper.writeValueAsString(testShiftDto1))).andReturn();
-//        MvcResult mvcResult2 = mockMvc.perform(MockMvcRequestBuilders.patch("/api/v1/shifts/5").contentType(MediaType.APPLICATION_JSON).
-//                content(objectMapper.writeValueAsString(testShiftDto2))).andReturn();
-//
-//       assertEquals(400, mvcResult2.getResponse().getStatus(),"Null value name should return bad request status");
-//       assertEquals(400, mvcResult1.getResponse().getStatus(),"Empty value name should return bad request status");
-//
-//    }
-
     @Test
     void editShiftThrowsExceptionWithEndEarlierThanStart() throws Exception{
         ShiftDto testShiftDto1 = new ShiftDto("Dieninė",5,4,1);

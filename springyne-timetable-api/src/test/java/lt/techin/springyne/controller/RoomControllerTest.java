@@ -7,17 +7,20 @@ import lt.techin.springyne.room.RoomController;
 import lt.techin.springyne.room.RoomDto;
 import lt.techin.springyne.room.RoomService;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.DependsOn;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
+import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,6 +31,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
+@Transactional
 class RoomControllerTest {
 
     @Autowired
@@ -35,27 +39,6 @@ class RoomControllerTest {
 
     @Autowired
     ObjectMapper objectMapper;
-
-//    @Test
-//    void getAllRoomsContainsCorrectDtos() throws Exception {
-//
-//        RoomDto testRoomDto1 = new RoomDto("101", "Lakūnų g. 3, LT-09108 Vilnius", "Akademija.IT");
-//        RoomDto testRoomDto2 = new RoomDto("102", "Lakūnų g. 3, LT-09108 Vilnius", "Akademija.IT");
-//        RoomDto testRoomDto3 = new RoomDto("103", "Lakūnų g. 3, LT-09108 Vilnius", "Akademija.IT");
-//
-//        List<RoomDto> expectedList = new ArrayList<>();
-//        expectedList.add(testRoomDto1);
-//        expectedList.add(testRoomDto2);
-//        expectedList.add(testRoomDto3);
-//
-//        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/rooms")
-//        ).andExpect(status().isOk()).andReturn();
-//
-//        List<RoomDto> resultList = objectMapper.readValue(mvcResult.getResponse().getContentAsString(), new TypeReference<List<RoomDto>>() {
-//        });
-//
-//        assertTrue(resultList.containsAll(expectedList));
-//    }
 
     @Test
     public void testRoomDto() {
@@ -89,6 +72,7 @@ class RoomControllerTest {
     }
 
     @Test
+    @Order(1)
     void deleteRoomSetsDeletedPropertyToTrue() throws Exception {
         MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.patch("/api/v1/rooms/delete/4").contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk()).andReturn();
@@ -97,6 +81,8 @@ class RoomControllerTest {
     }
 
     @Test
+    @Order(2)
+    @DependsOn("deleteRoomSetsDeletedPropertyToTrue")
     void restoreRoomsSetsDeletedPropertyToFalse() throws Exception {
         MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.patch("/api/v1/rooms/restore/4").contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk()).andReturn();

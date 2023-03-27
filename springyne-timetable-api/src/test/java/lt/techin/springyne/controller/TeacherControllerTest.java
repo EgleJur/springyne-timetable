@@ -5,15 +5,18 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lt.techin.springyne.teacher.Teacher;
 import lt.techin.springyne.teacher.TeacherDto;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.DependsOn;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
+import javax.transaction.Transactional;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -24,6 +27,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
+@Transactional
 class TeacherControllerTest {
 
 @Autowired
@@ -85,17 +89,9 @@ void getAllTeachersContainsCorrectDtos() throws Exception {
                         "Non existing Subject id should return bad request status");
         }
 
-//        creates test data in database
-//        @Test
-//        void addTeacherAllowsSavingWithCorrectValues() throws Exception {
-//            TeacherDto testTeacherDto = new TeacherDto("Test Name" + LocalDateTime.now(), "test teams","test email","test phone",40,false);
-//            MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/teachers?shiftId=1").contentType(MediaType.APPLICATION_JSON).
-//                            content(objectMapper.writeValueAsString(testTeacherDto)))
-//                    .andExpect(status().isOk()).andReturn();
-//            assertEquals(200, mvcResult.getResponse().getStatus(), "Correct values should allow creating new teacher");
-//        }
 
     @Test
+    @Order(1)
     void deleteTeacherSetsDeletedPropertyToTrue() throws Exception {
         MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.patch("/api/v1/teachers/delete/4").contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk()).andReturn();
@@ -104,6 +100,8 @@ void getAllTeachersContainsCorrectDtos() throws Exception {
     }
 
     @Test
+    @Order(2)
+    @DependsOn("deleteTeacherSetsDeletedPropertyToTrue")
     void restoreTeacherSetsDeletedPropertyToFalse() throws Exception {
         MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.patch("/api/v1/teachers/restore/4").contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk()).andReturn();
@@ -123,14 +121,12 @@ void getAllTeachersContainsCorrectDtos() throws Exception {
     @Test
     void editTeacherThrowsExceptionWithEmptyValues() throws Exception {
         TeacherDto testTeacherDto1 = new TeacherDto("","","","",null, false);
-//        TeacherDto testTeacherDto2 = new TeacherDto(null);
+
         MvcResult mvcResult1 = mockMvc.perform(MockMvcRequestBuilders.patch("/api/v1/teachers/update/5").contentType(MediaType.APPLICATION_JSON).
                 content(objectMapper.writeValueAsString(testTeacherDto1))).andReturn();
-//        MvcResult mvcResult2 = mockMvc.perform(MockMvcRequestBuilders.patch("/api/v1/teachers/update/5").contentType(MediaType.APPLICATION_JSON).
-//                content(objectMapper.writeValueAsString(testTeacherDto2))).andReturn();
-
+//
         assertEquals(400, mvcResult1.getResponse().getStatus(),"Empty value name should return bad request status");
-//        assertEquals(400, mvcResult2.getResponse().getStatus(),"Null value name should return bad request status");
+//
     }
     @Test
     void editTeacherAllowsSavingWithCorrectValues() throws Exception {

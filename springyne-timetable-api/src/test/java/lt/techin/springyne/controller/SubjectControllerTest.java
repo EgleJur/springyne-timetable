@@ -10,6 +10,7 @@ import lt.techin.springyne.subject.SubjectDto;
 import lt.techin.springyne.subject.SubjectService;
 import org.junit.Assert;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -17,6 +18,7 @@ import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.DependsOn;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.http.HttpStatus;
@@ -26,6 +28,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
+import javax.transaction.Transactional;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.util.*;
@@ -40,6 +43,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
+@Transactional
 class SubjectControllerTest {
     @Autowired
     MockMvc mockMvc;
@@ -98,7 +102,6 @@ class SubjectControllerTest {
 
     @Test
     public void testSearchByNamePaged() {
-        // Arrange
         String name = "Math";
         String moduleName = "Algebra";
         int page = 1;
@@ -107,15 +110,13 @@ class SubjectControllerTest {
 
         Mockito.when(subjectService.searchByNamePaged(name, moduleName, page, pageSize)).thenReturn(expectedPage);
 
-        // Act
         Page<Subject> actualPage = subjectController.searchByNamePaged(name, moduleName, page, pageSize);
 
-        // Assert
         assertEquals(expectedPage, actualPage);
     }
     @Test
     public void createSubjectTest() {
-        // Create test data
+
         SubjectDto subjectDto = new SubjectDto();
         subjectDto.setName("Test Subject");
         subjectDto.setDescription("This is a test subject");
@@ -123,22 +124,18 @@ class SubjectControllerTest {
         Long moduleId = 1L;
         Long roomId = 2L;
 
-        // Set up mock service response
         Subject subject = new Subject();
         subject.setId(1L);
         subject.setName("Test Subject");
         subject.setDescription("This is a test subject");
         when(subjectService.createSubject(moduleId, roomId, toSubject(subjectDto))).thenReturn(subject);
 
-        // Call controller method
         ResponseEntity<SubjectDto> responseEntity = subjectController.createSubject(subjectDto, moduleId, roomId);
 
-        // Verify response
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
 
         SubjectDto responseDto = responseEntity.getBody();
         assertNotNull(responseDto);
-        //assertEquals(subject.getId(), responseDto.getId());
         assertEquals(subject.getName(), responseDto.getName());
         assertEquals(subject.getDescription(), responseDto.getDescription());
     }
@@ -163,6 +160,7 @@ class SubjectControllerTest {
                 .andExpect(status().isBadRequest()).andReturn();
     }
     @Test
+    @Order(1)
     void deleteSubjectSetsDeletedPropertyToTrue() throws Exception {
         MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.patch("/api/v1/subjects/delete/1").contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk()).andReturn();
@@ -171,6 +169,8 @@ class SubjectControllerTest {
     }
 
     @Test
+    @Order(2)
+    @DependsOn("deleteSubjectSetsDeletedPropertyToTrue")
     void restoreSubjectSetsDeletedPropertyToFalse() throws Exception {
         MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.patch("/api/v1/subjects/restore/1").contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk()).andReturn();
@@ -180,7 +180,7 @@ class SubjectControllerTest {
 
     @Test
     public void addModuleToSubject() {
-        // Arrange
+
         Long subjectId = 1L;
         Long moduleId = 2L;
         Subject subject = new Subject();
@@ -190,10 +190,8 @@ class SubjectControllerTest {
 
         Mockito.when(subjectService.addModuleToSubject(subjectId, moduleId)).thenReturn(subject);
 
-        // Act
         ResponseEntity<Subject> response = subjectController.addModuleToSubject(subjectId, moduleId);
 
-        // Assert
         Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
         Assert.assertEquals(subject, response.getBody());
         Mockito.verify(subjectService, Mockito.times(1)).addModuleToSubject(subjectId, moduleId);

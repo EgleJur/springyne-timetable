@@ -126,7 +126,7 @@ const LessonToCalendar = (
           );
           starts++;
         } else if (
-          less.teacher?.name !== teacherName &&
+          (less.teacher?.name !== teacherName && teacherName!== "Mokytojas nepriskirtas") &&
           less.subject.id === result[index - 1].subject.id
         ) {
           lessonList.push(
@@ -137,7 +137,10 @@ const LessonToCalendar = (
                 <ListItemText
                   sx={{ fontSize: "0.85rem", fontWeight: 300, m: 0 }}
                   disableTypography
-                  primary={less.teacher?.name}
+                  primary={less.teacher === null || less.teacher === undefined
+                    ? "Mokytojas nepriskirtas"
+                    : less.teacher.name}
+					//less.teacher?.name}
                 />
               </ListItemButton>
             </ListItem>
@@ -150,9 +153,11 @@ const LessonToCalendar = (
         } else if (
           less.room.name !== room &&
           less.subject.id === result[index - 1]?.subject.id &&
-          less.teacher.id === result[index - 1]?.teacher.id
+		  ((less.teacher === null || less.teacher == undefined) 
+		  ? teacherName === "Mokytojas nepriskirtas" : teacherName === less.teacher.name)
+          
         ) {
-          lessonList.push(
+				lessonList.push(
             <ListItem disablePadding>
               <ListItemButton
                 sx={{ height: "40px", p: 1, bgcolor: colorArray[colorId % 20] }}
@@ -166,6 +171,7 @@ const LessonToCalendar = (
             </ListItem>
           );
           room = less.room.name;
+          
         } else {
           lessonList.push(
             <ListItem disablePadding>

@@ -70,18 +70,18 @@ public class GroupService {
             } else if (name == null || name.equals("")) {
                 return groupRepository.findAllByGroupYearIgnoreCaseContaining(groupYear, pageable);
             }
-            return groupRepository.findAllByNameIgnoreCaseContainingOrGroupYearIgnoreCaseContaining(name, groupYear, pageable);
+            return groupRepository.findAllByNameIgnoreCaseContainingAndGroupYearIgnoreCaseContaining(name, groupYear, pageable);
 
         } else if (groupYear == null || groupYear.equals("")) {
             if (name == null || name.equals("")) {
 
                 return groupRepository.findAllByProgramNameIgnoreCaseContaining(programName, pageable);
             }
-            return groupRepository.findAllByNameIgnoreCaseContainingOrProgramNameIgnoreCaseContaining(name, programName, pageable);
+            return groupRepository.findAllByNameIgnoreCaseContainingAndProgramNameIgnoreCaseContaining(name, programName, pageable);
         } else if (name == null || name.equals("")) {
             return groupRepository.findAllByProgramNameIgnoreCaseContainingOrGroupYearIgnoreCaseContaining(programName, groupYear, pageable);
         }
-        return groupRepository.findAllByNameIgnoreCaseContainingOrProgramNameIgnoreCaseContainingOrGroupYearIgnoreCaseContaining(name, programName, groupYear, pageable);
+        return groupRepository.findAllByNameIgnoreCaseContainingAndProgramNameIgnoreCaseContainingAndGroupYearIgnoreCaseContaining(name, programName, groupYear, pageable);
     }
 
     public Optional<Group> getById(Long id) {

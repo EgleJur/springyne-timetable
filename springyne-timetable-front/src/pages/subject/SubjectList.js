@@ -13,7 +13,7 @@ function SubjectListPage() {
   const [pageNumber, setPageNumber] = useState(0);
   const [pageSize, setPageSize] = useState(25);
   const [searchName, setSearchName] = useState("");
-  const [searchModName, setSearchModName] = useState("");
+  const [searchModuleName, setSearchModuleName] = useState("");
   const [page, setPage] = useState(1);
   const [deleted, setDeleted] = useState(false);
   const [restored, setRestored] = useState(false);
@@ -24,7 +24,7 @@ function SubjectListPage() {
 
   const fetchSubjects = () => {
     fetch(
-      `${apiUrl}/api/v1/subjects/search?name=${searchName}&moduleName=${searchModName}&page=${pageNumber}&pageSize=${pageSize}`
+      `${apiUrl}/api/v1/subjects/search?name=${searchName}&moduleName=${searchModuleName}&page=${pageNumber}&pageSize=${pageSize}`
     )
       .then((response) => response.json())
       .then((jsonResponse) => setSubjects(jsonResponse));
@@ -37,7 +37,7 @@ function SubjectListPage() {
     setPage(value);
     setPageNumber(value - 1);
     fetch(
-      `${apiUrl}/api/v1/subjects/search?name=${searchName}&moduleName=${searchModName}&page=${value - 1
+      `${apiUrl}/api/v1/subjects/search?name=${searchName}&moduleName=${searchModuleName}&page=${value - 1
       }&pageSize=${pageSize}`
     )
       .then((response) => response.json())
@@ -49,8 +49,19 @@ function SubjectListPage() {
     setPage(1);
     setPageNumber(0);
     fetch(
-      `${apiUrl}/api/v1/subjects/search?name=${searchName}&moduleName=${searchModName}&page=${0}&pageSize=${e.target.value
+      `${apiUrl}/api/v1/subjects/search?name=${searchName}&moduleName=${searchModuleName}&page=${0}&pageSize=${e.target.value
       }`
+    )
+      .then((response) => response.json())
+      .then((jsonResponse) => setSubjects(jsonResponse));
+  };
+
+  const handleSearch = (e) => {
+    e.preventDefault();
+    setPage(1);
+    setPageNumber(0);
+    fetch(
+      `${apiUrl}/api/v1/subjects/search?name=${searchName}&moduleName=${searchModuleName}&page=${0}&pageSize=${pageSize}`
     )
       .then((response) => response.json())
       .then((jsonResponse) => setSubjects(jsonResponse));
@@ -117,7 +128,7 @@ function SubjectListPage() {
         <div className="mb-4">
           <form className="d-flex" role="search">
             <TextField
-              onChange={(e) => { setSearchName(e.target.value); setPageNumber(0); setPage(1); }}
+              onChange={(e) => {setSearchName(e.target.value)}}
               value={searchName}
               id="search-name-input"
               label="Ieškoti pagal pavadinimą"
@@ -125,8 +136,8 @@ function SubjectListPage() {
               size="small"
             />
             <TextField
-              onChange={(e) => { setSearchModName(e.target.value); setPageNumber(0); setPage(1); }}
-              value={searchModName}
+              onChange={(e) => {setSearchModuleName(e.target.value)}}
+              value={searchModuleName}
               id="search-module-input"
               label="Ieškoti pagal modulį"
               className="form-control me-2"
@@ -135,7 +146,7 @@ function SubjectListPage() {
             <button
               className="btn btn-outline-primary"
               type="submit"
-              onClick={fetchSubjects}
+              onClick={(e) => handleSearch(e)}
             >
               Ieškoti
             </button>

@@ -1,10 +1,17 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { Select, MenuItem, Pagination, TextField, Collapse, Alert } from "@mui/material";
-import EditTwoToneIcon from '@mui/icons-material/EditTwoTone';
-import DeleteTwoToneIcon from '@mui/icons-material/DeleteTwoTone';
-import RestoreTwoToneIcon from '@mui/icons-material/RestoreTwoTone';
-import VisibilityTwoToneIcon from '@mui/icons-material/VisibilityTwoTone';
+import {
+  Select,
+  MenuItem,
+  Pagination,
+  TextField,
+  Collapse,
+  Alert,
+} from "@mui/material";
+import EditTwoToneIcon from "@mui/icons-material/EditTwoTone";
+import DeleteTwoToneIcon from "@mui/icons-material/DeleteTwoTone";
+import RestoreTwoToneIcon from "@mui/icons-material/RestoreTwoTone";
+import VisibilityTwoToneIcon from "@mui/icons-material/VisibilityTwoTone";
 import { apiUrl } from "../../App";
 
 function GroupListPage() {
@@ -12,7 +19,7 @@ function GroupListPage() {
   const [pageNumber, setPageNumber] = useState(0);
   const [pageSize, setPageSize] = useState(25);
   const [searchName, setSearchName] = useState("");
-  const [searchProgName, setSearchProgName] = useState("");
+  const [searchProgramName, setSearchProgramName] = useState("");
   const [searchYear, setSearchYear] = useState("");
   const [page, setPage] = useState(1);
   const [deleted, setDeleted] = useState(false);
@@ -24,7 +31,7 @@ function GroupListPage() {
 
   const fetchGroups = () => {
     fetch(
-      `${apiUrl}/api/v1/groups/search?name=${searchName}&programName=${searchProgName}&groupYear=${searchYear}&page=${pageNumber}&pageSize=${pageSize}`
+      `${apiUrl}/api/v1/groups/search?name=${searchName}&programName=${searchProgramName}&groupYear=${searchYear}&page=${pageNumber}&pageSize=${pageSize}`
     )
       .then((response) => response.json())
       .then((jsonResponse) => setGroups(jsonResponse));
@@ -36,7 +43,9 @@ function GroupListPage() {
     setPage(value);
     setPageNumber(value - 1);
     fetch(
-      `${apiUrl}/api/v1/groups/search?name=${searchName}&programName=${searchProgName}&groupYear=${searchYear}&page=${value - 1}&pageSize=${pageSize}`
+      `${apiUrl}/api/v1/groups/search?name=${searchName}&programName=${searchProgramName}&groupYear=${searchYear}&page=${
+        value - 1
+      }&pageSize=${pageSize}`
     )
       .then((response) => response.json())
       .then((jsonResponse) => setGroups(jsonResponse));
@@ -47,7 +56,20 @@ function GroupListPage() {
     setPage(1);
     setPageNumber(0);
     fetch(
-      `${apiUrl}/api/v1/groups/search?name=${searchName}&programName=${searchProgName}&groupYear=${searchYear}&page=${0}&pageSize=${e.target.value}`
+      `${apiUrl}/api/v1/groups/search?name=${searchName}&programName=${searchProgramName}&groupYear=${searchYear}&page=${0}&pageSize=${
+        e.target.value
+      }`
+    )
+      .then((response) => response.json())
+      .then((jsonResponse) => setGroups(jsonResponse));
+  };
+
+  const handleSearch = (e) => {
+    e.preventDefault();
+    setPage(1);
+    setPageNumber(0);
+    fetch(
+      `${apiUrl}/api/v1/groups/search?name=${searchName}&programName=${searchProgramName}&groupYear=${searchYear}&page=${0}&pageSize=${pageSize}`
     )
       .then((response) => response.json())
       .then((jsonResponse) => setGroups(jsonResponse));
@@ -114,7 +136,11 @@ function GroupListPage() {
         <div className="mb-4">
           <form className="d-flex" role="search">
             <TextField
-              onChange={(e) => { setSearchName(e.target.value); setPageNumber(0); setPage(1); }}
+              onChange={(e) => {
+                setSearchName(e.target.value);
+                setPageNumber(0);
+                setPage(1);
+              }}
               value={searchName}
               id="search-name-input"
               label="Ieškoti pagal pavadinimą"
@@ -122,15 +148,23 @@ function GroupListPage() {
               size="small"
             />
             <TextField
-              onChange={(e) => { setSearchProgName(e.target.value); setPageNumber(0); setPage(1); }}
-              value={searchProgName}
+              onChange={(e) => {
+                setSearchProgramName(e.target.value);
+                setPageNumber(0);
+                setPage(1);
+              }}
+              value={searchProgramName}
               id="search-program-input"
               label="Ieškoti pagal programą"
               className="form-control me-2"
               size="small"
             />
             <TextField
-              onChange={(e) => { setSearchYear(e.target.value); setPageNumber(0); setPage(1); }}
+              onChange={(e) => {
+                setSearchYear(e.target.value);
+                setPageNumber(0);
+                setPage(1);
+              }}
               value={searchYear}
               id="search-year-input"
               label="Ieškoti pagal metus"
@@ -140,7 +174,7 @@ function GroupListPage() {
             <button
               className="btn btn-outline-primary"
               type="submit"
-              onClick={fetchGroups}
+              onClick={(e) => handleSearch(e)}
             >
               Ieškoti
             </button>
@@ -161,46 +195,48 @@ function GroupListPage() {
         </thead>
         <tbody>
           {groups.content?.map((group) => (
-            <tr key={group.id}
+            <tr
+              key={group.id}
               id={group.id}
-              className={group.deleted ? "text-black-50" : ""}>
+              className={group.deleted ? "text-black-50" : ""}
+            >
               <td>{group.name}</td>
               <td>{group.program?.name}</td>
               <td>{group.groupYear}</td>
               <td>{group.students}</td>
               <td>{group.deleted ? "Ištrintas" : ""}</td>
               <td className="text-end">
-                <button className="btn btn-outline-primary me-1 my-1 btn-link" title="Žiūrėti">
-                  <Link
-                    className="nav-link"
-                    to={"/groups/view/" + group.id}
-                  >
+                <button
+                  className="btn btn-outline-primary me-1 my-1 btn-link"
+                  title="Žiūrėti"
+                >
+                  <Link className="nav-link" to={"/groups/view/" + group.id}>
                     <VisibilityTwoToneIcon />
                   </Link>
                 </button>
 
                 <button
-                  className="btn btn-outline-primary me-1 my-1 btn-link" title="Redaguoti"
+                  className="btn btn-outline-primary me-1 my-1 btn-link"
+                  title="Redaguoti"
                   disabled={group.deleted}
                 >
-                  <Link
-                    className="nav-link"
-                    to={"/groups/edit/" + group.id}
-                  >
+                  <Link className="nav-link" to={"/groups/edit/" + group.id}>
                     <EditTwoToneIcon />
                   </Link>
                 </button>
 
                 {group.deleted ? (
                   <button
-                    className="btn btn-outline-secondary me-1 my-1 btn-link" title="Atstatyti"
+                    className="btn btn-outline-secondary me-1 my-1 btn-link"
+                    title="Atstatyti"
                     onClick={() => restoreGroup(group.id)}
                   >
                     <RestoreTwoToneIcon />
                   </button>
                 ) : (
                   <button
-                    className="btn btn-danger me-2 my-1 btn-link" title="Ištrinti"
+                    className="btn btn-danger me-2 my-1 btn-link"
+                    title="Ištrinti"
                     onClick={() => deleteGroup(group.id)}
                   >
                     <DeleteTwoToneIcon className="red-icon" />
@@ -251,7 +287,6 @@ function GroupListPage() {
         </div>
       </div>
     </div>
-
   );
 }
 

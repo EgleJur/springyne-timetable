@@ -42,6 +42,11 @@ function ShiftListPage() {
 
   };
 
+  const handleSearch = (e) => {
+    e.preventDefault();
+    fetchShifts();
+  };
+
   const deleteShift = (shift) => {
     shift.visible = 0;
     fetch(`${apiUrl}/api/v1/shifts/` + shift.id, {
@@ -121,7 +126,7 @@ function ShiftListPage() {
             <button
               className="btn btn-outline-primary"
               type="submit"
-              onClick={fetchShifts}
+              onClick={(e) => handleSearch(e)}
             >
               Ieškoti
             </button>

@@ -49,6 +49,11 @@ function HolidayListPage() {
 
   useEffect(fetchHolidays, []);
 
+    const handleSearch = (e) => {
+      e.preventDefault();
+      fetchHolidays();
+    };
+
   const deleteHoliday = (id) => {
     fetch(`${apiUrl}/api/v1/holidays/delete/` + id, {
       method: "PATCH",
@@ -133,7 +138,7 @@ function HolidayListPage() {
             <button
               className="btn btn-outline-primary mb-3"
               type="submit"
-              onClick={fetchHolidays}
+              onClick={(e) => handleSearch(e)}
             >
               Ieškoti
             </button>

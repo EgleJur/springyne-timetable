@@ -16,5 +16,5 @@ public interface RoomRepository extends JpaRepository<Room, Long> {
 
     Page<Room> findAllByBuildingIgnoreCaseContaining(String building, Pageable pageable);
 
-    Page<Room> findAllByNameIgnoreCaseContainingOrBuildingIgnoreCaseContaining(String name, String building, Pageable pageable);
+    Page<Room> findAllByNameIgnoreCaseContainingAndBuildingIgnoreCaseContaining(String name, String building, Pageable pageable);
 }

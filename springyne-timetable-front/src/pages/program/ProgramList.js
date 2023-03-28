@@ -49,7 +49,8 @@ function ProgramListPage() {
       .then((jsonResponse) => setPrograms(jsonResponse));
   };
 
-  const handleSearch = () => {
+  const handleSearch = (e) => {
+    e.preventDefault();
     setPage(1);
     setPageNumber(0);
     fetch(
@@ -128,7 +129,7 @@ function ProgramListPage() {
             <button
               className="btn btn-outline-primary"
               type="submit"
-              onClick={handleSearch}
+              onClick={(e) => handleSearch(e)}
             >
               Ieškoti
             </button>

@@ -49,6 +49,17 @@ function ModuleListPage() {
       .then((jsonResponse) => setModules(jsonResponse));
   };
 
+  const handleSearch = (e) => {
+    e.preventDefault();
+    setPage(1);
+    setPageNumber(0);
+    fetch(
+      `${apiUrl}/api/v1/modules/search?name=${searchName}&page=${0}&pageSize=${pageSize}`
+    )
+      .then((response) => response.json())
+      .then((jsonResponse) => setModules(jsonResponse));
+  };
+
   const deleteModule = (id) => {
     fetch(`${apiUrl}/api/v1/modules/delete/` + id, {
       method: "PATCH",
@@ -118,7 +129,7 @@ function ModuleListPage() {
             <button
               className="btn btn-outline-primary"
               type="submit"
-              onClick={fetchModules}
+              onClick={(e) => handleSearch(e)}
             >
               Ieškoti
             </button>

@@ -66,7 +66,8 @@ function TeacherListPage() {
       .then((jsonResponse) => setTeachers(jsonResponse));
   };
 
-  const handleSearch = () => {
+  const handleSearch = (e) => {
+    e.preventDefault();
     setPage(1);
     setPageNumber(0);
     fetch(
@@ -187,7 +188,7 @@ function TeacherListPage() {
             <button
               className="btn btn-outline-primary"
               type="submit"
-              onClick={handleSearch}
+              onClick={(e) => handleSearch(e)}
             >
               Ieškoti
             </button>

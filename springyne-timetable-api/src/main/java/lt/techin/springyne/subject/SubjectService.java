@@ -67,7 +67,7 @@ public class SubjectService {
         } else if (name == null ||  name.equals("")){
             return subjectRepository.findAllByModuleNameIgnoreCaseContaining(moduleName, pageable);
         }
-        return  subjectRepository.findAllByNameIgnoreCaseContainingOrModuleNameIgnoreCaseContaining(name,moduleName, pageable);
+        return  subjectRepository.findAllByNameIgnoreCaseContainingAndModuleNameIgnoreCaseContaining(name,moduleName, pageable);
     }
 
     public Optional<Subject> getById(Long id) {

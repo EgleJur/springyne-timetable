@@ -54,6 +54,17 @@ function RoomListPage() {
       .then((jsonResponse) => setRooms(jsonResponse));
   };
 
+  const handleSearch = (e) => {
+    e.preventDefault();
+    setPage(1);
+    setPageNumber(0);
+    fetch(
+      `${apiUrl}/api/v1/rooms/search?name=${searchName}&building=${searchBuinding}&page=${0}&pageSize=${pageSize}`
+    )
+      .then((response) => response.json())
+      .then((jsonResponse) => setRooms(jsonResponse));
+  };
+
   const deleteRoom = (id) => {
     fetch(`${apiUrl}/api/v1/rooms/delete/` + id, {
       method: "PATCH",
@@ -118,7 +129,7 @@ function RoomListPage() {
         <div className="mb-4">
           <form className="d-flex" role="search">
             <TextField
-              onChange={(e) => { setSearchName(e.target.value); setPageNumber(0); setPage(1); }}
+              onChange={(e) => setSearchName(e.target.value)}
               value={searchName}
               id="search-name-input"
               label="Ieškoti pagal pavadinimą"
@@ -126,7 +137,7 @@ function RoomListPage() {
               size="small"
             />
             <TextField
-              onChange={(b) => { setSearchBuilding(b.target.value); setPageNumber(0); setPage(1); }}
+              onChange={(e) => setSearchBuilding(e.target.value)}
               value={searchBuinding}
               id="search-name-input"
               label="Ieškoti pagal pastatą"
@@ -136,7 +147,7 @@ function RoomListPage() {
             <button
               className="btn btn-outline-primary"
               type="submit"
-              onClick={fectchRooms}
+              onClick={(e) => handleSearch(e)}
             >
               Ieškoti
             </button>

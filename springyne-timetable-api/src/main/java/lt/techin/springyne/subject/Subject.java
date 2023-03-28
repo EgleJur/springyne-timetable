@@ -31,7 +31,7 @@ public class Subject {
     private String description;
 
     @LastModifiedDate
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Europe/Vilnius")
     private LocalDateTime last_Updated;
 
     private boolean deleted = Boolean.FALSE;

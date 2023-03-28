@@ -21,9 +21,9 @@ function EditModuleSubjects(props) {
       .then((jsonResponse) => setAvailableSubjects(jsonResponse));
   };
 
-  useEffect(() => fetchSubjects, []);
+  useEffect(fetchSubjects, [params]);
 
-  useEffect(() => fetchAvailableSubjects, []);
+  useEffect(fetchAvailableSubjects, [params]);
 
   const handleAddModule = () => {
     fetch(`${apiUrl}/api/v1/subjects/${chosenSubject}/addModule/` + params.id, {
@@ -43,8 +43,6 @@ function EditModuleSubjects(props) {
               <div className={subject.deleted ? "text-black-50" : ""}>
                 <div className="row mb-2" key={subject.id}>
                   <div className="col-md">{subject.name}</div>
-                  {/* <div className="col-md">{subject.description}</div>
-                  <div className="col-md">{subject.last_Updated}</div> */}
                   {subject.deleted ? (
                     <div className="col-md">Dalykas ištrintas</div>
                   ) : (

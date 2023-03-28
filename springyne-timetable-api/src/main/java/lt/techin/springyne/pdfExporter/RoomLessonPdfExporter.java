@@ -92,7 +92,7 @@ public class RoomLessonPdfExporter {
                     }
                     table.addCell(new PdfPCell(new Phrase(String.valueOf(lesson.getLessonTime()), font)));
                     if (lesson.getTeacher() == null) {
-                        table.addCell(new PdfPCell(new Phrase("Mokytojas nepriskirtas", font)));
+                        table.addCell(new PdfPCell(new Phrase("", font)));
                     } else {
                         table.addCell(new PdfPCell(new Phrase(lesson.getTeacher().getName(), font)));
                     }

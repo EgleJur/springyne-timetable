@@ -28,7 +28,7 @@ public class Shift {
     @Max(value=14)
     @NotNull
     private int ends;
-    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss", timezone = "Europe/Vilnius")
     private LocalDateTime lastUpdated;
     @Min(value=0)
     @Max(value=1)

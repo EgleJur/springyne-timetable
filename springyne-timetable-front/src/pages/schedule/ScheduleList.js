@@ -23,7 +23,7 @@ function ScheduleListPage() {
   const [deleteScheduleId, setDeleteScheduleId] = useState(null);
 
   const formatSearchDate = () => {
-    return searchDate === "" || searchDate === null
+    return searchDate == "" || searchDate == null
       ? ""
       : dayjs(searchDate).format("YYYY-MM-DD");
   };
@@ -63,7 +63,8 @@ function ScheduleListPage() {
       .then((jsonResponse) => setSchedules(jsonResponse));
   };
 
-  const handleSearch = () => {
+  const handleSearch = (e) => {
+    e.preventDefault();
     setPage(1);
     setPageNumber(0);
     fetch(
@@ -209,7 +210,7 @@ function ScheduleListPage() {
             <button
               className="btn btn-outline-primary mb-3"
               type="submit"
-              onClick={handleSearch}
+              onClick={(e) => handleSearch(e)}
             >
               Ieškoti
             </button>
@@ -279,7 +280,7 @@ function ScheduleListPage() {
         <tfoot className="table-light">
           <tr>
             <td colSpan={5}>
-              {schedules?.totalElements === "0"
+              {schedules?.totalElements == "0"
                 ? "Įrašų nerasta"
                 : `Rasta įrašų: ${schedules?.totalElements}`}
             </td>

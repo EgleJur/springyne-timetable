@@ -133,6 +133,7 @@ public class HolidayService {
                     newHoliday.setName(holiday.getName());
                     newHoliday.setStarts(newHolidayStarts);
                     newHoliday.setEnds(newHolidayEnds);
+                    newHoliday.setId(holiday.getId());
                     newHolidayList.add(newHoliday);
                 }
             } else {

@@ -13,11 +13,11 @@ public interface GroupRepository extends JpaRepository<Group, Long> {
 Page<Group> findAllByNameIgnoreCaseContaining(String name, Pageable pageable);
     Page<Group> findAllByProgramNameIgnoreCaseContaining(String name, Pageable pageable);
 
-    Page<Group> findAllByNameIgnoreCaseContainingOrProgramNameIgnoreCaseContaining(String name,String programName, Pageable pageable);
+    Page<Group> findAllByNameIgnoreCaseContainingAndProgramNameIgnoreCaseContaining(String name,String programName, Pageable pageable);
 
-    Page<Group> findAllByNameIgnoreCaseContainingOrProgramNameIgnoreCaseContainingOrGroupYearIgnoreCaseContaining(String name,String programName,String groupYear, Pageable pageable);
+    Page<Group> findAllByNameIgnoreCaseContainingAndProgramNameIgnoreCaseContainingAndGroupYearIgnoreCaseContaining(String name,String programName,String groupYear, Pageable pageable);
 
-    Page<Group> findAllByNameIgnoreCaseContainingOrGroupYearIgnoreCaseContaining(String name, String groupYear, Pageable pageable);
+    Page<Group> findAllByNameIgnoreCaseContainingAndGroupYearIgnoreCaseContaining(String name, String groupYear, Pageable pageable);
 
     Page<Group> findAllByProgramNameIgnoreCaseContainingOrGroupYearIgnoreCaseContaining(String programName, String groupYear, Pageable pageable);
 

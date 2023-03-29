@@ -38,7 +38,7 @@ public class Group {
     private int students;
 
     @LastModifiedDate
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Europe/Vilnius")
     @Column(name="modified_date")
     private LocalDateTime modifiedDate;
 

@@ -61,7 +61,7 @@ public class RoomService {
             return roomRepository.findAllByBuildingIgnoreCaseContaining(building, pageable);
         }
 
-        return  roomRepository.findAllByNameIgnoreCaseContainingOrBuildingIgnoreCaseContaining(name, building, pageable);
+        return  roomRepository.findAllByNameIgnoreCaseContainingAndBuildingIgnoreCaseContaining(name, building, pageable);
     }
 
     public Optional<Room> viewRoom(Long id) {

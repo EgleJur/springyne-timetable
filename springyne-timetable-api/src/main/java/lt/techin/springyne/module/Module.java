@@ -30,7 +30,7 @@ public class Module {
     private boolean deleted = Boolean.FALSE;
 
     @LastModifiedDate
-    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss", timezone = "Europe/Vilnius")
     private LocalDateTime modifiedDate;
 
     @PrePersist

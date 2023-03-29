@@ -10,7 +10,7 @@ import java.util.Optional;
 @Repository
 public interface GroupRepository extends JpaRepository<Group, Long> {
 
-Page<Group> findAllByNameIgnoreCaseContaining(String name, Pageable pageable);
+    Page<Group> findAllByNameIgnoreCaseContaining(String name, Pageable pageable);
     Page<Group> findAllByProgramNameIgnoreCaseContaining(String name, Pageable pageable);
 
     Page<Group> findAllByNameIgnoreCaseContainingAndProgramNameIgnoreCaseContaining(String name,String programName, Pageable pageable);

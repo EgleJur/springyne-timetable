@@ -1,6 +1,5 @@
 package lt.techin.springyne.room;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
@@ -15,10 +14,7 @@ import java.util.Optional;
 public class RoomController {
 
     @Autowired
-    RoomService roomService;
-
-    @Autowired
-    ObjectMapper objetMapper;
+    private final RoomService roomService;
 
 
     public RoomController (RoomService roomService){

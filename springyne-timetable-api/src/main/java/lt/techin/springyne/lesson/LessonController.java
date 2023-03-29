@@ -28,19 +28,21 @@ import java.util.Optional;
 public class LessonController {
 
     @Autowired
-    LessonService lessonService;
+    private final LessonService lessonService;
     @Autowired
-    TeacherService teacherService;
+    private final TeacherService teacherService;
 
     @Autowired
-    RoomService roomService;
+    private final RoomService roomService;
 
     @Autowired
-    ScheduleService scheduleService;
+    private final ScheduleService scheduleService;
 
-    public LessonController(LessonService lessonService, TeacherService teacherService, ScheduleService scheduleService) {
+    public LessonController(LessonService lessonService, TeacherService teacherService, RoomService roomService,
+                            ScheduleService scheduleService) {
         this.lessonService = lessonService;
         this.teacherService = teacherService;
+        this.roomService = roomService;
         this.scheduleService = scheduleService;
     }
 

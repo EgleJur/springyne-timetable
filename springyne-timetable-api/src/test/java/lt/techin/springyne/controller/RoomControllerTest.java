@@ -99,16 +99,6 @@ class RoomControllerTest {
         Assertions.assertEquals(result.getName(), "101","Get room by Id should return room with correct name");
     }
 
-//    @Test
-//    void editRoomThrowsExceptionWithEmptyValues() throws Exception {
-//        RoomDto testRoomDto1 = new RoomDto("", "");
-//        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.patch("/api/v1/room/edit/1").contentType(MediaType.APPLICATION_JSON).
-//                content(objectMapper.writeValueAsString(testRoomDto1))).andReturn();
-//
-//        assertEquals(400, mvcResult.getResponse().getStatus(),"Empty value name and building should return bad request status");
-//    }
-
-
     @Test
     void editRoomDtoAllowsSavingWithCorrectValues() {
         String testName = "101";
@@ -143,12 +133,7 @@ class RoomControllerTest {
 
     @Test
     public void viewRoomByIdTest() throws Exception {
-//        RoomDto testRoomDto1 = new RoomDto("101", "Lakūnų g. 3, LT-09108 Vilnius", "Akademija.IT");
-//        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/rooms/1")
-//        ).andExpect(status().isOk()).andReturn();
-//        RoomDto resultRoomDto = objectMapper.readValue(mvcResult.getResponse().getContentAsString(), new TypeReference<RoomDto>() {
-//        });
-//       assertEquals(resultRoomDto, testRoomDto1);
+
         MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/rooms/1")
         ).andExpect(status().isOk()).andReturn();
         RoomDto result = objectMapper.readValue(mvcResult.getResponse().getContentAsString(), new TypeReference<RoomDto>() {

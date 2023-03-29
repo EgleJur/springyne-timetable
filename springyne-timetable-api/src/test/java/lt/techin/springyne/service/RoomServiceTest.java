@@ -15,7 +15,7 @@ import static org.mockito.Mockito.*;
 
 @SpringBootTest
 @AutoConfigureMockMvc
-public class RoomServiseTest {
+public class RoomServiceTest {
     @InjectMocks
     RoomService roomService;
     @Mock

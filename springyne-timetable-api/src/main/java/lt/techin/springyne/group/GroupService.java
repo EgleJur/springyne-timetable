@@ -24,18 +24,18 @@ import static lt.techin.springyne.validationUnits.ValidationUtilsNotNull.*;
 public class GroupService {
 
     @Autowired
-    GroupRepository groupRepository;
+    private final GroupRepository groupRepository;
 
     @Autowired
-    ShiftRepository shiftRepository;
+    private final ShiftRepository shiftRepository;
     @Autowired
-    ProgramRepository programRepository;
+    private final ProgramRepository programRepository;
 
-    GroupUtils groupUtils;
+    private final GroupUtils groupUtils;
 
-    ProgramUtils programUtils;
+    private final ProgramUtils programUtils;
 
-    ShiftUtils shiftUtils;
+    private final ShiftUtils shiftUtils;
 
 
     public GroupService(GroupRepository groupRepository,

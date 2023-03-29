@@ -9,7 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 public class RoomUtils {
 
     @Autowired
-    RoomRepository roomRepository;
+    private final RoomRepository roomRepository;
 
     public RoomUtils(RoomRepository roomRepository) {
 

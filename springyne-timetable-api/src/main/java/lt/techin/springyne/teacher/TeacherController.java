@@ -1,6 +1,5 @@
 package lt.techin.springyne.teacher;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
@@ -15,10 +14,7 @@ import java.util.Optional;
 public class TeacherController {
 
     @Autowired
-    TeacherService teacherService;
-
-    @Autowired
-    ObjectMapper objectMapper;
+    private final TeacherService teacherService;
 
     public TeacherController(TeacherService teacherService) {
         this.teacherService = teacherService;
@@ -80,13 +76,5 @@ public class TeacherController {
                                                                  @RequestParam(required = false) Integer endTime) {
         return teacherService.getAvailableTeachersBySubjectId(subjectId, startTime, endTime);
     }
-
-//    @GetMapping("/lesson")
-//    public List<Teacher> findAvailableTeachers( @RequestParam Long lessonId,
-//                                                @RequestParam Long subjectId,
-//                                                @RequestParam Integer startHours,
-//                                                @RequestParam Integer endHours) {
-//        return teacherService.findAvailableTeachers(lessonId, subjectId, startHours, endHours);
-//    }
 
 }

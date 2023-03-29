@@ -29,14 +29,6 @@ class SubjectServiceTest {
         verify(subjectRepository).findById(Id);
     }
 
-
-//    @Test
-//    public void saveSubject(){
-//        Subject subject = mock(Subject.class);
-//        subjectService.createSubjectDto(subject);
-//        verify(subjectRepository).save(subject);
-//    }
-
     @Test
     public void editSubject() {
         Subject subject = mock(Subject.class);

@@ -1,6 +1,5 @@
 package lt.techin.springyne.module;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lt.techin.springyne.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -16,10 +15,7 @@ import java.util.Optional;
 public class ModuleController {
 
     @Autowired
-    ModuleService moduleService;
-
-    @Autowired
-    ObjectMapper objectMapper;
+    private final ModuleService moduleService;
 
     public ModuleController(ModuleService moduleService) {
         this.moduleService = moduleService;

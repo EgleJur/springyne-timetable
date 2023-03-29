@@ -1,7 +1,6 @@
 package lt.techin.springyne.teacher;
 
 import lt.techin.springyne.exception.ScheduleValidationException;
-import lt.techin.springyne.lesson.LessonRepository;
 import lt.techin.springyne.shift.Shift;
 import lt.techin.springyne.shift.ShiftRepository;
 import lt.techin.springyne.subject.Subject;
@@ -20,21 +19,18 @@ import java.util.Optional;
 public class TeacherService {
 
     @Autowired
-    TeacherRepository teacherRepository;
+    private final TeacherRepository teacherRepository;
 
     @Autowired
-    ShiftRepository shiftRepository;
+    private final ShiftRepository shiftRepository;
 
     @Autowired
-    SubjectRepository subjectRepository;
-    @Autowired
-    LessonRepository lessonRepository;
+    private final SubjectRepository subjectRepository;
 
-    public TeacherService(TeacherRepository teacherRepository, ShiftRepository shiftRepository, SubjectRepository subjectRepository, LessonRepository lessonRepository) {
+    public TeacherService(TeacherRepository teacherRepository, ShiftRepository shiftRepository, SubjectRepository subjectRepository) {
         this.teacherRepository = teacherRepository;
         this.shiftRepository = shiftRepository;
         this.subjectRepository = subjectRepository;
-        this.lessonRepository= lessonRepository;
     }
 
     public List<Teacher> getAllTeachers() {
@@ -121,28 +117,19 @@ public class TeacherService {
         Teacher updatedTeacher = teacherRepository.findById(teacherId).orElseThrow(
                 () -> new ScheduleValidationException("Teacher does not exist", "id", "Teacher not found", String.valueOf(teacherId)));
 
-            if (teacher.getName().equals("") || teacher.getName() == null) {
-                throw new ScheduleValidationException("Teacher name cannot be empty", "name", "Name is empty", teacher.getName());
-            } else {
+        if (teacher.getName().equals("") || teacher.getName() == null) {
+            throw new ScheduleValidationException("Teacher name cannot be empty", "name", "Name is empty", teacher.getName());
+        } else {
                 updatedTeacher.setName(teacher.getName());
-            }
-//        if (!teacher.getEmail().equals(updatedTeacher.getEmail())) {
-//            if (!(teacher.getEmail().equals("") || teacher.getEmail() == null)) {
-//                updatedTeacher.setEmail(teacher.getEmail());
-//            }
-//        }
+        }
 
-            if (teacher.getTeamsEmail().equals("") || teacher.getTeamsEmail() == null) {
-                throw new ScheduleValidationException("Teacher teams email cannot be empty", "teamsEmail", "TeamsEmail is empty", teacher.getTeamsEmail());
-            } else {
-                updatedTeacher.setTeamsEmail(teacher.getTeamsEmail());
-            }
 
-//        if (!teacher.getPhone().equals(updatedTeacher.getPhone())) {
-//            if (!(teacher.getPhone().equals("") || teacher.getPhone() == null)) {
-//                updatedTeacher.setPhone(teacher.getPhone());
-//            }
-//        }
+        if (teacher.getTeamsEmail().equals("") || teacher.getTeamsEmail() == null) {
+            throw new ScheduleValidationException("Teacher teams email cannot be empty", "teamsEmail", "TeamsEmail is empty", teacher.getTeamsEmail());
+        } else {
+            updatedTeacher.setTeamsEmail(teacher.getTeamsEmail());
+        }
+
         if (teacher.getHours() == null) {
             throw new ScheduleValidationException("Teacher hours cannot be empty", "hours", "Hours is empty", teacher.getHours().toString());
         } else if (teacher.getHours() < 0) {
@@ -181,26 +168,5 @@ public class TeacherService {
     public List<Teacher> getAvailableTeachersBySubjectId(Long subjectId, Integer startHours, Integer endHours) {
         return teacherRepository.findBySubjects_IdAndShift_StartsLessThanEqualAndShift_EndsGreaterThanEqual(subjectId, startHours, endHours);
     }
-
-//    public List<Teacher> getAvailableTeachersBySubjectId(Long subjectId, Integer startHours, Integer endHours) {
-//        return teacherRepository.findBySubjects_Id(subjectId);
-//    }
-
-
-//    public List<Teacher> findAvailableTeachers(Long lessonId, Long subjectId, Integer startHours, Integer endHours) {
-//        Lesson existingLesson = lessonRepository.findById(lessonId)
-//                .orElseThrow(() -> new ScheduleValidationException("Lesson does not exist",
-//                "lessonId", "Lesson not found", String.valueOf(lessonId)));
-//        Subject subject = subjectRepository.findById(subjectId)
-//                .orElseThrow(() -> new ScheduleValidationException("Subject does not exist",
-//                        "subjectId", "Subject not found", String.valueOf(subjectId)));
-//
-//        List<Lesson> lessonsSameDay = lessonRepository.findAllByLessonDateAndSubjectId(existingLesson.getLessonDate(), subjectId);
-//        List<Long> teacherIds=new ArrayList<>();
-//        for (Lesson lesson : lessonsSameDay) {
-//            teacherIds.add(lesson.getTeacher().getId());
-//        }
-//        return teacherRepository.findAllBySubjectsAndShift_StartsLessThanEqualAndShift_EndsGreaterThanEqualAndIdNotIn(subject, startHours, endHours, teacherIds);
-//    }
 
 }

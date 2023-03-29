@@ -30,11 +30,9 @@ public class Holiday {
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate starts;
 
-
     @NotNull
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate ends;
-
 
     private boolean repeats;
 

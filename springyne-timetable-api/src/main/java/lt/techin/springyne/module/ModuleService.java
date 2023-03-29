@@ -14,18 +14,19 @@ import java.util.Optional;
 public class ModuleService {
 
     @Autowired
-    ModuleRepository moduleRepository;
+    private final ModuleRepository moduleRepository;
 
     @Autowired
-    SubjectRepository subjectRepository;
+    private final SubjectRepository subjectRepository;
 
     private static final ExampleMatcher SEARCH_CONTAINS_NAME = ExampleMatcher.matchingAny()
             .withMatcher("name", ExampleMatcher.GenericPropertyMatchers.contains().ignoreCase())
             .withIgnorePaths("id", "number","deleted","modifiedDate");
 
 
-    public ModuleService(ModuleRepository moduleRepository) {
+    public ModuleService(ModuleRepository moduleRepository, SubjectRepository subjectRepository) {
         this.moduleRepository = moduleRepository;
+        this.subjectRepository = subjectRepository;
     }
 
 
@@ -120,21 +121,4 @@ public class ModuleService {
         }
     }
 
-//    public Subject addModuleToSubject(Long moduleId, Long subjectId) {
-//        Module moduleToAdd = moduleRepository.findById(moduleId).orElseThrow(
-//                () -> new ScheduleValidationException("Module does not exist", "id", "Module not found", String.valueOf(moduleId)));
-//        Subject updatedSubject = subjectRepository.findById(subjectId).orElseThrow(
-//                () -> new ScheduleValidationException("Subject does not exist", "id", "Subject not found", String.valueOf(subjectId)));
-//        updatedSubject.getModule().add(moduleToAdd);
-//        return subjectRepository.save(updatedSubject);
-//    }
-//
-//    public Subject removeModuleFromSubject(Long moduleId, Long subjectId) {
-//        Module moduleToRemove = moduleRepository.findById(moduleId).orElseThrow(
-//                () -> new ScheduleValidationException("Module does not exist", "id", "Module not found", String.valueOf(moduleId)));
-//        Subject updatedSubject = subjectRepository.findById(subjectId).orElseThrow(
-//                () -> new ScheduleValidationException("Subject does not exist", "id", "Subject not found", String.valueOf(subjectId)));
-//        updatedSubject.getModule().remove(moduleToRemove);
-//        return subjectRepository.save(updatedSubject);
-//    }
 }

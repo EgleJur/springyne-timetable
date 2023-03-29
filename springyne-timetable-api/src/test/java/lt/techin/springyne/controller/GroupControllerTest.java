@@ -63,7 +63,7 @@ class GroupControllerTest {
 
     @Test
     public void testGetAllGroups() {
-        LocalDateTime now = LocalDateTime.now().now();
+        LocalDateTime now = LocalDateTime.now();
 
         Group group1 = new Group(1L, "22/1", "2022-2023", 15, now, false, program, shift);
         Group group2 = new  Group(2L, "22/2", "2022-2023", 15, now, false, program, shift);

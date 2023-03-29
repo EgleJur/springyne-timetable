@@ -31,17 +31,17 @@ import java.util.stream.Collectors;
 public class LessonService {
 
     @Autowired
-    private LessonRepository lessonRepository;
+    private final LessonRepository lessonRepository;
     @Autowired
-    private ScheduleRepository scheduleRepository;
+    private final ScheduleRepository scheduleRepository;
     @Autowired
-    private SubjectRepository subjectRepository;
+    private final SubjectRepository subjectRepository;
     @Autowired
-    private TeacherRepository teacherRepository;
+    private final TeacherRepository teacherRepository;
     @Autowired
-    private RoomRepository roomRepository;
+    private final RoomRepository roomRepository;
     @Autowired
-    private HolidaysRepository holidaysRepository;
+    private final HolidaysRepository holidaysRepository;
 
 
     public LessonService(LessonRepository lessonRepository, ScheduleRepository scheduleRepository, SubjectRepository subjectRepository,

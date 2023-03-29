@@ -23,7 +23,6 @@ public class TeacherLessonPdfExporter {
     private Optional<Teacher> teacher;
 
     private BaseFont baseFont = BaseFont.createFont("fonts/LiberationSans-Regular.ttf", BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
-//    private BaseFont baseFont = BaseFont.createFont("C:/Git/Springyne-timetable/springyne-timetable-api/src/main/resources/fonts/LiberationSans-Regular.ttf", BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
 
     public TeacherLessonPdfExporter(List<Lesson> listLessons, Optional<Teacher> teacher) throws IOException {
         this.listLessons = listLessons;

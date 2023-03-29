@@ -9,7 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 public class ModuleUtils {
 
     @Autowired
-    ModuleRepository moduleRepository;
+    private final ModuleRepository moduleRepository;
 
     public ModuleUtils(ModuleRepository moduleRepository) {
         this.moduleRepository = moduleRepository;

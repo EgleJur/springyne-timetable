@@ -10,8 +10,13 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @NoArgsConstructor
 public class LessonBlock {
+
     private LocalDate startDate;
+
     private LocalDate endDate;
+
     private Integer startTime;
+
     private Integer endTime;
+
 }

@@ -9,7 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 public class ProgramUtils {
 
     @Autowired
-    ProgramRepository programRepository;
+    private final ProgramRepository programRepository;
 
     public ProgramUtils(ProgramRepository programRepository) {
         this.programRepository = programRepository;

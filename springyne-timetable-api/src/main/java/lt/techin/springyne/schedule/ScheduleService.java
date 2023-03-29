@@ -111,12 +111,6 @@ public class ScheduleService {
         lessonRepository.deleteAll(existingLessons);
         scheduleRepository.delete(schedule);
 
-//        try {
-//                scheduleRepository.deleteById(scheduleId);
-//                return true;
-//        } catch (EmptyResultDataAccessException exception) {
-//            return false;
-//        }
     }
 
 }

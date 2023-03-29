@@ -1,15 +1,15 @@
 {
   "files": {
     "main.css": "/springyne/static/css/main.2b8e4868.css",
-    "main.js": "/springyne/static/js/main.fa3e89cd.js",
+    "main.js": "/springyne/static/js/main.0cd7159a.js",
     "static/js/787.4d43545a.chunk.js": "/springyne/static/js/787.4d43545a.chunk.js",
     "index.html": "/springyne/index.html",
     "main.2b8e4868.css.map": "/springyne/static/css/main.2b8e4868.css.map",
-    "main.fa3e89cd.js.map": "/springyne/static/js/main.fa3e89cd.js.map",
+    "main.0cd7159a.js.map": "/springyne/static/js/main.0cd7159a.js.map",
     "787.4d43545a.chunk.js.map": "/springyne/static/js/787.4d43545a.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.2b8e4868.css",
-    "static/js/main.fa3e89cd.js"
+    "static/js/main.0cd7159a.js"
   ]
 }

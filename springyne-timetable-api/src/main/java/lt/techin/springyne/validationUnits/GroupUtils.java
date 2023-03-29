@@ -9,7 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 public class GroupUtils {
 
     @Autowired
-    GroupRepository groupRepository;
+    private final GroupRepository groupRepository;
 
     public GroupUtils(GroupRepository groupRepository) {
         this.groupRepository = groupRepository;

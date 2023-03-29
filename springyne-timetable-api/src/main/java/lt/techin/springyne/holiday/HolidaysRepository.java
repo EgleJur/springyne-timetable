@@ -10,7 +10,7 @@ import java.util.List;
 
 @Repository
 public interface HolidaysRepository extends JpaRepository<Holiday, Long> {
-    boolean existsByNameIgnoreCase(String name);
+
     List<Holiday> findAllByNameIgnoreCaseContaining(String name);
 
     @Query(value = "select case when count(name)> 0 then true else false end from HOLIDAY " +
@@ -18,28 +18,9 @@ public interface HolidaysRepository extends JpaRepository<Holiday, Long> {
             "AND STARTS = :STARTS AND ENDS = :ENDS", nativeQuery = true)
     boolean findAllByNameIgnoreCase(@Param("NAME") String name, @Param("STARTS") LocalDate starts, @Param("ENDS") LocalDate ends);
 
-    List<Holiday> findAllByStartsLessThanEqualAndEndsGreaterThanEqualOrderByStartsAsc(LocalDate ends, LocalDate starts);
-
-    List<Holiday> findAllByNameIgnoreCaseContainingOrStartsLessThanEqualAndEndsGreaterThanEqualOrderByStartsAsc(String name, LocalDate ends, LocalDate starts);
-    @Query(value = "SELECT * FROM HOLIDAY ORDER BY STARTS ASC",
-            nativeQuery = true)
-    List<Holiday> findAllOrderByStartsAsc();
-    @Query(value = "SELECT * FROM HOLIDAY WHERE YEAR(STARTS)=:YEAR_NOW ORDER BY STARTS ASC",
-            nativeQuery = true)
-    List<Holiday> findAllHolidays(@Param("YEAR_NOW") int y);
-//    List<Holidays> findAllOrderByDeletedAscStartsAsc(); SELECT * FROM HOLIDAYS WHERE year(starts)='2023
     @Query(value = "SELECT * FROM HOLIDAY where (TO_CHAR(starts, 'MM-DD')>=TO_CHAR(:YEAR_START, 'MM-DD') " +
             "or TO_CHAR(starts, 'MM-DD')<=TO_CHAR(:YEAR_END, 'MM-DD')) " +
             "and ends<=:YEAR_END ", nativeQuery = true)
     List<Holiday> findAllHolidaysByDate(@Param("YEAR_START") LocalDate starts, @Param("YEAR_END") LocalDate ends );
 
-    List<Holiday> findByStartsBetweenAndEndsBetweenOrderByStartsAsc(LocalDate sStarts, LocalDate sEnds, LocalDate eStarts, LocalDate eEnds);
-
-    @Query(value = "SELECT * FROM HOLIDAY where lower(name) like '%' || LOWER(:NAME) || '%' " +
-            "and ((TO_CHAR(starts, 'MM-DD')>=TO_CHAR(:YEAR_START, 'MM-DD') " +
-            "or TO_CHAR(starts, 'MM-DD')<=TO_CHAR(:YEAR_END, 'MM-DD')) " +
-            "and ends<=:YEAR_END) ", nativeQuery = true)
-    List<Holiday> findAllHolidaysByDateAndName(@Param("YEAR_START") LocalDate starts, @Param("YEAR_END") LocalDate ends, @Param("NAME") String name);
-
-    List<Holiday> findAllByStartsBetweenAndEndsBefore(LocalDate starts, LocalDate endsS, LocalDate ends);
 }

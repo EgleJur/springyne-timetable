@@ -18,7 +18,7 @@ import static org.springframework.http.ResponseEntity.ok;
 public class SubjectController {
 
     @Autowired
-    SubjectService subjectService;
+    private final SubjectService subjectService;
 
     public SubjectController(SubjectService subjectService) {
         this.subjectService = subjectService;
@@ -37,24 +37,12 @@ public class SubjectController {
         return subjectService.searchByNamePaged(name, moduleName, page, pageSize);
     }
 
-//    @GetMapping("/byModule/search")
-//
-//    public Page<Subject> getByModule(@RequestParam String name, @RequestParam int page,
-//                                     @RequestParam int pageSize) {
-//        return subjectService.getByModule(name, page, pageSize);
-//    }
 
     @GetMapping("/{subjectId}")
     public Optional<Subject> getSubject(@PathVariable Long subjectId) {
         return subjectService.getById(subjectId);
     }
 
-    //    @PostMapping
-//    public ResponseEntity<SubjectDto> createSubjectDto(@RequestBody SubjectDto subjectDto) {
-//        var createdSubject = subjectService.createSubjectDto(toSubject(subjectDto));
-//
-//        return ok(toSubjectDto(createdSubject));
-//    }
     @PostMapping(value = "/createSubject")
     public ResponseEntity<SubjectDto> createSubject(@RequestBody SubjectDto subjectDto,
                                                     @RequestParam Long moduleId,

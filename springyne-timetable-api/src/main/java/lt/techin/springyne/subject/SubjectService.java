@@ -25,17 +25,17 @@ import static lt.techin.springyne.validationUnits.ValidationUtilsNotNull.isValid
 public class SubjectService {
 
     @Autowired
-    SubjectRepository subjectRepository;
+    private final SubjectRepository subjectRepository;
     @Autowired
-    ModuleRepository moduleRepository;
+    private final ModuleRepository moduleRepository;
     @Autowired
-    RoomRepository roomRepository;
+    private final RoomRepository roomRepository;
 
-    SubjectUtils subjectUtils;
+    private final SubjectUtils subjectUtils;
 
-    ModuleUtils moduleUtils;
+    private final ModuleUtils moduleUtils;
 
-    RoomUtils roomUtils;
+    private final RoomUtils roomUtils;
 
 
     public SubjectService(SubjectRepository subjectRepository,

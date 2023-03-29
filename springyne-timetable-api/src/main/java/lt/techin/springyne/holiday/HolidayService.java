@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 @Service
 public class HolidayService {
     @Autowired
-    HolidaysRepository holidaysRepository;
+    private final HolidaysRepository holidaysRepository;
 
     public HolidayService(HolidaysRepository holidaysRepository) {
         this.holidaysRepository = holidaysRepository;
@@ -51,7 +51,6 @@ public class HolidayService {
             } else {
                 LocalDate startDate = LocalDate.parse(from);
                 LocalDate endDate = LocalDate.parse(to);
-                //List<Holiday> filteredHoliday = holidaysRepository.findAllHolidaysByDate(startDate, endDate);
 
                 List<Holiday> sortedHolidayList = createListFromRepeats(startDate, endDate, allHolidays);
 
@@ -140,7 +139,7 @@ public class HolidayService {
                 newHolidayList.add(holiday);
             }
         }
-        //List<Holiday> sortedHolidayList =
+
         return newHolidayList.stream()
                 .sorted(Comparator.comparing(Holiday::getStarts))
                 .collect(Collectors.toList());
